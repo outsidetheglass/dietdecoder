@@ -19,7 +19,7 @@ public class IngredientViewModel extends AndroidViewModel {
 
   private IngredientRepository mRepository;
   private final LiveData<List<Ingredient>> mViewModelAllIngredients;
-  private LiveData<List<Ingredient>> mViewModelAllIngredientsWithChemical;
+  private LiveData<List<Ingredient>> mViewModelAllIngredientsWithConcern;
   private String mViewModelIngredientName;
 
 
@@ -36,10 +36,10 @@ public class IngredientViewModel extends AndroidViewModel {
     return mViewModelAllIngredients;
   }
 
-  //get all ingredients with chemical
-  public LiveData<List<Ingredient>> viewModelGetIngredientsWithChemical(String paramChemical) {
-    mViewModelAllIngredientsWithChemical = mRepository.repositoryGetIngredientsWithChemical(paramChemical);
-    return mViewModelAllIngredientsWithChemical;
+  //get all ingredients with concern
+  public LiveData<List<Ingredient>> viewModelGetIngredientsWithConcern(String paramConcern) {
+    mViewModelAllIngredientsWithConcern = mRepository.repositoryGetIngredientsWithConcern(paramConcern);
+    return mViewModelAllIngredientsWithConcern;
   }
 
 

@@ -12,14 +12,5 @@
     android:layout_height="wrap_content"
     android:background="@color/green_200" />
 
-<!--  TODO: fix this button, this won't work It's a single button but I want it to appear on each line of textview
-Probably add another xml-->
-<!--  <Button-->
-<!--    android:id="@+id/button_delete_ingredient"-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:src="@drawable/ic_baseline_delete_24"-->
-<!--    android:background="@color/green_200" />-->
-
 
   </LinearLayout>

@@ -31,26 +31,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    setContentView(R.layout.activity_main);
-    RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
-    mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
-    recyclerView.setAdapter(mIngredientListAdapter);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //set view with RecyclerView
+        setContentView(R.layout.activity_main);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
-    mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+        mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
+        recyclerView.setAdapter(mIngredientListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    mIngredientViewModel.viewModelGetAllIngredients().observe(this, ingredients -> {
-      // Update the cached copy of the words in the adapter.
-      mIngredientListAdapter.submitList(ingredients);
-    });
-    Log.d(TAG, "onCreate: tags work");
-    FloatingActionButton fab = findViewById(R.id.fab);
-    fab.setOnClickListener( view -> {
-      Intent intent = new Intent(MainActivity.this, NewIngredientActivity.class);
-      startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
-    });
+        mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
+        mIngredientViewModel.viewModelGetAllIngredients().observe(this, ingredients -> {
+          // Update the cached copy of the words in the adapter.
+          mIngredientListAdapter.submitList(ingredients);
+        });
+
+        // FAB to add new ingredient
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener( view -> {
+          Intent intent = new Intent(MainActivity.this, NewIngredientActivity.class);
+          startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+        });
+
+
+        Log.d(TAG, "onCreate: tags work");
   } //end onCreate
 
 
@@ -60,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
     Log.d(TAG, "onActivityResult: made it here");
     if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       String ingredientName = data.getStringExtra("ingredient_name");
-      String ingredientChemical = data.getStringExtra("chemical");
-      Log.d(TAG, "onActivityResult: "+ingredientName+": "+ingredientChemical);
+      String ingredientConcern = data.getStringExtra("concern");
+      Log.d(TAG, "onActivityResult: "+ingredientName+": "+ingredientConcern);
 
-      Ingredient ingredient = new Ingredient(ingredientName, ingredientChemical);
+      Ingredient ingredient = new Ingredient(ingredientName, ingredientConcern);
       mIngredientViewModel.viewModelInsert(ingredient);
     } else {
       Toast.makeText(

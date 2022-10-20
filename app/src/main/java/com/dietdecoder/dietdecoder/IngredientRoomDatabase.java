@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 // so we set exportSchema to false here to avoid a build warning.
 // TODO: In a real app, you should consider setting a directory for Room to use to export the schema
 // so you can check the current schema into your version control system.
-@Database(entities = {Ingredient.class}, version = 3, exportSchema = false)
+@Database(entities = {Ingredient.class}, version = 1, exportSchema = false)
 public abstract class IngredientRoomDatabase extends RoomDatabase {
 
 
@@ -70,7 +70,7 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
             ) //end INSTANCE
 
             .addCallback(sRoomDatabaseCallback)
-            .addMigrations(MIGRATION_1_2)
+            //.addMigrations(MIGRATION_1_2)
             .build();
 
         }//end if null
@@ -84,14 +84,15 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
   } //end getDatabase
 
 
-  static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-
-    @Override
-    public void migrate(SupportSQLiteDatabase database) {
-
-// Since we didn't alter the table, there's nothing else to do here.
-    }//end migrate
-
-  }; //end Migration
+  // how to add migration
+//  static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+//
+//    @Override
+//    public void migrate(SupportSQLiteDatabase database) {
+//
+//// Since we didn't alter the table, there's nothing else to do here.
+//    }//end migrate
+//
+//  }; //end Migration
 
 } //end IngredientRoomDatabase

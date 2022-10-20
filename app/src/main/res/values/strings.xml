@@ -10,7 +10,7 @@
 
   <string name="add_ingredient">New Ingredient</string>
   <string name="enter_ingredient_edittext_name">Type Ingredient Name Here</string>
-  <string name="enter_ingredient_edittext_chemical">Chemicals in Ingredient Here</string>
+  <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
   <string name="empty_not_saved">Ingredient not saved because it is empty.</string>
 
 

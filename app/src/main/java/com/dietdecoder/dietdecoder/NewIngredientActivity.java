@@ -17,20 +17,20 @@ public class NewIngredientActivity extends AppCompatActivity {
   private final String TAG = getClass().getSimpleName();
 
   public static String mIngredientName;
-  public static String mIngredientChemical;
+  public static String mIngredientConcern;
 
   private EditText mEditIngredientNameView;
-  private EditText mEditIngredientChemicalView;
+  private EditText mEditIngredientConcernView;
 
   private Boolean isNameViewEmpty;
-  private Boolean isChemicalViewEmpty;
+  private Boolean isConcernViewEmpty;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_new_ingredient);
     mEditIngredientNameView = findViewById(R.id.edittext_ingredient_name);
-    mEditIngredientChemicalView = findViewById(R.id.edittext_ingredient_chemical);
+    mEditIngredientConcernView = findViewById(R.id.edittext_ingredient_concern);
 
     final Button button = findViewById(R.id.button_save);
     button.setOnClickListener(view -> {
@@ -38,23 +38,23 @@ public class NewIngredientActivity extends AppCompatActivity {
 
       // check for if views are empty
       isNameViewEmpty = TextUtils.isEmpty(mEditIngredientNameView.getText());
-      isChemicalViewEmpty = TextUtils.isEmpty(mEditIngredientChemicalView.getText());
+      isConcernViewEmpty = TextUtils.isEmpty(mEditIngredientConcernView.getText());
 
       // if either of the views are empty
-      if ( isNameViewEmpty || isChemicalViewEmpty ) {
+      if ( isNameViewEmpty || isConcernViewEmpty ) {
         // set intent to tell user result is cancelled
         setResult(RESULT_CANCELED, replyIntent);
       }
       // both views have values
       else {
-        // get strings for name and chemical
+        // get strings for name and concern
         mIngredientName = mEditIngredientNameView.getText().toString();
-        mIngredientChemical = mEditIngredientChemicalView.getText().toString();
+        mIngredientConcern = mEditIngredientConcernView.getText().toString();
 
-        Log.d(TAG, "onCreate: "+mIngredientName+": "+mIngredientChemical);
+        Log.d(TAG, "onCreate: "+mIngredientName+": "+mIngredientConcern);
         // send back values for new ingredient and tell user succeeded
         replyIntent.putExtra("ingredient_name", mIngredientName);
-        replyIntent.putExtra("chemical", mIngredientChemical);
+        replyIntent.putExtra("concern", mIngredientConcern);
         setResult(RESULT_OK, replyIntent);
       }
       finish();

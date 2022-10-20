@@ -14,17 +14,17 @@ public class Ingredient {
   @ColumnInfo(name = "ingredientName")
   private String mIngredientName;
 
-  @ColumnInfo(name = "ingredientChemical")
-  private String mIngredientChemical;
+  @ColumnInfo(name = "ingredientConcern")
+  private String mIngredientConcern;
 
   public Ingredient(@NonNull String ingredientName,
-                          String ingredientChemical) {
+                          String ingredientConcern) {
     this.mIngredientName = ingredientName;
-    this.mIngredientChemical = ingredientChemical;
+    this.mIngredientConcern = ingredientConcern;
   }
 
   public String getIngredientName(){return this.mIngredientName;}
 
-  public String getIngredientChemical(){return this.mIngredientChemical;}
+  public String getIngredientConcern(){return this.mIngredientConcern;}
 
 } //end Ingredient Entity

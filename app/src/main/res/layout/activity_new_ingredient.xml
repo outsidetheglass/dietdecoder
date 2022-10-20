@@ -12,12 +12,12 @@
     android:textAppearance="@style/edittext" />
 
   <EditText
-    android:id="@+id/edittext_ingredient_chemical"
+    android:id="@+id/edittext_ingredient_concern"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_ingredient_edittext_chemical"/>
+    android:hint="@string/enter_ingredient_edittext_concern"/>
 
   <Button
     android:id="@+id/button_save"
