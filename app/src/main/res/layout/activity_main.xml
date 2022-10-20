@@ -2,9 +2,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
 
+
+
   <data>
-    <variable name="name" type="String"/>
-    <variable name="lastName" type="String"/>
+
+    <variable
+      name="ingredientAdapter"
+      type="com.dietdecoder.dietdecoder.IngredientListAdapter" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

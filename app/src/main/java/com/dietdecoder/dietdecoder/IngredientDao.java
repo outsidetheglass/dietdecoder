@@ -13,16 +13,17 @@ import java.util.List;
 @Dao
 public interface IngredientDao {
 
-  // allowing the insert multiple times by passing a
-  // conflict resolution strategy
-  // choosing ignore because ingredients may seem the same but will have different brands, etc
+  // can insert multiple times by passing IGNORE for conflict strategy
+  // ingredients may seem the same but will have different brands, etc
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   void daoInsert(Ingredient ingredient);
-  // TODO: understand why adding onConflict didn't work with delete method
+
   @Delete
   void daoDelete(Ingredient ingredient);
+
   @Update(onConflict = OnConflictStrategy.IGNORE)
   void daoUpdate(Ingredient ingredient);
+
 
   // LiveData is a lifecycle library class for live database access
   // Select all ingredients from table and alphabetize them by name
@@ -55,7 +56,5 @@ public List<User> findUserWithName(String search);
    */
 
   //
-//  @Query("SELECT ingredient FROM ingredient_table")
-//  String getIngredient(Ingredient ingredient);
 
 }
