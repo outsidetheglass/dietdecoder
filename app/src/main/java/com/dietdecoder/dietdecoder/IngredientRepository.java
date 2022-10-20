@@ -29,9 +29,9 @@ class IngredientRepository {
     return mIngredientDao.daoGetAlphabetizedIngredients();
   }
 
-  // get only chemical from database for ingredients
-  LiveData<List<Ingredient>> repositoryGetIngredientsWithChemical(String chemical) {
-    return mIngredientDao.daoGetIngredientsWithChemical(chemical);
+  // get only concern from database for ingredients
+  LiveData<List<Ingredient>> repositoryGetIngredientsWithConcern(String concern) {
+    return mIngredientDao.daoGetIngredientsWithConcern(concern);
   }
 
   // get only given ingredient using name

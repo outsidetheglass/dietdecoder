@@ -25,17 +25,14 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
 
   @Override
   public void onBindViewHolder(IngredientViewHolder holder, int position) {
-
-    //TODO this way of binding probably won't work with name and chemical and ID
     Ingredient currentIngredient = getItem(position);
-    holder.bind(currentIngredient.getIngredientName());
-
+    holder.bind(currentIngredient.getIngredientName() + ": " + currentIngredient.getIngredientConcern());
   }//end onBindViewHolder
 
   static class IngredientDiff extends DiffUtil.ItemCallback<Ingredient> {
 
     private Boolean isEqualName;
-    private Boolean isEqualChemical;
+    private Boolean isEqualConcern;
 
     @Override
     public boolean areItemsTheSame(@NonNull Ingredient oldItem, @NonNull Ingredient newItem) {
@@ -46,8 +43,8 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
     public boolean areContentsTheSame(@NonNull Ingredient oldItem, @NonNull Ingredient newItem) {
       // check all parts of Ingredient to see if they're the same
       isEqualName = oldItem.getIngredientName().equals(newItem.getIngredientName());
-      isEqualChemical = oldItem.getIngredientChemical().equals(newItem.getIngredientChemical());
-      return isEqualName && isEqualChemical;
+      isEqualConcern = oldItem.getIngredientConcern().equals(newItem.getIngredientConcern());
+      return isEqualName && isEqualConcern;
     } //end areContentsTheSame
 
 

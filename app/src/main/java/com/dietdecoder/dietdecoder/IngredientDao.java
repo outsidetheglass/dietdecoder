@@ -30,8 +30,8 @@ public interface IngredientDao {
   LiveData<List<Ingredient>> daoGetAlphabetizedIngredients();
 
   // Sort by specific chemical and alphabetize them by ingredient name
-  @Query("SELECT * FROM ingredient_table WHERE ingredientChemical LIKE :daoChemical ORDER BY ingredientName ASC")
-  LiveData<List<Ingredient>> daoGetIngredientsWithChemical(String daoChemical);
+  @Query("SELECT * FROM ingredient_table WHERE ingredientConcern LIKE :daoConcern ORDER BY ingredientName ASC")
+  LiveData<List<Ingredient>> daoGetIngredientsWithConcern(String daoConcern);
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName")
   Ingredient daoGetIngredientFromName(String daoIngredientName);
