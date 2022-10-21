@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
         // adapter is passing context so the cardClicked can make a toast pop up
-        mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff(), this);
+        mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff(), this, mIngredientViewModel);
 
         // put an observer on the model to watch if data changes
         mIngredientViewModel.viewModelGetAllIngredients().observe(this, ingredients -> {

@@ -15,10 +15,11 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
 
   // for the Toast for button
   private Context context;
+  private IngredientViewModel mIngredientViewModel;
 
-  public IngredientListAdapter(@NonNull DiffUtil.ItemCallback<Ingredient> diffCallback, Context context) {
-    super(diffCallback);
+  public IngredientListAdapter(IngredientViewModel ingredientViewModel, Context context) {
     //this.allIngredients = ingredientViewModel.mViewModelAllIngredients;
+    this.mIngredientViewModel = ingredientViewModel;
     this.context = context;
   }//end IngredientListAdapter
 
@@ -31,9 +32,7 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
 
   @Override
   public void onBindViewHolder(IngredientViewHolder holder, int position) {
-
-    Ingredient currentIngredient = getItem(position);
-    holder.bind(currentIngredient, position);
+    holder.bind(mIngredientViewModel);
   }//end onBindViewHolder
 
 

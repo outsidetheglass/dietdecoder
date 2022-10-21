@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.databinding.RecyclerviewItemBinding;
+
+import java.util.List;
 
 public class IngredientViewHolder extends RecyclerView.ViewHolder {
 
@@ -22,20 +25,16 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
   // make a TAG to use to log errors
   private final String TAG = getClass().getSimpleName();
 
-  // to set the text for what shows up in the UI
-  private final TextView ingredientItemView;
-
 
   private IngredientViewHolder(RecyclerviewItemBinding recyclerviewItemBinding) {
     super(recyclerviewItemBinding.getRoot());
     this.recyclerviewItemBinding = recyclerviewItemBinding;
-    ingredientItemView = itemView.findViewById(R.id.textView_ingredients);
 
   }
 
 
-  public void bind(Ingredient ingredient, Integer position) {
-    recyclerviewItemBinding.setVariable(BR.model, ingredient);
+  public void bind(Object object) {
+    recyclerviewItemBinding.setVariable(BR.model, object);
     recyclerviewItemBinding.executePendingBindings();
   }
 
