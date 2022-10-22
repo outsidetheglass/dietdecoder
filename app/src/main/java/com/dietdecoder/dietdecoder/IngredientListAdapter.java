@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientViewHolder> {
 
   // make a TAG to use to log errors
-  private final String TAG = getClass().getSimpleName();
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
 
   public IngredientListAdapter(@NonNull DiffUtil.ItemCallback<Ingredient> diffCallback) {

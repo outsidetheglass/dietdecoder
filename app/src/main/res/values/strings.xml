@@ -13,5 +13,22 @@
   <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
   <string name="empty_not_saved">Ingredient not saved because it is empty.</string>
 
+  <string name="title_edit_ingredient_textview">Enter old and new values</string>
+  <string name="enter_new_ingredient_edittext_name">Fixed Ingredient Name Here</string>
+  <string name="enter_new_ingredient_edittext_concern">Fixed Concern Here</string>
+  <string name="enter_old_ingredient_edittext_name">Old Ingredient Name to Edit Here</string>
+  <string name="enter_old_ingredient_edittext_concern">Old Ingredient Concern to Edit Here</string>
+  <string name="edit_ingredient">Edit Ingredient</string>
+
+  <string name="empty_not_deleted">Ingredient not deleted because given value is empty.</string>
+  <string name="edittext_ingredient_concern_to_delete">Type Concern of Ingredient to Delete Here</string>
+  <string name="edittext_ingredient_name_to_delete">Enter Name of Ingredient to Delete Here</string>
+  <string name="textview_title_delete">Delete Ingredient</string>
+  <string name="button_delete">Delete Ingredient</string>
+  <string name="title_textview_new_ingredient">New Ingredient</string>
+  <string name="empty_not_updated">Ingredient not Updated, invalid values</string>
+  <string name="delete_ingredient">Delete Ingredient</string>
+  <string name="value_not_found_not_deleted">Ingredient not Deleted, Value not Found</string>
+
 
 </resources>

@@ -39,6 +39,9 @@ class IngredientRepository {
     return mIngredientDao.daoGetIngredientFromName(ingredientName);
   }
 
+  public Ingredient repositoryGetIngredientFromNameConcern(String ingredientName, String ingredientConcern) {
+    return mIngredientDao.daoGetIngredientFromNameConcern(ingredientName, ingredientConcern);
+  }
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
@@ -51,22 +54,30 @@ class IngredientRepository {
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryDelete(Ingredient ingredient) {
+  void repositoryDelete(String ingredientName, String ingredientConcern) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoDelete(ingredient);
+      mIngredientDao.daoDelete(ingredientName, ingredientConcern);
     });
 
   } // end delete
 
 
-  void repositoryUpdate(Ingredient ingredient) {
+  void repositoryUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoUpdate(ingredient);
+      mIngredientDao.daoUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
     });
 
-  } // end update
+  } // end update concern
+
+  void repositoryUpdateName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
+
+    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+      mIngredientDao.daoUpdateName(oldIngredientName, oldIngredientConcern, newIngredientName);
+    });
+
+  } // end update concern
 
 
 

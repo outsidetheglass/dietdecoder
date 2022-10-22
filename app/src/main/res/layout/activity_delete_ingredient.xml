@@ -4,37 +4,38 @@
   android:layout_height="match_parent">
 
   <TextView
-    android:id="@+id/textview_new_ingredient"
+    android:id="@+id/textview_delete_ingredient"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/title_textview_new_ingredient"
+    android:hint="@string/textview_title_delete"
+    android:textAlignment="center"
     android:textAppearance="@style/textview_title"
     android:textStyle="bold"
     android:layout_gravity="center_horizontal"    />
 
-  <EditText
-    android:id="@+id/edittext_ingredient_name"
+<EditText
+    android:id="@+id/edittext_delete_ingredient_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_ingredient_edittext_name"
+    android:hint="@string/edittext_ingredient_name_to_delete"
     android:textAppearance="@style/edittext" />
 
   <EditText
-    android:id="@+id/edittext_ingredient_concern"
+    android:id="@+id/edittext_delete_ingredient_concern"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_ingredient_edittext_concern"/>
+    android:hint="@string/edittext_ingredient_concern_to_delete"/>
 
   <Button
-    android:id="@+id/button_save"
+    android:id="@+id/button_delete"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/green_500"
-    android:text="@string/button_save"
+    android:text="@string/button_delete"
     android:layout_margin="@dimen/big_padding"
     android:textColor="@color/button_label" />
 

@@ -47,16 +47,28 @@ public class IngredientViewModel extends AndroidViewModel {
   public Ingredient viewModelGetIngredientFromName(String paramIngredientName) {
     return mRepository.repositoryGetIngredientFromName(paramIngredientName);
   }
+  public Ingredient viewModelGetIngredientFromNameConcern(String ingredientName, String ingredientConcern){
+    return mRepository.repositoryGetIngredientFromNameConcern(ingredientName, ingredientConcern);
+  }
 
 
   // add to database
   public void viewModelInsert(Ingredient ingredient) { mRepository.repositoryInsert(ingredient); }
 
   // edit ingredient in database
-  public void viewModelUpdate(Ingredient ingredient) { mRepository.repositoryUpdate(ingredient); }
+  public void viewModelUpdateName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
+    mRepository.repositoryUpdateName(oldIngredientName, oldIngredientConcern, newIngredientName);
+  }
+
+  // edit ingredient in database
+  public void viewModelUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
+    mRepository.repositoryUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
+  }
 
   // delete ingredient in database
-  public void viewModelDelete(Ingredient ingredient) { mRepository.repositoryDelete(ingredient); }
+  public void viewModelDelete(String ingredientName, String ingredientConcern) {
+    mRepository.repositoryDelete(ingredientName, ingredientConcern);
+  }
 
 
 } //end IngredientViewModel class

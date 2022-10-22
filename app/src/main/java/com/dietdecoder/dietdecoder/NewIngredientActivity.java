@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class NewIngredientActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
-  private final String TAG = getClass().getSimpleName();
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
   public static String mIngredientName;
   public static String mIngredientConcern;

@@ -13,16 +13,24 @@ import java.util.List;
 @Dao
 public interface IngredientDao {
 
+  //TODO: fix my Query's by replacing them with Ingredient instead of strings
+  // probably need to make ID's for that to work
+
   // allowing the insert multiple times by passing a
   // conflict resolution strategy
   // choosing ignore because ingredients may seem the same but will have different brands, etc
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   void daoInsert(Ingredient ingredient);
-  // TODO: understand why adding onConflict didn't work with delete method
-  @Delete
-  void daoDelete(Ingredient ingredient);
-  @Update(onConflict = OnConflictStrategy.IGNORE)
-  void daoUpdate(Ingredient ingredient);
+
+  @Query("DELETE FROM ingredient_table WHERE ingredientName = :ingredientName AND ingredientConcern = :ingredientConcern")
+  void daoDelete(String ingredientName, String ingredientConcern);
+
+  @Query("UPDATE ingredient_table SET ingredientConcern = :newIngredientConcern WHERE ingredientConcern = :oldIngredientConcern AND ingredientName = :oldIngredientName")
+  void daoUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern);
+
+  @Query("UPDATE ingredient_table SET ingredientName = :newIngredientName WHERE ingredientName = :oldIngredientName AND ingredientConcern = :oldIngredientConcern")
+  void daoUpdateName(String oldIngredientName, String oldIngredientConcern, String newIngredientName);
+
 
   // LiveData is a lifecycle library class for live database access
   // Select all ingredients from table and alphabetize them by name
@@ -36,6 +44,8 @@ public interface IngredientDao {
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName")
   Ingredient daoGetIngredientFromName(String daoIngredientName);
 
+  @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName AND ingredientConcern = :daoIngredientConcern")
+  Ingredient daoGetIngredientFromNameConcern(String daoIngredientName, String daoIngredientConcern);
   /*
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")

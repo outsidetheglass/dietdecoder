@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <!-- The default font for RecyclerView items is too small.
-  The margin is a simple delimiter between the words. -->
-  <style name="word_title">
+  <style name="textview_title">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_marginBottom">10dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textColor">@color/color_title</item>
+    <item name="android:textSize">@dimen/title</item>
+  </style>
+
+  <style name="textview_subtitle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_marginBottom">10dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textColor">@color/color_title</item>
+    <item name="android:textSize">@dimen/subtitle</item>
+  </style>
+
+  <style name="textview_item">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_marginBottom">8dp</item>
     <item name="android:paddingLeft">8dp</item>
     <item name="android:background">@android:color/holo_orange_light</item>
-    <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+    <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
   </style>
 
   <style name="edittext">
     <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:inputType">textAutoComplete</item>
     <item name="android:drawableBottom">@color/black</item>
+    <item name="android:textSize">18sp</item>
+  </style>
+
+  <style name="button">
+    <item name="android:gravity">center_horizontal</item>
+    <item name="android:layout_marginTop">@dimen/big_padding</item>
     <item name="android:textSize">18sp</item>
   </style>
 
