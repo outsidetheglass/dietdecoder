@@ -1,8 +1,12 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.ui;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+
+import com.dietdecoder.dietdecoder.database.IngredientDao;
+import com.dietdecoder.dietdecoder.database.Ingredient;
+import com.dietdecoder.dietdecoder.database.IngredientRoomDatabase;
 
 import java.util.List;
 

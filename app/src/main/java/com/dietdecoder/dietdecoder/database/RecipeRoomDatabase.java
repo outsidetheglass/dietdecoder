@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.database;
 
 import android.content.Context;
 
@@ -6,9 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
-
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -18,22 +15,22 @@ import java.util.concurrent.Executors;
 // so we set exportSchema to false here to avoid a build warning.
 // TODO: In a real app, you should consider setting a directory for Room to use to export the schema
 // so you can check the current schema into your version control system.
-@Database(entities = {Ingredient.class}, version = 1, exportSchema = false)
-public abstract class IngredientRoomDatabase extends RoomDatabase {
+@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+public abstract class RecipeRoomDatabase extends RoomDatabase {
 
 
 
-  public abstract IngredientDao ingredientDao();
+  public abstract RecipeDao recipeDao();
 
-  private static volatile IngredientRoomDatabase INSTANCE;
+  private static volatile RecipeRoomDatabase INSTANCE;
 
   private static final int NUMBER_OF_THREADS = 4;
 
-  static final ExecutorService databaseWriteExecutor =
+  public static final ExecutorService databaseWriteExecutor =
     Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static Callback sRoomDatabaseCallback = new Callback() {
       @Override
       public void onCreate(@NonNull SupportSQLiteDatabase db) {
 
@@ -44,29 +41,37 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
         databaseWriteExecutor.execute(() -> {
           // Populate the database in the background.
           // If you want to start with more words, just add them.
-          IngredientDao dao = INSTANCE.ingredientDao();
+          RecipeDao dao = INSTANCE.recipeDao();
           //dao.deleteAll();
 
-          Ingredient ingredient = new Ingredient("Miso paste", "tyramine");
-          dao.daoInsert(ingredient);
-          ingredient = new Ingredient("Rice", "None");
-          dao.daoInsert(ingredient);
+          Recipe recipe = new Recipe("Taco", "corn tortilla");
+          dao.daoInsert(recipe);
+          recipe = new Recipe("Taco", "pinto bean");
+          dao.daoInsert(recipe);
+          recipe = new Recipe("Taco", "brown rice");
+          dao.daoInsert(recipe);
+          recipe = new Recipe("Egg cheese rice", "brown rice");
+          dao.daoInsert(recipe);
+          recipe = new Recipe("Egg cheese rice", "cheddar cheese");
+          dao.daoInsert(recipe);
+          recipe = new Recipe("Egg cheese rice", "egg");
+          dao.daoInsert(recipe);
         });
 
       }
     }; //end sRoomDatabaseCallback
 
 
-  static IngredientRoomDatabase getDatabase(final Context context) {
+  public static RecipeRoomDatabase getDatabase(final Context context) {
 
     if (INSTANCE == null) {
 
-      synchronized (IngredientRoomDatabase.class) {
+      synchronized (RecipeRoomDatabase.class) {
 
         if (INSTANCE == null) {
 
           INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-              IngredientRoomDatabase.class, "ingredient_database"
+              RecipeRoomDatabase.class, "recipe_database"
             ) //end INSTANCE
 
             .addCallback(sRoomDatabaseCallback)
@@ -95,4 +100,4 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
 //
 //  }; //end Migration
 
-} //end IngredientRoomDatabase
+} //end RecipeRoomDatabase

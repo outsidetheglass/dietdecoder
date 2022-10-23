@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -5,5 +5,10 @@
   <dimen name="subtitle">28sp</dimen>
   <dimen name="small_padding">8dp</dimen>
   <dimen name="big_padding">16dp</dimen>
+  <dimen name="main_title_padding">40sp</dimen>
+  <dimen name="main_content_layout_marginStart">30dp</dimen>
+  <dimen name="main_content_layout_height">380dp</dimen>
+  <dimen name="main_content_layout_width">280dp</dimen>
+  <dimen name="half_main_content_layout_width">120dp</dimen>
 
 </resources>

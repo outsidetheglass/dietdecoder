@@ -1,15 +1,14 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.dietdecoder.dietdecoder.R;
 
 public class IngredientViewHolder extends RecyclerView.ViewHolder {
 
@@ -25,7 +24,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
   private IngredientViewHolder(View itemView) {
     super(itemView);
 
-    ingredientItemView = itemView.findViewById(R.id.textView_ingredients);
+    ingredientItemView = itemView.findViewById(R.id.textview_ingredient);
 
   }
 
@@ -38,7 +37,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
   static IngredientViewHolder create(ViewGroup parent) {
     Context context = parent.getContext();
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
+    View view = inflater.inflate(R.layout.recyclerview_ingredient_item, parent, false);
 
     return new IngredientViewHolder(view);
   }

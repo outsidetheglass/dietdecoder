@@ -1,12 +1,12 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
+
+import com.dietdecoder.dietdecoder.database.Ingredient;
 
 import java.util.List;
 

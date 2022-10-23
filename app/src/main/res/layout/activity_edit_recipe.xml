@@ -4,46 +4,47 @@
   android:layout_height="match_parent">
 
   <TextView
-    android:id="@+id/textview_title_edit_ingredient"
+    android:id="@+id/textview_edit_recipe"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/big_padding"
-    android:text="@string/title_edit_ingredient_textview"
+    android:text="@string/title_edit_recipe_textview"
     android:textAlignment="center"
     android:textAppearance="@style/textview_title"
+    android:textStyle="bold"
     android:layout_gravity="center_horizontal"    />
 
 
   <EditText
-    android:id="@+id/edittext_old_ingredient_name"
+    android:id="@+id/edittext_old_recipe_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_old_ingredient_edittext_name"
+    android:hint="@string/enter_old_recipe_edittext_name"
     android:textAppearance="@style/edittext" />
 
   <EditText
-    android:id="@+id/edittext_old_ingredient_concern"
+    android:id="@+id/edittext_old_recipe_ingredient"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_old_ingredient_edittext_concern"/>
+    android:hint="@string/enter_old_recipe_edittext_ingredient"/>
   <EditText
-    android:id="@+id/edittext_new_ingredient_name"
+    android:id="@+id/edittext_new_recipe_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_new_ingredient_edittext_name"
+    android:hint="@string/enter_new_recipe_edittext_name"
     android:textAppearance="@style/edittext" />
 
   <EditText
-    android:id="@+id/edittext_new_ingredient_concern"
+    android:id="@+id/edittext_new_recipe_ingredient"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_new_ingredient_edittext_concern"/>
+    android:hint="@string/enter_new_recipe_edittext_ingredient"/>
 
   <Button
     android:id="@+id/button_save"

@@ -2,11 +2,9 @@
 <resources>
 
   <style name="textview_title">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_marginBottom">10dp</item>
-    <item name="android:gravity">center_vertical</item>
     <item name="android:textColor">@color/color_title</item>
     <item name="android:textSize">@dimen/title</item>
+    <item name="android:textStyle">bold</item>
   </style>
 
   <style name="textview_subtitle">

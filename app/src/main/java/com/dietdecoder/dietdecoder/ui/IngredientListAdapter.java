@@ -1,10 +1,12 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.ui;
 
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+
+import com.dietdecoder.dietdecoder.database.Ingredient;
 
 public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientViewHolder> {
 
@@ -29,7 +31,7 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
     holder.bind(currentIngredient.getIngredientName() + ": " + currentIngredient.getIngredientConcern());
   }//end onBindViewHolder
 
-  static class IngredientDiff extends DiffUtil.ItemCallback<Ingredient> {
+  public static class IngredientDiff extends DiffUtil.ItemCallback<Ingredient> {
 
     private Boolean isEqualName;
     private Boolean isEqualConcern;
