@@ -14,39 +14,49 @@
     android:layout_gravity="center_horizontal"    />
 
 
-  <EditText
-    android:id="@+id/edittext_old_ingredient_name"
+  <TextView
+    android:id="@+id/textview_old_ingredient_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_old_ingredient_edittext_name"
-    android:textAppearance="@style/edittext" />
+    android:text="Old name"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_edit_old_values"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginTop="@dimen/big_padding" />
 
-  <EditText
-    android:id="@+id/edittext_old_ingredient_concern"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="@style/edittext"
-    android:layout_margin="@dimen/big_padding"
-    android:hint="@string/enter_old_ingredient_edittext_concern"/>
   <EditText
     android:id="@+id/edittext_new_ingredient_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/big_padding"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginBottom="@dimen/big_padding"
     android:hint="@string/enter_new_ingredient_edittext_name"
     android:textAppearance="@style/edittext" />
+
+  <TextView
+    android:id="@+id/textview_old_ingredient_concern"
+    android:layout_width="wrap_content"
+    android:text="Old concern"
+    android:layout_height="wrap_content"
+    android:textAppearance="@style/textview_edit_old_values"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:layout_marginTop="@dimen/big_padding"/>
+
 
   <EditText
     android:id="@+id/edittext_new_ingredient_concern"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
-    android:layout_margin="@dimen/big_padding"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginBottom="@dimen/big_padding"
     android:hint="@string/enter_new_ingredient_edittext_concern"/>
 
   <Button
-    android:id="@+id/button_save"
+    android:id="@+id/button_edit_ingredient_save"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/green_500"

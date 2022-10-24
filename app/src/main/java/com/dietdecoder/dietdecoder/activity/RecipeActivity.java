@@ -62,23 +62,6 @@ public class RecipeActivity extends AppCompatActivity {
       mRecipeListAdapter.submitList(recipes);
     });
 
-
-    // Button to edit recipe
-    editButton = findViewById(R.id.edit_button_recipe);
-    editButton.setOnClickListener( view -> {
-      editIntent = new Intent(thisActivity, EditRecipeActivity.class);
-      //TODO fix depreciated forResult
-      startActivityForResult(editIntent, EDIT_RECIPE_ACTIVITY_REQUEST_CODE);
-    });
-
-    // Button to delete recipe
-    //TODO get delete working and uncomment this
-    deleteButton = findViewById(R.id.delete_button_recipe);
-    deleteButton.setOnClickListener( view -> {
-//      deleteIntent = new Intent(thisActivity, DeleteRecipeActivity.class);
-//      startActivityForResult(deleteIntent, DELETE_RECIPE_ACTIVITY_REQUEST_CODE);
-    });
-
     // FAB to add new recipe
     addButton = findViewById(R.id.add_button_recipe);
     addButton.setOnClickListener( view -> {

@@ -42,6 +42,9 @@
         android:name=".activity.DeleteIngredientActivity"
         android:exported="false" />
       <activity
+        android:name=".activity.DetailIngredientActivity"
+        android:exported="false" />
+      <activity
         android:name=".activity.NewIngredientActivity"
         android:exported="false" />
       <activity

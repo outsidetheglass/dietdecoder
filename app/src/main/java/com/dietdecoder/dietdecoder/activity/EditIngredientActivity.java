@@ -6,10 +6,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.database.Ingredient;
 
 public class EditIngredientActivity extends AppCompatActivity {
 
@@ -23,74 +26,80 @@ public class EditIngredientActivity extends AppCompatActivity {
 
   private EditText mEditIngredientNewNameView;
   private EditText mEditIngredientNewConcernView;
-  private EditText mEditIngredientOldNameView;
-  private EditText mEditIngredientOldConcernView;
 
-  private Boolean isOldNameViewEmpty;
-  private Boolean isOldConcernViewEmpty;
+  private TextView mIngredientOldNameView;
+  private TextView mIngredientOldConcernView;
+  private String mIngredientOldName;
+  private String mIngredientOldConcern;
+
   private Boolean isNewNameViewEmpty;
   private Boolean isNewConcernViewEmpty;
+
+  private Button editIngredientSaveButton;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_ingredient);
+
     mEditIngredientNewNameView = findViewById(R.id.edittext_new_ingredient_name);
     mEditIngredientNewConcernView = findViewById(R.id.edittext_new_ingredient_concern);
-    mEditIngredientOldNameView = findViewById(R.id.edittext_old_ingredient_name);
-    mEditIngredientOldConcernView = findViewById(R.id.edittext_old_ingredient_concern);
 
-    final Button button = findViewById(R.id.button_save);
-    button.setOnClickListener(view -> {
-      Intent replyIntent = new Intent();
+    mIngredientOldNameView = findViewById(R.id.textview_old_ingredient_name);
+    mIngredientOldConcernView = findViewById(R.id.textview_old_ingredient_concern);
+
+    Intent editIngredientIntent = getIntent();
+
+    // Null check the intent worked
+    if (null == editIngredientIntent) {
+      // go back if it was null
+      Toast.makeText(this, "Can't edit an invalid ingredient", Toast.LENGTH_SHORT).show();
+      this.startActivity( new Intent(this, EditIngredientActivity.class));
+    }
+
+    mIngredientOldName = editIngredientIntent.getStringExtra("ingredient_name");
+    mIngredientOldConcern = editIngredientIntent.getStringExtra("ingredient_concern");
+    mIngredientOldNameView.setText(mIngredientOldName);
+    mIngredientOldConcernView.setText(mIngredientOldConcern);
+
+    //TODO fix this when I just can save it through here instead of going back to save
+    // make an intent to hold our edited ingredient to go back to where we can save it
+    Intent replyIntent = new Intent(this, IngredientActivity.class);
+
+    replyIntent.putExtra("old_name", mIngredientOldName);
+    replyIntent.putExtra("old_concern", mIngredientOldConcern);
+
+    editIngredientSaveButton = findViewById(R.id.button_edit_ingredient_save);
+    editIngredientSaveButton.setOnClickListener(view -> {
 
       // check for if views are empty
-      isOldNameViewEmpty = TextUtils.isEmpty(mEditIngredientOldNameView.getText());
-      isOldConcernViewEmpty = TextUtils.isEmpty(mEditIngredientOldConcernView.getText());
       isNewNameViewEmpty = TextUtils.isEmpty(mEditIngredientNewNameView.getText());
       isNewConcernViewEmpty = TextUtils.isEmpty(mEditIngredientNewConcernView.getText());
 
-      // if either of the old views are empty
-      if ( isOldNameViewEmpty || isOldConcernViewEmpty ) {
-        // set intent to tell user result is cancelled
-        setResult(RESULT_CANCELED, replyIntent);
+      // One of the new values needs to have been updated
+      if (isNewNameViewEmpty && isNewConcernViewEmpty) {
+        // tell user nope
+        Toast.makeText(this, "Update one of the fields to save", Toast.LENGTH_SHORT).show();
       }
-      // both old views have values
+      // at least one of the new values is filled
       else {
-        // One of the new values needs to have been updated
-        if (isNewNameViewEmpty && isNewConcernViewEmpty) {
-          // set intent to tell user result is cancelled
-          setResult(RESULT_CANCELED, replyIntent);
+        // check both values, if they're not empty add them to intent
+        if (!isNewNameViewEmpty) {
+          // Name is not empty, so add that
+          mNewIngredientName = mEditIngredientNewNameView.getText().toString();
+          replyIntent.putExtra("new_concern", mNewIngredientConcern);
         }
-        // at least one of the new values is filled
-        else {
-
-          // get strings for name and concern
-          mOldIngredientName = mEditIngredientOldNameView.getText().toString();
-          mOldIngredientConcern = mEditIngredientOldConcernView.getText().toString();
-
-          replyIntent.putExtra("old_name", mOldIngredientName);
-          replyIntent.putExtra("old_concern", mOldIngredientConcern);
-
-          // check both values, if they're not empty add them to intent
-          if (!isNewNameViewEmpty) {
-            // Name is not empty, so add that
-            mNewIngredientName = mEditIngredientNewNameView.getText().toString();
-            replyIntent.putExtra("new_name", mNewIngredientName);
-          }
-          if (!isNewConcernViewEmpty) {
-            // Concern is not empty, so add it
-            mNewIngredientConcern = mEditIngredientNewConcernView.getText().toString();
-            replyIntent.putExtra("new_concern", mNewIngredientConcern);
-          }
-
-          Log.d(TAG, "onCreate: " + mNewIngredientName + ": " + mNewIngredientConcern);
-          // send back values for new ingredient and tell user succeeded
-          setResult(RESULT_OK, replyIntent);
-
+        if (!isNewConcernViewEmpty) {
+          // Concern is not empty, so add it
+          mNewIngredientConcern = mEditIngredientNewConcernView.getText().toString();
+          replyIntent.putExtra("new_concern", mNewIngredientConcern);
         }
+
       }
-      finish();
+
+      this.startActivity( replyIntent );
+
+    finish();
     });
   }
 

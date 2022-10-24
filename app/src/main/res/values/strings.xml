@@ -19,7 +19,7 @@
   <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
   <string name="empty_ingredient_not_saved">Ingredient not saved because it is empty.</string>
 
-  <string name="title_edit_ingredient_textview">Enter old and new values for Ingredient</string>
+  <string name="title_edit_ingredient_textview">Enter New Values</string>
   <string name="enter_new_ingredient_edittext_name">Fixed Ingredient Name Here</string>
   <string name="enter_new_ingredient_edittext_concern">Fixed Concern Here</string>
   <string name="enter_old_ingredient_edittext_name">Old Ingredient Name to Edit Here</string>
@@ -48,6 +48,9 @@
   <string name="textview_title_log">Logs</string>
   <string name="textview_subtitle_food">Food</string>
   <string name="textview_subtitle_drink">Drinks</string>
+    <string name="edit">Edit</string>
+  <string name="delete">Delete</string>
+  <string name="detail">Details</string>
 
 
 </resources>

@@ -16,10 +16,19 @@
   </style>
 
   <style name="textview_item">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_marginBottom">8dp</item>
-    <item name="android:paddingLeft">8dp</item>
-    <item name="android:background">@android:color/holo_orange_light</item>
+    <item name="android:layout_margin">@dimen/small_padding</item>
+    <item name="android:paddingLeft">@dimen/small_padding</item>
+    <item name="android:paddingRight">@dimen/small_padding</item>
+    <item name="android:paddingTop">@dimen/smallest_padding</item>
+    <item name="android:paddingBottom">@dimen/smallest_padding</item>
+    <item name="android:background">@color/white</item>
+    <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+  </style>
+
+  <style name="textview_item_option">
+    <item name="android:layout_margin">@dimen/small_padding</item>
+    <item name="android:padding">@dimen/smallest_padding</item>
+    <item name="android:background">@color/lightest_green</item>
     <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
   </style>
 
@@ -27,6 +36,11 @@
     <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:inputType">textAutoComplete</item>
     <item name="android:drawableBottom">@color/black</item>
+    <item name="android:textSize">18sp</item>
+  </style>
+
+  <style name="textview_edit_old_values">
+    <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:textSize">18sp</item>
   </style>
 

@@ -39,8 +39,8 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
   static RecipeViewHolder create(ViewGroup parentRecipe) {
     Context contextRecipe = parentRecipe.getContext();
-    LayoutInflater inflater = LayoutInflater.from(contextRecipe);
-    View viewRecipe = inflater.inflate(R.layout.recyclerview_recipe_item, parentRecipe, false);
+    LayoutInflater inflaterRecipe = LayoutInflater.from(contextRecipe);
+    View viewRecipe = inflaterRecipe.inflate(R.layout.recyclerview_recipe_item, parentRecipe, false);
 
     return new RecipeViewHolder(viewRecipe);
   }

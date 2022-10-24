@@ -41,8 +41,7 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
   @Override
   public void onBindViewHolder(IngredientViewHolder holder, int position) {
     Ingredient currentIngredient = getItem(position);
-    holder.bind(currentIngredient.getIngredientName() + ": " + currentIngredient.getIngredientConcern());
-
+    holder.bind(currentIngredient);
   }//end onBindViewHolder
 
 

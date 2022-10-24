@@ -75,20 +75,6 @@ public class IngredientActivity extends AppCompatActivity {
 
     }
 
-    // Button to edit ingredient
-    editIngredientButton = findViewById(R.id.edit_button_ingredient);
-    editIngredientButton.setOnClickListener( view -> {
-      editIngredientIntent = new Intent(thisActivity, EditIngredientActivity.class);
-      //TODO fix depreciated forResult
-      startActivityForResult(editIngredientIntent, EDIT_INGREDIENT_ACTIVITY_REQUEST_CODE);
-    });
-    // Button to delete ingredient
-    deleteIngredientButton = findViewById(R.id.delete_button_ingredient);
-    deleteIngredientButton.setOnClickListener( view -> {
-      deleteIngredientIntent = new Intent(thisActivity, DeleteIngredientActivity.class);
-      startActivityForResult(deleteIngredientIntent, DELETE_INGREDIENT_ACTIVITY_REQUEST_CODE);
-    });
-
     // FAB to add new ingredient
     addIngredientButton = findViewById(R.id.add_button_ingredient);
     addIngredientButton.setOnClickListener( view -> {
@@ -99,6 +85,17 @@ public class IngredientActivity extends AppCompatActivity {
 
     Log.d(TAG, "onCreate: tags work");
 
+    // TODO turn this into a fragment
+    Intent fromActivityIntent = getIntent();
+    if ( fromActivityIntent != null ){
+      if (fromActivityIntent.getStringExtra("old_name") != null ){
+        String editedIngredientName = fromActivityIntent.getStringExtra("old_name");
+        String editedIngredientConcern = fromActivityIntent.getStringExtra("old_concern");
+        String editedIngredientNewName = fromActivityIntent.getStringExtra("new_name");
+        String editedIngredientNewConcern = fromActivityIntent.getStringExtra("new_concern");
+      }
+      ;
+    }
   }
 
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
