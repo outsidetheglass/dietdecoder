@@ -1,5 +1,6 @@
 package com.dietdecoder.dietdecoder.ui;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,39 +16,40 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
 
-  public RecipeListAdapter(@NonNull DiffUtil.ItemCallback<Recipe> diffCallback) {
-    super(diffCallback);
+  public RecipeListAdapter(@NonNull DiffUtil.ItemCallback<Recipe> diffCallbackRecipe) {
+    super(diffCallbackRecipe);
   }//end RecipeListAdapter
 
 
   @Override
-  public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    return RecipeViewHolder.create(parent);
+  public RecipeViewHolder onCreateViewHolder(ViewGroup parentRecipe, int viewTypeRecipe) {
+    return RecipeViewHolder.create(parentRecipe);
   }// end RecipeViewHolder
 
 
   @Override
-  public void onBindViewHolder(RecipeViewHolder holder, int position) {
-    Recipe currentRecipe = getItem(position);
-    holder.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredient());
+  public void onBindViewHolder(RecipeViewHolder holderRecipe, int positionRecipe) {
+    Recipe currentRecipe = getItem(positionRecipe);
+    Log.d(TAG, "onBindViewHolder: " + currentRecipe.getRecipeName());
+    holderRecipe.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredient());
   }//end onBindViewHolder
 ;
   public static class RecipeDiff extends DiffUtil.ItemCallback<Recipe> {
 
-    private Boolean isEqualName;
-    private Boolean isEqualIngredient;
+    private Boolean isEqualRecipeName;
+    private Boolean isEqualRecipeIngredient;
 
     @Override
-    public boolean areItemsTheSame(@NonNull Recipe oldItem, @NonNull Recipe newItem) {
-      return oldItem == newItem;
+    public boolean areItemsTheSame(@NonNull Recipe oldRecipeItem, @NonNull Recipe newRecipeItem) {
+      return oldRecipeItem == newRecipeItem;
     }//end areItemsTheSame
 
     @Override
-    public boolean areContentsTheSame(@NonNull Recipe oldItem, @NonNull Recipe newItem) {
+    public boolean areContentsTheSame(@NonNull Recipe oldRecipeItem, @NonNull Recipe newRecipeItem) {
       // check all parts of Recipe to see if they're the same
-      isEqualName = oldItem.getRecipeName().equals(newItem.getRecipeName());
-      isEqualIngredient = oldItem.getRecipeIngredient().equals(newItem.getRecipeIngredient());
-      return isEqualName && isEqualIngredient;
+      isEqualRecipeName = oldRecipeItem.getRecipeName().equals(newRecipeItem.getRecipeName());
+      isEqualRecipeIngredient = oldRecipeItem.getRecipeIngredient().equals(newRecipeItem.getRecipeIngredient());
+      return isEqualRecipeName && isEqualRecipeIngredient;
     } //end areContentsTheSame
 
 

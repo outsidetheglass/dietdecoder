@@ -11,23 +11,19 @@ import java.util.List;
 @Dao
 public interface RecipeDao {
 
-  //TODO: fix my Query's by replacing them with Recipe instead of strings
-  // probably need to make ID's for that to work
-
-  // allowing the insert multiple times by passing a
-  // conflict resolution strategy
+  // allowing the insert multiple times by passing a conflict resolution strategy
   // choosing ignore because recipes may seem the same but will have different brands, etc
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  void daoInsert(Recipe recipe);
+  void daoRecipeInsert(Recipe recipe);
 
   @Query("DELETE FROM recipe_table WHERE recipeName = :recipeName AND recipeIngredient = :recipeIngredient")
-  void daoDelete(String recipeName, String recipeIngredient);
+  void daoRecipeDelete(String recipeName, String recipeIngredient);
 
   @Query("UPDATE recipe_table SET recipeIngredient = :newRecipeIngredient WHERE recipeIngredient = :oldRecipeIngredient AND recipeName = :oldRecipeName")
-  void daoUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient);
+  void daoRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient);
 
   @Query("UPDATE recipe_table SET recipeName = :newRecipeName WHERE recipeName = :oldRecipeName AND recipeIngredient = :oldRecipeIngredient")
-  void daoUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName);
+  void daoRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName);
 
 
   // LiveData is a lifecycle library class for live database access

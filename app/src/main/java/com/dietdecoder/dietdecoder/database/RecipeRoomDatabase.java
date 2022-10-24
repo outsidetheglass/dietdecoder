@@ -22,15 +22,15 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
 
   public abstract RecipeDao recipeDao();
 
-  private static volatile RecipeRoomDatabase INSTANCE;
+  private static volatile RecipeRoomDatabase RECIPEINSTANCE;
 
   private static final int NUMBER_OF_THREADS = 4;
 
-  public static final ExecutorService databaseWriteExecutor =
+  public static final ExecutorService recipeDatabaseWriteExecutor =
     Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 
-    private static Callback sRoomDatabaseCallback = new Callback() {
+    private static Callback sRecipeRoomDatabaseCallback = new Callback() {
       @Override
       public void onCreate(@NonNull SupportSQLiteDatabase db) {
 
@@ -38,43 +38,43 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
 
         // If you want to keep data through app restarts,
         // comment out the following block
-        databaseWriteExecutor.execute(() -> {
+        recipeDatabaseWriteExecutor.execute(() -> {
           // Populate the database in the background.
           // If you want to start with more words, just add them.
-          RecipeDao dao = INSTANCE.recipeDao();
+          RecipeDao recipeDao = RECIPEINSTANCE.recipeDao();
           //dao.deleteAll();
 
           Recipe recipe = new Recipe("Taco", "corn tortilla");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
           recipe = new Recipe("Taco", "pinto bean");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
           recipe = new Recipe("Taco", "brown rice");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
           recipe = new Recipe("Egg cheese rice", "brown rice");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
           recipe = new Recipe("Egg cheese rice", "cheddar cheese");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
           recipe = new Recipe("Egg cheese rice", "egg");
-          dao.daoInsert(recipe);
+          recipeDao.daoRecipeInsert(recipe);
         });
 
       }
-    }; //end sRoomDatabaseCallback
+    }; //end sRecipeRoomDatabaseCallback
 
 
-  public static RecipeRoomDatabase getDatabase(final Context context) {
+  public static RecipeRoomDatabase getRecipeDatabase(final Context context) {
 
-    if (INSTANCE == null) {
+    if (RECIPEINSTANCE == null) {
 
       synchronized (RecipeRoomDatabase.class) {
 
-        if (INSTANCE == null) {
+        if (RECIPEINSTANCE == null) {
 
-          INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+          RECIPEINSTANCE = Room.databaseBuilder(context.getApplicationContext(),
               RecipeRoomDatabase.class, "recipe_database"
-            ) //end INSTANCE
+            ) //end RECIPEINSTANCE
 
-            .addCallback(sRoomDatabaseCallback)
+            .addCallback(sRecipeRoomDatabaseCallback)
             //.addMigrations(MIGRATION_1_2)
             .build();
 
@@ -84,9 +84,9 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
 
     }//end if statement
 
-    return INSTANCE;
+    return RECIPEINSTANCE;
 
-  } //end getDatabase
+  } //end getRecipeDatabase
 
 
   // how to add migration

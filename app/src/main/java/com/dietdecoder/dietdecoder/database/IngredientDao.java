@@ -1,7 +1,9 @@
 package com.dietdecoder.dietdecoder.database;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -22,8 +24,8 @@ public interface IngredientDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   void daoInsert(Ingredient ingredient);
 
-  @Query("DELETE FROM ingredient_table WHERE ingredientName = :ingredientName AND ingredientConcern = :ingredientConcern")
-  void daoDelete(String ingredientName, String ingredientConcern);
+  @Delete
+  void daoDelete(Ingredient ingredient);
 
   @Query("UPDATE ingredient_table SET ingredientConcern = :newIngredientConcern WHERE ingredientConcern = :oldIngredientConcern AND ingredientName = :oldIngredientName")
   void daoUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern);

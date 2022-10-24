@@ -20,9 +20,8 @@ public class IngredientViewModel extends AndroidViewModel {
 
 
   private IngredientRepository mRepository;
-  private final LiveData<List<Ingredient>> mViewModelAllIngredients;
-  private LiveData<List<Ingredient>> mViewModelAllIngredientsWithConcern;
-  private String mViewModelIngredientName;
+  //private LiveData<List<Ingredient>> mViewModelAllIngredientsWithConcern;
+  private LiveData<List<Ingredient>> mViewModelAllIngredients;
 
 
   public IngredientViewModel (Application application) {
@@ -39,10 +38,11 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
   //get all ingredients with concern
-  public LiveData<List<Ingredient>> viewModelGetIngredientsWithConcern(String paramConcern) {
-    mViewModelAllIngredientsWithConcern = mRepository.repositoryGetIngredientsWithConcern(paramConcern);
-    return mViewModelAllIngredientsWithConcern;
-  }
+  //TODO LiveData won't work twice like this I think
+//  public LiveData<List<Ingredient>> viewModelGetIngredientsWithConcern(String paramConcern) {
+//    mViewModelAllIngredientsWithConcern = mRepository.repositoryGetIngredientsWithConcern(paramConcern);
+//    return mViewModelAllIngredientsWithConcern;
+//  }
 
 
   // get single ingredient using the name
@@ -68,8 +68,8 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
   // delete ingredient in database
-  public void viewModelDelete(String ingredientName, String ingredientConcern) {
-    mRepository.repositoryDelete(ingredientName, ingredientConcern);
+  public void viewModelDelete(Ingredient ingredient) {
+    mRepository.repositoryDelete(ingredient);
   }
 
 

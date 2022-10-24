@@ -19,16 +19,16 @@ import java.util.List;
 public class RecipeViewModel extends AndroidViewModel {
 
 
-  private RecipeRepository mRepository;
+  private RecipeRepository mRecipeRepository;
   private final LiveData<List<Recipe>> mViewModelAllRecipes;
   private LiveData<List<Recipe>> mViewModelAllRecipesWithIngredient;
   private String mViewModelRecipeName;
 
 
-  public RecipeViewModel(Application application) {
-    super(application);
-    mRepository = new RecipeRepository(application);
-    mViewModelAllRecipes = mRepository.repositoryGetAllRecipes();
+  public RecipeViewModel(Application applicationRecipe) {
+    super(applicationRecipe);
+    mRecipeRepository = new RecipeRepository(applicationRecipe);
+    mViewModelAllRecipes = mRecipeRepository.repositoryGetAllRecipes();
 
   }//end RecipeViewModel method
 
@@ -40,36 +40,37 @@ public class RecipeViewModel extends AndroidViewModel {
 
   //get all recipes with ingredient
   public LiveData<List<Recipe>> viewModelGetRecipesWithIngredient(String paramIngredient) {
-    mViewModelAllRecipesWithIngredient = mRepository.repositoryGetRecipesWithIngredient(paramIngredient);
+    mViewModelAllRecipesWithIngredient = mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredient);
     return mViewModelAllRecipesWithIngredient;
   }
 
 
   // get single recipe using the name
   public Recipe viewModelGetRecipeFromName(String paramRecipeName) {
-    return mRepository.repositoryGetRecipeFromName(paramRecipeName);
+    return mRecipeRepository.repositoryGetRecipeFromName(paramRecipeName);
   }
   public Recipe viewModelGetRecipeFromNameIngredient(String recipeName, String recipeIngredient){
-    return mRepository.repositoryGetRecipeFromNameIngredient(recipeName, recipeIngredient);
+    return mRecipeRepository.repositoryGetRecipeFromNameIngredient(recipeName, recipeIngredient);
   }
 
 
   // add to database
-  public void viewModelInsert(Recipe recipe) { mRepository.repositoryInsert(recipe); }
+  public void viewModelRecipeInsert(Recipe recipe) {
+    mRecipeRepository.repositoryRecipeInsert(recipe); }
 
   // edit recipe in database
-  public void viewModelUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
-    mRepository.repositoryUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+  public void viewModelRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
+    mRecipeRepository.repositoryRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
   }
 
   // edit recipe in database
-  public void viewModelUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
-    mRepository.repositoryUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+  public void viewModelRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
+    mRecipeRepository.repositoryRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
   }
 
   // delete recipe in database
-  public void viewModelDelete(String recipeName, String recipeIngredient) {
-    mRepository.repositoryDelete(recipeName, recipeIngredient);
+  public void viewModelRecipeDelete(String recipeName, String recipeIngredient) {
+    mRecipeRepository.repositoryRecipeDelete(recipeName, recipeIngredient);
   }
 
 

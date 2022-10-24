@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activities;
+package com.dietdecoder.dietdecoder.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dietdecoder.dietdecoder.R;
-
-import java.util.ArrayList;
 
 public class NewIngredientActivity extends AppCompatActivity {
 

@@ -1,6 +1,4 @@
-package com.dietdecoder.dietdecoder.activities;
-
-import static java.security.AccessController.getContext;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;

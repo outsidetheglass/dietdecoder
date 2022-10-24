@@ -23,29 +23,26 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
   private final TextView recipeItemView;
 
 
-  private RecipeViewHolder(View itemView) {
-    super(itemView);
+  private RecipeViewHolder(View itemViewRecipe) {
+    super(itemViewRecipe);
+    recipeItemView = itemViewRecipe.findViewById(R.id.textview_recipe_item);
+  }
 
-    recipeItemView = itemView.findViewById(R.id.textview_recipe);
+
+  public void bind(String textRecipe) {
+    Log.d(TAG, "bind: "+ textRecipe);
+
+    recipeItemView.setText(textRecipe);
 
   }
 
 
-  public void bind(String text) {
-    Log.d(TAG, "bind: "+ text);
-    // if our string isn't empty, set it in view
-    if (!TextUtils.isEmpty(text)) {
-      recipeItemView.setText(text);
-    }
-  }
+  static RecipeViewHolder create(ViewGroup parentRecipe) {
+    Context contextRecipe = parentRecipe.getContext();
+    LayoutInflater inflater = LayoutInflater.from(contextRecipe);
+    View viewRecipe = inflater.inflate(R.layout.recyclerview_recipe_item, parentRecipe, false);
 
-
-  static RecipeViewHolder create(ViewGroup parent) {
-    Context context = parent.getContext();
-    LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.recyclerview_ingredient_item, parent, false);
-
-    return new RecipeViewHolder(view);
+    return new RecipeViewHolder(viewRecipe);
   }
 
 

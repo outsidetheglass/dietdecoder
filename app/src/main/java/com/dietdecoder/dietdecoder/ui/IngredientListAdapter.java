@@ -1,26 +1,39 @@
 package com.dietdecoder.dietdecoder.ui;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.database.Ingredient;
+
+import java.util.List;
 
 public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientViewHolder> {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
+  public IngredientViewModel ingredientViewModel;
+  public List<Ingredient> mIngredientList;
+
 
   public IngredientListAdapter(@NonNull DiffUtil.ItemCallback<Ingredient> diffCallback) {
     super(diffCallback);
+    // don't need context in here because can just get it in onCreateViewHolder from parent.getContext()
   }//end IngredientListAdapter
 
 
   @Override
   public IngredientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    // don't need to make button here because it's already in ViewHolder
     return IngredientViewHolder.create(parent);
   }// end IngredientViewHolder
 
@@ -29,7 +42,9 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
   public void onBindViewHolder(IngredientViewHolder holder, int position) {
     Ingredient currentIngredient = getItem(position);
     holder.bind(currentIngredient.getIngredientName() + ": " + currentIngredient.getIngredientConcern());
+
   }//end onBindViewHolder
+
 
   public static class IngredientDiff extends DiffUtil.ItemCallback<Ingredient> {
 
@@ -53,6 +68,16 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
   }//end IngredientDiff
 
 
+  public void setIngredientList(List<Ingredient> ingredientList) {
+
+    if ( ingredientList != null ) {
+      this.mIngredientList = ingredientList;
+      notifyDataSetChanged();
+    }
+    else {
+      // TODO initialize database here if need be
+    }
+  }
 
 } //end class IngredientListAdapter
 

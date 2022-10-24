@@ -17,9 +17,9 @@ class RecipeRepository {
   private RecipeDao mRecipeDao;
   private final RecipeRoomDatabase mRecipeDatabase;
 
-  RecipeRepository(Application application) {
+  RecipeRepository(Application applicationRecipe) {
     // setup database to be returned via methods
-    mRecipeDatabase = RecipeRoomDatabase.getDatabase(application);
+    mRecipeDatabase = RecipeRoomDatabase.getRecipeDatabase(applicationRecipe);
     mRecipeDao = mRecipeDatabase.recipeDao();
   }
 
@@ -49,36 +49,36 @@ class RecipeRepository {
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
-  void repositoryInsert(Recipe recipe) {
+  void repositoryRecipeInsert(Recipe recipe) {
 
-    RecipeRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoInsert(recipe);
+    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
+      mRecipeDao.daoRecipeInsert(recipe);
     });
 
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryDelete(String recipeName, String recipeIngredient) {
+  void repositoryRecipeDelete(String recipeName, String recipeIngredient) {
 
-    RecipeRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoDelete(recipeName, recipeIngredient);
+    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
+      mRecipeDao.daoRecipeDelete(recipeName, recipeIngredient);
     });
 
   } // end delete
 
 
-  void repositoryUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
+  void repositoryRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
 
-    RecipeRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
+      mRecipeDao.daoRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
     });
 
   } // end update ingredient
 
-  void repositoryUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
+  void repositoryRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
 
-    RecipeRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
+      mRecipeDao.daoRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
     });
 
   } // end update ingredient

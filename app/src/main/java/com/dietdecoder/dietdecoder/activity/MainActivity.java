@@ -1,23 +1,15 @@
-package com.dietdecoder.dietdecoder.activities;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.database.Ingredient;
-import com.dietdecoder.dietdecoder.ui.IngredientListAdapter;
-import com.dietdecoder.dietdecoder.ui.IngredientViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 //TODO fix edit delete button
 public class MainActivity extends AppCompatActivity {

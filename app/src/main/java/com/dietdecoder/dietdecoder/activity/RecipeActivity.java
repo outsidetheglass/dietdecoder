@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activities;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -44,19 +44,24 @@ public class RecipeActivity extends AppCompatActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe);
-
     RecyclerView recyclerView = findViewById(R.id.recyclerview_recipe);
 
+    Log.d(TAG, "onCreate: Before adapter");
     mRecipeListAdapter = new RecipeListAdapter(new RecipeListAdapter.RecipeDiff());
     recyclerView.setAdapter(mRecipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    Log.d(TAG, "onCreate: After adapter, before model");
 
     mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
+    Log.d(TAG, "onCreate: After model, before observer");
     mRecipeViewModel.viewModelGetAllRecipes().observe(this, recipes -> {
+
+      Log.d(TAG, "onCreate: inside observe, before submitlist");
       // Update the cached copy of the words in the adapter.
       mRecipeListAdapter.submitList(recipes);
     });
+
 
     // Button to edit recipe
     editButton = findViewById(R.id.edit_button_recipe);
@@ -65,6 +70,7 @@ public class RecipeActivity extends AppCompatActivity {
       //TODO fix depreciated forResult
       startActivityForResult(editIntent, EDIT_RECIPE_ACTIVITY_REQUEST_CODE);
     });
+
     // Button to delete recipe
     //TODO get delete working and uncomment this
     deleteButton = findViewById(R.id.delete_button_recipe);
@@ -111,7 +117,7 @@ public class RecipeActivity extends AppCompatActivity {
       Log.d(TAG, "newRecipeActivityResult: " + recipeName + ": " + recipeIngredient);
 
       Recipe recipe = new Recipe(recipeName, recipeIngredient);
-      mRecipeViewModel.viewModelInsert(recipe);
+      mRecipeViewModel.viewModelRecipeInsert(recipe);
     }//end result_ok
     else  {
       Toast.makeText(
@@ -138,18 +144,18 @@ public class RecipeActivity extends AppCompatActivity {
         if (!isNewNameEmpty && !isNewIngredientEmpty) {
           String newRecipeName = data.getStringExtra("new_name");
           String newRecipeIngredient = data.getStringExtra("new_ingredient");
-          mRecipeViewModel.viewModelUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
-          mRecipeViewModel.viewModelUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
         }
         // only update name
         else if (!isNewNameEmpty) {
           String newRecipeName = data.getStringExtra("new_name");
-          mRecipeViewModel.viewModelUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
         }
         // now only update ingredient
         else if (!isNewIngredientEmpty) {
           String newRecipeIngredient = data.getStringExtra("new_ingredient");
-          mRecipeViewModel.viewModelUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
         } //end updating recipe
       }//end result_ok
       // edit was not successful, so tell user with toast
@@ -185,7 +191,7 @@ public class RecipeActivity extends AppCompatActivity {
       // if the recipe exists, delete it
       if ( recipeExists ) {
         // TODO fix this, it won't delete because livedata is being weird
-        mRecipeViewModel.viewModelDelete(recipeName, recipeIngredient);
+        mRecipeViewModel.viewModelRecipeDelete(recipeName, recipeIngredient);
 
       }
       // recipe does not exist, make toast to tell user can't delete

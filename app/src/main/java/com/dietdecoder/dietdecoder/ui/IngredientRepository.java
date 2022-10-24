@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.ui;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.dietdecoder.dietdecoder.database.IngredientDao;
 import com.dietdecoder.dietdecoder.database.Ingredient;
@@ -58,10 +59,10 @@ class IngredientRepository {
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryDelete(String ingredientName, String ingredientConcern) {
+  void repositoryDelete(Ingredient ingredient) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoDelete(ingredientName, ingredientConcern);
+      mIngredientDao.daoDelete(ingredient);
     });
 
   } // end delete

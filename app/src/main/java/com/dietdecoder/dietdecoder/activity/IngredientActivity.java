@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activities;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import com.dietdecoder.dietdecoder.ui.IngredientListAdapter;
 import com.dietdecoder.dietdecoder.ui.IngredientViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 public class IngredientActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
@@ -26,18 +29,21 @@ public class IngredientActivity extends AppCompatActivity {
 
   private IngredientViewModel mIngredientViewModel;
   private IngredientListAdapter mIngredientListAdapter;
+
+  private LiveData<List<Ingredient>> mActivityAllIngredients;
+
   public static final int NEW_INGREDIENT_ACTIVITY_REQUEST_CODE = 1;
   public static final int EDIT_INGREDIENT_ACTIVITY_REQUEST_CODE = 2;
   public static final int DELETE_INGREDIENT_ACTIVITY_REQUEST_CODE = 3;
 
 
-  public FloatingActionButton editButton;
-  public FloatingActionButton deleteButton;
-  public FloatingActionButton addButton;
+  public FloatingActionButton editIngredientButton;
+  public FloatingActionButton deleteIngredientButton;
+  public FloatingActionButton addIngredientButton;
 
-  private Intent editIntent;
-  private Intent deleteIntent;
-  private Intent addIntent;
+  private Intent editIngredientIntent;
+  private Intent deleteIngredientIntent;
+  private Intent addIngredientIntent;
 
 
   @Override
@@ -51,32 +57,43 @@ public class IngredientActivity extends AppCompatActivity {
     recyclerView.setAdapter(mIngredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
     mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
-    mIngredientViewModel.viewModelGetAllIngredients().observe(this, ingredients -> {
-      // Update the cached copy of the words in the adapter.
-      mIngredientListAdapter.submitList(ingredients);
-    });
+    // if not null, then set list of ingredients
+    mActivityAllIngredients = mIngredientViewModel.viewModelGetAllIngredients();
+
+    // turn LiveData into list and set that in Adapter so we can get positions
+    mIngredientListAdapter.setIngredientList(mActivityAllIngredients.getValue());
+
+    //TODO move this if statement to setIngredientList somehow
+    if ( mActivityAllIngredients != null ) {
+      mActivityAllIngredients.observe(this, ingredients -> {
+        // Update the cached copy of the words in the adapter.
+        mIngredientListAdapter.submitList(ingredients);
+      });
+
+    }
 
     // Button to edit ingredient
-    editButton = findViewById(R.id.edit_button_ingredient);
-    editButton.setOnClickListener( view -> {
-      editIntent = new Intent(thisActivity, EditIngredientActivity.class);
+    editIngredientButton = findViewById(R.id.edit_button_ingredient);
+    editIngredientButton.setOnClickListener( view -> {
+      editIngredientIntent = new Intent(thisActivity, EditIngredientActivity.class);
       //TODO fix depreciated forResult
-      startActivityForResult(editIntent, EDIT_INGREDIENT_ACTIVITY_REQUEST_CODE);
+      startActivityForResult(editIngredientIntent, EDIT_INGREDIENT_ACTIVITY_REQUEST_CODE);
     });
     // Button to delete ingredient
-    deleteButton = findViewById(R.id.delete_button_ingredient);
-    deleteButton.setOnClickListener( view -> {
-      deleteIntent = new Intent(thisActivity, DeleteIngredientActivity.class);
-      startActivityForResult(deleteIntent, DELETE_INGREDIENT_ACTIVITY_REQUEST_CODE);
+    deleteIngredientButton = findViewById(R.id.delete_button_ingredient);
+    deleteIngredientButton.setOnClickListener( view -> {
+      deleteIngredientIntent = new Intent(thisActivity, DeleteIngredientActivity.class);
+      startActivityForResult(deleteIngredientIntent, DELETE_INGREDIENT_ACTIVITY_REQUEST_CODE);
     });
 
     // FAB to add new ingredient
-    addButton = findViewById(R.id.add_button_ingredient);
-    addButton.setOnClickListener( view -> {
-      addIntent = new Intent(thisActivity, NewIngredientActivity.class);
-      startActivityForResult(addIntent, NEW_INGREDIENT_ACTIVITY_REQUEST_CODE);
+    addIngredientButton = findViewById(R.id.add_button_ingredient);
+    addIngredientButton.setOnClickListener( view -> {
+      addIngredientIntent = new Intent(thisActivity, NewIngredientActivity.class);
+      startActivityForResult(addIngredientIntent, NEW_INGREDIENT_ACTIVITY_REQUEST_CODE);
     });
 
 
@@ -96,14 +113,15 @@ public class IngredientActivity extends AppCompatActivity {
         editIngredientActivityResult(resultCode, data);
       }
       else if (requestCode == DELETE_INGREDIENT_ACTIVITY_REQUEST_CODE) {
-        deleteIngredientActivityResult(resultCode, data);
+        //deleteIngredientActivityResult(resultCode, data);
       } //end request codes to run method
 
     }//end request codes activity results
 
-
+// new ingredient activity was run
   private void newIngredientActivityResult(int resultCode, Intent data) {
 
+    // if new ingredient returned successfully
     if (resultCode == RESULT_OK) {
       String ingredientName = data.getStringExtra("ingredient_name");
       String ingredientConcern = data.getStringExtra("concern");
@@ -160,51 +178,51 @@ public class IngredientActivity extends AppCompatActivity {
     } //end if result not okay
 
   }//end edit ingredient activity result
-
-  private void deleteIngredientActivityResult(int resultCode, Intent data) {
-
-    if (resultCode == RESULT_OK) {
-
-      // set which ingredient we're updating
-      String ingredientName = data.getStringExtra("ingredient_name");
-      String ingredientConcern = data.getStringExtra("ingredient_concern");
-
-      Log.d(TAG, "onActivityResult: " + ingredientName + ": " + ingredientConcern);
-
-      // ingredient must exist if we want to delete it, so let's check
-      // check all the ingredients listed right now to see if the ingredient is one of them
-      Boolean ingredientExists = Boolean.FALSE;
-      for (int i=0; i < mIngredientListAdapter.getCurrentList().size(); i++){
-        Ingredient currentIngredient = mIngredientListAdapter.getCurrentList().get(i);
-        if (currentIngredient.getIngredientName() == ingredientName && currentIngredient.getIngredientConcern() == ingredientConcern) {
-          ingredientExists = Boolean.TRUE;
-        }
-      }
-
-      // if the ingredient exists, delete it
-      if ( ingredientExists ) {
-        // TODO fix this, it won't delete because livedata is being weird
-        mIngredientViewModel.viewModelDelete(ingredientName, ingredientConcern);
-
-      }
-      // ingredient does not exist, make toast to tell user can't delete
-      else {
-        Toast.makeText(
-          getApplicationContext(),
-          R.string.value_not_found_not_deleted,
-          Toast.LENGTH_LONG).show();
-
-      }
-
-    }//end result_ok
-    else  {
-      Toast.makeText(
-        getApplicationContext(),
-        R.string.empty_not_deleted,
-        Toast.LENGTH_LONG).show();
-    } //end if result not okay
-
-  }//end delete ingredient activity result
+//
+//  private void deleteIngredientActivityResult(int resultCode, Intent data) {
+//
+//    if (resultCode == RESULT_OK) {
+//
+//      // set which ingredient we're updating
+//      String ingredientName = data.getStringExtra("ingredient_name");
+//      String ingredientConcern = data.getStringExtra("ingredient_concern");
+//
+//      Log.d(TAG, "onActivityResult: " + ingredientName + ": " + ingredientConcern);
+//
+//      // ingredient must exist if we want to delete it, so let's check
+//      // check all the ingredients listed right now to see if the ingredient is one of them
+//      Boolean ingredientExists = Boolean.FALSE;
+//      for (int i=0; i < mIngredientListAdapter.getCurrentList().size(); i++){
+//        Ingredient currentIngredient = mIngredientListAdapter.getCurrentList().get(i);
+//        if (currentIngredient.getIngredientName() == ingredientName && currentIngredient.getIngredientConcern() == ingredientConcern) {
+//          ingredientExists = Boolean.TRUE;
+//        }
+//      }
+//
+//      // if the ingredient exists, delete it
+//      if ( ingredientExists ) {
+//        // TODO fix this, it won't delete because livedata is being weird
+//        mIngredientViewModel.viewModelDelete(ingredient);
+//
+//      }
+//      // ingredient does not exist, make toast to tell user can't delete
+//      else {
+//        Toast.makeText(
+//          getApplicationContext(),
+//          R.string.value_not_found_not_deleted,
+//          Toast.LENGTH_LONG).show();
+//
+//      }
+//
+//    }//end result_ok
+//    else  {
+//      Toast.makeText(
+//        getApplicationContext(),
+//        R.string.empty_not_deleted,
+//        Toast.LENGTH_LONG).show();
+//    } //end if result not okay
+//
+//  }//end delete ingredient activity result
 
 
 
