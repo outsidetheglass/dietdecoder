@@ -1,8 +1,12 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.ui.ingredient;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+
+import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredient.IngredientRoomDatabase;
 
 import java.util.List;
 
@@ -30,43 +34,55 @@ class IngredientRepository {
   }
 
   // get only concern from database for ingredients
-  LiveData<List<Ingredient>> repositoryGetIngredientsWithConcern(String concern) {
-    return mIngredientDao.daoGetIngredientsWithConcern(concern);
-  }
+  //TODO add other properties of ingredient type here
+//  LiveData<List<Ingredient>> repositoryGetIngredientsWithConcern(String concern) {
+//    return mIngredientDao.daoGetIngredientsWithConcern(concern);
+//  }
 
   // get only given ingredient using name
   public Ingredient repositoryGetIngredientFromName(String ingredientName) {
     return mIngredientDao.daoGetIngredientFromName(ingredientName);
   }
-
+  //TODO add other properties of ingredient type here
+//  public Ingredient repositoryGetIngredientFromNameConcern(String ingredientName, String ingredientConcern) {
+//    return mIngredientDao.daoGetIngredientFromNameConcern(ingredientName, ingredientConcern);
+//  }
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
-  void repositoryInsert(Ingredient ingredient) {
+  void repositoryInsertIngredient(Ingredient ingredient) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoInsert(ingredient);
+      mIngredientDao.daoInsertIngredient(ingredient);
     });
 
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryDelete(Ingredient ingredient) {
+  void repositoryDeleteIngredient(Ingredient ingredient) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoDelete(ingredient);
+      mIngredientDao.daoDeleteIngredient(ingredient);
     });
 
   } // end delete
 
+//TODO add other properties of ingredient type here
+//  void repositoryUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
+//
+//    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+//      mIngredientDao.daoUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
+//    });
+//
+//  } // end update concern
 
-  void repositoryUpdate(Ingredient ingredient) {
+  void repositoryUpdateIngredientName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
 
     IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoUpdate(ingredient);
+      mIngredientDao.daoUpdateIngredientName(oldIngredientName, oldIngredientConcern, newIngredientName);
     });
 
-  } // end update
+  } // end update concern
 
 
 

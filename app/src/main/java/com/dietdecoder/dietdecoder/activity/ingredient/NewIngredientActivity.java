@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.activity.ingredient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,12 +9,12 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
+import com.dietdecoder.dietdecoder.R;
 
 public class NewIngredientActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
-  private final String TAG = getClass().getSimpleName();
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
   public static String mIngredientName;
   public static String mIngredientConcern;

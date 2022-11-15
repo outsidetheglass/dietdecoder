@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.database.ingredient;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -6,23 +6,30 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
 @Dao
 public interface IngredientDao {
 
+  //TODO: fix my Query's by replacing them with Ingredient instead of strings
+  // probably need to make ID's for that to work
+
   // allowing the insert multiple times by passing a
   // conflict resolution strategy
   // choosing ignore because ingredients may seem the same but will have different brands, etc
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  void daoInsert(Ingredient ingredient);
-  // TODO: understand why adding onConflict didn't work with delete method
+  void daoInsertIngredient(Ingredient ingredient);
+
   @Delete
-  void daoDelete(Ingredient ingredient);
-  @Update(onConflict = OnConflictStrategy.IGNORE)
-  void daoUpdate(Ingredient ingredient);
+  void daoDeleteIngredient(Ingredient ingredient);
+
+  @Query("UPDATE ingredient_table SET ingredientChemicalName = :newIngredientChemicalName WHERE ingredientChemicalName = :oldIngredientChemicalName AND ingredientName = :oldIngredientName")
+  void daoUpdateIngredientChemicalName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientChemicalName);
+
+  @Query("UPDATE ingredient_table SET ingredientName = :newIngredientName WHERE ingredientName = :oldIngredientName AND ingredientChemicalName = :oldIngredientChemicalName")
+  void daoUpdateIngredientName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientName);
+
 
   // LiveData is a lifecycle library class for live database access
   // Select all ingredients from table and alphabetize them by name
@@ -30,12 +37,14 @@ public interface IngredientDao {
   LiveData<List<Ingredient>> daoGetAlphabetizedIngredients();
 
   // Sort by specific chemical and alphabetize them by ingredient name
-  @Query("SELECT * FROM ingredient_table WHERE ingredientConcern LIKE :daoConcern ORDER BY ingredientName ASC")
-  LiveData<List<Ingredient>> daoGetIngredientsWithConcern(String daoConcern);
+  @Query("SELECT * FROM ingredient_table WHERE ingredientChemicalName LIKE :daoChemicalName ORDER BY ingredientName ASC")
+  LiveData<List<Ingredient>> daoGetIngredientsWithChemicalName(String daoChemicalName);
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName")
   Ingredient daoGetIngredientFromName(String daoIngredientName);
 
+  @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName AND ingredientChemicalName = :daoIngredientChemicalName")
+  Ingredient daoGetIngredientFromNameChemicalName(String daoIngredientName, String daoIngredientChemicalName);
   /*
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")

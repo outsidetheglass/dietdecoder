@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <item
+    android:title="@string/edit"
+    android:id="@+id/edit_option"
+    android:text="@string/edit"
+    android:icon="@drawable/ic_baseline_edit"
+    />
+
+  <item
+    android:title="@string/delete"
+    android:id="@+id/delete_option"
+    android:icon="@drawable/ic_baseline_delete_24"
+    android:text="@string/delete"
+    />
+
+  <item
+    android:title="@string/detail"
+    android:id="@+id/detail_option"
+    android:text="@string/detail"
+    />
+
+</menu>

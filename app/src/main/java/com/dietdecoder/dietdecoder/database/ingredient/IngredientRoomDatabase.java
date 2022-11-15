@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder;
+package com.dietdecoder.dietdecoder.database.ingredient;
 
 import android.content.Context;
 
@@ -6,9 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -29,7 +27,7 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
 
   private static final int NUMBER_OF_THREADS = 4;
 
-  static final ExecutorService databaseWriteExecutor =
+  public static final ExecutorService databaseWriteExecutor =
     Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 
@@ -47,9 +45,9 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
           IngredientDao dao = INSTANCE.ingredientDao();
           //dao.deleteAll();
 
-          Ingredient ingredient = new Ingredient("Miso paste", "tyramine");
+          Ingredient ingredient = new Ingredient("Miso paste", "tyramine", 1.1, "mL");
           dao.daoInsert(ingredient);
-          ingredient = new Ingredient("Rice", "None");
+          ingredient = new Ingredient("Rice", "None", 0.0, "g");
           dao.daoInsert(ingredient);
         });
 
@@ -57,7 +55,7 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
     }; //end sRoomDatabaseCallback
 
 
-  static IngredientRoomDatabase getDatabase(final Context context) {
+  public static IngredientRoomDatabase getDatabase(final Context context) {
 
     if (INSTANCE == null) {
 

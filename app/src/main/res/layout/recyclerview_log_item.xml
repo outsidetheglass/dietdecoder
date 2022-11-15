@@ -6,9 +6,9 @@
 
 
   <TextView
-    android:id="@+id/textView_ingredients"
-    style="@style/word_title"
-    android:layout_width="match_parent"
+    android:id="@+id/textview_log"
+    style="@style/textview_item"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/green_200" />
 

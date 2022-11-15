@@ -3,6 +3,15 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <TextView
+    android:id="@+id/textview_new_ingredient"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/big_padding"
+    android:text="@string/title_textview_new_ingredient"
+    android:textAppearance="@style/textview_title"
+    android:layout_gravity="center_horizontal"    />
+
   <EditText
     android:id="@+id/edittext_ingredient_name"
     android:layout_width="wrap_content"
@@ -21,12 +30,12 @@
 
   <Button
     android:id="@+id/button_save"
+    android:text="@string/button_save"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/green_500"
-    android:text="@string/button_save"
     android:layout_margin="@dimen/big_padding"
-    android:textColor="@color/button_label" />
+    android:background="@color/green_500"
+    android:textColor="@color/button_label"/>
 
 </LinearLayout>
 
