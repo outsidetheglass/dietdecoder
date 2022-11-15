@@ -6,6 +6,7 @@
   <dimen name="small_padding">8dp</dimen>
   <dimen name="smallest_padding">4dp</dimen>
   <dimen name="big_padding">16dp</dimen>
+  <dimen name="bigger_padding">24dp</dimen>
   <dimen name="main_title_padding">40sp</dimen>
   <dimen name="main_content_layout_marginStart">30dp</dimen>
   <dimen name="main_content_layout_height">380dp</dimen>

@@ -29,32 +29,43 @@
           <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-
-
-      <activity android:name=".activity.IngredientActivity"
-        android:exported="false"/>
-      <activity android:name=".activity.RecipeActivity"
-        android:exported="false"/>
-      <activity android:name=".activity.LogActivity"
+      <activity android:name=".activity.ResourcesActivity"
         android:exported="false"/>
 
+
+      <activity android:name=".activity.ingredient.IngredientActivity"
+        android:exported="false"/>
+      <activity android:name=".activity.recipe.RecipeActivity"
+        android:exported="false"/>
+      <activity android:name=".activity.log.LogActivity"
+        android:exported="false"/>
+
       <activity
-        android:name=".activity.DeleteIngredientActivity"
+        android:name=".activity.ingredient.DeleteIngredientActivity"
         android:exported="false" />
       <activity
-        android:name=".activity.DetailIngredientActivity"
+        android:name=".activity.ingredient.DetailIngredientActivity"
         android:exported="false" />
       <activity
-        android:name=".activity.NewIngredientActivity"
+        android:name=".activity.ingredient.NewIngredientActivity"
         android:exported="false" />
       <activity
-        android:name=".activity.EditIngredientActivity"
+        android:name=".activity.ingredient.EditIngredientActivity"
+        android:exported="false" />
+
+      <activity
+        android:name=".activity.recipe.NewRecipeActivity"
         android:exported="false" />
       <activity
-        android:name=".activity.NewRecipeActivity"
+        android:name=".activity.recipe.EditRecipeActivity"
+        android:exported="false" />
+
+
+      <activity
+        android:name=".activity.symptom.SymptomActivity"
         android:exported="false" />
       <activity
-        android:name=".activity.EditRecipeActivity"
+        android:name=".activity.symptom.DetailSymptomActivity"
         android:exported="false" />
 
     </application>

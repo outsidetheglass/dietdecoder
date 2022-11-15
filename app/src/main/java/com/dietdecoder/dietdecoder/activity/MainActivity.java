@@ -10,6 +10,10 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.ingredient.IngredientActivity;
+import com.dietdecoder.dietdecoder.activity.log.LogActivity;
+import com.dietdecoder.dietdecoder.activity.recipe.RecipeActivity;
+import com.dietdecoder.dietdecoder.activity.symptom.SymptomActivity;
 
 //TODO fix edit delete button
 public class MainActivity extends AppCompatActivity {
@@ -21,10 +25,12 @@ public class MainActivity extends AppCompatActivity {
   public Button ingredientButton;
   public Button recipeButton;
   public Button logButton;
+  public Button symptomButton;
 
   private Intent ingredientIntent;
   private Intent recipeIntent;
   private Intent logIntent;
+  private Intent symptomIntent;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +52,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(recipeIntent);
       });
 
-      // Button to got to recipe's page
-      logButton = findViewById(R.id.button_log);
-      logButton.setOnClickListener( view -> {
-        logIntent = new Intent(thisActivity, LogActivity.class);
-        startActivity(logIntent);
-      });
+    // Button to got to recipe's page
+    logButton = findViewById(R.id.button_log);
+    logButton.setOnClickListener( view -> {
+      logIntent = new Intent(thisActivity, LogActivity.class);
+      startActivity(logIntent);
+    });
+
+    // Button to got to recipe's page
+    symptomButton = findViewById(R.id.button_symptom);
+    symptomButton.setOnClickListener( view -> {
+      symptomIntent = new Intent(thisActivity, SymptomActivity.class);
+      startActivity(symptomIntent);
+    });
 
       Log.d(TAG, "onCreate: tags work");
   } //end onCreate

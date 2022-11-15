@@ -1,16 +1,17 @@
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
   android:layout_height="match_parent"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  tools:context=".activity.ingredient.IngredientActivity"
+  tools:context=".activity.symptom.SymptomActivity"
   xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <TextView
-    android:id="@+id/textview_title_ingredient"
+    android:id="@+id/textview_title_symptom"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:text="@string/textview_title_ingredient"
+    android:text="@string/textview_title_symptom"
     android:textAppearance="@style/textview_title"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintHorizontal_bias="0.50"
@@ -20,9 +21,9 @@
     app:layout_constraintVertical_bias="0.05" />
 
   <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerview_ingredient"
+    android:id="@+id/recyclerview_symptom"
     android:layout_width="@dimen/main_content_layout_width"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/main_content_layout_height"
     android:layout_marginStart="@dimen/main_content_layout_marginStart"
     android:background="@color/green_200"
     android:nestedScrollingEnabled="false"
@@ -32,12 +33,12 @@
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textview_title_ingredient"
+    app:layout_constraintTop_toBottomOf="@+id/textview_title_symptom"
     app:layout_constraintVertical_bias="0.10"
-    tools:listitem="@layout/recyclerview_ingredient_item" />
+    tools:listitem="@layout/recyclerview_symptom_item" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/add_button_ingredient"
+    android:id="@+id/add_button_symptom"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_baseline_add_24"

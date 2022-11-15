@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+    android:id="@+id/textview_title_symptom_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/big_padding"
+    android:text="@string/title_symptom_detail_textview"
+    android:textAlignment="center"
+    android:textAppearance="@style/textview_title"
+    android:layout_gravity="center_horizontal"    />
+
+
+  <TextView
+    android:id="@+id/subsubtitle_textview_symptom_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/symptom_detail_name_textview"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+  <TextView
+    android:id="@+id/textview_symptom_name_value"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/bigger_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+
+  <TextView
+    android:id="@+id/subsubtitle_textview_symptom_category"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/symptom_detail_category_textview"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+  <TextView
+    android:id="@+id/textview_symptom_category_value"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/bigger_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+
+  <TextView
+    android:id="@+id/subsubtitle_textview_symptom_description"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/symptom_detail_description_textview"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+  <TextView
+    android:id="@+id/textview_symptom_description_value"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/bigger_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+
+  <TextView
+    android:id="@+id/subsubtitle_textview_symptom_suffertype"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/symptom_detail_suffertype_textview"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/big_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+  <TextView
+    android:id="@+id/textview_symptom_suffertype_value"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/green_200"
+    android:padding="@dimen/small_padding"
+    android:textAppearance="@style/textview_main_content"
+    android:layout_marginLeft="@dimen/bigger_padding"
+    android:layout_marginTop="@dimen/big_padding" />
+
+  <Button
+    android:id="@+id/button_from_detail_to_all_symptom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/green_500"
+    android:text="@string/button_back"
+    android:layout_margin="@dimen/big_padding"
+    android:textColor="@color/button_label" />
+
+</LinearLayout>
+
