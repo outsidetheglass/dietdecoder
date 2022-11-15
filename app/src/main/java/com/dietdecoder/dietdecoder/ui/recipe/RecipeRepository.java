@@ -34,9 +34,16 @@ class RecipeRepository {
   }
 
   // get only ingredient from database for recipes
-  LiveData<List<Recipe>> repositoryGetRecipesWithIngredient(String ingredient) {
-    return mRecipeDao.daoGetRecipesWithIngredient(ingredient);
+  List<Recipe> repositoryGetRecipesWithIngredient(List<String> ingredientName) {
+    return mRecipeDao.daoGetRecipesWithIngredient(ingredientName);
   }
+
+  // get only given recipe using name
+  public List<Recipe> repositoryGetAllRecipeFromName(String recipeName) {
+    return mRecipeDao.daoGetAllRecipeFromName(recipeName);
+  }
+
+
 
   // get only given recipe using name
   public Recipe repositoryGetRecipeFromName(String recipeName) {
@@ -58,7 +65,7 @@ class RecipeRepository {
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryRecipeDelete(String recipeName, String recipeIngredient) {
+  void repositoryRecipeDelete(String recipeName, List<String> recipeIngredient) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeDelete(recipeName, recipeIngredient);
@@ -67,7 +74,7 @@ class RecipeRepository {
   } // end delete
 
 
-  void repositoryRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
+  void repositoryRecipeUpdateIngredient(String oldRecipeName, List<String> oldRecipeIngredient, List<String> newRecipeIngredient) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
@@ -75,7 +82,7 @@ class RecipeRepository {
 
   } // end update ingredient
 
-  void repositoryRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
+  void repositoryRecipeUpdateName(String oldRecipeName, List<String> oldRecipeIngredient, String newRecipeName) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);

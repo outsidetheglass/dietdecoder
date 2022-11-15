@@ -8,6 +8,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,18 +45,18 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
           RecipeDao recipeDao = RECIPEINSTANCE.recipeDao();
           //dao.deleteAll();
 
-          Recipe recipe = new Recipe("Taco", "corn tortilla");
+          Recipe recipe = new Recipe("Taco", Collections.singletonList(("corn tortilla")));
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", "pinto bean");
+          recipe = new Recipe("Taco", Collections.singletonList("pinto bean"));
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", "brown rice");
+          recipe = new Recipe("Taco", Collections.singletonList("brown rice"));
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Egg cheese rice", "brown rice");
+          recipe = new Recipe("Egg cheese rice", Collections.singletonList("brown rice"));
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Egg cheese rice", "cheddar cheese");
-          recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Egg cheese rice", "egg");
-          recipeDao.daoRecipeInsert(recipe);
+//          recipe = new Recipe("Egg cheese rice", "cheddar cheese");
+//          recipeDao.daoRecipeInsert(recipe);
+//          recipe = new Recipe("Egg cheese rice", "egg");
+//          recipeDao.daoRecipeInsert(recipe);
         });
 
       }

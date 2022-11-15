@@ -39,11 +39,13 @@ public class RecipeViewModel extends AndroidViewModel {
   }
 
   //get all recipes with ingredient
-  public LiveData<List<Recipe>> viewModelGetRecipesWithIngredient(String paramIngredient) {
-    mViewModelAllRecipesWithIngredient = mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredient);
-    return mViewModelAllRecipesWithIngredient;
+  public List<Recipe> viewModelGetRecipesWithIngredient(List<String> paramIngredientName) {
+    return mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredientName);
   }
 
+  public List<Recipe> viewModelGetAllRecipeFromName(String paramRecipeName){
+    return mRecipeRepository.repositoryGetAllRecipeFromName(paramRecipeName);
+  }
 
   // get single recipe using the name
   public Recipe viewModelGetRecipeFromName(String paramRecipeName) {
@@ -59,17 +61,17 @@ public class RecipeViewModel extends AndroidViewModel {
     mRecipeRepository.repositoryRecipeInsert(recipe); }
 
   // edit recipe in database
-  public void viewModelRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
+  public void viewModelRecipeUpdateName(String oldRecipeName, List<String> oldRecipeIngredient, String newRecipeName) {
     mRecipeRepository.repositoryRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
   }
 
   // edit recipe in database
-  public void viewModelRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
+  public void viewModelRecipeUpdateIngredient(String oldRecipeName, List<String> oldRecipeIngredient, List<String> newRecipeIngredient) {
     mRecipeRepository.repositoryRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
   }
 
   // delete recipe in database
-  public void viewModelRecipeDelete(String recipeName, String recipeIngredient) {
+  public void viewModelRecipeDelete(String recipeName, List<String> recipeIngredient) {
     mRecipeRepository.repositoryRecipeDelete(recipeName, recipeIngredient);
   }
 

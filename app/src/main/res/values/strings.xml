@@ -60,5 +60,10 @@
   <string name="symptom_detail_suffertype_textview">Type</string>
   <string name="textview_title_symptom">Symptoms</string>
 
+  <string name="title_textview_new_log">New Log</string>
+  <string name="button_save_log">Save Log</string>
+
+
+  <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
 
 </resources>

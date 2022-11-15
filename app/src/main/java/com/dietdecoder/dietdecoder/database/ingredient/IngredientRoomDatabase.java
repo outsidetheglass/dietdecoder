@@ -46,9 +46,9 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
           //dao.deleteAll();
 
           Ingredient ingredient = new Ingredient("Miso paste", "tyramine", 1.1, "mL");
-          dao.daoInsert(ingredient);
+          dao.daoInsertIngredient(ingredient);
           ingredient = new Ingredient("Rice", "None", 0.0, "g");
-          dao.daoInsert(ingredient);
+          dao.daoInsertIngredient(ingredient);
         });
 
       }

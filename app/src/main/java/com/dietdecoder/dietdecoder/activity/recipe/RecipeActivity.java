@@ -17,6 +17,8 @@ import com.dietdecoder.dietdecoder.ui.recipe.RecipeListAdapter;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Collections;
+
 public class RecipeActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
@@ -47,14 +49,17 @@ public class RecipeActivity extends AppCompatActivity {
     RecyclerView recyclerView = findViewById(R.id.recyclerview_recipe);
 
     Log.d(TAG, "onCreate: Before adapter");
+    // start the adapter, which we use to see the recipes listed
     mRecipeListAdapter = new RecipeListAdapter(new RecipeListAdapter.RecipeDiff());
     recyclerView.setAdapter(mRecipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     Log.d(TAG, "onCreate: After adapter, before model");
 
+    // view model to be the connection to database
     mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
     Log.d(TAG, "onCreate: After model, before observer");
+    // get all the recipes in a livedata model view
     mRecipeViewModel.viewModelGetAllRecipes().observe(this, recipes -> {
 
       Log.d(TAG, "onCreate: inside observe, before submitlist");
@@ -97,10 +102,21 @@ public class RecipeActivity extends AppCompatActivity {
     if (resultCode == RESULT_OK) {
       String recipeName = data.getStringExtra("recipe_name");
       String recipeIngredient = data.getStringExtra("ingredient");
+      String recipeAddAnotherOrDone = data.getStringExtra("add_another_ingredient_or_done");
       Log.d(TAG, "newRecipeActivityResult: " + recipeName + ": " + recipeIngredient);
 
-      Recipe recipe = new Recipe(recipeName, recipeIngredient);
+      Recipe recipe = new Recipe(recipeName, Collections.singletonList(recipeIngredient));
       mRecipeViewModel.viewModelRecipeInsert(recipe);
+      // if from the intent we're told that the save but add another ingredient button was added
+      if (recipeAddAnotherOrDone == "add_another_ingredient") {
+
+        // make the intent to pass the data along to the edit activity
+        // so we can edit this specific recipe for more ingredients
+        Intent editGivenRecipeNameIntent = new Intent(thisActivity, EditRecipeActivity.class);
+        editGivenRecipeNameIntent.putExtra("recipe_name", recipeName);
+        startActivityForResult(editGivenRecipeNameIntent, EDIT_RECIPE_ACTIVITY_REQUEST_CODE);
+
+      }
     }//end result_ok
     else  {
       Toast.makeText(
@@ -127,18 +143,18 @@ public class RecipeActivity extends AppCompatActivity {
         if (!isNewNameEmpty && !isNewIngredientEmpty) {
           String newRecipeName = data.getStringExtra("new_name");
           String newRecipeIngredient = data.getStringExtra("new_ingredient");
-          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
-          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, Collections.singletonList(oldRecipeIngredient), Collections.singletonList(newRecipeIngredient));
+          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, Collections.singletonList(oldRecipeIngredient), newRecipeName);
         }
         // only update name
         else if (!isNewNameEmpty) {
           String newRecipeName = data.getStringExtra("new_name");
-          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+          mRecipeViewModel.viewModelRecipeUpdateName(oldRecipeName, Collections.singletonList(oldRecipeIngredient), newRecipeName);
         }
         // now only update ingredient
         else if (!isNewIngredientEmpty) {
           String newRecipeIngredient = data.getStringExtra("new_ingredient");
-          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+          mRecipeViewModel.viewModelRecipeUpdateIngredient(oldRecipeName, Collections.singletonList(oldRecipeIngredient), Collections.singletonList(newRecipeIngredient));
         } //end updating recipe
       }//end result_ok
       // edit was not successful, so tell user with toast
@@ -166,7 +182,8 @@ public class RecipeActivity extends AppCompatActivity {
       Boolean recipeExists = Boolean.FALSE;
       for (int i=0; i < mRecipeListAdapter.getCurrentList().size(); i++){
         Recipe currentRecipe = mRecipeListAdapter.getCurrentList().get(i);
-        if (currentRecipe.getRecipeName() == recipeName && currentRecipe.getRecipeIngredient() == recipeIngredient) {
+        // TODO fix get names to be recursive for all ingredients
+        if (currentRecipe.getmRecipeName() == recipeName && currentRecipe.getmRecipeIngredientNames().get(0) == recipeIngredient) {
           recipeExists = Boolean.TRUE;
         }
       }
@@ -174,7 +191,7 @@ public class RecipeActivity extends AppCompatActivity {
       // if the recipe exists, delete it
       if ( recipeExists ) {
         // TODO fix this, it won't delete because livedata is being weird
-        mRecipeViewModel.viewModelRecipeDelete(recipeName, recipeIngredient);
+        mRecipeViewModel.viewModelRecipeDelete(recipeName, Collections.singletonList(recipeIngredient));
 
       }
       // recipe does not exist, make toast to tell user can't delete

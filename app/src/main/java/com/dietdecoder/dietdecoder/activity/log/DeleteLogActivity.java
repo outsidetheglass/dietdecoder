@@ -30,8 +30,9 @@ public class DeleteLogActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_delete_log);
-    logNameView = findViewById(R.id.edittext_delete_log_name);
+    //TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
+//    setContentView(R.layout.activity_delete_log);
+//    logNameView = findViewById(R.id.edittext_delete_log_name);
 //    logConcernView = findViewById(R.id.edittext_delete_log_concern);
 
     deleteButton = findViewById(R.id.button_delete);

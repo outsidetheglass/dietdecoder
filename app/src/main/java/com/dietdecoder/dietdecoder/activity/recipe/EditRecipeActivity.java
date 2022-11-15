@@ -4,18 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.database.recipe.Recipe;
+import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 
 public class EditRecipeActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
+  private RecipeViewModel mRecipeViewModel;
   public static String mOldRecipeName;
   public static String mOldRecipeIngredient;
   public static String mNewRecipeName;
@@ -35,12 +40,14 @@ public class EditRecipeActivity extends AppCompatActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_recipe);
+
     mEditRecipeNewNameView = findViewById(R.id.edittext_new_recipe_name);
     mEditRecipeNewIngredientView = findViewById(R.id.edittext_new_recipe_ingredient);
     mEditRecipeOldNameView = findViewById(R.id.edittext_old_recipe_name);
     mEditRecipeOldIngredientView = findViewById(R.id.edittext_old_recipe_ingredient);
 
     final Button button = findViewById(R.id.button_save);
+
     button.setOnClickListener(view -> {
       Intent replyIntent = new Intent();
 
@@ -94,4 +101,24 @@ public class EditRecipeActivity extends AppCompatActivity {
     });
   }
 
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    super.onActivityResult(requestCode, resultCode, data);
+
+    String mRecipeName = data.getStringExtra("recipe_name");
+
+    // if we're here from starting a new recipe, or else know the name
+    // set the name
+    mEditRecipeOldNameView.setText(mRecipeName);
+    // set the other name view to invisible
+    mEditRecipeNewNameView.setVisibility(View.INVISIBLE);
+
+    // now use the repository, might also need the adapter
+    mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+    // this won't work with multiple ingredients
+    Recipe recipe = mRecipeViewModel.viewModelGetRecipeFromName(mRecipeName);
+
+    mEditRecipeOldIngredientView.setText(recipe.getmRecipeIngredientNames().get(0));
+
+  }
 }

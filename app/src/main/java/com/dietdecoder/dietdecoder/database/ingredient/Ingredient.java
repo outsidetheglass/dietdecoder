@@ -7,7 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.dietdecoder.dietdecoder.database.UUIDConverter;
+import com.dietdecoder.dietdecoder.database.Converters;
 import com.dietdecoder.dietdecoder.database.chemical.Chemical;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 
 @Entity(tableName = "ingredient_table")
-@TypeConverters({UUIDConverter.class})
+@TypeConverters({Converters.class})
 public class Ingredient {
 
   @PrimaryKey

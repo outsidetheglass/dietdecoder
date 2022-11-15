@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.dietdecoder.dietdecoder.database.UUIDConverter;
+import com.dietdecoder.dietdecoder.database.Converters;
 import com.dietdecoder.dietdecoder.database.chemical.Chemical;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.log.Log;
@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Log.class}, version = 1, exportSchema = false)
-@TypeConverters({UUIDConverter.class})
+@TypeConverters({Converters.class})
 public abstract class LogRoomDatabase extends RoomDatabase {
 
 

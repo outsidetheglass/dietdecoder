@@ -30,8 +30,10 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
   @Override
   public void onBindViewHolder(RecipeViewHolder holderRecipe, int positionRecipe) {
     Recipe currentRecipe = getItem(positionRecipe);
-    Log.d(TAG, "onBindViewHolder: " + currentRecipe.getRecipeName());
-    holderRecipe.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredient());
+    Log.d(TAG, "onBindViewHolder: " + currentRecipe.getmRecipeName());
+
+    // TODO fix get names to be recursive for all ingredients
+    holderRecipe.bind(currentRecipe.getmRecipeName() + ": " + currentRecipe.getmRecipeIngredientNames().get(0));
   }//end onBindViewHolder
 ;
   public static class RecipeDiff extends DiffUtil.ItemCallback<Recipe> {
@@ -47,8 +49,8 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
     @Override
     public boolean areContentsTheSame(@NonNull Recipe oldRecipeItem, @NonNull Recipe newRecipeItem) {
       // check all parts of Recipe to see if they're the same
-      isEqualRecipeName = oldRecipeItem.getRecipeName().equals(newRecipeItem.getRecipeName());
-      isEqualRecipeIngredient = oldRecipeItem.getRecipeIngredient().equals(newRecipeItem.getRecipeIngredient());
+      isEqualRecipeName = oldRecipeItem.getmRecipeName().equals(newRecipeItem.getmRecipeName());
+      isEqualRecipeIngredient = oldRecipeItem.getmRecipeIngredientNames().equals(newRecipeItem.getmRecipeIngredientNames());
       return isEqualRecipeName && isEqualRecipeIngredient;
     } //end areContentsTheSame
 

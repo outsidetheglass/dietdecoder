@@ -9,14 +9,13 @@ import androidx.room.Query;
 import androidx.room.TypeConverters;
 import androidx.room.Update;
 
-import com.dietdecoder.dietdecoder.database.InstantConverter;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
 import java.util.List;
 
 @Dao
-@TypeConverters({InstantConverter.class})
+@TypeConverters({Converters.class})
 public interface LogDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   void daoLogInsert(Log log);

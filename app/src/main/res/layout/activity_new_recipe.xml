@@ -29,11 +29,20 @@
     android:hint="@string/enter_recipe_edittext_ingredient"/>
 
   <Button
-    android:id="@+id/button_save"
+    android:id="@+id/button_save_and_done"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/green_500"
     android:text="@string/button_save"
+    android:layout_margin="@dimen/big_padding"
+    android:textColor="@color/button_label" />
+
+  <Button
+    android:id="@+id/button_save_and_add_another"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/green_500"
+    android:text="@string/button_save_and_add_another"
     android:layout_margin="@dimen/big_padding"
     android:textColor="@color/button_label" />
 

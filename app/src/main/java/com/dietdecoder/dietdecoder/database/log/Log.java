@@ -7,8 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.dietdecoder.dietdecoder.database.InstantConverter;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +15,7 @@ import java.util.UUID;
 
 
 @Entity(tableName = "log_table")
-@TypeConverters(InstantConverter.class)
+@TypeConverters(Converters.class)
 public class Log {
 
   @PrimaryKey
@@ -24,7 +23,6 @@ public class Log {
   @ColumnInfo(name = "logId")
   private UUID mLogId;
 
-  @TypeConverters({InstantConverter.class})
   @ColumnInfo(name = "dateTime")
   private Instant mDateTime;
 

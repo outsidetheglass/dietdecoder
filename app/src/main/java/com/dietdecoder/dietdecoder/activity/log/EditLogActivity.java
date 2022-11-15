@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.log.LogActivity;
 
+//TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
+
 public class EditLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
@@ -39,12 +41,14 @@ public class EditLogActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_edit_log);
+    //TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
 
-    mEditLogNewNameView = findViewById(R.id.edittext_new_log_name);
-//    mEditLogNewConcernView = findViewById(R.id.edittext_new_log_concern);
-
-    mLogOldNameView = findViewById(R.id.textview_old_log_name);
+//    setContentView(R.layout.activity_edit_log);
+//
+//    mEditLogNewNameView = findViewById(R.id.edittext_new_log_name);
+////    mEditLogNewConcernView = findViewById(R.id.edittext_new_log_concern);
+//
+//    mLogOldNameView = findViewById(R.id.textview_old_log_name);
 //    mLogOldConcernView = findViewById(R.id.textview_old_log_concern);
 
     Intent editLogIntent = getIntent();
@@ -68,7 +72,7 @@ public class EditLogActivity extends AppCompatActivity {
     replyIntent.putExtra("old_name", mLogOldName);
 //    replyIntent.putExtra("old_concern", mLogOldConcern);
 
-    editLogSaveButton = findViewById(R.id.button_edit_log_save);
+//    editLogSaveButton = findViewById(R.id.button_edit_log_save);
     editLogSaveButton.setOnClickListener(view -> {
 
       // check for if views are empty
