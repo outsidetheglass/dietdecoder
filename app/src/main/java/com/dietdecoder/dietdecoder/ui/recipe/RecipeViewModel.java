@@ -39,7 +39,7 @@ public class RecipeViewModel extends AndroidViewModel {
   }
 
   //get all recipes with ingredient
-  public List<Recipe> viewModelGetRecipesWithIngredient(List<String> paramIngredientName) {
+  public List<Recipe> viewModelGetRecipesWithIngredient(String paramIngredientName) {
     return mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredientName);
   }
 
@@ -51,8 +51,9 @@ public class RecipeViewModel extends AndroidViewModel {
   public Recipe viewModelGetRecipeFromName(String paramRecipeName) {
     return mRecipeRepository.repositoryGetRecipeFromName(paramRecipeName);
   }
-  public Recipe viewModelGetRecipeFromNameIngredient(String recipeName, String recipeIngredient){
-    return mRecipeRepository.repositoryGetRecipeFromNameIngredient(recipeName, recipeIngredient);
+  // Get single recipe matching the name with a specific ingredient
+  public Recipe viewModelGetRecipeFromRecipeNameAndIngredient(String recipeName, String recipeIngredient){
+    return mRecipeRepository.repositoryGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);
   }
 
 
@@ -61,17 +62,17 @@ public class RecipeViewModel extends AndroidViewModel {
     mRecipeRepository.repositoryRecipeInsert(recipe); }
 
   // edit recipe in database
-  public void viewModelRecipeUpdateName(String oldRecipeName, List<String> oldRecipeIngredient, String newRecipeName) {
+  public void viewModelRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
     mRecipeRepository.repositoryRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
   }
 
   // edit recipe in database
-  public void viewModelRecipeUpdateIngredient(String oldRecipeName, List<String> oldRecipeIngredient, List<String> newRecipeIngredient) {
+  public void viewModelRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
     mRecipeRepository.repositoryRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
   }
 
   // delete recipe in database
-  public void viewModelRecipeDelete(String recipeName, List<String> recipeIngredient) {
+  public void viewModelRecipeDelete(String recipeName, String recipeIngredient) {
     mRecipeRepository.repositoryRecipeDelete(recipeName, recipeIngredient);
   }
 

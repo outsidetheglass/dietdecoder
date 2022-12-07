@@ -45,13 +45,13 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
           RecipeDao recipeDao = RECIPEINSTANCE.recipeDao();
           //dao.deleteAll();
 
-          Recipe recipe = new Recipe("Taco", Collections.singletonList(("corn tortilla")));
+          Recipe recipe = new Recipe("Taco", "corn tortilla");
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", Collections.singletonList("pinto bean"));
+          recipe = new Recipe("Taco", "pinto bean");
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", Collections.singletonList("brown rice"));
+          recipe = new Recipe("Taco", "brown rice");
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Egg cheese rice", Collections.singletonList("brown rice"));
+          recipe = new Recipe("Egg cheese rice", "brown rice");
           recipeDao.daoRecipeInsert(recipe);
 //          recipe = new Recipe("Egg cheese rice", "cheddar cheese");
 //          recipeDao.daoRecipeInsert(recipe);

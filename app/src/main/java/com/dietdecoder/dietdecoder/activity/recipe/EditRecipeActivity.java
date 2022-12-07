@@ -118,7 +118,7 @@ public class EditRecipeActivity extends AppCompatActivity {
     // this won't work with multiple ingredients
     Recipe recipe = mRecipeViewModel.viewModelGetRecipeFromName(mRecipeName);
 
-    mEditRecipeOldIngredientView.setText(recipe.getmRecipeIngredientNames().get(0));
+    mEditRecipeOldIngredientView.setText(recipe.getRecipeIngredientName());
 
   }
 }

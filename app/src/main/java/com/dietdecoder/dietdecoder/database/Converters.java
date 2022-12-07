@@ -13,7 +13,7 @@ public class Converters {
     return uuid.toString();
   }
   @TypeConverter
-  public static UUID uuidFromString(String string) {
+  public static UUID toUUID(String string) {
     return UUID.fromString(string);
   }
 
@@ -26,4 +26,5 @@ public class Converters {
   public static Long toTimestamp(Instant instant) {
     return instant == null ? null : instant.toEpochMilli();
   }
+
 }

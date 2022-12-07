@@ -24,22 +24,29 @@ public class Recipe {
   @ColumnInfo(name = "recipeName")
   private String mRecipeName;
 
-  @ColumnInfo(name = "recipeIngredientNames")
-  private List<String> mRecipeIngredientNames;
+  @ColumnInfo(name = "recipeIngredientName")
+  private String mRecipeIngredientName;
 
-  public Recipe(@NonNull String recipeName,
-                List<String> recipeIngredientNames) {
+  public Recipe(String recipeName,
+                String recipeIngredientName) {
     this.mRecipeId = UUID.randomUUID();
     this.mRecipeName = recipeName;
-    this.mRecipeIngredientNames = recipeIngredientNames;
+    this.mRecipeIngredientName = recipeIngredientName;
   }
 
-  public void setmRecipeId(UUID id){this.mRecipeId = id;}
+  public UUID getMRecipeId(){return mRecipeId;}
+  public void setMRecipeId(UUID id){this.mRecipeId = id;}
 
-  public UUID getmRecipeId(){return this.mRecipeId;}
+  public String getRecipeName(){return mRecipeName;}
 
-  public String getmRecipeName(){return this.mRecipeName;}
+  public String getRecipeIngredientName(){return mRecipeIngredientName;}
 
-  public List<String> getmRecipeIngredientNames(){return this.mRecipeIngredientNames;}
 
+  @Override
+  public String toString() {
+    return "Recipe{" +
+      "mRecipeName='" + mRecipeName + '\'' +
+      ", mRecipeIngredientName='" + mRecipeIngredientName + '\'' +
+      '}';
+  }
 } //end Recipe Entity

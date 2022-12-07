@@ -34,7 +34,7 @@ class RecipeRepository {
   }
 
   // get only ingredient from database for recipes
-  List<Recipe> repositoryGetRecipesWithIngredient(List<String> ingredientName) {
+  List<Recipe> repositoryGetRecipesWithIngredient(String ingredientName) {
     return mRecipeDao.daoGetRecipesWithIngredient(ingredientName);
   }
 
@@ -50,8 +50,8 @@ class RecipeRepository {
     return mRecipeDao.daoGetRecipeFromName(recipeName);
   }
 
-  public Recipe repositoryGetRecipeFromNameIngredient(String recipeName, String recipeIngredient) {
-    return mRecipeDao.daoGetRecipeFromNameIngredient(recipeName, recipeIngredient);
+  public Recipe repositoryGetRecipeFromRecipeNameAndIngredient(String recipeName, String recipeIngredient) {
+    return mRecipeDao.daoGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);
   }
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
@@ -65,7 +65,7 @@ class RecipeRepository {
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryRecipeDelete(String recipeName, List<String> recipeIngredient) {
+  void repositoryRecipeDelete(String recipeName, String recipeIngredient) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeDelete(recipeName, recipeIngredient);
@@ -74,7 +74,7 @@ class RecipeRepository {
   } // end delete
 
 
-  void repositoryRecipeUpdateIngredient(String oldRecipeName, List<String> oldRecipeIngredient, List<String> newRecipeIngredient) {
+  void repositoryRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
@@ -82,7 +82,7 @@ class RecipeRepository {
 
   } // end update ingredient
 
-  void repositoryRecipeUpdateName(String oldRecipeName, List<String> oldRecipeIngredient, String newRecipeName) {
+  void repositoryRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
 
     RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
