@@ -54,7 +54,7 @@ public class LogListAdapter extends ListAdapter<Log, LogViewHolder> {
     @Override
     public boolean areContentsTheSame(@NonNull Log oldItem, @NonNull Log newItem) {
       // check all parts of Log to see if they're the same
-      isEqualName = oldItem.getLogDateTime().equals(newItem.getLogDateTime());
+      isEqualName = oldItem.getLogDateTimeInstant().equals(newItem.getLogDateTimeInstant());
       //TODO add other properties of log type here
       //isEqualConcern = oldItem.getLogConcern().equals(newItem.getLogConcern());
       return isEqualName/* && isEqualConcern*/;

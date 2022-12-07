@@ -68,8 +68,11 @@ public class Log {
 
 
 
-  public Instant getLogDateTime() {
+  public Instant getLogDateTimeInstant() {
     return(this.mDateTime);
+  }
+  public String getLogDateTimeString() {
+    return(this.mDateTime.toString());
   }
   public String getLogAge() {
     //TODO: fix age so it can calculate how old logged grocery is
@@ -96,11 +99,11 @@ public class Log {
   public String toString() {
     //if one of them is null it doesn't break
     if (this.mDateTimeAcquired != null && this.mIngredientName != null && this.mBrand != null && this.mDateTimeExpiration != null ) {
-      return ("Logged at: " + this.mDateTime
-        + "Acquired at: " + this.mDateTimeAcquired
-        + "\nIngredient Cooked at: " + this.mDateTimeCooked
-        + "\nIngredient Name: " + this.mIngredientName
-        + "\nBrand of Ingredient: " + this.mBrand
+      return ("Logged at: " + this.mDateTime + "\n"
+        + "\nAcquired at: " + this.mDateTimeAcquired + "\n"
+        + "\nIngredient Cooked at: " + this.mDateTimeCooked + "\n"
+        + "\nIngredient Name: " + this.mIngredientName + "\n"
+        + "\nBrand of Ingredient: " + this.mBrand + "\n"
         + "\nExpiration of Ingredient: " + this.mDateTimeExpiration);
     } else
     {

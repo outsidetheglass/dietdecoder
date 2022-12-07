@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,24 +37,27 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     super(itemView);
     logContext = itemView.getContext();
     logItemView = itemView.findViewById(R.id.textview_log_item);
-    logItemOptionButton = itemView.findViewById(R.id.imagebutton_log_option);
+
+//    //TODO get edit working and uncomment this and figure out how to place it right
+//    logItemOptionButton = itemView.findViewById(R.id.imagebutton_log_option);
   }
 
 
   public void bind(Log log) {
 
-    Instant logDateTime = log.getLogDateTime();
-    //TODO add other properties of log type here
-    //String logConcern = log.getLogConcern();
+    String logDateTime = log.getLogDateTimeString();
+    String logIngredientName = log.getLogIngredientName();
+    String logString = log.toString();
 
-    logItemView.setText(logDateTime.toString());
+    logItemView.setText(logDateTime + ": " + logIngredientName);
 
-    logItemOptionButton.setOnClickListener(new View.OnClickListener() {
+    // change this to OptionButton when that's working, or not
+    logItemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
 
         // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(logContext, logItemOptionButton);
+        PopupMenu popupMenu = new PopupMenu(logContext, logItemView);
 
         // Inflating popup menu from popup_menu.xml file
         popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
@@ -64,24 +68,28 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
             // if edit clicked
             if ( logMenuItem.getTitle().toString() == logContext.getString(R.string.edit))
             {
+              Toast.makeText(logContext, "Edit was clicked", Toast.LENGTH_SHORT).show();
               //TODO turn this into a fragment, or just a popup
-              Intent editLogIntent = new Intent(logContext, EditLogActivity.class);
-              editLogIntent.putExtra("log_datetime", logDateTime);
-              //TODO add other properties of log type here
-              //editLogIntent.putExtra("log_concern", logConcern);
-              logContext.startActivity( editLogIntent );
+//              Intent editLogIntent = new Intent(logContext, EditLogActivity.class);
+//              editLogIntent.putExtra("log_datetime", logDateTime);
+//              //TODO add other properties of log type here
+//              //editLogIntent.putExtra("log_concern", logConcern);
+//              logContext.startActivity( editLogIntent );
             }
             // if delete clicked
             else if ( logMenuItem.getTitle().toString()  == logContext.getString(R.string.delete ))
             {
-              logContext.startActivity(
-                new Intent(logContext, DeleteLogActivity.class)
-              );
+              Toast.makeText(logContext, "Delete was clicked", Toast.LENGTH_SHORT).show();
+//              logContext.startActivity(
+//                new Intent(logContext, DeleteLogActivity.class)
+//              );
             }
             // if more details clicked
             else if ( logMenuItem.getTitle().toString() == logContext.getString(R.string.detail) )
             {
-              logContext.startActivity(new Intent(logContext, DetailLogActivity.class));
+              Intent detailIntent = new Intent(logContext, DetailLogActivity.class);
+              detailIntent.putExtra("log_detail", logString);
+              logContext.startActivity(detailIntent);
             }
 
             return true;

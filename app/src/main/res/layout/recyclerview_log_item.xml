@@ -12,14 +12,13 @@
     android:layout_height="wrap_content"
     android:background="@color/green_200" />
 
-  <ImageButton
-    android:id="@+id/imagebutton_log_option"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    style="@style/textview_item_option"
-    android:background="@drawable/roundcorners"
-    android:src="@drawable/ic_baseline_option"
-    android:gravity="end"
-    />
+<!--  <ImageButton-->
+<!--    android:id="@+id/imagebutton_log_option"-->
+<!--    style="@style/textview_item_option"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@drawable/roundcorners"-->
+<!--    android:gravity="end"-->
+<!--    android:src="@drawable/ic_baseline_option" />-->
 
-  </LinearLayout>
+</LinearLayout>

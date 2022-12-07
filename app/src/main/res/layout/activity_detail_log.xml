@@ -1,0 +1,124 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/linearLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+
+  <!--  <TextView-->
+  <!--    android:id="@+id/subtitle_textview_log_detail"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:text="@string/log_detail_subtitle_textview"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/big_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+
+  <TextView
+    android:id="@+id/textview_title_log_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:text="@string/title_log_detail_textview"
+    android:textAlignment="center"
+    android:textAppearance="@style/textview_title"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.498"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/textview_log_detail_value"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:layout_marginTop="20dp"
+    android:background="@color/green_200"
+    android:padding="@dimen/big_padding"
+    android:scrollbars = "vertical"
+    android:textAppearance="@style/textview_main_content"
+    app:layout_constraintBottom_toTopOf="@+id/return_button_from_detail_to_all_log"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.50"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textview_title_log_detail"
+    app:layout_constraintVertical_bias="0.15" />
+
+  <Button
+    android:id="@+id/return_button_from_detail_to_all_log"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_margin="15dp"
+    android:background="@color/green_500"
+    android:text="@string/button_back"
+    android:textColor="@color/button_label"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+  <!--  <TextView-->
+  <!--    android:id="@+id/subsubtitle_textview_log_category"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:text="@string/log_detail_category_textview"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/big_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+  <!--  <TextView-->
+  <!--    android:id="@+id/textview_log_category_value"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/bigger_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+
+  <!--  <TextView-->
+  <!--    android:id="@+id/subsubtitle_textview_log_description"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:text="@string/log_detail_description_textview"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/big_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+  <!--  <TextView-->
+  <!--    android:id="@+id/textview_log_description_value"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/bigger_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+
+  <!--  <TextView-->
+  <!--    android:id="@+id/subsubtitle_textview_log_suffertype"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:text="@string/log_detail_suffertype_textview"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/big_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+  <!--  <TextView-->
+  <!--    android:id="@+id/textview_log_suffertype_value"-->
+  <!--    android:layout_width="wrap_content"-->
+  <!--    android:layout_height="wrap_content"-->
+  <!--    android:background="@color/green_200"-->
+  <!--    android:padding="@dimen/small_padding"-->
+  <!--    android:textAppearance="@style/textview_main_content"-->
+  <!--    android:layout_marginLeft="@dimen/bigger_padding"-->
+  <!--    android:layout_marginTop="@dimen/big_padding" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

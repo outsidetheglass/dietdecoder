@@ -48,7 +48,8 @@ public class LogActivity extends AppCompatActivity {
     setContentView(R.layout.activity_log);
 
     //TODO make scrollable left and right (maybe tabs) for snacks too, by category
-    RecyclerView recyclerViewDrink = findViewById(R.id.recyclerview_log_drink);
+    //Making everything food first, add Drink in after Food works
+    //RecyclerView recyclerViewDrink = findViewById(R.id.recyclerview_log_drink);
     RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
 
 
@@ -63,21 +64,21 @@ public class LogActivity extends AppCompatActivity {
     });
 
     // Button to edit log
-    editButton = findViewById(R.id.edit_button_log);
-    editButton.setOnClickListener( view -> {
-
-      //TODO uncomment edit when made activity
-      editIntent = new Intent(thisActivity, EditLogActivity.class);
-      //TODO fix depreciated forResult
-      startActivityForResult(editIntent, EDIT_LOG_ACTIVITY_REQUEST_CODE);
-    });
-    // Button to delete log
-    //TODO get delete working and uncomment this
-    deleteButton = findViewById(R.id.delete_button_log);
-    deleteButton.setOnClickListener( view -> {
-      deleteIntent = new Intent(thisActivity, DeleteLogActivity.class);
-      startActivityForResult(deleteIntent, DELETE_LOG_ACTIVITY_REQUEST_CODE);
-    });
+//    editButton = findViewById(R.id.edit_button_log);
+//    editButton.setOnClickListener( view -> {
+//
+//      //TODO uncomment edit when made activity
+//      editIntent = new Intent(thisActivity, EditLogActivity.class);
+//      //TODO fix depreciated forResult
+//      startActivityForResult(editIntent, EDIT_LOG_ACTIVITY_REQUEST_CODE);
+//    });
+//    // Button to delete log
+//    //TODO get delete working and uncomment this
+//    deleteButton = findViewById(R.id.delete_button_log);
+//    deleteButton.setOnClickListener( view -> {
+//      deleteIntent = new Intent(thisActivity, DeleteLogActivity.class);
+//      startActivityForResult(deleteIntent, DELETE_LOG_ACTIVITY_REQUEST_CODE);
+//    });
 
     // FAB to add new log
     addButton = findViewById(R.id.add_button_log);
@@ -99,12 +100,13 @@ public class LogActivity extends AppCompatActivity {
       if (requestCode == NEW_LOG_ACTIVITY_REQUEST_CODE) {
         newLogActivityResult(resultCode, data);
       }
-      else if (requestCode == EDIT_LOG_ACTIVITY_REQUEST_CODE) {
-        editLogActivityResult(resultCode, data);
-      }
-      else if (requestCode == DELETE_LOG_ACTIVITY_REQUEST_CODE) {
-        deleteLogActivityResult(resultCode, data);
-      } //end request codes to run method
+//    //TODO get delete and edit working and uncomment this
+//      else if (requestCode == EDIT_LOG_ACTIVITY_REQUEST_CODE) {
+//        editLogActivityResult(resultCode, data);
+//      }
+//      else if (requestCode == DELETE_LOG_ACTIVITY_REQUEST_CODE) {
+//        deleteLogActivityResult(resultCode, data);
+//      } //end request codes to run method
 
     }//end request codes activity results
 

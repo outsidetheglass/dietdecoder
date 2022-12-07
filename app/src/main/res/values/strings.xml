@@ -65,6 +65,7 @@
   <string name="title_textview_new_log">New Log</string>
   <string name="button_save_log">Save Log</string>
 
+  <string name="title_log_detail_textview">Detail Log</string>
 
   <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
 
