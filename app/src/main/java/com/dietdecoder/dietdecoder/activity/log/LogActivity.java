@@ -7,12 +7,16 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.database.log.Log;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
+import com.dietdecoder.dietdecoder.ui.log.LogListAdapter;
+import com.dietdecoder.dietdecoder.ui.log.LogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class LogActivity extends AppCompatActivity {
@@ -22,8 +26,8 @@ public class LogActivity extends AppCompatActivity {
   private final Activity thisActivity = LogActivity.this;
 
 
-//  private LogViewModel mLogViewModel;
-//  private LogListAdapter mLogListAdapter;
+  private LogViewModel mLogViewModel;
+  private LogListAdapter mLogListAdapter;
   public static final int NEW_LOG_ACTIVITY_REQUEST_CODE = 1;
   public static final int EDIT_LOG_ACTIVITY_REQUEST_CODE = 2;
   public static final int DELETE_LOG_ACTIVITY_REQUEST_CODE = 3;
@@ -46,23 +50,23 @@ public class LogActivity extends AppCompatActivity {
     RecyclerView recyclerViewDrink = findViewById(R.id.recyclerview_log_drink);
     RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
 
-//    mLogListAdapter = new LogListAdapter(new LogListAdapter.LogDiff());
-//    recyclerView.setAdapter(mLogListAdapter);
-//    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//    mLogViewModel = new ViewModelProvider(this).get(LogViewModel.class);
-//
-//    mLogViewModel.viewModelGetAllLogs().observe(this, logs -> {
-//      // Update the cached copy of the words in the adapter.
-//      mLogListAdapter.submitList(logs);
-//    });
+
+    mLogListAdapter = new LogListAdapter(new LogListAdapter.LogDiff());
+    recyclerViewFood.setAdapter(mLogListAdapter);
+    recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
+    mLogViewModel = new ViewModelProvider(this).get(LogViewModel.class);
+
+    mLogViewModel.viewModelGetAllLogs().observe(this, logs -> {
+      // Update the cached copy of the words in the adapter.
+      mLogListAdapter.submitList(logs);
+    });
 
     // Button to edit log
     editButton = findViewById(R.id.edit_button_log);
     editButton.setOnClickListener( view -> {
 
       //TODO uncomment edit when made activity
-      //editIntent = new Intent(thisActivity, EditLogActivity.class);
+      editIntent = new Intent(thisActivity, EditLogActivity.class);
       //TODO fix depreciated forResult
       startActivityForResult(editIntent, EDIT_LOG_ACTIVITY_REQUEST_CODE);
     });
@@ -70,14 +74,14 @@ public class LogActivity extends AppCompatActivity {
     //TODO get delete working and uncomment this
     deleteButton = findViewById(R.id.delete_button_log);
     deleteButton.setOnClickListener( view -> {
-//      deleteIntent = new Intent(thisActivity, DeleteLogActivity.class);
-//      startActivityForResult(deleteIntent, DELETE_LOG_ACTIVITY_REQUEST_CODE);
+      deleteIntent = new Intent(thisActivity, DeleteLogActivity.class);
+      startActivityForResult(deleteIntent, DELETE_LOG_ACTIVITY_REQUEST_CODE);
     });
 
     // FAB to add new log
     addButton = findViewById(R.id.add_button_log);
     addButton.setOnClickListener( view -> {
-      //addIntent = new Intent(thisActivity, NewLogActivity.class);
+      addIntent = new Intent(thisActivity, NewLogActivity.class);
       startActivityForResult(addIntent, NEW_LOG_ACTIVITY_REQUEST_CODE);
     });
 

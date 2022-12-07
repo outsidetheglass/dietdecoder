@@ -19,53 +19,58 @@
         android:theme="@style/Theme.DietDecoder"
         tools:targetApi="31" >
 
-      <activity
-        android:name=".activity.MainActivity"
+
+      <activity android:name=".activity.MainActivity"
         android:exported="true"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"         >
+
         <intent-filter>
           <action android:name="android.intent.action.MAIN" />
-
           <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
       </activity>
+
+
       <activity android:name=".activity.ResourcesActivity"
         android:exported="false"/>
 
 
-      <activity android:name=".activity.ingredient.IngredientActivity"
-        android:exported="false"/>
-      <activity android:name=".activity.recipe.RecipeActivity"
-        android:exported="false"/>
       <activity android:name=".activity.log.LogActivity"
         android:exported="false"/>
-
-      <activity
-        android:name=".activity.ingredient.DeleteIngredientActivity"
+      <activity        android:name=".activity.log.DeleteLogActivity"
         android:exported="false" />
-      <activity
-        android:name=".activity.ingredient.DetailIngredientActivity"
+      <activity        android:name=".activity.log.DetailLogActivity"
         android:exported="false" />
-      <activity
-        android:name=".activity.ingredient.NewIngredientActivity"
+      <activity        android:name=".activity.log.NewLogActivity"
         android:exported="false" />
-      <activity
-        android:name=".activity.ingredient.EditIngredientActivity"
-        android:exported="false" />
-
-      <activity
-        android:name=".activity.recipe.NewRecipeActivity"
-        android:exported="false" />
-      <activity
-        android:name=".activity.recipe.EditRecipeActivity"
+      <activity        android:name=".activity.log.EditLogActivity"
         android:exported="false" />
 
 
-      <activity
-        android:name=".activity.symptom.SymptomActivity"
+      <activity android:name=".activity.ingredient.IngredientActivity"
+        android:exported="false"/>
+      <activity        android:name=".activity.ingredient.DeleteIngredientActivity"
         android:exported="false" />
-      <activity
-        android:name=".activity.symptom.DetailSymptomActivity"
+      <activity        android:name=".activity.ingredient.DetailIngredientActivity"
+        android:exported="false" />
+      <activity        android:name=".activity.ingredient.NewIngredientActivity"
+        android:exported="false" />
+      <activity        android:name=".activity.ingredient.EditIngredientActivity"
+        android:exported="false" />
+
+
+      <activity android:name=".activity.recipe.RecipeActivity"
+        android:exported="false"/>
+      <activity        android:name=".activity.recipe.NewRecipeActivity"
+        android:exported="false" />
+      <activity        android:name=".activity.recipe.EditRecipeActivity"
+        android:exported="false" />
+
+
+      <activity android:name=".activity.symptom.SymptomActivity"
+        android:exported="false" />
+      <activity        android:name=".activity.symptom.DetailSymptomActivity"
         android:exported="false" />
 
     </application>
