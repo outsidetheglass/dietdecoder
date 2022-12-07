@@ -39,6 +39,9 @@ public interface RecipeDao {
   @Query("SELECT * FROM recipe_table WHERE recipeName = :daoRecipeName")
   List<Recipe> daoGetAllRecipeFromName(String daoRecipeName);
 
+  @Query("SELECT * FROM recipe_table WHERE recipeCategory = :daoRecipeCategory")
+  List<Recipe> daoGetAllRecipeFromCategory(String daoRecipeCategory);
+
 
   @Query("SELECT * FROM recipe_table WHERE recipeName = :daoRecipeName")
   Recipe daoGetRecipeFromName(String daoRecipeName);

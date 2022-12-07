@@ -43,6 +43,8 @@
   <string name="title_textview_new_recipe">New Recipe</string>
   <string name="enter_recipe_edittext_name">Type Recipe Name Here</string>
   <string name="enter_recipe_edittext_ingredient">Ingredients in Recipe Here</string>
+  <string name="enter_recipe_edittext_category">Category of Recipe Here</string>
+
   <string name="empty_recipe_not_saved">Recipe not saved because it is empty.</string>
   <string name="textview_title_recipe">Recipes</string>
   <string name="textview_title_ingredient">Ingredients</string>

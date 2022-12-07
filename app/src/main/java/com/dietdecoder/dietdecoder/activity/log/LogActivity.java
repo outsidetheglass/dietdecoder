@@ -47,6 +47,7 @@ public class LogActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_log);
 
+    //TODO make scrollable left and right (maybe tabs) for snacks too, by category
     RecyclerView recyclerViewDrink = findViewById(R.id.recyclerview_log_drink);
     RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
 

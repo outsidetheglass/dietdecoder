@@ -56,6 +56,10 @@ public class RecipeViewModel extends AndroidViewModel {
     return mRecipeRepository.repositoryGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);
   }
 
+  public List<Recipe> viewModelGetAllRecipeFromCategory(String recipeCategory){
+    return mRecipeRepository.repositoryGetAllRecipeFromCategory(recipeCategory);
+  }
+
 
   // add to database
   public void viewModelRecipeInsert(Recipe recipe) {

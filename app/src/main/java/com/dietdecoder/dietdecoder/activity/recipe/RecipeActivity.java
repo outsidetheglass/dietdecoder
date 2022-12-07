@@ -102,10 +102,11 @@ public class RecipeActivity extends AppCompatActivity {
     if (resultCode == RESULT_OK) {
       String recipeName = data.getStringExtra("recipe_name");
       String recipeIngredient = data.getStringExtra("ingredient");
+      String recipeCategory = data.getStringExtra("category");
       String recipeAddAnotherOrDone = data.getStringExtra("add_another_ingredient_or_done");
-      Log.d(TAG, "newRecipeActivityResult: " + recipeName + ": " + recipeIngredient);
+      Log.d(TAG, "newRecipeActivityResult: " + recipeName + ": " + recipeIngredient + ": " + recipeCategory);
 
-      Recipe recipe = new Recipe(recipeName, recipeIngredient);
+      Recipe recipe = new Recipe(recipeName, recipeIngredient, recipeCategory);
       mRecipeViewModel.viewModelRecipeInsert(recipe);
       // if from the intent we're told that the save but add another ingredient button was added
       if (recipeAddAnotherOrDone == "add_another_ingredient") {

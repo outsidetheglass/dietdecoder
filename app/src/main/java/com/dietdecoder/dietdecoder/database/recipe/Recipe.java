@@ -27,19 +27,23 @@ public class Recipe {
   @ColumnInfo(name = "recipeIngredientName")
   private String mRecipeIngredientName;
 
+  @ColumnInfo(name = "recipeCategory")
+  private String mRecipeCategory;
+
   public Recipe(String recipeName,
-                String recipeIngredientName) {
+                String recipeIngredientName, String recipeCategory) {
     this.mRecipeId = UUID.randomUUID();
     this.mRecipeName = recipeName;
     this.mRecipeIngredientName = recipeIngredientName;
+    this.mRecipeCategory = recipeCategory;
   }
 
   public UUID getMRecipeId(){return mRecipeId;}
   public void setMRecipeId(UUID id){this.mRecipeId = id;}
 
   public String getRecipeName(){return mRecipeName;}
-
   public String getRecipeIngredientName(){return mRecipeIngredientName;}
+  public String getRecipeCategory(){return mRecipeCategory;}
 
 
   @Override
@@ -47,6 +51,7 @@ public class Recipe {
     return "Recipe{" +
       "mRecipeName='" + mRecipeName + '\'' +
       ", mRecipeIngredientName='" + mRecipeIngredientName + '\'' +
+      ", mRecipeCategory='" + mRecipeCategory + '\'' +
       '}';
   }
 } //end Recipe Entity

@@ -68,7 +68,7 @@ public class NewLogActivity extends AppCompatActivity {
     // then put that recipe name into the View Model
     // list the Adapter with all the recipe's ingredients
     // then an add ingredient button
-    // then make ingredients edit texts
+    // then make ingredients edit textsdietd
 
 
     RecyclerView recyclerView = findViewById(R.id.recyclerview_new_log);

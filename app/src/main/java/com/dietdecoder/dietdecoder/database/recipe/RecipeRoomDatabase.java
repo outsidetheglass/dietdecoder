@@ -45,18 +45,28 @@ public abstract class RecipeRoomDatabase extends RoomDatabase {
           RecipeDao recipeDao = RECIPEINSTANCE.recipeDao();
           //dao.deleteAll();
 
-          Recipe recipe = new Recipe("Taco", "corn tortilla");
+          Recipe recipe = new Recipe("Taco", "corn tortilla", "Food");
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", "pinto bean");
+          recipe = new Recipe("Taco", "pinto bean", "Food");
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Taco", "brown rice");
+          recipe = new Recipe("Taco", "brown rice", "Food");
+
           recipeDao.daoRecipeInsert(recipe);
-          recipe = new Recipe("Egg cheese rice", "brown rice");
+          recipe = new Recipe("Egg cheese rice", "brown rice", "Food");
           recipeDao.daoRecipeInsert(recipe);
-//          recipe = new Recipe("Egg cheese rice", "cheddar cheese");
-//          recipeDao.daoRecipeInsert(recipe);
-//          recipe = new Recipe("Egg cheese rice", "egg");
-//          recipeDao.daoRecipeInsert(recipe);
+          recipe = new Recipe("Egg cheese rice", "cheddar cheese", "Food");
+          recipeDao.daoRecipeInsert(recipe);
+          recipe = new Recipe("Egg cheese rice", "egg", "Food");
+          recipeDao.daoRecipeInsert(recipe);
+
+          recipe = new Recipe("Oat milk tea", "oat milk", "Drink");
+          recipeDao.daoRecipeInsert(recipe);
+          recipe = new Recipe("Oat milk tea", "ginger", "Drink");
+          recipeDao.daoRecipeInsert(recipe);
+          recipe = new Recipe("Oat milk tea", "lavendar", "Drink");
+          recipeDao.daoRecipeInsert(recipe);
+          recipe = new Recipe("Oat milk tea", "maple syrup", "Drink");
+          recipeDao.daoRecipeInsert(recipe);
         });
 
       }

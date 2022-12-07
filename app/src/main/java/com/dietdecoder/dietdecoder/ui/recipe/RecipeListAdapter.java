@@ -40,6 +40,7 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
 
     private Boolean isEqualRecipeName;
     private Boolean isEqualRecipeIngredient;
+    private Boolean isEqualRecipeCategory;
 
     @Override
     public boolean areItemsTheSame(@NonNull Recipe oldRecipeItem, @NonNull Recipe newRecipeItem) {
@@ -51,7 +52,8 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
       // check all parts of Recipe to see if they're the same
       isEqualRecipeName = oldRecipeItem.getRecipeName().equals(newRecipeItem.getRecipeName());
       isEqualRecipeIngredient = oldRecipeItem.getRecipeIngredientName().equals(newRecipeItem.getRecipeIngredientName());
-      return isEqualRecipeName && isEqualRecipeIngredient;
+      isEqualRecipeCategory = oldRecipeItem.getRecipeCategory().equals(newRecipeItem.getRecipeCategory());
+      return isEqualRecipeName && isEqualRecipeIngredient && isEqualRecipeCategory;
     } //end areContentsTheSame
 
 
