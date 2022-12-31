@@ -46,7 +46,7 @@ public class EditRecipeActivity extends AppCompatActivity {
     mEditRecipeOldNameView = findViewById(R.id.edittext_old_recipe_name);
     mEditRecipeOldIngredientView = findViewById(R.id.edittext_old_recipe_ingredient);
 
-    final Button button = findViewById(R.id.button_save);
+    final Button button = findViewById(R.id.button_save_edit_recipe);
 
     button.setOnClickListener(view -> {
       Intent replyIntent = new Intent();

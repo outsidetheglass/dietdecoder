@@ -32,7 +32,7 @@ public class NewIngredientActivity extends AppCompatActivity {
     mEditIngredientNameView = findViewById(R.id.edittext_ingredient_name);
     mEditIngredientConcernView = findViewById(R.id.edittext_ingredient_concern);
 
-    final Button button = findViewById(R.id.button_save);
+    final Button button = findViewById(R.id.button_save_new_ingredient);
     button.setOnClickListener(view -> {
       Intent replyIntent = new Intent();
 

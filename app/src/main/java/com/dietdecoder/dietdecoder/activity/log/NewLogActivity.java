@@ -1,11 +1,15 @@
 package com.dietdecoder.dietdecoder.activity.log;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -14,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.ui.log.LogListAdapter;
 import com.dietdecoder.dietdecoder.ui.log.LogViewModel;
@@ -22,6 +27,10 @@ import com.dietdecoder.dietdecoder.ui.log.LogViewModel;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeListAdapter;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class NewLogActivity extends AppCompatActivity {
@@ -34,6 +43,8 @@ public class NewLogActivity extends AppCompatActivity {
 
   private EditText mEditLogNameView;
   //private EditText mEditLogConcernView;
+  private EditText mEditTextDateTime;
+  private EditText mEditTextIngredientName;
 
   private Boolean isNameViewEmpty;
   //private Boolean isConcernViewEmpty;
@@ -43,7 +54,10 @@ public class NewLogActivity extends AppCompatActivity {
   private RecipeViewModel mRecipeViewModel;
   private RecipeListAdapter mRecipeListAdapter;
 
+
   private List<Recipe> mActivityAllRecipe;
+
+  private Intent addIntent;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -63,22 +77,54 @@ public class NewLogActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_new_log);
 
+    mEditTextDateTime = findViewById(R.id.edittext_new_log_datetime);
+    mEditTextIngredientName = findViewById(R.id.edittext_new_log_ingredient_name);
+
+    Bundle extras = getIntent().getExtras();
+    if (extras != null) {
+        String logIngredientName = extras.getString("ingredientName");
+        String logIngredientDateTime = extras.getString("ingredientDateTime");
+        Log.d(TAG, "newLogActivityResult: " + logIngredientDateTime + ": " + logIngredientName);
+        //set the edittexts to say the above values given
+      mEditTextIngredientName.setText(logIngredientName);
+      mEditTextDateTime.setText(logIngredientDateTime);
+    }else {
+      // we weren't given a duplication, so set the time to be now
+      // the user can change the time if it wasn't now
+      LocalDateTime dateTimeNow = LocalDateTime.now();
+      String dateTimeNowDate =
+        dateTimeNow.getMonthValue() + "/" + dateTimeNow.getDayOfMonth() + "/" + dateTimeNow.getYear();
+      Integer minuteNow = dateTimeNow.getMinute();
+      String dateTimeNowMinute;
+      if (minuteNow < 10) {
+        dateTimeNowMinute = "0" + minuteNow.toString();
+      } else {
+        dateTimeNowMinute = minuteNow.toString();
+      }
+      String dateTimeNowTime =
+        dateTimeNow.getHour() + ":" + dateTimeNowMinute;
+
+      mEditTextDateTime.setText(dateTimeNowTime + " " + dateTimeNowDate);
+      Log.d(TAG, "newLogActivityResult: did not have extras." );
+    }//end if not null extras
+
+
     // TODO Next step
     //  make edittext for putting in recipe to search for
     // then put that recipe name into the View Model
     // list the Adapter with all the recipe's ingredients
     // then an add ingredient button
-    // then make ingredients edit textsdietd
+    // then make ingredients edit texts
 
-
-    RecyclerView recyclerView = findViewById(R.id.recyclerview_new_log);
-
-    // Setup view to get info from database
-    mRecipeListAdapter = new RecipeListAdapter(new RecipeListAdapter.RecipeDiff());
-    recyclerView.setAdapter(mNewLogListAdapter);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    // Setup access to database
-    mNewLogViewModel = new ViewModelProvider(this).get(LogViewModel.class);
+//
+//    RecyclerView recyclerView = findViewById(R.id.recyclerview_new_log);
+//
+//    // Setup view to get info from database
+//    mRecipeListAdapter = new RecipeListAdapter(new RecipeListAdapter.RecipeDiff());
+//    recyclerView.setAdapter(mNewLogListAdapter);
+//    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//    // Setup access to database
+//    mNewLogViewModel = new ViewModelProvider(this).get(LogViewModel.class);
     // if not null, then set list of logs
 //    mActivityAllRecipe = mRecipeViewModel.viewModelGetAllRecipeFromName(recipeName);
 //    // turn LiveData into list and set that in Adapter so we can get positions
@@ -127,6 +173,10 @@ public class NewLogActivity extends AppCompatActivity {
 //      }
 //      finish();
 //    });
-  }
 
-}
+  }//end OnCreate
+
+
+
+
+}//end NewLogActivity

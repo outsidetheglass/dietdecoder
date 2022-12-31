@@ -17,6 +17,7 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.log.DeleteLogActivity;
 import com.dietdecoder.dietdecoder.activity.log.DetailLogActivity;
 import com.dietdecoder.dietdecoder.activity.log.EditLogActivity;
+import com.dietdecoder.dietdecoder.activity.log.NewLogActivity;
 import com.dietdecoder.dietdecoder.database.log.Log;
 
 import java.time.Instant;
@@ -49,7 +50,7 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
     String logIngredientName = log.getLogIngredientName();
     String logString = log.toString();
 
-    logItemView.setText(logDateTime + ": " + logIngredientName);
+    logItemView.setText(logIngredientName + "\n(" + logDateTime + ")");
 
     // change this to OptionButton when that's working, or not
     logItemView.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +84,16 @@ public class LogViewHolder extends RecyclerView.ViewHolder {
 //              logContext.startActivity(
 //                new Intent(logContext, DeleteLogActivity.class)
 //              );
+            }
+            // if delete clicked
+            else if ( logMenuItem.getTitle().toString()  == logContext.getString(R.string.duplicate ))
+            {
+              Toast.makeText(logContext, "Duplicate was clicked", Toast.LENGTH_SHORT).show();
+
+              logContext.startActivity(
+                new Intent(logContext, NewLogActivity.class).putExtra(
+                  "ingredientName", logIngredientName).putExtra("ingredientDateTime", logDateTime)
+              );
             }
             // if more details clicked
             else if ( logMenuItem.getTitle().toString() == logContext.getString(R.string.detail) )

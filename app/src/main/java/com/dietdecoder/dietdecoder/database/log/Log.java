@@ -10,7 +10,11 @@ import androidx.room.TypeConverters;
 import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 
@@ -72,7 +76,23 @@ public class Log {
     return(this.mDateTime);
   }
   public String getLogDateTimeString() {
-    return(this.mDateTime.toString());
+    Calendar logCalendar = GregorianCalendar.from(this.mDateTime.atZone(ZoneId.systemDefault()));
+    String fullLogTime = logCalendar.getTime().toString();
+
+    String logNumberDayOfMonth = String.valueOf(logCalendar.get(Calendar.DAY_OF_MONTH));
+    String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+      "Sept", "Oct", "Nov", "Dec" };
+    String logMonth = months[logCalendar.get(Calendar.MONTH)];
+    String logYear = String.valueOf(logCalendar.get(Calendar.YEAR));
+    String logShortYear = logYear.substring(2);
+    String logDate =  logMonth + "/" + logNumberDayOfMonth + "/" + logShortYear;
+
+    String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
+    String logDayOfWeek = days[logCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+    String logTime = logCalendar.get(Calendar.HOUR_OF_DAY) + ":" + logCalendar.get(Calendar.MINUTE);
+
+    return(logTime + " " + logDayOfWeek + ", " + logMonth + " " + logNumberDayOfMonth + " " + logYear);
   }
   public String getLogAge() {
     //TODO: fix age so it can calculate how old logged grocery is

@@ -2,6 +2,12 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <item
+    android:title="@string/duplicate"
+    android:id="@+id/duplicate_option"
+    android:text="@string/duplicate"
+    />
+
+  <item
     android:title="@string/edit"
     android:id="@+id/edit_option"
     android:text="@string/edit"

@@ -47,7 +47,7 @@
     android:hint="@string/enter_new_recipe_edittext_ingredient"/>
 
   <Button
-    android:id="@+id/button_save"
+    android:id="@+id/button_save_edit_recipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/green_500"
