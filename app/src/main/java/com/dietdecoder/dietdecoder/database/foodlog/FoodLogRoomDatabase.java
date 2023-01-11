@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.database.log;
+package com.dietdecoder.dietdecoder.database.foodlog;
 
 import android.content.Context;
 
@@ -7,26 +7,23 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.dietdecoder.dietdecoder.database.Converters;
-import com.dietdecoder.dietdecoder.database.chemical.Chemical;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.database.log.Log;
-import com.dietdecoder.dietdecoder.database.log.LogDao;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Log.class}, version = 1, exportSchema = false)
+@Database(entities = {FoodLog.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
-public abstract class LogRoomDatabase extends RoomDatabase {
+public abstract class FoodLogRoomDatabase extends RoomDatabase {
 
 
 
-  public abstract LogDao logDao();
+  public abstract FoodLogDao foodLogDao();
 
-  private static volatile LogRoomDatabase INSTANCE;
+  private static volatile FoodLogRoomDatabase INSTANCE;
 
   private static final int NUMBER_OF_THREADS = 4;
 
@@ -45,31 +42,31 @@ public abstract class LogRoomDatabase extends RoomDatabase {
         databaseWriteExecutor.execute(() -> {
           // Populate the database in the background.
           // If you want to start with more words, just add them.
-          LogDao dao = INSTANCE.logDao();
+          FoodLogDao foodLogDao = INSTANCE.foodLogDao();
           //dao.deleteAll();
 
-          Log log = new Log("Oat milk");
-          dao.daoLogInsert(log);
+          FoodLog foodLog = new FoodLog("Oat milk");
+          foodLogDao.daoFoodLogInsert(foodLog);
         });
 
       }
     }; //end sRoomDatabaseCallback
 
 
-  public static LogRoomDatabase getDatabase(final Context context) {
+  public static FoodLogRoomDatabase getDatabase(final Context context) {
 
     if (INSTANCE == null) {
 
-      synchronized (LogRoomDatabase.class) {
+      synchronized (FoodLogRoomDatabase.class) {
 
         if (INSTANCE == null) {
 
           INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-              LogRoomDatabase.class, "log_database"
+              FoodLogRoomDatabase.class, "food_log_database"
             ) //end INSTANCE
 
             .addCallback(sRoomDatabaseCallback)
-            //.addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2)
             .build();
 
         }//end if null
@@ -84,14 +81,14 @@ public abstract class LogRoomDatabase extends RoomDatabase {
 
 
   // how to add migration
-//  static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-//
-//    @Override
-//    public void migrate(SupportSQLiteDatabase database) {
-//
-//// Since we didn't alter the table, there's nothing else to do here.
-//    }//end migrate
-//
-//  }; //end Migration
+  static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+
+    @Override
+    public void migrate(SupportSQLiteDatabase database) {
+
+// Since we didn't alter the table, there's nothing else to do here.
+    }//end migrate
+
+  }; //end Migration
 
 } //end LogRoomDatabase

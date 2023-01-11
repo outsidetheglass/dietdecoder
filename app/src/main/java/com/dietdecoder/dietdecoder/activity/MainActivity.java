@@ -11,7 +11,7 @@ import android.widget.Button;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.ingredient.IngredientActivity;
-import com.dietdecoder.dietdecoder.activity.log.LogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.recipe.RecipeActivity;
 import com.dietdecoder.dietdecoder.activity.symptom.SymptomActivity;
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     // Button to got to recipe's page
     logButton = findViewById(R.id.button_log);
     logButton.setOnClickListener( view -> {
-      logIntent = new Intent(thisActivity, LogActivity.class);
+      logIntent = new Intent(thisActivity, FoodLogActivity.class);
       startActivity(logIntent);
     });
 

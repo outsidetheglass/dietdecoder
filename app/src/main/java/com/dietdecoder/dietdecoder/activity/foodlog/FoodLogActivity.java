@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activity.log;
+package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,19 +15,23 @@ import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.database.log.Log;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
-import com.dietdecoder.dietdecoder.ui.log.LogListAdapter;
-import com.dietdecoder.dietdecoder.ui.log.LogViewModel;
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class LogActivity extends AppCompatActivity {
+import java.time.Instant;
+import java.util.Calendar;
+
+public class FoodLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
-  private final Activity thisActivity = LogActivity.this;
+  private final Activity thisActivity = FoodLogActivity.this;
 
 
-  private LogViewModel mLogViewModel;
-  private LogListAdapter mLogListAdapter;
+  private FoodLogViewModel mFoodLogViewModel;
+  private FoodLogListAdapter mFoodLogListAdapter;
   public static final int NEW_LOG_ACTIVITY_REQUEST_CODE = 1;
   public static final int EDIT_LOG_ACTIVITY_REQUEST_CODE = 2;
   public static final int DELETE_LOG_ACTIVITY_REQUEST_CODE = 3;
@@ -45,7 +49,7 @@ public class LogActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_log);
+    setContentView(R.layout.activity_food_log);
 
     //TODO make scrollable left and right (maybe tabs) for snacks too, by category
     //Making everything food first, add Drink in after Food works
@@ -53,14 +57,14 @@ public class LogActivity extends AppCompatActivity {
     RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
 
 
-    mLogListAdapter = new LogListAdapter(new LogListAdapter.LogDiff());
-    recyclerViewFood.setAdapter(mLogListAdapter);
+    mFoodLogListAdapter = new FoodLogListAdapter(new FoodLogListAdapter.LogDiff());
+    recyclerViewFood.setAdapter(mFoodLogListAdapter);
     recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
-    mLogViewModel = new ViewModelProvider(this).get(LogViewModel.class);
+    mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
 
-    mLogViewModel.viewModelGetAllLogs().observe(this, logs -> {
+    mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this, logs -> {
       // Update the cached copy of the words in the adapter.
-      mLogListAdapter.submitList(logs);
+      mFoodLogListAdapter.submitList(logs);
     });
 
     // Button to edit log
@@ -83,7 +87,7 @@ public class LogActivity extends AppCompatActivity {
     // FAB to add new log
     addButton = findViewById(R.id.add_button_log);
     addButton.setOnClickListener( view -> {
-      addIntent = new Intent(thisActivity, NewLogActivity.class);
+      addIntent = new Intent(thisActivity, NewFoodLogActivity.class);
       startActivityForResult(addIntent, NEW_LOG_ACTIVITY_REQUEST_CODE);
     });
 
@@ -114,13 +118,9 @@ public class LogActivity extends AppCompatActivity {
   private void newLogActivityResult(int resultCode, Intent data) {
 
     if (resultCode == RESULT_OK) {
-      String logName = data.getStringExtra("log_name");
-      String logIngredient = data.getStringExtra("ingredient");
-      Log.d(TAG, "newLogActivityResult: " + logName + ": " + logIngredient);
 
-      //TODO uncomment when activity is working
-      //Log log = new Log(logName, logIngredient);
-      //mLogViewModel.viewModelInsert(log);
+      Log.d(TAG, "newLogActivityResult: got here from " + this.thisActivity);
+
     }//end result_ok
     else  {
       Toast.makeText(

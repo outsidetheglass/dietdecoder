@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activity.log;
+package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dietdecoder.dietdecoder.R;
 
-public class DeleteLogActivity extends AppCompatActivity {
+public class DeleteFoodLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();

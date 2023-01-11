@@ -36,15 +36,15 @@
         android:exported="false"/>
 
 
-      <activity android:name=".activity.log.LogActivity"
+      <activity android:name=".activity.foodlog.FoodLogActivity"
         android:exported="false"/>
-      <activity        android:name=".activity.log.DeleteLogActivity"
+      <activity        android:name=".activity.foodlog.DeleteFoodLogActivity"
         android:exported="false" />
-      <activity        android:name=".activity.log.DetailLogActivity"
+      <activity        android:name=".activity.foodlog.DetailFoodLogActivity"
         android:exported="false" />
-      <activity        android:name=".activity.log.NewLogActivity"
+      <activity        android:name=".activity.foodlog.NewFoodLogActivity"
         android:exported="false" />
-      <activity        android:name=".activity.log.EditLogActivity"
+      <activity        android:name=".activity.foodlog.EditFoodLogActivity"
         android:exported="false" />
 
 

@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activity.log;
+package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.log.LogActivity;
-
 //TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
 
-public class EditLogActivity extends AppCompatActivity {
+public class EditFoodLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -57,7 +54,7 @@ public class EditLogActivity extends AppCompatActivity {
     if (null == editLogIntent) {
       // go back if it was null
       Toast.makeText(this, "Can't edit an invalid log", Toast.LENGTH_SHORT).show();
-      this.startActivity( new Intent(this, EditLogActivity.class));
+      this.startActivity( new Intent(this, EditFoodLogActivity.class));
     }
 
     mLogOldName = editLogIntent.getStringExtra("log_name");
@@ -67,7 +64,7 @@ public class EditLogActivity extends AppCompatActivity {
 
     //TODO fix this when I just can save it through here instead of going back to save
     // make an intent to hold our edited log to go back to where we can save it
-    Intent replyIntent = new Intent(this, LogActivity.class);
+    Intent replyIntent = new Intent(this, FoodLogActivity.class);
 
     replyIntent.putExtra("old_name", mLogOldName);
 //    replyIntent.putExtra("old_concern", mLogOldConcern);

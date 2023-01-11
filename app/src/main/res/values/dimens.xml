@@ -2,7 +2,8 @@
     <dimen name="fab_margin">16dp</dimen>
   <dimen name="home_title">40sp</dimen>
   <dimen name="title">32sp</dimen>
-  <dimen name="subtitle">28sp</dimen>
+  <dimen name="subtitle">20sp</dimen>
+  <dimen name="tiny_padding">2dp</dimen>
   <dimen name="small_padding">8dp</dimen>
   <dimen name="smallest_padding">4dp</dimen>
   <dimen name="big_padding">16dp</dimen>

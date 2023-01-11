@@ -9,7 +9,7 @@
 
   <style name="textview_subtitle">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_marginBottom">10dp</item>
+    <item name="android:layout_marginTop">@dimen/tiny_padding</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textColor">@color/color_title</item>
     <item name="android:textSize">@dimen/subtitle</item>
