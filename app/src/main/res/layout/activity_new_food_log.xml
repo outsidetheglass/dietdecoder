@@ -1,5 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/constraintLayout_new_food_log"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -8,19 +11,27 @@
     android:text="@string/title_textview_new_log"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/big_padding"
+    android:layout_marginTop="10dp"
     android:textAlignment="center"
     android:textAppearance="@style/textview_title"
     android:textStyle="bold"
-    android:layout_gravity="center_horizontal"    />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.498"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
 
   <TextView
     android:id="@+id/textview_new_log_ingredient_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/textview_subtitle"
-    android:layout_margin="@dimen/tiny_padding"
-    android:text="@string/textview_new_log_ingredient_name"/>
+    android:layout_marginBottom="@dimen/tiny_padding"
+    android:layout_marginTop="@dimen/big_padding"
+    android:text="@string/textview_new_log_ingredient_name"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textview_title_new_log"
+    />
 
   <EditText
     android:id="@+id/edittext_new_log_ingredient_name"
@@ -28,64 +39,90 @@
     android:layout_height="wrap_content"
     android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/tiny_padding"
-    android:hint="@string/edittext_new_log_ingredient_name"/>
+    android:hint="@string/edittext_new_log_ingredient_name"
+    android:layout_marginRight="@dimen/tiny_padding"
+    app:layout_constraintStart_toStartOf="@+id/textview_new_log_ingredient_name"
+    app:layout_constraintTop_toBottomOf="@+id/textview_new_log_ingredient_name"
+    app:layout_constraintRight_toLeftOf="@id/edittext_new_log_ingredient_brand"
+    />
 
   <EditText
     android:id="@+id/edittext_new_log_ingredient_brand"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textAppearance="@style/edittext"
     android:layout_margin="@dimen/tiny_padding"
-    android:hint="@string/edittext_new_log_ingredient_brand"/>
-
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="@dimen/tiny_padding"
+    android:hint="@string/edittext_new_log_ingredient_brand"
+    android:textAppearance="@style/edittext"
+    app:layout_constraintLeft_toRightOf="@+id/edittext_new_log_ingredient_name"
+    app:layout_constraintTop_toBottomOf="@+id/textview_new_log_ingredient_name" />
 
   <TextView
-    android:id="@+id/textview_new_log_ingredient_hour"
+   android:id="@+id/textview_new_log_ingredient_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/textview_subtitle"
-    android:layout_margin="@dimen/tiny_padding"
-    android:text="@string/textview_new_log_ingredient_hour"/>
+   android:layout_marginBottom="@dimen/tiny_padding"
+    android:layout_marginTop="@dimen/big_padding"
+    android:text="@string/textview_new_log_ingredient_date"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/edittext_new_log_ingredient_brand"
+  />
 
   <EditText
     android:id="@+id/edittext_new_log_datetime_hour"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/tiny_padding"
-    android:textAppearance="@style/edittext" />
+    android:textAppearance="@style/edittext"
+    app:layout_constraintStart_toStartOf="@+id/textview_new_log_ingredient_date"
+    app:layout_constraintTop_toBottomOf="@+id/textview_new_log_ingredient_date"
+    app:layout_constraintRight_toLeftOf="@+id/edittext_new_log_datetime_day"
+    />
 
-  <TextView
-    android:id="@+id/textview_new_log_ingredient_date"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="@style/textview_subtitle"
-    android:layout_margin="@dimen/tiny_padding"
-    android:text="@string/textview_new_log_ingredient_date"/>
   <EditText
-    android:id="@+id/edittext_new_log_datetime_day"
+ android:id="@+id/edittext_new_log_datetime_day"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/tiny_padding"
-    android:textAppearance="@style/edittext" />
+    android:textAppearance="@style/edittext"
+    app:layout_constraintStart_toStartOf="@+id/textview_new_log_ingredient_date"
+    app:layout_constraintTop_toBottomOf="@+id/edittext_new_log_datetime_hour"
+    app:layout_constraintRight_toLeftOf="@+id/edittext_new_log_datetime_month"
+    />
+
   <EditText
     android:id="@+id/edittext_new_log_datetime_month"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
     android:layout_margin="@dimen/tiny_padding"
-    android:textAppearance="@style/edittext" />
+    android:textAppearance="@style/edittext"
+    app:layout_constraintTop_toBottomOf="@+id/edittext_new_log_datetime_hour"
+    app:layout_constraintLeft_toRightOf="@+id/edittext_new_log_datetime_day"
+    />
+
   <EditText
     android:id="@+id/edittext_new_log_datetime_year"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/tiny_padding"
-    android:textAppearance="@style/edittext" />
+    android:textAppearance="@style/edittext"
+    app:layout_constraintTop_toBottomOf="@+id/edittext_new_log_datetime_hour"
+    app:layout_constraintLeft_toRightOf="@+id/edittext_new_log_datetime_month"
+    />
   <Button
     android:id="@+id/button_save_new_log"
     android:text="@string/button_save_new_log"
     android:background="@color/green_500"
     android:textColor="@color/button_label"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/small_padding"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
