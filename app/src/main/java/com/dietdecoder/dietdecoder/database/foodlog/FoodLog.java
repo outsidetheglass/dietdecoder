@@ -26,6 +26,7 @@ public class FoodLog {
   @ColumnInfo(name = "foodLogId")
   private UUID mFoodLogId;
 
+  // dateTime is when the log was made
   @ColumnInfo(name = "dateTime")
   private Instant mDateTime;
 
@@ -37,6 +38,10 @@ public class FoodLog {
   @ColumnInfo(name = "brand")
   private String mBrand;
 
+  // when it was consumed
+  @ColumnInfo(name = "dateTimeConsumed")
+  private Instant mDateTimeConsumed;
+
   // when it was bought or pulled from the garden, as close to time it died and began the decomposition process as possible
   @ColumnInfo(name = "dateTimeAcquired")
   private Instant mDateTimeAcquired;
@@ -45,19 +50,21 @@ public class FoodLog {
   @ColumnInfo(name = "dateTimeCooked")
   private Instant mDateTimeCooked;
 
+
 // use Ignore for which parameters are optional
   @Ignore
   public FoodLog(String ingredientName) {
     // if only ingredient was given
     // empty for brand
-    // acquired was yesterday and cooked now and expires tomorrow
-    this(ingredientName, "", Instant.now().minus(1, ChronoUnit.DAYS), Instant.now());
+    // acquired was yesterday and cooked and eaten now
+    this(ingredientName, "", Instant.now(), Instant.now().minus(1, ChronoUnit.DAYS), Instant.now());
   }
 
   public FoodLog(@NonNull String ingredientName, String brand,
-                 Instant dateTimeAcquired, Instant dateTimeCooked) {
+                 Instant dateTimeConsumed, Instant dateTimeAcquired, Instant dateTimeCooked) {
     this.mFoodLogId = UUID.randomUUID();
     this.mDateTime = Instant.now();
+    this.mDateTimeConsumed = dateTimeConsumed;
     this.mIngredientName = ingredientName;
     this.mBrand = brand;
     this.mDateTimeAcquired = dateTimeAcquired;
@@ -67,10 +74,10 @@ public class FoodLog {
 
   // helpful functions for calculating off of the times
   public Instant getFoodLogDateTimeInstant() {
-    return(this.mDateTime);
+    return(this.mDateTimeConsumed);
   }
   public String getFoodLogDateTimeString() {
-    Calendar logCalendar = GregorianCalendar.from(this.mDateTime.atZone( ZoneId.systemDefault() )) ;
+    Calendar logCalendar = GregorianCalendar.from(this.mDateTimeConsumed.atZone( ZoneId.systemDefault() )) ;
     String fullLogTime = logCalendar.getTime().toString();
 
 
@@ -88,7 +95,22 @@ public class FoodLog {
     String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
     String logDayOfWeek = days[logCalendar.get(Calendar.DAY_OF_WEEK) - 1];
 
-    String logTime = logCalendar.get(Calendar.HOUR_OF_DAY) + ":" + logCalendar.get(Calendar.MINUTE);
+
+    String logHour = String.valueOf(logCalendar.get(Calendar.HOUR_OF_DAY));
+    // if minute is less than 10, add a 0 to the beginning to display pretty
+    Integer logMinuteInteger = logCalendar.get(Calendar.MINUTE);
+    String logMinuteString;
+    if (logMinuteInteger < 10) {
+      logMinuteString =
+      "0" + String.valueOf(logCalendar.get(Calendar.MINUTE));
+    } else {
+      logMinuteString =
+      String.valueOf(logCalendar.get(Calendar.MINUTE));
+    }
+
+
+
+    String logTime = logHour + ":" + logMinuteString;
 
 
     return(logTime + " " + logDayOfWeek + ", " + logMonth + " " + logNumberDayOfMonth + " " + logYear);
@@ -111,6 +133,7 @@ public class FoodLog {
     //if one of them is null it doesn't break
     if (this.mDateTimeAcquired != null && this.mIngredientName != null && this.mBrand != null ) {
       return ("Logged at: " + this.mDateTime + "\n"
+        + "\nConsumed at: " + this.mDateTimeConsumed + "\n"
         + "\nAcquired at: " + this.mDateTimeAcquired + "\n"
         + "\nIngredient Cooked at: " + this.mDateTimeCooked + "\n"
         + "\nIngredient Name: " + this.mIngredientName + "\n"
@@ -135,6 +158,15 @@ public class FoodLog {
     this.mDateTime = dateTime;
   }
 
+
+  public Instant getMDateTimeConsumed() {
+    return mDateTimeConsumed;
+  }
+  public void setMDateTimeConsumed(Instant dateTimeConsumed) {
+    this.mDateTimeConsumed = dateTimeConsumed;
+  }
+
+
   public String getMIngredientName() {
     return mIngredientName;
   }
@@ -149,13 +181,13 @@ public class FoodLog {
     this.mBrand = brand;
   }
 
+
   public Instant getMDateTimeAcquired() {
     return mDateTimeAcquired;
   }
   public void setMDateTimeAcquired(Instant dateTimeAcquired) {
     this.mDateTimeAcquired = dateTimeAcquired;
   }
-
 
   public Instant getMDateTimeCooked() {
     return mDateTimeCooked;

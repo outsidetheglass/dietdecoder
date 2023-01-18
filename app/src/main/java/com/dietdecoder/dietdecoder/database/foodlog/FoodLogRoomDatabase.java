@@ -87,8 +87,9 @@ public abstract class FoodLogRoomDatabase extends RoomDatabase {
     public void migrate(SupportSQLiteDatabase database) {
 
 // Since we didn't alter the table, there's nothing else to do here.
-    }//end migrate
+    }//end public void migrate
 
-  }; //end Migration
+  }; //end static final Migration
+
 
 } //end LogRoomDatabase

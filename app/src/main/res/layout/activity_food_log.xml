@@ -11,27 +11,25 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="@dimen/tiny_padding"
     android:text="@string/textview_title_log"
     android:textAlignment="center"
     android:textAppearance="@style/textview_title"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="@+id/edit_button_log"
     app:layout_constraintHorizontal_bias="0.50"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/edit_button_log"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.05" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerview_log_food"
     android:layout_width="315dp"
-    android:layout_height="489dp"
-    android:layout_margin="10dp"
-    android:layout_marginTop="30dp"
+    android:layout_height="400dp"
+    android:layout_marginTop="@dimen/medium_padding"
+    android:layout_marginBottom="@dimen/medium_padding"
     android:nestedScrollingEnabled="false"
-    android:padding="@dimen/big_padding"
-    app:layout_constraintBottom_toTopOf="@+id/edit_button_log"
+    android:padding="@dimen/medium_padding"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.50"
     app:layout_constraintLeft_toLeftOf="parent"
@@ -47,37 +45,11 @@
     android:layout_height="wrap_content"
     android:src="@drawable/ic_baseline_add_24"
     android:textAppearance="@style/button"
+    android:layout_margin="@dimen/big_padding"
+    app:layout_constraintVertical_bias="0.90"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="0.20"
-    app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.95" />
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/edit_button_log"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_baseline_edit"
-    android:textAppearance="@style/button"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.95" />
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/delete_button_log"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_baseline_delete_24"
-    android:textAppearance="@style/button"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="0.80"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.95" />
+    app:layout_constraintHorizontal_bias="0.80"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

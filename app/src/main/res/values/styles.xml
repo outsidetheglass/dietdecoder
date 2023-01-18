@@ -36,23 +36,30 @@
     <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:inputType">textAutoComplete</item>
     <item name="android:drawableBottom">@color/black</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
+    <item name="android:layout_margin">@dimen/tiny_padding</item>
   </style>
+
+  <style name="textview_subsubtitle">
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:textSize">@dimen/subsubtitle</item>
+  </style>
+
 
   <style name="textview_edit_old_values">
     <item name="android:fontFamily">sans-serif-light</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:textSize">@dimen/subsubtitle</item>
   </style>
 
   <style name="textview_main_content">
     <item name="fontFamily">sans-serif-light</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
 
   <style name="button">
     <item name="android:gravity">center_horizontal</item>
     <item name="android:layout_marginTop">@dimen/big_padding</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
 
 </resources>

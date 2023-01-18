@@ -101,6 +101,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
               Integer foodLogYear = foodLogCalendar.get(Calendar.YEAR);
               Integer foodLogMonth = foodLogCalendar.get(Calendar.MONTH);
               Integer foodLogHour = foodLogCalendar.get(Calendar.HOUR_OF_DAY);
+              Integer foodLogMinute = foodLogCalendar.get(Calendar.MINUTE);
 
 
               foodLogContext.startActivity(
@@ -111,6 +112,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
                   .putExtra("ingredientDateTimeMonth", foodLogMonth)
                   .putExtra("ingredientDateTimeYear", foodLogYear)
                   .putExtra("ingredientDateTimeHour", foodLogHour)
+                  .putExtra("ingredientDateTimeMinute", foodLogMinute)
                   .putExtra("ingredientDateTimeAcquired", mFoodLogDateTimeAcquired)
                   .putExtra("ingredientDateTimeCooked", mFoodLogDateTimeCooked)
               );

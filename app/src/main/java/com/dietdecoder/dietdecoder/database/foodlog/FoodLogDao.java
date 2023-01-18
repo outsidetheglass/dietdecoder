@@ -26,19 +26,19 @@ public interface FoodLogDao {
   @Delete
   void daoFoodLogDelete(FoodLog foodLog);
 
-  @Query("SELECT * FROM food_log_table ORDER BY dateTime")
+  @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed")
   LiveData<List<FoodLog>> daoGetAllFoodLog();
 
 
   // TODO fix this so it gets all on that date, not just that specific instant
-  @Query("SELECT * FROM food_log_table WHERE :onThisDateTime = dateTime ORDER BY dateTime")
+  @Query("SELECT * FROM food_log_table WHERE :onThisDateTime = dateTimeConsumed ORDER BY dateTimeConsumed")
   List<FoodLog> daoGetAllFoodLogOnDate(Instant onThisDateTime);
 
-  @Query("SELECT * FROM food_log_table WHERE :onThisInstant = dateTime ORDER BY dateTime")
+  @Query("SELECT * FROM food_log_table WHERE :onThisInstant = dateTimeConsumed ORDER BY dateTimeConsumed")
   FoodLog daoGetFoodLogFromInstant(Instant onThisInstant);
 
   // TODO fix this so it gets all after that actual date
-  @Query("SELECT * FROM food_log_table WHERE dateTime >= :laterThanThisDateTime ORDER BY dateTime")
+  @Query("SELECT * FROM food_log_table WHERE dateTimeConsumed >= :laterThanThisDateTime ORDER BY dateTimeConsumed")
   List<FoodLog> daoGetAllFoodLogAfterDateTime(Instant laterThanThisDateTime);
 
 }

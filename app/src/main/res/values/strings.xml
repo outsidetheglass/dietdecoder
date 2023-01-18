@@ -9,7 +9,11 @@
   <string name="empty_not_updated">Not Updated, invalid values</string>
 
   <string name="textview_new_log_ingredient_name">Name and Brand of Ingredient</string>
-  <string name="textview_new_log_ingredient_date">Time Consumed (HH, MM, DD, YYYY)</string>
+  <string name="title_textview_new_log_ingredient_date">Date Time Consumed</string>
+  <string name="textview_24hr">(24 hour time)</string>
+  <string name="textview_colon">:</string>
+  <string name="textview_slash">/</string>
+
 
   <string name="home_fragment_label">Home</string>
   <string name="textview_main_title">Go To</string>
@@ -76,5 +80,20 @@
   <string name="title_log_detail_textview">Detail Log</string>
 
   <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
+
+  <string-array name="months_array">
+    <item>Jan</item>
+    <item>Feb</item>
+    <item>Mar</item>
+    <item>Apr</item>
+    <item>May</item>
+    <item>Jun</item>
+    <item>Jul</item>
+    <item>Aug</item>
+    <item>Sep</item>
+    <item>Oct</item>
+    <item>Nov</item>
+    <item>Dec</item>
+  </string-array>
 
 </resources>
