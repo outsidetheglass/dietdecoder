@@ -1,5 +1,7 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -9,7 +11,10 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +37,7 @@ public class NewFoodLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
+  private final Activity thisActivity = NewFoodLogActivity.this;
 
   private EditText mEditTextDateTimeHour;
   private EditText mEditTextDateTimeMinute;
@@ -79,7 +85,10 @@ public class NewFoodLogActivity extends AppCompatActivity {
 
 
   private FoodLogViewModel mFoodLogViewModel;
-
+  private Button pickDateBtn;
+  private TextView selectedDateTV;
+  private TimePicker timepicker;
+  private Button changetime;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     //TODO make recipe dropdown, listed in order of frequency made
@@ -107,8 +116,8 @@ public class NewFoodLogActivity extends AppCompatActivity {
     mEditTextDateTimeDay = findViewById(R.id.edittext_new_log_datetime_day);
     mEditTextDateTimeMonth = findViewById(R.id.edittext_new_log_datetime_month);
     mEditTextDateTimeYear = findViewById(R.id.edittext_new_log_datetime_year);
-
-    //TODO make month into dropdown or all the date into the calendar select
+    timepicker=(TimePicker)findViewById(R.id.timePicker);
+    changetime=(Button)findViewById(R.id.button1);
 
     mEditTextDateTimeHour.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
     mEditTextDateTimeMinute.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
@@ -159,9 +168,6 @@ public class NewFoodLogActivity extends AppCompatActivity {
     mEditTextDateTimeHour.setText(logIngredientDateTimeHour.toString());
     mEditTextIngredientName.setText(mNewLogName);
     mEditTextIngredientBrand.setText(mNewLogBrand);
-    mEditTextDateTimeDay.setText(logIngredientDateTimeDay.toString());
-    mEditTextDateTimeMonth.setText(setMonthString(logIngredientDateTimeMonth));
-    mEditTextDateTimeYear.setText(logIngredientDateTimeYear.toString());
     // if minutes is less than 10, put a 0 before it for displaying
     mEditTextDateTimeMinute.setText( setMinutesString(logIngredientDateTimeMinute) );
 
@@ -169,6 +175,45 @@ public class NewFoodLogActivity extends AppCompatActivity {
     // then put that recipe name into the View Model
     // list the Adapter with all the recipe's ingredients
     // then an add ingredient button
+
+        // on below line we are initializing our variables.
+    pickDateBtn = findViewById(R.id.idBtnPickDate);
+    selectedDateTV = findViewById(R.id.idTVSelectedDate);
+
+    // on below line we are adding click listener for our pick date button
+    pickDateBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // create a variable for date picker dialog.
+          // passing context.
+          // setting date to our text view.
+        DatePickerDialog datePickerDialog = new DatePickerDialog( thisActivity,
+          new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+              selectedDateTV.setText( (setMonthString(logIngredientDateTimeMonth))+"-" + dayOfMonth  + "-" + year);
+            }
+          },
+          // on below line we are passing year,
+          // month and day for selected date in our date picker.
+          logIngredientDateTimeYear,
+          logIngredientDateTimeMonth,
+          logIngredientDateTimeDay
+        );
+        // at last we are calling show to
+        // display our date picker dialog.
+        datePickerDialog.show();
+      }
+    });
+
+    changetime.setOnClickListener(new View.OnClickListener(){
+    @Override
+    public void onClick(View view) {
+      mEditTextDateTimeHour.setText(timepicker.getHour());
+      mEditTextDateTimeMinute.setText( setMinutesString(timepicker.getMinute()) );
+    }
+    });
+
 
     // save info into log database and go back to log page
     saveButton = findViewById(R.id.button_save_new_log);
@@ -194,16 +239,16 @@ public class NewFoodLogActivity extends AppCompatActivity {
 
         // save it directly from here
         Instant logInstant;
-          Calendar logCalendar = Calendar.getInstance();
-          logCalendar.set(Calendar.MONTH,
-            getMonthInteger(mEditTextDateTimeMonth.getText().toString()));
-          logCalendar.set(Calendar.YEAR, Integer.parseInt(mEditTextDateTimeYear.getText().toString()));
+        Calendar logCalendar = Calendar.getInstance();
+        logCalendar.set(Calendar.MONTH,
+          getMonthInteger(mEditTextDateTimeMonth.getText().toString()));
+        logCalendar.set(Calendar.YEAR, Integer.parseInt(mEditTextDateTimeYear.getText().toString()));
         logCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mEditTextDateTimeHour.getText().toString()));
         logCalendar.set(Calendar.MINUTE,Integer.parseInt(mEditTextDateTimeMinute.getText().toString()));
-          logCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mEditTextDateTimeDay.getText().toString()));
+        logCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mEditTextDateTimeDay.getText().toString()));
 
-          logInstant = logCalendar.toInstant();
-          FoodLog foodLog = new FoodLog(mNewLogName, mNewLogBrand, logInstant, logInstant, logInstant);
+        logInstant = logCalendar.toInstant();
+        FoodLog foodLog = new FoodLog(mNewLogName, mNewLogBrand, logInstant, logInstant, logInstant);
 
         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
         mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
@@ -215,6 +260,7 @@ public class NewFoodLogActivity extends AppCompatActivity {
       }
       finish();
     });
+
 
   }//end OnCreate
 

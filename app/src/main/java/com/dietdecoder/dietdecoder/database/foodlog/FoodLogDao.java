@@ -26,7 +26,7 @@ public interface FoodLogDao {
   @Delete
   void daoFoodLogDelete(FoodLog foodLog);
 
-  @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed")
+  @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed DESC")
   LiveData<List<FoodLog>> daoGetAllFoodLog();
 
 

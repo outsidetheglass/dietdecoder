@@ -82,7 +82,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/subtitle_textview_new_log_ingredient_date"
     />
-
   <EditText
     android:id="@+id/edittext_new_log_datetime_hour"
     android:layout_width="wrap_content"
@@ -170,6 +169,38 @@
     app:layout_constraintTop_toBottomOf="@+id/textview_new_log_ingredient_datetime"
     app:layout_constraintLeft_toRightOf="@+id/textview_new_log_ingredient_datetime_month_slash_year"
     />
+
+  <TimePicker
+  android:id="@+id/timePicker"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@+id/idTVSelectedDate"
+  android:layout_centerHorizontal="true"
+  android:layout_marginBottom="36dp"
+  />
+  <TextView
+    android:id="@+id/idTVSelectedDate"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="20dp"
+    android:gravity="center"
+    android:padding="10dp"
+    android:text="Date"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintTop_toBottomOf="@+id/edittext_new_log_datetime_year" />
+  <Button
+    android:id="@+id/idBtnPickDate"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="20dp"
+    android:text="Pick Date"
+    android:textAllCaps="false"
+    app:layout_constraintTop_toBottomOf="@+id/idTVSelectedDate" />
   <Button
     android:id="@+id/button_save_new_log"
     android:text="@string/button_save_new_log"
