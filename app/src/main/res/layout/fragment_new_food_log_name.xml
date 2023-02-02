@@ -1,0 +1,104 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/constraintLayout_new_food_log"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+      android:id="@+id/textview_title_new_food_log_name_fragment"
+      android:text="@string/title_textview_new_log"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_title"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <TextView
+      android:id="@+id/textview_new_food_log_name_chosen_time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_past_answer"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_food_log_name_fragment"/>
+
+  <TextView
+      android:id="@+id/textview_new_food_log_name_chosen_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_past_answer"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_name_chosen_time"/>
+
+<!--  <TextView-->
+<!--      android:id="@+id/textview_new_log_ingredient_name"-->
+<!--      android:layout_width="wrap_content"-->
+<!--      android:layout_height="wrap_content"-->
+<!--      android:textAppearance="@style/textview_subtitle"-->
+<!--      android:layout_marginBottom="@dimen/tiny_padding"-->
+<!--      android:layout_marginTop="@dimen/big_padding"-->
+<!--      android:text="@string/textview_new_log_ingredient_name"-->
+<!--      app:layout_constraintStart_toStartOf="parent"-->
+<!--      app:layout_constraintEnd_toEndOf="parent"-->
+<!--      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_when_chosen"-->
+<!--      />-->
+
+  <TextView
+      android:id="@+id/textview_question_new_food_log_name"
+      android:text="@string/question_textview_new_food_log_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_main_content"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_name_chosen_date"/>
+
+  <EditText
+      android:id="@+id/edittext_new_food_log_name_ingredient_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/edittext"
+      android:layout_margin="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:hint="@string/edittext_new_log_ingredient_name"
+      android:layout_marginRight="@dimen/tiny_padding"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_food_log_name"
+      />
+
+
+  <Button
+      android:id="@+id/button_new_food_log_name_save"
+      android:text="@string/button_save"
+      android:background="@color/green_500"
+      android:textColor="@color/button_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/small_padding"
+      app:layout_constraintTop_toBottomOf="@+id/edittext_new_food_log_name_ingredient_name"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

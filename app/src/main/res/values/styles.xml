@@ -51,6 +51,12 @@
     <item name="android:textSize">@dimen/subsubtitle</item>
   </style>
 
+  <style name="textview_past_answer">
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:textColor">@color/gray</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
+  </style>
+
   <style name="textview_main_content">
     <item name="fontFamily">sans-serif-light</item>
     <item name="android:textSize">@dimen/normal_textsize</item>

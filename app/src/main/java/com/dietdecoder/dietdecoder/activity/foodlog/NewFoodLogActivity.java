@@ -3,9 +3,7 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -20,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
@@ -31,9 +30,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
-public class NewFoodLogActivity extends AppCompatActivity {
+public class NewFoodLogActivity extends AppCompatActivity implements View.OnClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -48,11 +46,7 @@ public class NewFoodLogActivity extends AppCompatActivity {
   private EditText mEditTextIngredientBrand;
 
 
-  String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-    "Sept", "Oct", "Nov", "Dec" };
-
   private Boolean isNameViewEmpty;
-  //private Boolean isConcernViewEmpty;
 
   private FoodLogViewModel mNewFoodLogViewModel;
   private FoodLogListAdapter mNewFoodLogListAdapter;
@@ -60,6 +54,7 @@ public class NewFoodLogActivity extends AppCompatActivity {
   private RecipeListAdapter mRecipeListAdapter;
 
   private Button saveButton;
+  private Button mTimeButton;
 
   private List<Recipe> mActivityAllRecipe;
 
@@ -83,12 +78,15 @@ public class NewFoodLogActivity extends AppCompatActivity {
   private Integer dateTimeNowHour;
   private Integer dateTimeNowMinute;
 
+  private Integer mHour;
+  private Integer mMinute;
+  private Integer mDay;
+  private Integer mMonth;
+  private Integer mYear;
 
   private FoodLogViewModel mFoodLogViewModel;
-  private Button pickDateBtn;
-  private TextView selectedDateTV;
-  private TimePicker timepicker;
-  private Button changetime;
+  private TextView mTextViewSelectedDate;
+  private TimePicker mTimepicker;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     //TODO make recipe dropdown, listed in order of frequency made
@@ -116,25 +114,19 @@ public class NewFoodLogActivity extends AppCompatActivity {
     mEditTextDateTimeDay = findViewById(R.id.edittext_new_log_datetime_day);
     mEditTextDateTimeMonth = findViewById(R.id.edittext_new_log_datetime_month);
     mEditTextDateTimeYear = findViewById(R.id.edittext_new_log_datetime_year);
-    timepicker=(TimePicker)findViewById(R.id.timePicker);
-    changetime=(Button)findViewById(R.id.button1);
+    mTimeButton = findViewById(R.id.time_button);
 
-    mEditTextDateTimeHour.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-    mEditTextDateTimeMinute.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-    mEditTextDateTimeDay.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-    mEditTextDateTimeYear.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
 
-    mEditTextDateTimeHour.setTransformationMethod(new NumericKeyBoardTransformationMethod());
-    mEditTextDateTimeMinute.setTransformationMethod(new NumericKeyBoardTransformationMethod());
-    mEditTextDateTimeDay.setTransformationMethod(new NumericKeyBoardTransformationMethod());
-    mEditTextDateTimeYear.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+
+    saveButton = findViewById(R.id.button_save_new_log);
 
     // this is checking for if this activity was made from a duplicate action or a new log click
     Bundle extras = getIntent().getExtras();
     // if from a duplicate action
     if (extras != null) {
-      mNewLogName = extras.getString("ingredientName");
-      mNewLogBrand = extras.getString("ingredientBrand");
+      mNewLogName = extras.getString(Util.ARGUMENT_INGREDIENT_NAME);
+      mNewLogBrand = extras.getString(Util.ARGUMENT_INGREDIENT_BRAND);
+      //TODO change arguments to hh_mm_dd_mm_yy as saved string for time cooked
       logIngredientDateTimeDay = extras.getInt("ingredientDateTimeDay");
       logIngredientDateTimeYear = extras.getInt("ingredientDateTimeYear");
       logIngredientDateTimeHour = extras.getInt("ingredientDateTimeHour");
@@ -169,97 +161,29 @@ public class NewFoodLogActivity extends AppCompatActivity {
     mEditTextIngredientName.setText(mNewLogName);
     mEditTextIngredientBrand.setText(mNewLogBrand);
     // if minutes is less than 10, put a 0 before it for displaying
-    mEditTextDateTimeMinute.setText( setMinutesString(logIngredientDateTimeMinute) );
+    mEditTextDateTimeMinute.setText(Util.setMinutesString(logIngredientDateTimeMinute) );
+    mEditTextDateTimeMonth.setText( Util.setMonthString(logIngredientDateTimeMonth) );
+    mEditTextDateTimeYear.setText(logIngredientDateTimeYear.toString());
+    mEditTextDateTimeDay.setText(logIngredientDateTimeDay.toString());
 
     // TODO make edittext for putting in recipe to search for
     // then put that recipe name into the View Model
     // list the Adapter with all the recipe's ingredients
     // then an add ingredient button
 
-        // on below line we are initializing our variables.
-    pickDateBtn = findViewById(R.id.idBtnPickDate);
-    selectedDateTV = findViewById(R.id.idTVSelectedDate);
+    // on below line we are adding click listener
+    // for our pick date button
+    // and for our time picker
+    mEditTextDateTimeYear.setOnClickListener(this);
+    mEditTextDateTimeDay.setOnClickListener(this);
+    mEditTextDateTimeMonth.setOnClickListener(this);
 
-    // on below line we are adding click listener for our pick date button
-    pickDateBtn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        // create a variable for date picker dialog.
-          // passing context.
-          // setting date to our text view.
-        DatePickerDialog datePickerDialog = new DatePickerDialog( thisActivity,
-          new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-              selectedDateTV.setText( (setMonthString(logIngredientDateTimeMonth))+"-" + dayOfMonth  + "-" + year);
-            }
-          },
-          // on below line we are passing year,
-          // month and day for selected date in our date picker.
-          logIngredientDateTimeYear,
-          logIngredientDateTimeMonth,
-          logIngredientDateTimeDay
-        );
-        // at last we are calling show to
-        // display our date picker dialog.
-        datePickerDialog.show();
-      }
-    });
+    mTimeButton.setOnClickListener(this);
 
-    changetime.setOnClickListener(new View.OnClickListener(){
-    @Override
-    public void onClick(View view) {
-      mEditTextDateTimeHour.setText(timepicker.getHour());
-      mEditTextDateTimeMinute.setText( setMinutesString(timepicker.getMinute()) );
-    }
-    });
 
 
     // save info into log database and go back to log page
-    saveButton = findViewById(R.id.button_save_new_log);
-    saveButton.setOnClickListener(view -> {
-      Intent replyIntent = new Intent();
-
-      // TODO add validation for correct values, i.e. if less than 1900 make it 1900 etc
-      //  year = (year<1900)?1900:(year>2100)?2100:year;
-      // check for if views are empty
-      isNameViewEmpty = TextUtils.isEmpty(mEditTextIngredientName.getText());
-      // if views are empty
-      if ( isNameViewEmpty ) {
-        // set intent to tell user result is cancelled
-        setResult(RESULT_CANCELED, replyIntent);
-      }
-      // if views have values
-      else {
-        // get strings
-        mNewLogName = mEditTextIngredientName.getText().toString();
-        mNewLogBrand = mEditTextIngredientBrand.getText().toString();
-
-        Log.d(TAG, "onCreate: "+mNewLogName);
-
-        // save it directly from here
-        Instant logInstant;
-        Calendar logCalendar = Calendar.getInstance();
-        logCalendar.set(Calendar.MONTH,
-          getMonthInteger(mEditTextDateTimeMonth.getText().toString()));
-        logCalendar.set(Calendar.YEAR, Integer.parseInt(mEditTextDateTimeYear.getText().toString()));
-        logCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mEditTextDateTimeHour.getText().toString()));
-        logCalendar.set(Calendar.MINUTE,Integer.parseInt(mEditTextDateTimeMinute.getText().toString()));
-        logCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mEditTextDateTimeDay.getText().toString()));
-
-        logInstant = logCalendar.toInstant();
-        FoodLog foodLog = new FoodLog(mNewLogName, mNewLogBrand, logInstant, logInstant, logInstant);
-
-        mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
-        mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
-
-
-
-
-        setResult(RESULT_OK, replyIntent);
-      }
-      finish();
-    });
+    saveButton.setOnClickListener(this);
 
 
   }//end OnCreate
@@ -272,73 +196,94 @@ public class NewFoodLogActivity extends AppCompatActivity {
     }
   }//end numeric keypad function
 
-  // given an integer of minute of datetime
-  // return a string to set for displaying
-  // with a 0 in front if the minute is less than 10
-  private String setMinutesString(Integer minute){
 
-    String mMinutesString;
+  @Override
+  public void onClick(View v) {
+    Log.d(TAG, "onCreate: something was clicked");
+    // case switch for which button was pressed
+    switch (v.getId()) {
+      // if day or month or year is pressed
+      // start date picker
+      case R.id.edittext_new_log_datetime_day:
+      case R.id.edittext_new_log_datetime_month:
+      case R.id.edittext_new_log_datetime_year:
 
-    if ( minute < 10 ) {
-      mMinutesString = "0" + minute.toString();
-    } else {
-      mMinutesString = minute.toString();
+        // default method for handling onClick Events..
+        // create a variable for date picker dialog.
+        // passing context.
+        // setting date to our text view.
+        DatePickerDialog datePickerDialog = new DatePickerDialog( thisActivity,
+          new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+              mTextViewSelectedDate.setText( (Util.setMonthString(logIngredientDateTimeMonth))+
+                      "-" + dayOfMonth  + "-" + year);
+            }
+          },
+          // on below line we are passing year,
+          // month and day for selected date in our date picker.
+          logIngredientDateTimeYear,
+          logIngredientDateTimeMonth,
+          logIngredientDateTimeDay
+        );
+        // at last we are calling show to
+        // display our date picker dialog.
+        datePickerDialog.show();
+        break;
+      // if it's minute or hour pressed
+      // start TimePicker
+      case R.id.time_button:
+        //in the Utility
+
+        break;
+      case R.id.button_save_new_log:
+
+        Intent replyIntent = new Intent();
+
+        // TODO add validation for correct values, i.e. if less than 1900 make it 1900 etc
+        //  year = (year<1900)?1900:(year>2100)?2100:year;
+        // check for if views are empty
+        isNameViewEmpty = TextUtils.isEmpty(mEditTextIngredientName.getText());
+        // if views are empty
+        if ( isNameViewEmpty ) {
+          // set intent to tell user result is cancelled
+          setResult(RESULT_CANCELED, replyIntent);
+        }
+        // if views have values
+        else {
+          // get strings
+          mNewLogName = mEditTextIngredientName.getText().toString();
+          mNewLogBrand = mEditTextIngredientBrand.getText().toString();
+          Log.d(TAG, "onCreate: mNewLogName = " + mNewLogName);
+
+          // get the values from the edit texts
+          mYear = Integer.parseInt(mEditTextDateTimeYear.getText().toString());
+          mMonth = Util.getMonthInteger(mEditTextDateTimeMonth.getText().toString());
+          mHour = Integer.parseInt(mEditTextDateTimeHour.getText().toString());
+          mMinute = Integer.parseInt(mEditTextDateTimeMinute.getText().toString());
+          mDay = Integer.parseInt(mEditTextDateTimeDay.getText().toString());
+
+          // make an instant from our values
+          Instant logInstant = Util.instantFromValues(mHour, mMinute, mDay, mMonth, mYear);
+          // make our food log
+          FoodLog foodLog = new FoodLog(mNewLogName, mNewLogBrand, logInstant, logInstant, logInstant);
+
+          mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+          mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
+
+
+
+
+          setResult(RESULT_OK, replyIntent);
+        }
+        finish();
+        break;
+      default:
+        break;
     }
 
-    return mMinutesString;
-  }//end setMinutesString function
-
-  // set month from zero indexed value to a string of the month name
-  private String setMonthString(Integer monthIndex){
-
-    // if they're invalid values less than Jan or more than Dec, set to those
-    if (monthIndex < 0) {
-      monthIndex = 0;
-    }
-    else if (monthIndex > 11) {
-      monthIndex = 11;
-    }
-    String month = months[monthIndex];
-
-    return month;
   }
 
-  // get the integer zero indexed from a three char string of the month
-  // if it's anything but the given three char strings, return 0 for January
-  private Integer getMonthInteger(String monthString){
-    Integer monthInt;
 
-    if (monthString == "Jan") {
-      monthInt = 0;
-    } else if (Objects.equals(monthString, "Feb")) {
-      monthInt = 1;
-    } else if (Objects.equals(monthString, "Mar")) {
-      monthInt = 2;
-    } else if (Objects.equals(monthString, "Apr")) {
-      monthInt = 3;
-    } else if (Objects.equals(monthString, "May")) {
-      monthInt = 4;
-    } else if (Objects.equals(monthString, "Jun")) {
-      monthInt = 5;
-    } else if (Objects.equals(monthString, "Jul")) {
-      monthInt = 6;
-    } else if (Objects.equals(monthString, "Aug")) {
-      monthInt = 7;
-    } else if (Objects.equals(monthString, "Sep")) {
-      monthInt = 8;
-    } else if (Objects.equals(monthString, "Oct")) {
-      monthInt = 9;
-    } else if (Objects.equals(monthString, "Nov")) {
-      monthInt = 10;
-    } else if (Objects.equals(monthString, "Dec")) {
-      monthInt = 11;
-    } else {
-      monthInt = 0;
-    }
-
-    Log.d(TAG, "newFoodLogActivity monthString=" + monthString );
-    Log.d(TAG, "newFoodLogActivity monthInt=" + monthInt.toString() );
-    return monthInt;
-  }
 
 }//end NewLogActivity

@@ -43,7 +43,9 @@
       <activity        android:name=".activity.foodlog.DetailFoodLogActivity"
         android:exported="false" />
       <activity        android:name=".activity.foodlog.NewFoodLogActivity"
-        android:exported="false" />
+          android:exported="false" />
+      <activity        android:name=".activity.foodlog.NewFoodLogChoicesActivity"
+          android:exported="false" />
       <activity        android:name=".activity.foodlog.EditFoodLogActivity"
         android:exported="false" />
 

@@ -15,6 +15,7 @@ import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.database.log.Log;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
+import com.dietdecoder.dietdecoder.activity.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -87,7 +88,7 @@ public class FoodLogActivity extends AppCompatActivity {
     // FAB to add new log
     addButton = findViewById(R.id.add_button_log);
     addButton.setOnClickListener( view -> {
-      addIntent = new Intent(thisActivity, NewFoodLogActivity.class);
+      addIntent = new Intent(thisActivity, NewFoodLogChoicesActivity.class);
       startActivityForResult(addIntent, NEW_LOG_ACTIVITY_REQUEST_CODE);
     });
 
@@ -136,11 +137,12 @@ public class FoodLogActivity extends AppCompatActivity {
       if (resultCode == RESULT_OK) {
 
         // set which log we're updating
-        String oldLogName = data.getStringExtra("old_name");
-        String oldLogIngredient = data.getStringExtra("old_ingredient");
+        String oldLogName = data.getStringExtra(Util.ARGUMENT_OLD_NAME);
+        String oldLogIngredient = data.getStringExtra(Util.ARGUMENT_OLD_INGREDIENT);
         //Log logToUpdate = mLogViewModel.viewModelGetLogFromNameIngredient(logName, logIngredient);
         Log.d(TAG, "editLogActivityResult: " + oldLogName + ": " + oldLogIngredient);
 
+        //TODO finish bringing the new_name arguments into Util
         Boolean isNewNameEmpty = data.getBooleanExtra("new_name", false);
         Boolean isNewIngredientEmpty = data.getBooleanExtra("new_ingredient", false);
         // if the new name and ingredient value was set from the edit activity, update it

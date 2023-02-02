@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dietdecoder.dietdecoder.activity.Util;
+
 //TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
 
 public class EditFoodLogActivity extends AppCompatActivity {
@@ -57,7 +59,7 @@ public class EditFoodLogActivity extends AppCompatActivity {
       this.startActivity( new Intent(this, EditFoodLogActivity.class));
     }
 
-    mLogOldName = editLogIntent.getStringExtra("log_name");
+    mLogOldName = editLogIntent.getStringExtra(Util.ARGUMENT_LOG_NAME);
 //    mLogOldConcern = editLogIntent.getStringExtra("log_concern");
     mLogOldNameView.setText(mLogOldName);
 //    mLogOldConcernView.setText(mLogOldConcern);
@@ -66,7 +68,7 @@ public class EditFoodLogActivity extends AppCompatActivity {
     // make an intent to hold our edited log to go back to where we can save it
     Intent replyIntent = new Intent(this, FoodLogActivity.class);
 
-    replyIntent.putExtra("old_name", mLogOldName);
+    replyIntent.putExtra(Util.ARGUMENT_OLD_NAME, mLogOldName);
 //    replyIntent.putExtra("old_concern", mLogOldConcern);
 
 //    editLogSaveButton = findViewById(R.id.button_edit_log_save);
@@ -87,7 +89,7 @@ public class EditFoodLogActivity extends AppCompatActivity {
         if (!isNewNameViewEmpty) {
           // Name is not empty, so add that
           mNewLogName = mEditLogNewNameView.getText().toString();
-          replyIntent.putExtra("new_name", mNewLogName);
+          replyIntent.putExtra(Util.ARGUMENT_NEW_NAME, mNewLogName);
         }
 //        if (!isNewConcernViewEmpty) {
 //          // Concern is not empty, so add it

@@ -91,4 +91,8 @@ dependencies {
   implementation "androidx.paging:paging-compose:1.0.0-alpha16"
 
 
+    //fragments
+    def fragment_version = "1.5.5"
+    implementation "androidx.fragment:fragment:$fragment_version"
+
 }//end dependencies
