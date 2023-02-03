@@ -69,8 +69,8 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
   <Button
-      android:id="@+id/button_log_date_time_choices_another_time"
-      android:text="@string/button_another_time"
+      android:id="@+id/button_log_date_time_choices_another_date"
+      android:text="@string/button_another_date"
       android:background="@color/green_500"
       android:textColor="@color/button_label"
       android:layout_width="wrap_content"

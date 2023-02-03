@@ -2,6 +2,7 @@ package com.dietdecoder.dietdecoder.ui.foodlog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
@@ -42,7 +44,6 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
 //    logItemOptionButton = itemView.findViewById(R.id.imagebutton_log_option);
   }
 
-
   public void bind(FoodLog foodLog) {
 
     // info on the foodlog
@@ -55,8 +56,12 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
     String mFoodLogString = foodLog.toString();
 
     // bind the name and the time the food was eaten to the recyclerview item
-    foodLogItemView.setText(mFoodLogIngredientName + "\n(" + mFoodLogDateTime + ")");
-
+    // leave out brand if it isn't named
+    if ( TextUtils.isEmpty(mFoodLogBrand)) {
+      foodLogItemView.setText(mFoodLogIngredientName + "\n(" + mFoodLogDateTime + ")");
+      } else {
+      foodLogItemView.setText(mFoodLogIngredientName + "\n" + mFoodLogBrand +"\n(" + mFoodLogDateTime + ")");
+    }
     // if the item is clicked, open the menu for options on that item
     // change this to OptionButton when that's working, or not
     foodLogItemView.setOnClickListener(new View.OnClickListener() {

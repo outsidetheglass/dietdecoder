@@ -133,7 +133,7 @@ public class IngredientActivity extends AppCompatActivity {
     else  {
       Toast.makeText(
         getApplicationContext(),
-        R.string.empty_ingredient_not_saved,
+        R.string.empty_not_saved,
         Toast.LENGTH_LONG).show();
     } //end if result not okay
 

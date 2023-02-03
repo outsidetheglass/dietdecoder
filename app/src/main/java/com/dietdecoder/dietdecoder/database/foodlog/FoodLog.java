@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.dietdecoder.dietdecoder.activity.Util;
 import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
@@ -77,47 +78,13 @@ public class FoodLog {
     return(this.mDateTimeConsumed);
   }
   public String getFoodLogDateTimeString() {
-    Calendar logCalendar = GregorianCalendar.from(this.mDateTimeConsumed.atZone( ZoneId.systemDefault() )) ;
-    String fullLogTime = logCalendar.getTime().toString();
-
-
-    String logNumberDayOfMonth = String.valueOf(logCalendar.get(Calendar.DAY_OF_MONTH));
-    String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-      "Sept", "Oct", "Nov", "Dec" };
-    String logMonth = months[logCalendar.get(Calendar.MONTH)];
-
-    String logYear = String.valueOf(logCalendar.get(Calendar.YEAR));
-    String logShortYear = logYear.substring(2);
-
-    String logDate =  logMonth + "/" + logNumberDayOfMonth + "/" + logShortYear;
-
-
-    String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
-    String logDayOfWeek = days[logCalendar.get(Calendar.DAY_OF_WEEK) - 1];
-
-
-    String logHour = String.valueOf(logCalendar.get(Calendar.HOUR_OF_DAY));
-    // if minute is less than 10, add a 0 to the beginning to display pretty
-    Integer logMinuteInteger = logCalendar.get(Calendar.MINUTE);
-    String logMinuteString;
-    if (logMinuteInteger < 10) {
-      logMinuteString =
-      "0" + String.valueOf(logCalendar.get(Calendar.MINUTE));
-    } else {
-      logMinuteString =
-      String.valueOf(logCalendar.get(Calendar.MINUTE));
-    }
-
-
-
-    String logTime = logHour + ":" + logMinuteString;
-
-
-    return(logTime + " " + logDayOfWeek + ", " + logMonth + " " + logNumberDayOfMonth + " " + logYear);
+    return Util.stringFromInstant(this.mDateTimeConsumed);
   }
+
   public Calendar getFoodLogDateTimeCalendar() {
-    return( GregorianCalendar.from(this.mDateTime.atZone( ZoneId.systemDefault() )) );
+    return Util.calendarFromInstant(this.mDateTime);
   }
+
   public String getFoodLogAge() {
     //TODO: fix age so it can calculate how old logged grocery is
     //TODO: or maybe just put this logic into exporting logic

@@ -1,5 +1,6 @@
 package com.dietdecoder.dietdecoder.ui.foodlog;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,7 @@ import java.util.List;
 public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> {
 
   // make a TAG to use to log errors
-  private final String TAG = "TAG: " + getClass().getSimpleName();
+  private final static String TAG = "TAG: FoodLogListAdapter";
 
   public FoodLogViewModel foodLogViewModel;
   public List<FoodLog> mFoodLogList;
@@ -38,7 +39,6 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
     holder.bind(currentFoodLog);
   }//end onBindViewHolder
 
-
   public static class LogDiff extends DiffUtil.ItemCallback<FoodLog> {
 
     private Boolean isEqualName;
@@ -51,6 +51,7 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
 
     @Override
     public boolean areContentsTheSame(@NonNull FoodLog oldItem, @NonNull FoodLog newItem) {
+      Log.d(TAG, "Adapter, newitem name: " + newItem.getMIngredientName());
       // check all parts of Log to see if they're the same
       isEqualName = oldItem.getFoodLogDateTimeInstant().equals(newItem.getFoodLogDateTimeInstant());
       //TODO add other properties of log type here

@@ -116,8 +116,6 @@ public class NewFoodLogActivity extends AppCompatActivity implements View.OnClic
     mEditTextDateTimeYear = findViewById(R.id.edittext_new_log_datetime_year);
     mTimeButton = findViewById(R.id.time_button);
 
-
-
     saveButton = findViewById(R.id.button_save_new_log);
 
     // this is checking for if this activity was made from a duplicate action or a new log click

@@ -15,7 +15,7 @@ import com.dietdecoder.dietdecoder.database.Converters;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {FoodLog.class}, version = 2, exportSchema = false)
+@Database(entities = {FoodLog.class}, version = 3, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FoodLogRoomDatabase extends RoomDatabase {
 
@@ -67,6 +67,11 @@ public abstract class FoodLogRoomDatabase extends RoomDatabase {
 
             .addCallback(sRoomDatabaseCallback)
             .addMigrations(MIGRATION_1_2)
+                  // allow main thread queries can lock the UI for a long time, not the best way
+                  // to get access to livedata main thread
+                  // TODO fix this
+                  .allowMainThreadQueries()
+                  .addMigrations(MIGRATION_2_3)
             .build();
 
         }//end if null
@@ -82,14 +87,20 @@ public abstract class FoodLogRoomDatabase extends RoomDatabase {
 
   // how to add migration
   static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    @Override
+    public void migrate(SupportSQLiteDatabase database) {
+
+// Since we didn't alter the table, there's nothing else to do here.
+    }//end public void migrate
+  }; //end static final Migration
+
+  static final Migration MIGRATION_2_3 = new Migration(2, 3) {
 
     @Override
     public void migrate(SupportSQLiteDatabase database) {
 
 // Since we didn't alter the table, there's nothing else to do here.
     }//end public void migrate
-
-  }; //end static final Migration
-
+  };
 
 } //end LogRoomDatabase

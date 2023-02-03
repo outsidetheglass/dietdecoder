@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,33 +9,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class NewFoodLogChoicesActivity extends AppCompatActivity  {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
+    //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
     private final Activity thisActivity = NewFoodLogChoicesActivity.this;
 
     Bundle mBundle;
 
-    private static final String ARGUMENT_HOUR = "hour";
-    private static final String ARGUMENT_MINUTE = "minute";
-    private static final String ARGUMENT_DAY = "day";
-    private static final String ARGUMENT_MONTH = "month";
-    private static final String ARGUMENT_YEAR = "year";
-    private static final String ARGUMENT_WHICH_BUTTON = "which_button";
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
-    String mWhichButton;
+    String mWhichFragmentGoTo;
 
-    private static final String mJustNowString = "just_now";
-    private static final String mYesterdayString = "yesterday";
-    private static final String mEarlierTodayString = "earlier_today";
-    private static final String mAnotherTimeString = "another_time";
-
+    private Fragment nextFragment = null;
 
     public NewFoodLogChoicesActivity() {
         super(R.layout.activity_new_food_log_choices);
@@ -46,65 +43,95 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment logDateTimeChoicesFragment = new LogDateTimeChoicesFragment();
+            Fragment newFoodLogNameFragment = new NewFoodLogNameFragment();
 
             fragmentTransaction
-                    .replace(R.id.fragment_container_view_choices, logDateTimeChoicesFragment)
+                    .replace(R.id.fragment_container_view_choices, newFoodLogNameFragment)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
         }
-        // if there's an intent, it's the fragment passing hour and minute along
+        // if there's an intent, it's the fragment passing info along
         if ( getIntent().getExtras() != null ) {
             mBundle = getIntent().getExtras();
             // get the string that tells us which button was pressed
             // so we know which fragment is next to start
-            mWhichButton = mBundle.getString(ARGUMENT_WHICH_BUTTON);
-            Log.d(TAG, " onCreate, mWhichButton: " + mWhichButton);
+            mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_FRAGMENT_GO_TO);
 
-            Fragment mNextFragment = whichFragmentNext(mWhichButton);
+            Log.d(TAG, String.valueOf(mBundle.getClass()));
+            // check which fragment we should start next based on
+            // which button was pressed in the fragment we just came from
+            Fragment mNextFragment = whichFragmentNext(mWhichFragmentGoTo);
 
-            // set the data to pass along to be the hour and minute
-            // given from the previous fragment
-            mNextFragment.setArguments(mBundle);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction
-                    .replace(R.id.fragment_container_view_choices, mNextFragment)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
+            if ( mNextFragment != null ) {
+                // set the data to pass along info
+                // given from the previous fragment
+                mNextFragment.setArguments(mBundle);
+
+                // start the next fragment
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction
+                        .replace(R.id.fragment_container_view_choices, mNextFragment)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                // it was null so go back to the food logs list
+                startActivity(new Intent(thisActivity, FoodLogActivity.class));
+            }
         }
     }
 
-    private Fragment whichFragmentNext(String whichButton) {
-
-        // TODO move name of ingredient first
-        // so we can then ask about time and then timepicker can directly save
-        Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
-
-        Fragment nextFragment = null;
+    private Fragment whichFragmentNext(String whichFragmentGoTo) {
 
         // change which fragment starts based on which button was pressed
-        // if it was the just now button
-        if (Objects.equals(whichButton, mJustNowString)) {
-            Log.d(TAG, " whichFragmentNext, mWhichButton: " + mWhichButton);
-            // we don't need to ask anything else about time or day
-            // so just start asking what was consumed
-            nextFragment = new NewFoodLogNameFragment();
-        } else if (Objects.equals(whichButton, mYesterdayString)) {
+        if (Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_DATE_TIME_CHOICES)) {
             // we know the day but not the time
             // ask that before we can move on
-            nextFragment = new LogWhatTimeOfDayFragment();
-        } else if (Objects.equals(whichButton, mEarlierTodayString)) {
-            // just set it to preferred amount earlier and go for the name
-            nextFragment = new NewFoodLogNameFragment();
-        } else if (Objects.equals(whichButton, mAnotherTimeString)) {
-            // just set it to preferred amount earlier and go for the name
+            nextFragment = new LogDateTimeChoicesFragment();
+
+        } else if (Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_PART_OF_DAY)) {
+            // we know the day but not the time
+            // ask that before we can move on
+            nextFragment = new LogPartOfDayFragment();
+
+            if (Objects.equals(whichFragmentGoTo,
+                    Util.ARGUMENT_FROM_SPECIFIC_DATE)) {
+                // add to the data the new fragment will see that we already know our date
+                // TODO remove this when confirm that update into database after name inserts it
+                //  is working
+                this.mBundle.putString(Util.ARGUMENT_FRAGMENT_FROM, Util.ARGUMENT_FROM_SPECIFIC_DATE);
+
+            }
+
+        }  else if (Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_SPECIFIC_TIME)) {
+            // ask for specific time
             nextFragment = new LogSpecificTimeFragment();
+
+        } else if (Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_SPECIFIC_DATE)) {
+            // ask for specific time
+            nextFragment = new LogSpecificDateFragment();
+
+        } else if (Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_NAME)) {
+            // we just got the specific time the user wants
+            // so go to next, ask for name
+            nextFragment = new NewFoodLogNameFragment();
+        } else if ( Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_GO_TO_BRAND)) {
+
+            // go to the brand
+            nextFragment = new NewFoodLogBrandFragment();
+
+        } else if ( Objects.equals(whichFragmentGoTo,
+                Util.ARGUMENT_DONE)) {
+            nextFragment = null;
         }
-        //        private static final String mEarlierTodayString = "earlier_today";
-//        private static final String mAnotherTimeString = "another_time";
         return nextFragment;
     }
 }

@@ -1,11 +1,6 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
-import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +9,34 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.util.UUID;
 
 public class LogSpecificTimeFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
+    //Log.d(TAG, "onClick: mTimePickerDateTime = " + mTimePickerDateTime.getHour());
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
+    String mFoodLogIdString;
 
-    private static final String mJustNowString = "just_now";
-    private static final String mYesterdayString = "yesterday";
-
-    LocalDateTime mNowDateTime, mEarlierTodayDateTime, mYesterdayDateTime, mDayBeforeYesterdayDateTime;
+    LocalDateTime mTimePickerDateTime;
     Button mButtonSave;
     TimePicker mTimePicker;
+
+    Bundle mBundle;
+    Instant mInstantConsumed;
+    FoodLogViewModel mFoodLogViewModel;
+    FoodLog mFoodLog;
 
     public LogSpecificTimeFragment() {
         super(R.layout.fragment_log_specific_time);
@@ -51,6 +53,15 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+        mBundle = getArguments();
+        mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+        mFoodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
+        // now get the food log associated with that UUID
+        mFoodLog =
+                mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mFoodLogIdString));
+
+
         // set the listeners on the buttons
         // to run onClick method when they are clicked
         mButtonSave = (Button) view.findViewById(R.id.button_log_specific_time_save);
@@ -71,10 +82,26 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
                 Toast.makeText(getContext(), getResources().getString(R.string.saving),
                         Toast.LENGTH_SHORT).show();
 
-                // change this to get date time if it can
-                LocalDateTime mTimePickerDateTime = null;
-                startActivity(Util.intentWithDateTimeButton(getActivity(), mTimePickerDateTime,
-                        Util.ARGUMENT_SPECIFIC_TIME));
+                // get the current hour and minute of the time picker
+                mHour = mTimePicker.getHour();
+                mMinute = mTimePicker.getMinute();
+                // start an instance of LocalDateTime
+                mTimePickerDateTime = Util.localDateTimeFromInstant(mFoodLog.getMDateTimeConsumed());
+
+                // and set it with the hour and minute chosen
+                mTimePickerDateTime = mTimePickerDateTime.withHour(mHour).withMinute(mMinute);
+
+                //then set the values from the food log
+                mInstantConsumed = Util.instantFromLocalDateTime(mTimePickerDateTime);
+                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+                mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+
+                // go back to activity to go to the next fragment
+                // with our picked time
+                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), mFoodLogIdString,
+                        Util.ARGUMENT_GO_TO_NAME,
+                        Util.ARGUMENT_FROM_SPECIFIC_TIME));
+
                 break;
 
             default:
@@ -82,48 +109,5 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
         }//end switch case
 
     }//end onClick
-
-
-    // here's the timepicker fragment
-    // set it in an activity with:
-    // start the time picker fragment display
-    // when changed, in TimeSet in the fragment, save the new time in
-//    DialogFragment timePickerFragment = new com.dietdecoder.dietdecoder.activity.foodlog.TimePickerFragment();
-//        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
-    //TODO here, reset the views based on the new times in the saved database
-    // or start a new activity for each value,
-    // or go back to the main view each time, then
-    // back to this activity
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
-
-        public final String TAG = "TAG: " + getClass().getSimpleName();
-
-        Bundle myBundle;
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-            // Do something with the time chosen by the user
-            this.myBundle = new Bundle();
-            this.myBundle.putInt("mMinute", minuteOfHour);
-            this.myBundle.putInt("mHour", hourOfDay);
-            Log.d(TAG, String.valueOf(hourOfDay));
-            // TODO this is where to save the values in to the database
-            // move name of ingredient first so we can then ask about time and then it could save
-            // from here
-
-        }
-
-    }
 
 }//end fragment

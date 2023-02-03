@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,13 +22,13 @@ import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.Instant;
-import java.util.Calendar;
+import java.util.List;
 
 public class FoodLogActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
+  // Log.d(TAG, "onActivityResult: made it here");
   private final Activity thisActivity = FoodLogActivity.this;
 
 
@@ -63,10 +64,15 @@ public class FoodLogActivity extends AppCompatActivity {
     recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
     mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
 
-    mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this, logs -> {
-      // Update the cached copy of the words in the adapter.
-      mFoodLogListAdapter.submitList(logs);
-    });
+    mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this,
+            new Observer<List<FoodLog>>() {
+              @Override
+              public void onChanged(List<FoodLog> logs) {
+                // Update the cached copy of the words in the adapter.
+                mFoodLogListAdapter.submitList(logs);
+                Log.d(TAG, "FoodLogActivity in Observer on Change, newName=" + logs.get(0).getMIngredientName());
+              }
+            });
 
     // Button to edit log
 //    editButton = findViewById(R.id.edit_button_log);
@@ -92,14 +98,10 @@ public class FoodLogActivity extends AppCompatActivity {
       startActivityForResult(addIntent, NEW_LOG_ACTIVITY_REQUEST_CODE);
     });
 
-
-    Log.d(TAG, "onCreate: tags work");
-
   }
 
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    Log.d(TAG, "onActivityResult: made it here");
 
     // check which activity completed and work with the returned data
       if (requestCode == NEW_LOG_ACTIVITY_REQUEST_CODE) {
@@ -120,13 +122,11 @@ public class FoodLogActivity extends AppCompatActivity {
 
     if (resultCode == RESULT_OK) {
 
-      Log.d(TAG, "newLogActivityResult: got here from " + this.thisActivity);
-
     }//end result_ok
     else  {
       Toast.makeText(
         getApplicationContext(),
-        R.string.empty_ingredient_not_saved,
+        R.string.empty_not_saved,
         Toast.LENGTH_LONG).show();
     } //end if result not okay
 
@@ -140,7 +140,6 @@ public class FoodLogActivity extends AppCompatActivity {
         String oldLogName = data.getStringExtra(Util.ARGUMENT_OLD_NAME);
         String oldLogIngredient = data.getStringExtra(Util.ARGUMENT_OLD_INGREDIENT);
         //Log logToUpdate = mLogViewModel.viewModelGetLogFromNameIngredient(logName, logIngredient);
-        Log.d(TAG, "editLogActivityResult: " + oldLogName + ": " + oldLogIngredient);
 
         //TODO finish bringing the new_name arguments into Util
         Boolean isNewNameEmpty = data.getBooleanExtra("new_name", false);
@@ -183,8 +182,6 @@ public class FoodLogActivity extends AppCompatActivity {
       // set which log we're updating
       String logName = data.getStringExtra("log_name");
       String logIngredient = data.getStringExtra("log_ingredient");
-
-      Log.d(TAG, "onActivityResult: " + logName + ": " + logIngredient);
 
       // log must exist if we want to delete it, so let's check
       // check all the logs listed right now to see if the log is one of them

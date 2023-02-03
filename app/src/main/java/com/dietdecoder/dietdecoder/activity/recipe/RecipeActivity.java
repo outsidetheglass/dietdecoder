@@ -17,8 +17,6 @@ import com.dietdecoder.dietdecoder.ui.recipe.RecipeListAdapter;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Collections;
-
 public class RecipeActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
@@ -122,7 +120,7 @@ public class RecipeActivity extends AppCompatActivity {
     else  {
       Toast.makeText(
         getApplicationContext(),
-        R.string.empty_ingredient_not_saved,
+        R.string.empty_not_saved,
         Toast.LENGTH_LONG).show();
     } //end if result not okay
 

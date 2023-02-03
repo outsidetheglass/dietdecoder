@@ -9,6 +9,7 @@ import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
 // i.e. remove Fragment, Activity, View
@@ -47,9 +48,14 @@ public class FoodLogViewModel extends AndroidViewModel {
 
 
   // get single log using the instant
-  public FoodLog viewModelGetFoodLogFromInstant(Instant instant) {
-    return mRepository.repositoryGetFoodLogFromInstant(instant);
+  public FoodLog viewModelGetFoodLogFromConsumedInstant(Instant instant) {
+    return mRepository.repositoryGetFoodLogFromConsumedInstant(instant);
   }
+  // get single log using the uuid
+  public FoodLog viewModelGetFoodLogFromId(UUID uuid) {
+    return mRepository.repositoryGetFoodLogFromId(uuid);
+  }
+
 
   //TODO add other properties of log type here
   // and change log to foodlog

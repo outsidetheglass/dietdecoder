@@ -10,6 +10,7 @@ import com.dietdecoder.dietdecoder.database.foodlog.FoodLogDao;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 class FoodLogRepository {
 
@@ -46,8 +47,13 @@ class FoodLogRepository {
   }
 
   // get single log that is on a certain date
-  public FoodLog repositoryGetFoodLogFromInstant(Instant instant) {
-    return mFoodLogDao.daoGetFoodLogFromInstant(instant);
+  public FoodLog repositoryGetFoodLogFromConsumedInstant(Instant instant) {
+    return mFoodLogDao.daoGetFoodLogFromConsumedInstant(instant);
+  }
+
+  // get single log that from uuid
+  public FoodLog repositoryGetFoodLogFromId(UUID uuid) {
+    return mFoodLogDao.daoGetFoodLogFromId(uuid);
   }
 
   // get all logs happening after a certain date

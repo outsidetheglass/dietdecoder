@@ -13,6 +13,7 @@ import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Dao
 @TypeConverters({Converters.class})
@@ -35,7 +36,15 @@ public interface FoodLogDao {
   List<FoodLog> daoGetAllFoodLogOnDate(Instant onThisDateTime);
 
   @Query("SELECT * FROM food_log_table WHERE :onThisInstant = dateTimeConsumed ORDER BY dateTimeConsumed")
-  FoodLog daoGetFoodLogFromInstant(Instant onThisInstant);
+  FoodLog daoGetFoodLogFromConsumedInstant(Instant onThisInstant);
+
+  // get foodlog from ID
+//  @Query("SELECT * FROM food_log_table WHERE :matchThisUuid = foodLogId")
+//  LiveData<FoodLog> daoGetFoodLogFromId(UUID matchThisUuid);
+
+
+  @Query("SELECT * FROM food_log_table WHERE :matchThisUuid = foodLogId")
+  FoodLog daoGetFoodLogFromId(UUID matchThisUuid);
 
   // TODO fix this so it gets all after that actual date
   @Query("SELECT * FROM food_log_table WHERE dateTimeConsumed >= :laterThanThisDateTime ORDER BY dateTimeConsumed")
