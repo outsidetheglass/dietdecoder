@@ -38,12 +38,10 @@
 
       <activity android:name=".activity.foodlog.FoodLogActivity"
         android:exported="false"/>
-      <activity        android:name=".activity.foodlog.DeleteFoodLogActivity"
+      <activity        android:name=".activity.foodlog.AreYouSureActivity"
         android:exported="false" />
       <activity        android:name=".activity.foodlog.DetailFoodLogActivity"
         android:exported="false" />
-      <activity        android:name=".activity.foodlog.NewFoodLogActivity"
-          android:exported="false" />
       <activity        android:name=".activity.foodlog.NewFoodLogChoicesActivity"
           android:exported="false" />
       <activity        android:name=".activity.foodlog.EditFoodLogActivity"

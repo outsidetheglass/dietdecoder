@@ -41,6 +41,10 @@ public class Util {
     public static final String ARGUMENT_GO_TO_SPECIFIC_DATE = "go_to_specific_date";
     public static final String ARGUMENT_GO_TO_SPECIFIC_TIME = "go_to_specific_time";
 
+    public static final String ARGUMENT_GO_TO_DELETE_FOOD_LOG = "go_to_delete_food_log";
+    public static final String ARGUMENT_GO_TO_UPDATE_FOOD_LOG = "go_to_update_food_log";
+
+
     public static final String ARGUMENT_DONE = "done";
 
     public static final String ARGUMENT_FROM_INGREDIENT_NAME = "from_ingredient_name";

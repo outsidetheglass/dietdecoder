@@ -2,68 +2,75 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/constraintLayout_new_food_log"
+  android:id="@+id/constraintLayout_delete_food_log"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <TextView
-      android:id="@+id/textview_title_new_food_log_name_fragment"
-      android:text="@string/title_textview_new_log"
+      android:id="@+id/textview_title_delete_food_log"
+      android:text="@string/title_textview_delete_food_log"
       android:layout_width="match_parent"
       android:layout_height="100dp"
       android:layout_marginTop="10dp"
       android:textAlignment="center"
       android:autoSizeTextType="uniform"
-      android:autoSizeMinTextSize="@dimen/auto_min_text_size"
-      android:autoSizeMaxTextSize="@dimen/auto_max_text_size"
+      android:autoSizeMinTextSize="12sp"
+      android:autoSizeMaxTextSize="100sp"
       android:autoSizeStepGranularity="2sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
-  <!--      android:textAppearance="@style/textview_title"-->
 
 
   <TextView
-      android:id="@+id/textview_question_new_food_log_name"
-      android:text="@string/question_textview_new_food_log_name"
+      android:id="@+id/textview_question_delete_food_log"
+      android:text="@string/textview_question_delete_food_log"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
       android:textAlignment="center"
-      android:textAppearance="@style/textview_main_content"
+      android:textAppearance="@style/textview"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_food_log_name_fragment"/>
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_delete_food_log"/>
 
-  <EditText
-      android:id="@+id/edittext_new_food_log_name_ingredient_name"
+  <TextView
+      android:id="@+id/textview_delete_food_log_details"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/edittext"
-      android:layout_margin="@dimen/tiny_padding"
+      android:layout_marginTop="10dp"
       android:textAlignment="center"
-      android:hint="@string/edittext_new_log_ingredient_name"
-      android:layout_marginRight="@dimen/tiny_padding"
+      android:textAppearance="@style/textview"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_food_log_name"
-      />
-
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_delete_food_log"/>
 
   <Button
-      android:id="@+id/button_new_food_log_name_save"
+      android:id="@+id/button_delete_food_log_save"
       android:text="@string/button_save"
       android:background="@color/green_500"
       android:textColor="@color/button_label"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/small_padding"
-      app:layout_constraintTop_toBottomOf="@+id/edittext_new_food_log_name_ingredient_name"
+      app:layout_constraintTop_toBottomOf="@+id/textview_delete_food_log_details"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+  <Button
+      android:id="@+id/button_delete_food_log_cancel"
+      android:text="@string/button_save"
+      android:background="@color/gray"
+      android:textColor="@color/black"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/small_padding"
+      app:layout_constraintTop_toBottomOf="@+id/button_delete_food_log_save"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
 

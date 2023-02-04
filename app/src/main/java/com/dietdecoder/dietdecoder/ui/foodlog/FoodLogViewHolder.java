@@ -12,20 +12,17 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.activity.foodlog.AreYouSureActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.DetailFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.time.Instant;
-import java.util.Calendar;
 
 public class FoodLogViewHolder extends RecyclerView.ViewHolder {
-
-
 
   // make a TAG to use to log errors
   private final String TAG = getClass().getSimpleName();
@@ -67,6 +64,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
     foodLogItemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        Toast.makeText(foodLogContext, "Was clicked", Toast.LENGTH_SHORT).show();
 
         // Initializing the popup menu and giving the reference as current logContext
         PopupMenu popupMenu = new PopupMenu(foodLogContext, foodLogItemView);
@@ -81,46 +79,50 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
             if ( foodLogMenuItem.getTitle().toString() == foodLogContext.getString(R.string.edit))
             {
               Toast.makeText(foodLogContext, "Edit was clicked", Toast.LENGTH_SHORT).show();
-              //TODO turn this into a fragment, or just a popup
-//              Intent editLogIntent = new Intent(logContext, EditLogActivity.class);
-//              editLogIntent.putExtra("log_datetime", logDateTime);
-//              //TODO add other properties of log type here
-//              //editLogIntent.putExtra("log_concern", logConcern);
-//              logContext.startActivity( editLogIntent );
+              // go to double check are they sure to update fragment with our food log id
+              Intent intent = new Intent(foodLogContext, AreYouSureActivity.class);
+              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_UPDATE_FOOD_LOG);
+              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLog.getMFoodLogId().toString());
+              foodLogContext.startActivity(intent);
             }
             // if delete clicked
             else if ( foodLogMenuItem.getTitle().toString()  == foodLogContext.getString(R.string.delete ))
             {
               Toast.makeText(foodLogContext, "Delete was clicked", Toast.LENGTH_SHORT).show();
-//              logContext.startActivity(
-//                new Intent(logContext, DeleteLogActivity.class)
-//              );
+              // delete this log, go activity double checking if they want to
+              Intent intent = new Intent(foodLogContext, AreYouSureActivity.class);
+              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_DELETE_FOOD_LOG);
+              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLog.getMFoodLogId().toString());
+              foodLogContext.startActivity(intent);
+
             }
             // if duplicate clicked
             else if ( foodLogMenuItem.getTitle().toString()  == foodLogContext.getString(R.string.duplicate ))
             {
+              //TODO fix duplicate, put in Dao to duplicate
               Toast.makeText(foodLogContext, "Duplicate was clicked", Toast.LENGTH_SHORT).show();
-
-              Calendar foodLogCalendar = foodLog.getFoodLogDateTimeCalendar();
-              Integer foodLogNumberDayOfMonth = foodLogCalendar.get(Calendar.DAY_OF_MONTH);
-              Integer foodLogYear = foodLogCalendar.get(Calendar.YEAR);
-              Integer foodLogMonth = foodLogCalendar.get(Calendar.MONTH);
-              Integer foodLogHour = foodLogCalendar.get(Calendar.HOUR_OF_DAY);
-              Integer foodLogMinute = foodLogCalendar.get(Calendar.MINUTE);
-
-
-              foodLogContext.startActivity(
-                new Intent(foodLogContext, NewFoodLogActivity.class)
-                  .putExtra(
-                  "ingredientName", mFoodLogIngredientName)
-                  .putExtra("ingredientDateTimeDay", foodLogNumberDayOfMonth)
-                  .putExtra("ingredientDateTimeMonth", foodLogMonth)
-                  .putExtra("ingredientDateTimeYear", foodLogYear)
-                  .putExtra("ingredientDateTimeHour", foodLogHour)
-                  .putExtra("ingredientDateTimeMinute", foodLogMinute)
-                  .putExtra("ingredientDateTimeAcquired", mFoodLogDateTimeAcquired)
-                  .putExtra("ingredientDateTimeCooked", mFoodLogDateTimeCooked)
-              );
+//
+//
+//              Calendar foodLogCalendar = foodLog.getFoodLogDateTimeCalendar();
+//              Integer foodLogNumberDayOfMonth = foodLogCalendar.get(Calendar.DAY_OF_MONTH);
+//              Integer foodLogYear = foodLogCalendar.get(Calendar.YEAR);
+//              Integer foodLogMonth = foodLogCalendar.get(Calendar.MONTH);
+//              Integer foodLogHour = foodLogCalendar.get(Calendar.HOUR_OF_DAY);
+//              Integer foodLogMinute = foodLogCalendar.get(Calendar.MINUTE);
+//
+//
+//              foodLogContext.startActivity(
+//                new Intent(foodLogContext, NewFoodLogActivity.class)
+//                  .putExtra(
+//                  "ingredientName", mFoodLogIngredientName)
+//                  .putExtra("ingredientDateTimeDay", foodLogNumberDayOfMonth)
+//                  .putExtra("ingredientDateTimeMonth", foodLogMonth)
+//                  .putExtra("ingredientDateTimeYear", foodLogYear)
+//                  .putExtra("ingredientDateTimeHour", foodLogHour)
+//                  .putExtra("ingredientDateTimeMinute", foodLogMinute)
+//                  .putExtra("ingredientDateTimeAcquired", mFoodLogDateTimeAcquired)
+//                  .putExtra("ingredientDateTimeCooked", mFoodLogDateTimeCooked)
+//              );
             }
             // if more details clicked
             else if ( foodLogMenuItem.getTitle().toString() == foodLogContext.getString(R.string.detail) )

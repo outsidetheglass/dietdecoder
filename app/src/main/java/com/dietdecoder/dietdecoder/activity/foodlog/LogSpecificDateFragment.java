@@ -98,7 +98,7 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
                 // TODO put how to set this in the time fragments
                 // get that turned into an instant now
                 Instant mDatePickerInstant = Util.instantFromLocalDateTime(mDatePickerDateTime);
-                Log.d(TAG, mDatePickerInstant.toString());
+
                 // set it in the food log
                 mFoodLog.setMDateTimeConsumed(mDatePickerInstant);
                 // update our food log with the new date consumed

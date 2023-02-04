@@ -21,12 +21,26 @@ import java.util.UUID;
 
 public class NewFoodLogChoicesActivity extends AppCompatActivity  {
 
+    //TODO make recipe dropdown, listed in order of frequency made
+    // the dropdown should be typeable, which selects for that recipe
+    // if chosen, auto put the ingredients of that recipe into the view
+    // beside each ingredient, edittext dropdown for common replacements, can search select for by typing
+    // Add new ingredient at bottom, adds another row of edittext
+    // Add option for unknown ingredients were in this
+    // add option next to each to select if it was "this" or maybe "that", like on chips where it says Canola Oil or Sunflower Oil
+    // if add new ingredient was clicked, when save is pressed add that in as a variant of the recipe
+    // add view for now or earlier, which then allows user to say today, yesterday, earlier,
+    // earlier selected then option shows days of the month,
+    // then clicks broad times of day like morning, midday, evening, overnight, then specific times as an optional selection
+
+
+
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
     private final Activity thisActivity = NewFoodLogChoicesActivity.this;
 
+    int mFragmentContainerView = R.id.fragment_container_view_choices;
     Bundle mBundle;
-
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
     String mWhichFragmentGoTo;
@@ -46,7 +60,7 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
             Fragment newFoodLogNameFragment = new NewFoodLogNameFragment();
 
             fragmentTransaction
-                    .replace(R.id.fragment_container_view_choices, newFoodLogNameFragment)
+                    .replace(mFragmentContainerView, newFoodLogNameFragment)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
@@ -72,7 +86,7 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction
-                        .replace(R.id.fragment_container_view_choices, mNextFragment)
+                        .replace(mFragmentContainerView, mNextFragment)
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();

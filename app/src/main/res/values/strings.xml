@@ -21,6 +21,11 @@
   <string name="button_another_date">Another date...</string>
 
   <string name="saving">Saving... </string>
+  <string name="deleting">Deleting... </string>
+  <string name="updating">Updating... </string>
+  <string name="cancelling">Cancelling... </string>
+  <string name="adding">Adding... </string>
+
 
   <string name="question_textview_new_food_log_name">What was the ingredient?</string>
   <string name="question_textview_new_food_log_brand">What was the brand? (Homemade is an option)</string>
@@ -117,6 +122,10 @@
   <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
   <string name="name_consumed">Ingredient Name:</string>
   <string name="when_consumed">Consumed at:</string>
+
+  <string name="title_textview_delete_food_log">Delete Log</string>
+  <string name="textview_question_delete_food_log">Are you sure you want to delete this log?</string>
+
 
   <string name="unknown_brand">Unknown</string>
 

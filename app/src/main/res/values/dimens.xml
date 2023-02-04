@@ -3,8 +3,10 @@
   <dimen name="title">32sp</dimen>
   <dimen name="subtitle">20sp</dimen>
   <dimen name="subsubtitle">18sp</dimen>
-  <dimen name="normal_textsize">18sp</dimen>
 
+  <dimen name="normal_textsize">18sp</dimen>
+  <dimen name="auto_min_text_size">32sp</dimen>
+  <dimen name="auto_max_text_size">100sp</dimen>
 
   <dimen name="tiny_padding">2dp</dimen>
   <dimen name="small_padding">4dp</dimen>
@@ -12,6 +14,7 @@
   <dimen name="medium_padding">10dp</dimen>
   <dimen name="big_padding">16dp</dimen>
   <dimen name="bigger_padding">24dp</dimen>
+
 
   <dimen name="activity_horizontal_margin">8dp</dimen>
 
