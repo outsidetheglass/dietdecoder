@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +46,10 @@ public class RecipeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe);
     RecyclerView recyclerView = findViewById(R.id.recyclerview_recipe);
+
+    recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+            DividerItemDecoration.VERTICAL));
+
 
     Log.d(TAG, "onCreate: Before adapter");
     // start the adapter, which we use to see the recipes listed

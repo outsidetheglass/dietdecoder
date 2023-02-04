@@ -9,55 +9,21 @@
   <TextView
       android:id="@+id/textview_title_new_food_log_name_fragment"
       android:text="@string/title_textview_new_log"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="100dp"
       android:layout_marginTop="10dp"
       android:textAlignment="center"
-      android:textAppearance="@style/textview_title"
+      android:autoSizeTextType="uniform"
+      android:autoSizeMinTextSize="12sp"
+      android:autoSizeMaxTextSize="100sp"
+      android:autoSizeStepGranularity="2sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
+  <!--      android:textAppearance="@style/textview_title"-->
 
-  <TextView
-      android:id="@+id/textview_new_food_log_name_chosen_time"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/textview_past_answer"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_food_log_name_fragment"/>
-
-  <TextView
-      android:id="@+id/textview_new_food_log_name_when"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/textview_past_answer"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_name_chosen_time"/>
-
-<!--  <TextView-->
-<!--      android:id="@+id/textview_new_log_ingredient_name"-->
-<!--      android:layout_width="wrap_content"-->
-<!--      android:layout_height="wrap_content"-->
-<!--      android:textAppearance="@style/textview_subtitle"-->
-<!--      android:layout_marginBottom="@dimen/tiny_padding"-->
-<!--      android:layout_marginTop="@dimen/big_padding"-->
-<!--      android:text="@string/textview_new_log_ingredient_name"-->
-<!--      app:layout_constraintStart_toStartOf="parent"-->
-<!--      app:layout_constraintEnd_toEndOf="parent"-->
-<!--      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_when_chosen"-->
-<!--      />-->
 
   <TextView
       android:id="@+id/textview_question_new_food_log_name"
@@ -71,7 +37,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_new_food_log_name_when"/>
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_food_log_name_fragment"/>
 
   <EditText
       android:id="@+id/edittext_new_food_log_name_ingredient_name"

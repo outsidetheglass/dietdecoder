@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -46,10 +48,15 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                          Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_food_log_name, container, false);
 
+        TextView mTextViewTitle;
+        mTextViewTitle =
+                view.findViewById(R.id.textview_title_new_food_log_name_fragment);
+        mTextViewTitle.setAutoSizeTextTypeUniformWithConfiguration(
+                1, 17, 1, TypedValue.COMPLEX_UNIT_DIP);
+
         mEditTextIngredientName =
                 view.findViewById(R.id.edittext_new_food_log_name_ingredient_name);
-
-        mTextViewWhen = view.findViewById(R.id.textview_new_food_log_name_when);
+        mEditTextIngredientName = Util.setEditTextWordWrapNoEnter(mEditTextIngredientName);
         mButtonSaveName = view.findViewById(R.id.button_new_food_log_name_save);
         mButtonSaveName.setOnClickListener(this);
     // Inflate the layout for this fragment

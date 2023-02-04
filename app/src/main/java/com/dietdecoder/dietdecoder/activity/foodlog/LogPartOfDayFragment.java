@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,9 +158,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         }//end switch case
 
         //then set the values from the food log
-//        mInstantConsumed = Util.instantFromLocalDateTime(mDateTime);
-//        mFoodLog.setMDateTimeConsumed(mInstantConsumed);
-//        mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+        mInstantConsumed = Util.instantFromLocalDateTime(mDateTime);
+        mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+        mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
         // go back to parent activity and then to name with the early date time
         startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,

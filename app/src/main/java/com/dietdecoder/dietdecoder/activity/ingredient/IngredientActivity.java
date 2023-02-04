@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +53,9 @@ public class IngredientActivity extends AppCompatActivity {
     setContentView(R.layout.activity_ingredient);
 
     RecyclerView recyclerView = findViewById(R.id.recyclerview_ingredient);
+
+    recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+            DividerItemDecoration.VERTICAL));
 
     mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
     recyclerView.setAdapter(mIngredientListAdapter);

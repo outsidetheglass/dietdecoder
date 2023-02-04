@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,10 +43,14 @@ public class SymptomActivity extends AppCompatActivity {
 
     RecyclerView recyclerView = findViewById(R.id.recyclerview_symptom);
 
+    recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+            DividerItemDecoration.VERTICAL));
+
     // Setup view to get info from database
     mSymptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
     recyclerView.setAdapter(mSymptomListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     // Setup access to database
     mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
     // if not null, then set list of symptoms

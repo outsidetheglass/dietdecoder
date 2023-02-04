@@ -13,7 +13,10 @@
   <dimen name="big_padding">16dp</dimen>
   <dimen name="bigger_padding">24dp</dimen>
 
-  <dimen name="main_content_layout_marginStart">30dp</dimen>
+  <dimen name="activity_horizontal_margin">8dp</dimen>
+
+
+  <dimen name="main_content_layout_margin">40dp</dimen>
   <dimen name="main_content_layout_height">380dp</dimen>
   <dimen name="main_content_layout_width">280dp</dimen>
   <dimen name="half_main_content_layout_width">120dp</dimen>

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,6 +58,9 @@ public class FoodLogActivity extends AppCompatActivity {
     //Making everything food first, add Drink in after Food works
     //RecyclerView recyclerViewDrink = findViewById(R.id.recyclerview_log_drink);
     RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
+    // add horizontal lines between each recyclerview item
+    recyclerViewFood.addItemDecoration(new DividerItemDecoration(recyclerViewFood.getContext(),
+            DividerItemDecoration.VERTICAL));
 
 
     mFoodLogListAdapter = new FoodLogListAdapter(new FoodLogListAdapter.LogDiff());

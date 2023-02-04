@@ -53,6 +53,9 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
         mEditTextIngredientBrand =
                 view.findViewById(R.id.edittext_new_food_log_brand_ingredient_brand);
+        // set the edit text to not allow enter keys
+        // but still word wrap if the brand is longer than the screen
+        mEditTextIngredientBrand = Util.setEditTextWordWrapNoEnter(mEditTextIngredientBrand);
 
         mWhenAnsweredDate = view.findViewById(R.id.textview_new_food_log_brand_chosen_date);
         mWhenAnsweredTime = view.findViewById(R.id.textview_new_food_log_brand_chosen_time);

@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -315,6 +316,33 @@ public class Util {
 
         // now we're ready to go back to activity this fragment is in
         return mIntent;
+    }
+
+    ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////
+    // Change defaults //////////
+    ////////////////////////////////////////////////////////
+
+    // set the edit text given to use word wrap up to 6 lines but not allow the enter key
+    public static EditText setEditTextWordWrapNoEnter(EditText editText) {
+/*
+What setSingleLine(true) does is calling setHorizontallyScrolling(true) and setLines(1) implicitly,
+ alongside with altering some IME keyboard settings to disable the enter key.
+In turn, the call to setLines(1) is like calling setMinLines(1) and setMaxLines(1) in one call.
+Some input types (i.e., the constants from InputType.TYPE_*) calls setSingleLine(true) implicitly,
+or at least achieves the same effect.
+ */
+// IMPORTANT, do this before any of the code following it
+        editText.setSingleLine(true);
+// IMPORTANT, to allow wrapping
+        editText.setHorizontallyScrolling(false);
+// IMPORTANT, or else your edit text would wrap but not expand to multiple lines
+        editText.setMaxLines(6);
+
+        return editText;
     }
 
     ////////////////////////////////////////////////////////
