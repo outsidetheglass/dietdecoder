@@ -48,12 +48,6 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                          Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_food_log_name, container, false);
 
-        TextView mTextViewTitle;
-        mTextViewTitle =
-                view.findViewById(R.id.textview_title_new_food_log_name_fragment);
-        mTextViewTitle.setAutoSizeTextTypeUniformWithConfiguration(
-                1, 17, 1, TypedValue.COMPLEX_UNIT_DIP);
-
         mEditTextIngredientName =
                 view.findViewById(R.id.edittext_new_food_log_name_ingredient_name);
         mEditTextIngredientName = Util.setEditTextWordWrapNoEnter(mEditTextIngredientName);

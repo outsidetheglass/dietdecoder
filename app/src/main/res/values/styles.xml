@@ -22,14 +22,15 @@
     <item name="android:paddingTop">@dimen/smallest_padding</item>
     <item name="android:paddingBottom">@dimen/smallest_padding</item>
     <item name="android:background">@color/white</item>
-    <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
+
 
   <style name="textview_item_option">
     <item name="android:layout_margin">@dimen/small_padding</item>
     <item name="android:padding">@dimen/smallest_padding</item>
     <item name="android:background">@color/lightest_green</item>
-    <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
 
   <style name="edittext">
@@ -67,10 +68,17 @@
     <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
 
-  <style name="button">
-    <item name="android:gravity">center_horizontal</item>
-    <item name="android:layout_marginTop">@dimen/big_padding</item>
+  <style name="button_save">
+    <item name="android:background">@color/green_500</item>
+    <item name="android:textColor">@color/button_label</item>
     <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
+
+  <style name="button_main">
+    <item name="android:background">@color/green_500</item>
+    <item name="android:textColor">@color/button_label</item>
+    <item name="android:textSize">@dimen/subtitle</item>
+  </style>
+
 
 </resources>

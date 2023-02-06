@@ -13,10 +13,7 @@
       android:layout_height="100dp"
       android:layout_marginTop="10dp"
       android:textAlignment="center"
-      android:autoSizeTextType="uniform"
-      android:autoSizeMinTextSize="12sp"
-      android:autoSizeMaxTextSize="100sp"
-      android:autoSizeStepGranularity="2sp"
+      android:textAppearance="@style/textview_title"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
@@ -62,16 +59,16 @@
       app:layout_constraintTop_toBottomOf="@+id/textview_delete_food_log_details"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
+
   <Button
       android:id="@+id/button_delete_food_log_cancel"
-      android:text="@string/button_save"
-      android:background="@color/gray"
-      android:textColor="@color/black"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/small_padding"
-      app:layout_constraintTop_toBottomOf="@+id/button_delete_food_log_save"
+      android:textColor="@color/lightest_green"
+      android:text="@string/button_cancel"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"/>
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/button_delete_food_log_save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

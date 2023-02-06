@@ -31,12 +31,15 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
     String foodLogIdString;
 
     LocalDateTime mDatePickerDateTime;
+    LocalDateTime mFoodLogConsumedDateTime, mDateTime;
     Button mDateButtonSave;
     DatePicker mDatePicker;
 
     Bundle mBundle;
     FoodLogViewModel mFoodLogViewModel;
     FoodLog mFoodLog;
+
+    Instant mInstantConsumed;
 
     public LogSpecificDateFragment() {
         super(R.layout.fragment_log_specific_date);
@@ -81,28 +84,34 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
                 Toast.makeText(getContext(), getResources().getString(R.string.saving),
                         Toast.LENGTH_SHORT).show();
 
+                // TODO fix this
+                Log.d(TAG, mFoodLog.getMDateTimeConsumed().toString());
+                mFoodLogConsumedDateTime = Util.localDateTimeFromInstant(mFoodLog.getMDateTimeConsumed());
+
                 // get the current date of the picker
                 mDay = mDatePicker.getDayOfMonth();
-                mMonth = mDatePicker.getMonth();
+                // month not zero indexed
+                mMonth = mDatePicker.getMonth()+1;
                 mYear = mDatePicker.getYear();
 
+                Log.d(TAG, mDay.toString());
                 // get the instant of the food log consumed
                 // which here should be the instant the name was saved
                 // or a specific time if they chose that first and then came here
-                mDatePickerDateTime =
-                        Util.localDateTimeFromInstant( mFoodLog.getMDateTimeConsumed() );
+                // set the early date time to current time but with early hour and minute to 0
+                mDateTime = mFoodLogConsumedDateTime.withDayOfMonth(mDay).withMonth(mMonth).withYear(mYear);
 
-                // and now set it with the date chosen
-                mDatePickerDateTime =
-                        mDatePickerDateTime.withDayOfMonth(mDay).withMonth(mMonth).withYear(mYear);
+                Log.d(TAG, mDateTime.toString());
                 // TODO put how to set this in the time fragments
                 // get that turned into an instant now
-                Instant mDatePickerInstant = Util.instantFromLocalDateTime(mDatePickerDateTime);
-
+                //then set the values from the food log
+                mInstantConsumed = Util.instantFromLocalDateTime(mDateTime);
                 // set it in the food log
-                mFoodLog.setMDateTimeConsumed(mDatePickerInstant);
+                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
                 // update our food log with the new date consumed
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+
+                Log.d(TAG,mFoodLog.getMDateTimeConsumed().toString());
 
                 // go back to activity to go to the next fragment
                 // with our picked date
