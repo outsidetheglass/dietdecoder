@@ -3,17 +3,20 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class AreYouSureActivity extends AppCompatActivity  {
     private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -28,6 +31,8 @@ public class AreYouSureActivity extends AppCompatActivity  {
 
     int mFragmentContainerView = R.id.fragment_container_view_are_you_sure;
 
+    FoodLogViewModel mFoodLogViewModel;
+
     public AreYouSureActivity() {
         super(R.layout.activity_are_you_sure);
     }
@@ -39,6 +44,7 @@ public class AreYouSureActivity extends AppCompatActivity  {
             // if there's an intent, it's the fragment passing info along
             if ( getIntent().getExtras() != null ) {
                 mBundle = getIntent().getExtras();
+
                 // get the string that tells us which button was pressed
                 // so we know which fragment is next to start
                 mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_FRAGMENT_GO_TO);
@@ -61,7 +67,35 @@ public class AreYouSureActivity extends AppCompatActivity  {
                             .addToBackStack(null)
                             .commit();
                 } else {
-                    // it was null so go back to the food logs list
+                    // no next fragment to go to was found
+                    // so check if we're here to duplicate and do that if we are
+                    if ( Objects.equals(mBundle.get(Util.ARGUMENT_ACTION),
+                            Util.ARGUMENT_DUPLICATE)) {
+
+                        mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+
+
+                        // get the food log from the UUID in the previous activity
+                        FoodLog foodLogToCopy = mFoodLogViewModel.viewModelGetFoodLogFromId(
+                                UUID.fromString(mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID)) );
+                        // copy it with current datetime consumed
+                        String foodLogToCopyName = foodLogToCopy.getMIngredientName();
+                        FoodLog newFoodLog = new FoodLog(foodLogToCopyName);
+                        // TODO put this somewhere else, like in the dao itself
+                        newFoodLog.setMBrand(foodLogToCopy.getMBrand());
+                        newFoodLog.setMDateTimeCooked(foodLogToCopy.getMDateTimeCooked());
+                        newFoodLog.setMDateTimeAcquired(foodLogToCopy.getMDateTimeAcquired());
+                        mFoodLogViewModel.viewModelUpdateFoodLog(newFoodLog);
+
+                        // go to edit log with our new food log
+                        Intent intent = Util.intentWithFoodLogIdStringButtonActivity(thisActivity,
+                                newFoodLog.getMFoodLogId().toString(),
+                                Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY, Util.ARGUMENT_ACTIVITY_FROM_ARE_YOU_SURE);
+                        startActivity(intent);
+
+                    }
+
+                    // so go back to the food logs list
                     startActivity(new Intent(thisActivity, FoodLogActivity.class));
                 }
             }
@@ -78,13 +112,12 @@ public class AreYouSureActivity extends AppCompatActivity  {
             mNextFragment = new DeleteFoodLogFragment();
 
         } else if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_UPDATE_FOOD_LOG)) {
+                Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT)) {
             //update food log
             //TODO uncomment this when delete is working
             //mNextFragment = new UpdateFoodLogFragment();
 
-        }
-        return mNextFragment;
+        } return mNextFragment;
     }
 }
 

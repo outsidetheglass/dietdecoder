@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -136,7 +136,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                         Toast.LENGTH_SHORT).show();
 
                 startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
-                        Util.ARGUMENT_GO_TO_SPECIFIC_DATE,
+                        Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT,
                         Util.ARGUMENT_FROM_DATE_TIME_CHOICES));
                 break;
 

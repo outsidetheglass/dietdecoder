@@ -65,31 +65,31 @@ class FoodLogRepository {
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
-  void repositoryInsertFoodLog(FoodLog foodFoodLog) {
+  void repositoryInsertFoodLog(FoodLog foodLog) {
 
     FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mFoodLogDao.daoFoodLogInsert(foodFoodLog);
+      mFoodLogDao.daoFoodLogInsert(foodLog);
     });
 
   } // end insert
 
   // You must call this on a non-UI thread
-  void repositoryDeleteFoodLog(FoodLog foodFoodLog) {
+  void repositoryDeleteFoodLog(FoodLog foodLog) {
 
     FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mFoodLogDao.daoFoodLogDelete(foodFoodLog);
+      mFoodLogDao.daoFoodLogDelete(foodLog);
     });
 
   } // end delete
 
 
-  void repositoryUpdateFoodLog(FoodLog foodFoodLog) {
+  void repositoryUpdateFoodLog(FoodLog foodLog) {
 
     FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mFoodLogDao.daoFoodLogUpdate(foodFoodLog);
+      mFoodLogDao.daoFoodLogUpdate(foodLog);
     });
 
-  } // end update concern
+  } // end update
 
 
 

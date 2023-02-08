@@ -3,14 +3,11 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,7 +18,6 @@ import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.database.log.Log;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
-import com.dietdecoder.dietdecoder.activity.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -87,7 +83,7 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
       case R.id.add_button_log:
         Toast.makeText(thisActivity, getResources().getString(R.string.adding),
                 Toast.LENGTH_SHORT).show();
-        addIntent = new Intent(thisActivity, NewFoodLogChoicesActivity.class);
+        addIntent = new Intent(thisActivity, NewFoodLogActivity.class);
         startActivity(addIntent);
         break;
       default:

@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -116,7 +116,7 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
 
                 //TODO not done, go to cooked and acquired fragments and make them
                 startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), mFoodLogIdString,
-                        Util.ARGUMENT_DONE,
+                        Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY,
                         Util.ARGUMENT_FROM_INGREDIENT_BRAND));
                 break;
             default:

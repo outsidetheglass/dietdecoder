@@ -9,17 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.Util;
 
 import java.util.Objects;
-import java.util.UUID;
 
-public class NewFoodLogChoicesActivity extends AppCompatActivity  {
+public class NewFoodLogActivity extends AppCompatActivity  {
 
     //TODO make recipe dropdown, listed in order of frequency made
     // the dropdown should be typeable, which selects for that recipe
@@ -37,9 +33,9 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
-    private final Activity thisActivity = NewFoodLogChoicesActivity.this;
+    private final Activity thisActivity = NewFoodLogActivity.this;
 
-    int mFragmentContainerView = R.id.fragment_container_view_choices;
+    int mFragmentContainerView = R.id.fragment_container_view_new_food_log;
     Bundle mBundle;
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
@@ -47,8 +43,8 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
 
     private Fragment nextFragment = null;
 
-    public NewFoodLogChoicesActivity() {
-        super(R.layout.activity_new_food_log_choices);
+    public NewFoodLogActivity() {
+        super(R.layout.activity_new_food_log);
     }
 
     @Override
@@ -68,6 +64,11 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
         // if there's an intent, it's the fragment passing info along
         if ( getIntent().getExtras() != null ) {
             mBundle = getIntent().getExtras();
+
+            // put down we started activity in new food log
+            mBundle.putString(Util.ARGUMENT_ACTIVITY_FROM,
+                    Util.ARGUMENT_ACTIVITY_FROM_NEW_FOOD_LOG);
+
             // get the string that tells us which button was pressed
             // so we know which fragment is next to start
             mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_FRAGMENT_GO_TO);
@@ -122,12 +123,12 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
             }
 
         }  else if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_SPECIFIC_TIME)) {
+                Util.ARGUMENT_GO_TO_SPECIFIC_TIME_FRAGMENT)) {
             // ask for specific time
             nextFragment = new LogSpecificTimeFragment();
 
         } else if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_SPECIFIC_DATE)) {
+                Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT)) {
             // ask for specific time
             nextFragment = new LogSpecificDateFragment();
 
@@ -143,7 +144,7 @@ public class NewFoodLogChoicesActivity extends AppCompatActivity  {
             nextFragment = new NewFoodLogBrandFragment();
 
         } else if ( Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_DONE)) {
+                Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY)) {
             nextFragment = null;
         }
         return nextFragment;

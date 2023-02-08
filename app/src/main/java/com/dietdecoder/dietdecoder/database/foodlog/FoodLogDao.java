@@ -26,6 +26,19 @@ public interface FoodLogDao {
 
   @Delete
   void daoFoodLogDelete(FoodLog foodLog);
+// TODO figure out duplication the right way
+//  @Query("INSERT INTO food_log_table ")
+//  INSERT INTO menuship3
+//          (headhash, menucardhash, menucathash, producthash)
+//  SELECT
+//  headhash, 'qqq', menucathash, producthash
+//          FROM
+//  menuship3
+//          WHERE
+//  menucardhash = 'aaa' ;
+  // or
+  // @Query("UPDATE playlist SET play_order = play_order + 1 WHERE play_order >=:insertion_point")
+  //void prepareForInsertion(long insertion_point);
 
   @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed DESC")
   LiveData<List<FoodLog>> daoGetAllFoodLog();

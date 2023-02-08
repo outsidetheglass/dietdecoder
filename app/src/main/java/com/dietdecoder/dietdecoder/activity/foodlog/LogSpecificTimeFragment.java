@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -27,7 +27,7 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
     //Log.d(TAG, "onClick: mTimePickerDateTime = " + mTimePickerDateTime.getHour());
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
-    String mFoodLogIdString;
+    String mFoodLogIdString, mPreviousFragment, mWhatToChange, mGoTo, mActivityFrom;
 
     LocalDateTime mTimePickerDateTime;
     Button mButtonSave;
@@ -55,6 +55,11 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         mBundle = getArguments();
+
+        // get previous fragment so we know which time to set in the food log
+        mPreviousFragment = mBundle.getString(Util.ARGUMENT_FRAGMENT_FROM);
+        mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+
         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
         mFoodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
         // now get the food log associated with that UUID
@@ -85,21 +90,33 @@ public class LogSpecificTimeFragment extends Fragment implements View.OnClickLis
                 // get the current hour and minute of the time picker
                 mHour = mTimePicker.getHour();
                 mMinute = mTimePicker.getMinute();
-                // start an instance of LocalDateTime
-                mTimePickerDateTime = Util.localDateTimeFromInstant(mFoodLog.getMDateTimeConsumed());
 
+                // start an instance of LocalDateTime based on which value we're changing
+                // get and reset the instant we're setting now to be based on consumed or
+                // acquired or cooked date times
+                // based on which fragment's button we're coming from
+                mTimePickerDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange,
+                        mFoodLog);
                 // and set it with the hour and minute chosen
                 mTimePickerDateTime = mTimePickerDateTime.withHour(mHour).withMinute(mMinute);
+                mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange,
+                        mFoodLog, mTimePickerDateTime);
 
-                //then set the values from the food log
-                mInstantConsumed = Util.instantFromLocalDateTime(mTimePickerDateTime);
-                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+                // update our food log with the new date consumed
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
                 // go back to activity to go to the next fragment
                 // with our picked time
+                // get which activity we came from and work from that
+                //TODO put this in other relevant fragments
+                mActivityFrom =  mBundle.getString(Util.ARGUMENT_ACTIVITY_FROM);
+                if ( mActivityFrom == Util.ARGUMENT_ACTIVITY_FROM_EDIT_FOOD_LOG) {
+                    mGoTo = Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT;
+                } else if ( mActivityFrom == Util.ARGUMENT_ACTIVITY_FROM_NEW_FOOD_LOG) {
+                    mGoTo = Util.ARGUMENT_GO_TO_BRAND;
+                }
                 startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), mFoodLogIdString,
-                        Util.ARGUMENT_GO_TO_NAME,
+                        mGoTo,
                         Util.ARGUMENT_FROM_SPECIFIC_TIME));
 
                 break;

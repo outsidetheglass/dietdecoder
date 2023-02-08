@@ -34,6 +34,8 @@ public class Symptom {
   @ColumnInfo(name = "symptomSufferType")
   private String mSymptomSufferType;
 
+  //TODO add conditions linked with this symptom
+
   public Symptom(@NonNull String symptomName,
                  String symptomDescription,
                  String symptomCategory, String symptomSufferType) {

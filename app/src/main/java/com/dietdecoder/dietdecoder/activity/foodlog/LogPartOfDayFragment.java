@@ -1,7 +1,6 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -24,9 +23,10 @@ import java.util.UUID;
 public class LogPartOfDayFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
+    String mFragmentFrom = Util.ARGUMENT_FROM_PART_OF_DAY;
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
-    String foodLogIdString, mFragmentGoTo;
+    String foodLogIdString, mFragmentGoTo, mWhatToChange;
 
     //TODO set this to be preferences a different time
     Integer mEarlyHour = 8;
@@ -35,7 +35,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
     Integer mEveningHour = 19;
     Integer mMidnightHour = 23;
 
-    LocalDateTime mFoodLogConsumedDateTime, mDateTime;
+    LocalDateTime mFoodLogDateTime, mDateTime;
     Button mButtonEarly, mButtonMidday, mButtonAfternoon, mButtonEvening,
             mButtonMidnight, mButtonSpecificTime;
     Bundle mBundle;
@@ -69,6 +69,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         mFoodLog =
                 mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(foodLogIdString));
 
+        mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
 
         mButtonEarly = (Button) view.findViewById(R.id.button_log_part_of_day_early);
         mButtonEarly.setOnClickListener(this);
@@ -96,8 +97,12 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
+        // set a boolean so we can know to set the part of day
+        // doing this because specific time starts a different fragment
+        Boolean doSetTime = Boolean.FALSE;
+
         // set the date time to the one already set, ready to get changed it up
-        mFoodLogConsumedDateTime = Util.localDateTimeFromInstant(mFoodLog.getMDateTimeConsumed());
+        mFoodLogDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange, mFoodLog);
 
         // most common next fragment is brand, so that's our default
         mFragmentGoTo = Util.ARGUMENT_GO_TO_BRAND;
@@ -110,7 +115,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                         Toast.LENGTH_SHORT).show();
 
                 // set the early date time to current time but with early hour and minute to 0
-                mDateTime = mFoodLogConsumedDateTime.withHour(mEarlyHour).withMinute(0);
+                // TODO use ARGUMENT_CHANGE to get Util function to set that
+                mDateTime = mFoodLogDateTime.withHour(mEarlyHour).withMinute(0);
+                doSetTime = Boolean.TRUE;
 
                 break;
 
@@ -118,14 +125,16 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_midday),
                         Toast.LENGTH_SHORT).show();
-                mDateTime = mFoodLogConsumedDateTime.withHour(mMiddayHour).withMinute(0);
+                mDateTime = mFoodLogDateTime.withHour(mMiddayHour).withMinute(0);
+                doSetTime = Boolean.TRUE;
 
                 break;
             case R.id.button_log_part_of_day_afternoon:
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_afternoon),
                         Toast.LENGTH_SHORT).show();
-                mDateTime = mFoodLogConsumedDateTime.withHour(mAfternoonHour).withMinute(0);
+                mDateTime = mFoodLogDateTime.withHour(mAfternoonHour).withMinute(0);
+                doSetTime = Boolean.TRUE;
 
                 break;
 
@@ -133,7 +142,8 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_evening),
                         Toast.LENGTH_SHORT).show();
-                mDateTime = mFoodLogConsumedDateTime.withHour(mEveningHour).withMinute(0);
+                mDateTime = mFoodLogDateTime.withHour(mEveningHour).withMinute(0);
+                doSetTime = Boolean.TRUE;
 
                 break;
 
@@ -141,7 +151,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_midnight),
                         Toast.LENGTH_SHORT).show();
-                mDateTime = mFoodLogConsumedDateTime.withHour(mMidnightHour).withMinute(0);
+                mDateTime = mFoodLogDateTime.withHour(mMidnightHour).withMinute(0);
+                doSetTime = Boolean.TRUE;
+
                 break;
 
             case R.id.button_log_part_of_day_more_specific_time:
@@ -150,22 +162,25 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                         Toast.LENGTH_SHORT).show();
                 // only button that was different,
                 // let's set the fragment to go to specific time
-                mFragmentGoTo = Util.ARGUMENT_GO_TO_SPECIFIC_TIME;
+                mFragmentGoTo = Util.ARGUMENT_GO_TO_SPECIFIC_TIME_FRAGMENT;
+
                 break;
 
             default:
                 break;
         }//end switch case
 
-        //then set the values from the food log
-        mInstantConsumed = Util.instantFromLocalDateTime(mDateTime);
-        mFoodLog.setMDateTimeConsumed(mInstantConsumed);
-        mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+        if ( doSetTime ) {
+            // TODO use ARGUMENT_CHANGE to get Util function to set that
+            //then set the values from the food log
+            mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange, mFoodLog, mDateTime);
+            mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
+        }
         // go back to parent activity and then to name with the early date time
         startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
                 mFragmentGoTo,
-                Util.ARGUMENT_FROM_PART_OF_DAY));
+                mFragmentFrom));
     }//end onClick
 
 

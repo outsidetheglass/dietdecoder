@@ -3,27 +3,22 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
-import java.time.Instant;
 import java.util.UUID;
 
 public class DeleteFoodLogFragment extends Fragment implements View.OnClickListener {
@@ -91,20 +86,22 @@ public class DeleteFoodLogFragment extends Fragment implements View.OnClickListe
                 Toast.LENGTH_SHORT).show();
         // and now delete the one chosen
         mFoodLogViewModel.viewModelDeleteFoodLog(mFoodLog);
+        // go back to activity to go to the next fragment
         break;
 
       case R.id.button_delete_food_log_cancel:
         // just toast them that the transaction is cancelled
         Toast.makeText(getContext(), getResources().getString(R.string.cancelling),
                 Toast.LENGTH_SHORT).show();
+        // go back to activity to go to the next fragment
         break;
       default:
         break;
     }//end switch case
 
     // go back to activity to go to the next fragment
-    mIntent = new Intent(thisActivity, FoodLogActivity.class);
-    startActivity(mIntent);
+    startActivity(Util.intentChoicesButton(getActivity(), Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY,
+            Util.ARGUMENT_FRAGMENT_FROM_DELETE_FOOD_LOG));
 
   }//end onClick
 }

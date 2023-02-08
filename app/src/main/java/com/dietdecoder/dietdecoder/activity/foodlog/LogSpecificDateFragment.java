@@ -1,7 +1,6 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.Util;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -28,10 +27,10 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
     //Log.d(TAG, "onClick: mDatePickerDateTime = " + mDatePickerDateTime.getHour());
 
     Integer mDay, mMonth, mYear;
-    String foodLogIdString;
+    String mFoodLogIdString, mPreviousFragment, mWhatToChange;
 
     LocalDateTime mDatePickerDateTime;
-    LocalDateTime mFoodLogConsumedDateTime, mDateTime;
+    LocalDateTime mDateTime, mDateTimeSet;
     Button mDateButtonSave;
     DatePicker mDatePicker;
 
@@ -39,7 +38,7 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
     FoodLogViewModel mFoodLogViewModel;
     FoodLog mFoodLog;
 
-    Instant mInstantConsumed;
+    Instant mInstant, mInstantSet;
 
     public LogSpecificDateFragment() {
         super(R.layout.fragment_log_specific_date);
@@ -58,11 +57,14 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         mBundle = getArguments();
+
+        mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+
         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
-        foodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
+        mFoodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
         // now get the food log associated with that UUID
         mFoodLog =
-                mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(foodLogIdString));
+                mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mFoodLogIdString));
 
         // set the listeners on the buttons
         // to run onClick method when they are clicked
@@ -84,39 +86,34 @@ public class LogSpecificDateFragment extends Fragment implements View.OnClickLis
                 Toast.makeText(getContext(), getResources().getString(R.string.saving),
                         Toast.LENGTH_SHORT).show();
 
-                // TODO fix this
-                Log.d(TAG, mFoodLog.getMDateTimeConsumed().toString());
-                mFoodLogConsumedDateTime = Util.localDateTimeFromInstant(mFoodLog.getMDateTimeConsumed());
-
                 // get the current date of the picker
                 mDay = mDatePicker.getDayOfMonth();
                 // month not zero indexed
                 mMonth = mDatePicker.getMonth()+1;
                 mYear = mDatePicker.getYear();
 
-                Log.d(TAG, mDay.toString());
+                // set the instant we're setting now to be based on consumed or acquired or
+                // cooked date times
+                // based on which fragment's button we're coming from
+                mDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange,
+                        mFoodLog);
+
                 // get the instant of the food log consumed
                 // which here should be the instant the name was saved
                 // or a specific time if they chose that first and then came here
                 // set the early date time to current time but with early hour and minute to 0
-                mDateTime = mFoodLogConsumedDateTime.withDayOfMonth(mDay).withMonth(mMonth).withYear(mYear);
+                mDateTimeSet = mDateTime.withDayOfMonth(mDay).withMonth(mMonth).withYear(mYear);
 
-                Log.d(TAG, mDateTime.toString());
-                // TODO put how to set this in the time fragments
-                // get that turned into an instant now
-                //then set the values from the food log
-                mInstantConsumed = Util.instantFromLocalDateTime(mDateTime);
-                // set it in the food log
-                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+                // then set the values from the food log
+                mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange,
+                        mFoodLog, mDateTimeSet);
+
                 // update our food log with the new date consumed
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
-                Log.d(TAG,mFoodLog.getMDateTimeConsumed().toString());
-
                 // go back to activity to go to the next fragment
                 // with our picked date
-                // TODO move the above I just made into Util, or Model
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
+                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), mFoodLogIdString,
                         Util.ARGUMENT_GO_TO_PART_OF_DAY,
                         Util.ARGUMENT_FROM_SPECIFIC_DATE));
                 break;
