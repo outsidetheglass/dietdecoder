@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
@@ -33,20 +36,22 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
     EditText mEditTextIngredientName, mEditTextIngredientBrand, mEditTextConsumed,
     mEditTextCooked, mEditTextAcquired;
 
+    int mFragmentContainerView = R.id.fragment_container_view_edit_food_log;
+
     String mSaveString, mNothingChangedString, mName, mBrand, mFoodLogIdString,
             mFoodLogIngredientName,
             mFoodLogIngredientBrand, mCurrentIngredientName, mCurrentIngredientBrand, mGoToNext,
             mChangeDateTime, mWhatToChange;
     Boolean isNameEdited, isBrandEdited;
 
-    Bundle mBundle;
+    Bundle mBundle, mBundleNext;
     Intent mIntent;
 
     FoodLogViewModel mFoodLogViewModel;
     UUID mFoodLogId;
     FoodLog mFoodLog;
 
-    Fragment mNextFragment;
+    Fragment mNextFragment = null;
 
     public EditFoodLogFragment() {
         super(R.layout.fragment_edit_food_log);
@@ -128,11 +133,16 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         mSaveString = getResources().getString(R.string.saving);
         mNothingChangedString = getResources().getString(R.string.nothing_changed_not_saved);
         mChangeDateTime = getResources().getString(R.string.change_date_time);
-        mIntent = Util.intentWithFoodLogIdStringButton(getActivity(),
-                mFoodLogIdString,
-                mGoToNext,
-                mFrom);
 
+        // set our relevant data to use in new location
+        mBundleNext = new Bundle();
+        mBundleNext.putString(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
+
+        // will only use that for date time changes
+        LogSpecificDateFragment logSpecificDateFragment = new LogSpecificDateFragment();
+
+        // check for where to go next
+        Boolean isNextFragmentSet = Boolean.FALSE;
         switch (view.getId()) {
             // save button was pressed
             case R.id.button_edit_food_log_save:
@@ -147,7 +157,6 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
                     // set intent to tell user nothing changed
                     Toast.makeText(getContext(), mNothingChangedString, Toast.LENGTH_SHORT).show();
                     // we're done so go back to food log no changes
-                    mGoToNext = Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY;
                 } else {
                     // if view has a values, find which or both was changed
                     if ( isNameEdited ) {
@@ -169,53 +178,54 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
             case R.id.edittext_edit_food_log_ingredient_consumed:
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
                 // go to specific date
-                mGoToNext = Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT;
-                mWhatToChange = Util.ARGUMENT_CHANGE_CONSUMED;
-                mIntent = Util.intentChangeWithFoodLogIdStringButton(getActivity(),
-                    mFoodLogIdString,
-                    mGoToNext,
-                    mFrom,
-                    mWhatToChange);
+                // set our relevant data to use in new location
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_CONSUMED);
+                // go to a fragment
+                isNextFragmentSet = Boolean.TRUE;
 
                 break;
             case R.id.edittext_edit_food_log_ingredient_cooked:
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
                 // go to specific date
-                mGoToNext = Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT;
-                mWhatToChange = Util.ARGUMENT_CHANGE_COOKED;
-                mIntent = Util.intentChangeWithFoodLogIdStringButton(getActivity(),
-                    mFoodLogIdString,
-                    mGoToNext,
-                    mFrom,
-                    mWhatToChange);
+                // set our relevant data to use in new location
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_COOKED);
+                isNextFragmentSet = Boolean.TRUE;
 
                 break;
             case R.id.edittext_edit_food_log_ingredient_acquired:
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
                 // go to specific date
-                mGoToNext = Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT;
-                mWhatToChange = Util.ARGUMENT_CHANGE_ACQUIRED;
-                mIntent = Util.intentChangeWithFoodLogIdStringButton(getActivity(),
-                        mFoodLogIdString,
-                        mGoToNext,
-                        mFrom,
-                        mWhatToChange);
-
+                // set our relevant data to use in new location
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_ACQUIRED);
+                isNextFragmentSet = Boolean.TRUE;
                 break;
             case R.id.button_edit_food_log_cancel:
-
+                // toast to the user that nothing happened
                 Toast.makeText(getContext(), mNothingChangedString, Toast.LENGTH_SHORT).show();
-                // we're done so go back to food log no changes
-                mGoToNext = Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY;
+                // we're done so go back to food log no changes set
             default:
                 break;
         }
+        // if next fragment has been set use that
+        if ( isNextFragmentSet ) {
+            // put which we're changing into the bundle
+            logSpecificDateFragment.setArguments(mBundleNext);
+            // actually go to the next place now
+            Toast.makeText(getContext(), "Let's go!", Toast.LENGTH_SHORT).show();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(mFragmentContainerView, logSpecificDateFragment);
+            ft.commit();
+        }
+        // else it means go back to main activity
+        else {
+            // go back to food log activity
+            // with the ID of foodlog set
+            mIntent = new Intent(getActivity(), FoodLogActivity.class);
+            mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
+            startActivity(mIntent);
 
-        // go back to edit food log activity
-        // with the ID of foodlog set
-        // and the fact we came from this fragment
-        // and which fragment to go to next
-        startActivity(mIntent);
+        }
 
     }//end onClick
 

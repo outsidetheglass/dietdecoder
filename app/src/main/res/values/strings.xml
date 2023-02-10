@@ -4,6 +4,9 @@
 
   <string name="button_save">Save</string>
   <string name="button_cancel">Cancel</string>
+  <string name="nothing_changed_not_saved">Nothing changed, returning without saving...</string>
+  <string name="change_date_time">Let\'s go change the date/time...</string>
+
 
   <string name="button_save_new_ingredient">Save New Ingredient</string>
   <string name="button_save_edit_recipe">Save Ingredient</string>
@@ -115,6 +118,8 @@
   <string name="textview_title_symptom">Symptoms</string>
 
   <string name="title_textview_new_log">New Log</string>
+  <string name="title_textview_edit_log">Edit Log</string>
+
   <string name="button_save_new_log">Save Log</string>
   <string name="edittext_new_log_ingredient_name">Ingredient Name</string>
   <string name="edittext_new_log_ingredient_brand">Brand Name</string>
@@ -123,10 +128,13 @@
 
   <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
   <string name="name_consumed">Ingredient Name:</string>
-  <string name="when_consumed">Consumed at:</string>
+  <string name="when_consumed">Consumed/Drank/Ate at:</string>
+  <string name="when_cooked">Cooked/Prepared at:</string>
+  <string name="when_acquired">Acquired/Bought/Harvested at:</string>
 
   <string name="title_textview_delete_food_log">Delete Log</string>
   <string name="textview_question_delete_food_log">Are you sure you want to delete this log?</string>
+  <string name="textview_question_edit_food_log_edit_what">What would you like to edit?</string>
 
 
   <string name="unknown_brand">Unknown</string>

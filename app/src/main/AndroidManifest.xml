@@ -42,13 +42,13 @@
         android:exported="false" />
       <activity        android:name=".activity.foodlog.DetailFoodLogActivity"
         android:exported="false" />
-      <activity        android:name=".activity.foodlog.NewFoodLogChoicesActivity"
+      <activity        android:name=".activity.foodlog.NewFoodLogActivity"
           android:exported="false" />
       <activity        android:name=".activity.foodlog.EditFoodLogActivity"
-        android:exported="false" />
+          android:exported="false" />
 
 
-      <activity android:name=".activity.ingredient.IngredientActivity"
+        <activity android:name=".activity.ingredient.IngredientActivity"
         android:exported="false"/>
       <activity        android:name=".activity.ingredient.DeleteIngredientActivity"
         android:exported="false" />
