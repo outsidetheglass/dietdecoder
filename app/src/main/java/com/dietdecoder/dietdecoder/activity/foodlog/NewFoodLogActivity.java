@@ -125,12 +125,12 @@ public class NewFoodLogActivity extends AppCompatActivity  {
         }  else if (Objects.equals(whichFragmentGoTo,
                 Util.ARGUMENT_GO_TO_SPECIFIC_TIME_FRAGMENT)) {
             // ask for specific time
-            nextFragment = new LogSpecificTimeFragment();
+            nextFragment = new LogSpecificDateTimeFragment();
 
         } else if (Objects.equals(whichFragmentGoTo,
                 Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT)) {
             // ask for specific time
-            nextFragment = new LogSpecificDateFragment();
+            nextFragment = new LogSpecificDateTimeFragment();
 
         } else if (Objects.equals(whichFragmentGoTo,
                 Util.ARGUMENT_GO_TO_NAME)) {

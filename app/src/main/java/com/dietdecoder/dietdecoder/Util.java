@@ -37,6 +37,8 @@ public class Util {
     public static final StyleSpan boldStyle = new StyleSpan(Typeface.BOLD);
     public static final StyleSpan italicStyle = new StyleSpan(Typeface.ITALIC);
 
+    public static final int fragmentContainerView = R.id.fragment_container_view_edit_food_log;
+
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
@@ -106,6 +108,11 @@ public class Util {
     public static final String ARGUMENT_CHANGE_CONSUMED = "change_consumed";
     public static final String ARGUMENT_CHANGE_COOKED = "change_cooked";
     public static final String ARGUMENT_CHANGE_ACQUIRED = "change_acquired";
+
+
+    public static final String ARGUMENT_ONLY_SET = "only_set";
+    public static final String ARGUMENT_ONLY_SET_TIME = "only_set_time";
+    public static final String ARGUMENT_ONLY_SET_DATE = "only_set_date";
 
     public static final String ARGUMENT_HOUR = "hour";
     public static final String ARGUMENT_MINUTE = "minute";
@@ -181,6 +188,34 @@ public class Util {
 
         return mMinutesString;
     }//end setMinutesString function
+    // given integers of hours and minutes return string pretty
+    public static String setTimeString(int hour, int min) {
+        // Append in a StringBuilder
+        String aTime = new StringBuilder()
+                .append(hour)
+                .append(':')
+                .append( Util.setMinutesString(
+                        min ) )
+                .toString();
+        return aTime;
+    }
+    public static String setDateString(int day, int month, int year) {
+
+        // turn a zero indexed number for month into the name of that month
+        String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                "Sept", "Oct", "Nov", "Dec"};
+
+        String aDate = new StringBuilder()
+                .append(months[month])
+                .append(" ")
+                .append(day)
+                .append(", ")
+                .append(year)
+                .toString();
+        return aDate;
+    }
+
+    //
     // set month from zero indexed value to a string of the month name
     public static String setMonthString(Integer monthIndex){
 
@@ -198,44 +233,27 @@ public class Util {
     //given an instant in time, display it pretty
     public static String stringFromInstant(Instant instant){
 
-        Calendar logCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
-        String fullLogTime = logCalendar.getTime().toString();
+        Calendar mCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
 
+        // date related
+        int mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
+        int mMonth = mCalendar.get(Calendar.MONTH);
+        int mYear = mCalendar.get(Calendar.YEAR);
+        // set the date to be with a space and a comma and with the short month name
+        String mDateString = setDateString(mDayOfMonth, mMonth, mYear);
 
-        String logNumberDayOfMonth = String.valueOf(logCalendar.get(Calendar.DAY_OF_MONTH));
-        String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-                "Sept", "Oct", "Nov", "Dec" };
-        String logMonth = months[logCalendar.get(Calendar.MONTH)];
-
-        String logYear = String.valueOf(logCalendar.get(Calendar.YEAR));
-        String logShortYear = logYear.substring(2);
-
-        String logDate =  logMonth + "/" + logNumberDayOfMonth + "/" + logShortYear;
-
-
+        // the day of the week for readability
         String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
-        String logDayOfWeek = days[logCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+        String logDayOfWeek = days[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+        // get the hour and minute
+        Integer mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
+        Integer mMinute = mCalendar.get(Calendar.MINUTE);
+        // and set them to have a colon and a zero if the minute is < 10
+        String logTime = setTimeString(mHour, mMinute);
 
 
-        String logHour = String.valueOf(logCalendar.get(Calendar.HOUR_OF_DAY));
-        // if minute is less than 10, add a 0 to the beginning to display pretty
-        Integer logMinuteInteger = logCalendar.get(Calendar.MINUTE);
-        String logMinuteString;
-        if (logMinuteInteger < 10) {
-            logMinuteString =
-                    "0" + String.valueOf(logCalendar.get(Calendar.MINUTE));
-        } else {
-            logMinuteString =
-                    String.valueOf(logCalendar.get(Calendar.MINUTE));
-        }
-
-
-
-        String logTime = logHour + ":" + logMinuteString;
-
-
-        return(logTime + " " + logDayOfWeek + ", " + logMonth + " " + logNumberDayOfMonth + " " + logYear);
-
+        return(logTime + " " + logDayOfWeek + ", " + mDateString);
     }
 
     public static String stringRelativeTimeFromInstant(Instant printThisInstant,
@@ -626,5 +644,8 @@ or at least achieves the same effect.
     }
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
+
+
+
 
 }

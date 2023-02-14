@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder.ui.foodlog;
 
 import android.app.Application;
+import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 
@@ -59,6 +60,11 @@ class FoodLogRepository {
   // get all logs happening after a certain date
   public List<FoodLog> repositoryGetAllFoodLogAfterDateTime(Instant instant) {
     return mFoodLogDao.daoGetAllFoodLogAfterDateTime(instant);
+  }
+
+  // get all logs cursor
+  public Cursor repositoryGetCursorAllFoodLog() {
+    return mFoodLogDao.getCursorAllFoodLog();
   }
 
 

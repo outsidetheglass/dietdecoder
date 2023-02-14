@@ -22,15 +22,9 @@ public class MainActivity extends AppCompatActivity {
   private final String TAG = "TAG: " + getClass().getSimpleName();
   private final Activity thisActivity = MainActivity.this;
 
-  public Button ingredientButton;
-  public Button recipeButton;
-  public Button logButton;
-  public Button symptomButton;
+  public Button otherButton, logButton;
 
-  private Intent ingredientIntent;
-  private Intent recipeIntent;
-  private Intent logIntent;
-  private Intent symptomIntent;
+  private Intent ingredientIntent, logIntent;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +32,6 @@ public class MainActivity extends AppCompatActivity {
       //set view
       setContentView(R.layout.activity_main);
 
-      // Button to go to ingredient's list and edit and delete and add
-      ingredientButton = findViewById(R.id.button_ingredient);
-      ingredientButton.setOnClickListener( view -> {
-        ingredientIntent = new Intent(thisActivity, IngredientActivity.class);
-            startActivity(ingredientIntent);
-      });
-
-      // Button to got to recipe's page
-      recipeButton = findViewById(R.id.button_recipe);
-      recipeButton.setOnClickListener( view -> {
-        recipeIntent = new Intent(thisActivity, RecipeActivity.class);
-        startActivity(recipeIntent);
-      });
 
     // Button to got to recipe's page
     logButton = findViewById(R.id.button_log);
@@ -59,14 +40,12 @@ public class MainActivity extends AppCompatActivity {
       startActivity(logIntent);
     });
 
-    // Button to got to recipe's page
-    symptomButton = findViewById(R.id.button_symptom);
-    symptomButton.setOnClickListener( view -> {
-      symptomIntent = new Intent(thisActivity, SymptomActivity.class);
-      startActivity(symptomIntent);
+    // Button to go to ingredient's list and edit and delete and add
+    otherButton = findViewById(R.id.button_other);
+    otherButton.setOnClickListener( view -> {
+      startActivity(new Intent(thisActivity, OtherActivity.class));
     });
 
-      Log.d(TAG, "onCreate: tags work");
   } //end onCreate
 
 } // end MainActivity

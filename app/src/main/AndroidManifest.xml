@@ -33,7 +33,11 @@
 
 
       <activity android:name=".activity.ResourcesActivity"
-        android:exported="false"/>
+          android:exported="false"/>
+      <activity android:name=".activity.OtherActivity"
+          android:exported="false"/>
+      <activity android:name=".activity.ExportActivity"
+          android:exported="false"/>
 
 
       <activity android:name=".activity.foodlog.FoodLogActivity"
@@ -73,6 +77,16 @@
       <activity        android:name=".activity.symptom.DetailSymptomActivity"
         android:exported="false" />
 
+<!--  TODO get export as CSV working    -->
+<!--      <provider-->
+<!--          android:name="androidx.core.content.FileProvider"-->
+<!--          android:authorities="com.lomza.moviesroom.fileprovider"-->
+<!--          android:exported="false"-->
+<!--          android:grantUriPermissions="true">-->
+<!--        <meta-data-->
+<!--            android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--            android:resource="@xml/file_paths" />-->
+<!--      </provider>-->
     </application>
 
 </manifest>

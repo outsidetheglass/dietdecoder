@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder.ui.foodlog;
 
 import android.app.Application;
+import android.database.Cursor;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -54,6 +55,11 @@ public class FoodLogViewModel extends AndroidViewModel {
   // get single log using the uuid
   public FoodLog viewModelGetFoodLogFromId(UUID uuid) {
     return mRepository.repositoryGetFoodLogFromId(uuid);
+  }
+
+  // cursor for exporting
+  public Cursor viewModelGetCursorAllFoodLog() {
+    return mRepository.repositoryGetCursorAllFoodLog();
   }
 
 

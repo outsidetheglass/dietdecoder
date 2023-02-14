@@ -1,5 +1,7 @@
 package com.dietdecoder.dietdecoder.database.foodlog;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -39,6 +41,10 @@ public interface FoodLogDao {
   // or
   // @Query("UPDATE playlist SET play_order = play_order + 1 WHERE play_order >=:insertion_point")
   //void prepareForInsertion(long insertion_point);
+
+  // TODO get export as CSV working
+  @Query("SELECT * FROM food_log_table")
+  Cursor getCursorAllFoodLog();
 
   @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed DESC")
   LiveData<List<FoodLog>> daoGetAllFoodLog();

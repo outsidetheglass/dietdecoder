@@ -3,7 +3,6 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
     EditText mEditTextIngredientName, mEditTextIngredientBrand, mEditTextConsumed,
     mEditTextCooked, mEditTextAcquired;
 
-    int mFragmentContainerView = R.id.fragment_container_view_edit_food_log;
 
     String mSaveString, mNothingChangedString, mName, mBrand, mFoodLogIdString,
             mFoodLogIngredientName,
@@ -98,21 +96,21 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_consumed);
         mEditTextConsumed = Util.setEditTextWordWrapNoEnter(mEditTextConsumed);
         mEditTextConsumed.setInputType(InputType.TYPE_NULL);
-        mEditTextConsumed.setText(mFoodLog.getMDateTimeConsumed().toString());
+        mEditTextConsumed.setText(Util.stringFromInstant(mFoodLog.getMDateTimeConsumed()));
         mEditTextConsumed.setOnClickListener(this);
 
         mEditTextCooked =
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_cooked);
         mEditTextCooked = Util.setEditTextWordWrapNoEnter(mEditTextCooked);
         mEditTextCooked.setInputType(InputType.TYPE_NULL);
-        mEditTextCooked.setText(mFoodLog.getMDateTimeCooked().toString());
+        mEditTextCooked.setText(Util.stringFromInstant(mFoodLog.getMDateTimeCooked()));
         mEditTextCooked.setOnClickListener(this);
 
         mEditTextAcquired =
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_acquired);
         mEditTextAcquired = Util.setEditTextWordWrapNoEnter(mEditTextAcquired);
         mEditTextAcquired.setInputType(InputType.TYPE_NULL);
-        mEditTextAcquired.setText(mFoodLog.getMDateTimeAcquired().toString());
+        mEditTextAcquired.setText(Util.stringFromInstant(mFoodLog.getMDateTimeAcquired()));
         mEditTextAcquired.setOnClickListener(this);
 
 
@@ -139,7 +137,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         mBundleNext.putString(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
 
         // will only use that for date time changes
-        LogSpecificDateFragment logSpecificDateFragment = new LogSpecificDateFragment();
+        LogSpecificDateTimeFragment logSpecificDateTimeFragment = new LogSpecificDateTimeFragment();
 
         // check for where to go next
         Boolean isNextFragmentSet = Boolean.FALSE;
@@ -209,12 +207,11 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         // if next fragment has been set use that
         if ( isNextFragmentSet ) {
             // put which we're changing into the bundle
-            logSpecificDateFragment.setArguments(mBundleNext);
+            logSpecificDateTimeFragment.setArguments(mBundleNext);
             // actually go to the next place now
-            Toast.makeText(getContext(), "Let's go!", Toast.LENGTH_SHORT).show();
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(mFragmentContainerView, logSpecificDateFragment);
+            ft.replace(Util.fragmentContainerView, logSpecificDateTimeFragment);
             ft.commit();
         }
         // else it means go back to main activity
