@@ -43,6 +43,10 @@ public class Util {
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
 
+    // check if we want to export as a csv or pdf or what
+    public static final String ARGUMENT_CSV = "csv";
+    public static final String ARGUMENT_PDF = "pdf";
+
     // action to take given this argument
     public static final String ARGUMENT_ACTION = "action";
     // actions to take
@@ -141,10 +145,6 @@ public class Util {
         int thirdStringLength = secondStringLength + italicString.length();
         int fourthStringLength = thirdStringLength + notItalicString.length();
 
-        Log.d(TAG, "boldstring: " + boldString + boldString.length());
-        Log.d(TAG, "notboldstring: " + notBoldString+ notBoldString.length());
-        Log.d(TAG, "italic: " + italicString+ italicString.length());
-        Log.d(TAG, "notital: " + notItalicString+ notItalicString.length());
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(boldString);
         // this is the location of the substring that you want to make bold
         int start = 0;
@@ -154,7 +154,6 @@ public class Util {
         // append whatever else you want
         spannableStringBuilder.append(notBoldString);
 
-        Log.d(TAG, "spannableStringBuilder: " + spannableStringBuilder.length());
         // if we have more strings to use, add them
         if ( !TextUtils.isEmpty(italicString) ) {
 
@@ -167,7 +166,6 @@ public class Util {
             }
         }
 
-        Log.d(TAG, "spannableStringBuilder: " + spannableStringBuilder.length());
         return spannableStringBuilder;
 
     }
@@ -199,6 +197,17 @@ public class Util {
                 .toString();
         return aTime;
     }
+    // given integers of hours and minutes return string pretty
+    public static String setTimeStringWithUnderscore(int hour, int min) {
+        // Append in a StringBuilder
+        String aTime = new StringBuilder()
+                .append(hour)
+                .append('_')
+                .append( Util.setMinutesString(
+                        min ) )
+                .toString();
+        return aTime;
+    }
     public static String setDateString(int day, int month, int year) {
 
         // turn a zero indexed number for month into the name of that month
@@ -214,8 +223,22 @@ public class Util {
                 .toString();
         return aDate;
     }
+    public static String setDateStringWithUnderscore(int day, int month, int year) {
 
-    //
+        // turn a zero indexed number for month into the name of that month
+        String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                "Sept", "Oct", "Nov", "Dec"};
+
+        String aDate = new StringBuilder()
+                .append(months[month])
+                .append("_")
+                .append(day)
+                .append("_")
+                .append(year)
+                .toString();
+        return aDate;
+    }
+
     // set month from zero indexed value to a string of the month name
     public static String setMonthString(Integer monthIndex){
 
@@ -235,27 +258,79 @@ public class Util {
 
         Calendar mCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
 
+        // the day of the week for readability
+        String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
+        String mDayOfWeekString = days[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+        // set the date to be with a space and a comma and with the short month name
+        String mDateString = stringDateFromCalendar(mCalendar);
+
+        // set time to have a colon and a zero if the minute is < 10
+        String mTimeString = stringTimeFromCalendar(mCalendar);
+
+
+        return(mTimeString + " " + mDayOfWeekString + ", " + mDateString);
+    }
+
+    //given an instant in time, display it pretty
+    public static String stringForFileNameFromInstant(Instant instant){
+
+        Calendar mCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
+
+        // set the date to be with a space and a comma and with the short month name
+        String mDateString = stringDateFromCalendarWithUnderscore(mCalendar);
+
+        // set time to have a colon and a zero if the minute is < 10
+        String mTimeString = stringTimeFromCalendarWithUnderscore(mCalendar);
+
+        return(mTimeString + "_" + mDateString);
+    }
+
+    //given calendar return a string with only the date and time set
+    public static String stringDateFromCalendar(Calendar calendar){
+
         // date related
-        int mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
-        int mMonth = mCalendar.get(Calendar.MONTH);
-        int mYear = mCalendar.get(Calendar.YEAR);
+        int mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mYear = calendar.get(Calendar.YEAR);
         // set the date to be with a space and a comma and with the short month name
         String mDateString = setDateString(mDayOfMonth, mMonth, mYear);
 
-        // the day of the week for readability
-        String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
-        String logDayOfWeek = days[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+        return mDateString;
+    }
+    //given calendar return a string with only the date and time set
+    public static String stringDateFromCalendarWithUnderscore(Calendar calendar){
 
+        // date related
+        int mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mYear = calendar.get(Calendar.YEAR);
+        // set the date to be with a space and a comma and with the short month name
+        String mDateString = setDateStringWithUnderscore(mDayOfMonth, mMonth, mYear);
+
+        return mDateString;
+    }
+    public static String stringTimeFromCalendar(Calendar calendar){
         // get the hour and minute
-        Integer mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
-        Integer mMinute = mCalendar.get(Calendar.MINUTE);
+        Integer mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        Integer mMinute = calendar.get(Calendar.MINUTE);
         // and set them to have a colon and a zero if the minute is < 10
-        String logTime = setTimeString(mHour, mMinute);
+        String mTimeString = setTimeString(mHour, mMinute);
 
+        return mTimeString;
+    }
+    public static String stringTimeFromCalendarWithUnderscore(Calendar calendar){
+        // get the hour and minute
+        Integer mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        Integer mMinute = calendar.get(Calendar.MINUTE);
+        // and set them to have a colon and a zero if the minute is < 10
+        String mTimeString = setTimeStringWithUnderscore(mHour, mMinute);
 
-        return(logTime + " " + logDayOfWeek + ", " + mDateString);
+        return mTimeString;
     }
 
+    // calculate how recently the parameter instant was from the second instant parameter
+    // and make it a pretty string
     public static String stringRelativeTimeFromInstant(Instant printThisInstant,
                                                        Instant printRelativeToThisInstant){
 
@@ -641,6 +716,25 @@ or at least achieves the same effect.
             foodLog.setMDateTimeAcquired(instant);
         }
         return foodLog;
+    }
+
+    public static String setFileName(String fileType) {
+        // set name of file
+        StringBuilder myFileName = new StringBuilder("diet_decoder_database_");
+        // include the current instant of time
+        Instant nowInstant = Instant.now();
+        String nowDayString = Util.stringForFileNameFromInstant(nowInstant);
+        myFileName.append(nowDayString);
+        // TODO append on file name with their name
+
+        // set the end of the file name to be for csv or pdf
+        if (fileType == ARGUMENT_CSV) {
+            myFileName.append(".txt");
+        } else if (fileType == ARGUMENT_PDF) {
+            myFileName.append(".pdf");
+        }
+
+        return myFileName.toString();
     }
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////

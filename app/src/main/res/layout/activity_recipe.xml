@@ -23,18 +23,20 @@
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerview_recipe"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       android:layout_marginTop="@dimen/medium_padding"
       android:padding="@dimen/medium_padding"
       android:background="@color/green_200"
     android:nestedScrollingEnabled="false"
       android:scrollbars="vertical"
       android:fadeScrollbars="false"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.50"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textview_title_recipe"
-      app:layout_constraintHorizontal_bias="0.40"
+      app:layout_constraintBottom_toBottomOf="@id/add_button_recipe"
     app:layout_constraintVertical_bias="0.20"/>
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton

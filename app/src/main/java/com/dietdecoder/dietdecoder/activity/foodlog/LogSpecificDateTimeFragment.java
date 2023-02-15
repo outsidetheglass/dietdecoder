@@ -29,6 +29,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.Tex
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class LogSpecificDateTimeFragment extends Fragment implements View.OnClickListener {
@@ -37,7 +38,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
     //Log.d(TAG, "onClick: mDatePickerDateTime = " + mDatePickerDateTime.getHour());
 
     Integer mHour, mMinute, mDay, mMonth, mYear;
-    String mFoodLogIdString, mOnlySetDateOrTime, mWhatToChange;
+    String mFoodLogIdString, mOnlySetDateOrTime, mWhatToChange, mWhereFrom;
 
     LocalDateTime mDatePickerDateTime;
     LocalDateTime mDateTime, mDateTimeSet;
@@ -50,6 +51,8 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
     FoodLog mFoodLog;
 
     Instant mInstant, mInstantSet;
+
+    Boolean isFromEditFoodLog;
 
     // IDs for which dialog to open
     static final int TIME_DIALOG_ID = 1111;
@@ -93,6 +96,8 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
             mBundle = getArguments();
             mFoodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
             mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+            mWhereFrom = mBundle.getString(Util.ARGUMENT_ACTIVITY_FROM);
+
 
             // if we're only supposed to set one or the other
 //            if ( !!TextUtils.isEmpty(mBundle.getString(Util.ARGUMENT_ONLY_SET)) ) {
@@ -241,10 +246,23 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                     ft.replace(Util.fragmentContainerView, logPartOfDayFragment);
                     ft.commit();
                 }
-                // else it means go back to main activity
+                // else it means go back to main activity or edit
                 else {
-                    // go back to food log activity
-                    startActivity(new Intent(getActivity(), FoodLogActivity.class));
+                    // if we're from edit we have more to do
+                    if (Objects.equals(
+                                    mWhereFrom, Util.ARGUMENT_ACTIVITY_FROM_EDIT_FOOD_LOG)
+                    ) {
+                        Intent intent = new Intent(getActivity(), EditFoodLogActivity.class);
+                        intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
+                        intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                                Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+                        startActivity(intent);
+
+                    } else {
+                        // not from edit so we're done here
+                        // go back to food log activity
+                        startActivity(new Intent(getActivity(), FoodLogActivity.class));
+                    }
 
                 }
 

@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +23,7 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class EditFoodLogFragment extends Fragment implements View.OnClickListener {
@@ -71,6 +74,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         mFoodLogId = UUID.fromString(mFoodLogIdString);
         // use that to get the food log itself
         mFoodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mFoodLogId);
+
         // then some values
         mFoodLogIngredientName = mFoodLog.getMIngredientName();
         mFoodLogIngredientBrand = mFoodLog.getMBrand();

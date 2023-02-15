@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.ui.foodlog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,9 +137,13 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
             {
               Toast.makeText(foodLogContext, "Duplicate was clicked", Toast.LENGTH_SHORT).show();
 
-              Intent intent = new Intent(foodLogContext, AreYouSureActivity.class);
+              Intent intent = new Intent(foodLogContext, EditFoodLogActivity.class);
               intent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_DUPLICATE);
-              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLog.getMFoodLogId().toString());
+              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                      Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+              String foodLogToDuplicateString = foodLog.getMFoodLogId().toString();
+              Log.d(TAG, foodLogToDuplicateString);
+              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogToDuplicateString);
               foodLogContext.startActivity(intent);
 
 

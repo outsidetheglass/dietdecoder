@@ -114,8 +114,7 @@ public class AreYouSureActivity extends AppCompatActivity  {
         } else if (Objects.equals(whichFragmentGoTo,
                 Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT)) {
             //update food log
-            //TODO uncomment this when delete is working
-            //mNextFragment = new UpdateFoodLogFragment();
+//            mNextFragment = new EditFoodLogActivity();
 
         } return mNextFragment;
     }

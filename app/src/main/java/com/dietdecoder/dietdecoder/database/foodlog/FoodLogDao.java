@@ -28,7 +28,7 @@ public interface FoodLogDao {
 
   @Delete
   void daoFoodLogDelete(FoodLog foodLog);
-// TODO figure out duplication the right way
+// TODO figure out duplication the right way, it's currently being done in EditFoodLogFragment
 //  @Query("INSERT INTO food_log_table ")
 //  INSERT INTO menuship3
 //          (headhash, menucardhash, menucathash, producthash)
