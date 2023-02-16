@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +22,7 @@ import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.database.log.Log;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
+import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
@@ -31,7 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Objects;
 
-public class FoodLogActivity extends AppCompatActivity implements View.OnClickListener {
+public class FoodLogActivity extends AppCompatActivity implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -47,12 +49,15 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
 
   private Intent addIntent;
 
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_food_log);
 
+
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_food_log);
+    toolbar.setTitle(getResources().getString(R.string.app_name));
+    toolbar.setOnMenuItemClickListener(this);
     //TODO make scrollable left and right (maybe tabs) for automatic filters too, by category
     // like snacks
 
@@ -98,6 +103,23 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
     }//end switch case
   }//end onClick
 
+
+
+  @Override
+  public boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_settings) {
+      Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+      // do something
+    } else if (item.getItemId() == R.id.action_go_home) {
+      // do something
+      startActivity(new Intent(thisActivity, MainActivity.class));
+    } else {
+      // do something
+    }
+
+    return false;
+  }
 
 }//end LogActivity
 

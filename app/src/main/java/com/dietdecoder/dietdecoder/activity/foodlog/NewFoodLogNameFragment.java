@@ -1,13 +1,19 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,12 +21,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.util.Objects;
@@ -32,6 +40,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
 
     Button mButtonSaveName;
     EditText mEditTextIngredientName;
+    ListView mListView;
 
     String mSaveString, mEmptyTryAgainString, mName, foodLogIdString;
     Boolean isNameViewEmpty;
@@ -39,6 +48,8 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
     Bundle mBundle;
 
     FoodLogViewModel mFoodLogViewModel;
+    IngredientViewModel mIngredientViewModel;
+    IngredientListAdapter mIngredientListAdapter;
 
     public NewFoodLogNameFragment() {
         super(R.layout.fragment_new_food_log_name);
@@ -52,11 +63,45 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
         mEditTextIngredientName =
                 view.findViewById(R.id.edittext_new_food_log_name_ingredient_name);
         mEditTextIngredientName = Util.setEditTextWordWrapNoEnter(mEditTextIngredientName);
+
+        if (!Objects.isNull(getArguments())) {
+            Bundle mBundle = getArguments();
+            String ingredientIdString = mBundle.getString(Util.ARGUMENT_INGREDIENT_ID);
+            String ingredientName = mBundle.getString(Util.ARGUMENT_INGREDIENT_NAME);
+            mEditTextIngredientName.setText(ingredientName);
+        }
+
         mButtonSaveName = view.findViewById(R.id.button_new_food_log_name_save);
         mButtonSaveName.setOnClickListener(this);
+
+        mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+
+        mListView = view.findViewById(R.id.list_view_new_food_log_name);
+        mEditTextIngredientName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId,
+                                          KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchData = mEditTextIngredientName.getText().toString();
+                    showResults(searchData); //passing string to search in your database to your method
+                    return true;
+                }
+                return false;
+            }
+        });
     // Inflate the layout for this fragment
     return view;
-}
+    }
+
+    private void showResults(String query) {
+
+        Ingredient mIngredient = mIngredientViewModel.viewModelGetIngredientFromSearchName(query);
+        mIngredientListAdapter =
+                new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
+        mListView.setAdapter((ListAdapter) mIngredientListAdapter);
+        mListView.setOnClickListener(this::onClick);
+
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         // set the data from the bundle to the activity variables

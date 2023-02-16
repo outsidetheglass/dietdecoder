@@ -45,6 +45,11 @@ public class Util {
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
 
+
+    public static final String ARGUMENT_INGREDIENT_ID = "ingredient_id";
+    public static final String ARGUMENT_INGREDIENT_NAME = "ingredient_name";
+
+
     // check if we want to export as a csv or pdf or what
     public static final String ARGUMENT_CSV = "csv";
     public static final String ARGUMENT_PDF = "pdf";

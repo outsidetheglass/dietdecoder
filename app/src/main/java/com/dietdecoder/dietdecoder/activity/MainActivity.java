@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
   } //end onCreate
 
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
       if (item.getItemId() == R.id.action_settings) {
@@ -84,8 +85,4 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
 
 
-  @Override
-  public void onPointerCaptureChanged(boolean hasCapture) {
-    super.onPointerCaptureChanged(hasCapture);
-  }
 } // end MainActivity

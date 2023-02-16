@@ -5,6 +5,19 @@
   android:layout_height="match_parent"
   tools:context=".activity.recipe.RecipeActivity">
 
+  <androidx.appcompat.widget.Toolbar
+      android:id="@+id/my_toolbar_recipe"
+      android:layout_width="match_parent"
+      app:titleTextColor="@color/button_label"
+      android:layout_height="?attr/actionBarSize"
+      app:menu="@menu/menu_main"
+      android:background="?attr/colorPrimary"
+      android:elevation="4dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+      app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
   <TextView
     android:id="@+id/textview_title_recipe"
     android:layout_width="wrap_content"

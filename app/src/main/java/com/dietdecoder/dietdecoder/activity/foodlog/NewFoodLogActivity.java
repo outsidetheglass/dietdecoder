@@ -4,18 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.MainActivity;
 
 import java.util.Objects;
 
-public class NewFoodLogActivity extends AppCompatActivity  {
+public class NewFoodLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     //TODO make recipe dropdown, listed in order of frequency made
     // the dropdown should be typeable, which selects for that recipe
@@ -43,6 +47,7 @@ public class NewFoodLogActivity extends AppCompatActivity  {
 
     private Fragment nextFragment = null;
 
+
     public NewFoodLogActivity() {
         super(R.layout.activity_new_food_log);
     }
@@ -50,6 +55,11 @@ public class NewFoodLogActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_new_food_log);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        toolbar.setOnMenuItemClickListener(this);
+
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -96,6 +106,22 @@ public class NewFoodLogActivity extends AppCompatActivity  {
                 startActivity(new Intent(thisActivity, FoodLogActivity.class));
             }
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+            // do something
+        } else if (item.getItemId() == R.id.action_go_home) {
+            // do something
+            startActivity(new Intent(thisActivity, MainActivity.class));
+        } else {
+            // do something
+        }
+
+        return false;
     }
 
     private Fragment whichFragmentNext(String whichFragmentGoTo) {
@@ -148,6 +174,10 @@ public class NewFoodLogActivity extends AppCompatActivity  {
             nextFragment = null;
         }
         return nextFragment;
+    }
+
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }
 

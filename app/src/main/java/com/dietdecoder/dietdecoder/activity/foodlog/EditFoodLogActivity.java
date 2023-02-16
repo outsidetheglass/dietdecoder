@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -22,7 +26,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 // control the fragments going back and forth
-public class EditFoodLogActivity extends AppCompatActivity  {
+public class EditFoodLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
@@ -43,6 +47,10 @@ public class EditFoodLogActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        toolbar.setOnMenuItemClickListener(this);
         if (savedInstanceState == null ) {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -112,6 +120,22 @@ public class EditFoodLogActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+            // do something
+        } else if (item.getItemId() == R.id.action_go_home) {
+            // do something
+            startActivity(new Intent(thisActivity, MainActivity.class));
+        } else {
+            // do something
+        }
+
+        return false;
+    }
+
     private Fragment whichFragmentNext(String whichFragmentGoTo) {
 
         Log.d(TAG, whichFragmentGoTo);
@@ -169,6 +193,11 @@ public class EditFoodLogActivity extends AppCompatActivity  {
         mFoodLogViewModel.viewModelUpdateFoodLog(duplicatedFoodLog);
 
         return duplicatedFoodLog.getMFoodLogId().toString();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }
 

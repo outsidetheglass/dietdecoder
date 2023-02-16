@@ -42,7 +42,6 @@ public interface FoodLogDao {
   // @Query("UPDATE playlist SET play_order = play_order + 1 WHERE play_order >=:insertion_point")
   //void prepareForInsertion(long insertion_point);
 
-  // TODO get export as CSV working
   @Query("SELECT * FROM food_log_table")
   Cursor getCursorAllFoodLog();
 

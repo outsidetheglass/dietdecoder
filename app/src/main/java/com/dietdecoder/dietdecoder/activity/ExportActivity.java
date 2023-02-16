@@ -14,11 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -35,7 +37,7 @@ import java.util.UUID;
 
 
 // control the fragments going back and forth
-public class ExportActivity extends AppCompatActivity  {
+public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     private static String TAGstatic = "TAG: ExportActivity" ;
     private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -58,11 +60,30 @@ public class ExportActivity extends AppCompatActivity  {
     Bitmap bmp, scaledbmp;
 
     @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+            // do something
+        } else if (item.getItemId() == R.id.action_go_home) {
+            // do something
+            startActivity(new Intent(thisActivity, MainActivity.class));
+        } else {
+            // do something
+        }
+
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //set view
         setContentView(R.layout.activity_export);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_export);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        toolbar.setOnMenuItemClickListener(this);
         // set the paths for internal memory and external SD card
         Context context = getBaseContext();
         internalPath = context.getFilesDir();
@@ -272,5 +293,9 @@ public class ExportActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
 }
 

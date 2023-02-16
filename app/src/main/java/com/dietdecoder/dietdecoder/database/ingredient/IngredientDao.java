@@ -7,6 +7,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+
 import java.util.List;
 
 @Dao
@@ -45,6 +47,11 @@ public interface IngredientDao {
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName AND ingredientChemicalName = :daoIngredientChemicalName")
   Ingredient daoGetIngredientFromNameChemicalName(String daoIngredientName, String daoIngredientChemicalName);
+
+
+  @Query("SELECT * FROM ingredient_table WHERE ingredientName LIKE :searchIngredientName")
+  Ingredient daoGetIngredientFromSearchName(String searchIngredientName);
+
   /*
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")

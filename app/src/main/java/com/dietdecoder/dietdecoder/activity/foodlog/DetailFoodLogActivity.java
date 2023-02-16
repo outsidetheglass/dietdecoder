@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.activity.MainActivity;
 
 //TODO make delete a fragment or a popup, change this after getting pass ID through the layers working
 
-public class DetailFoodLogActivity extends AppCompatActivity {
+public class DetailFoodLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
 
   // make a TAG to use to log errors
@@ -33,6 +36,9 @@ public class DetailFoodLogActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_detail_food_log);
 
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+    toolbar.setTitle(getResources().getString(R.string.app_name));
+    toolbar.setOnMenuItemClickListener(this);
     mLogDetailView = findViewById(R.id.textview_log_detail_value);
     mLogDetailView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -62,4 +68,25 @@ public class DetailFoodLogActivity extends AppCompatActivity {
     }
   }
 
+
+  @Override
+  public boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_settings) {
+      Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+      // do something
+    } else if (item.getItemId() == R.id.action_go_home) {
+      // do something
+      startActivity(new Intent(thisActivity, MainActivity.class));
+    } else {
+      // do something
+    }
+
+    return false;
+  }
+
+  @Override
+  public void onPointerCaptureChanged(boolean hasCapture) {
+    super.onPointerCaptureChanged(hasCapture);
+  }
 }

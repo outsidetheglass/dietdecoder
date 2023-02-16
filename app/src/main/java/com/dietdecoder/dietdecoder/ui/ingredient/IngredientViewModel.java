@@ -49,6 +49,12 @@ public class IngredientViewModel extends AndroidViewModel {
   public Ingredient viewModelGetIngredientFromName(String paramIngredientName) {
     return mRepository.repositoryGetIngredientFromName(paramIngredientName);
   }
+
+
+  public Ingredient viewModelGetIngredientFromSearchName(String searchIngredientName) {
+    return mRepository.repositoryGetIngredientFromSearchName(searchIngredientName);
+  }
+
   //TODO add other properties of ingredient type here
 //  public Ingredient viewModelGetIngredientFromNameConcern(String ingredientName, String ingredientConcern){
 //    return mRepository.repositoryGetIngredientFromNameConcern(ingredientName, ingredientConcern);

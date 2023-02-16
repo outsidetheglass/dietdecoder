@@ -43,6 +43,11 @@ class IngredientRepository {
   public Ingredient repositoryGetIngredientFromName(String ingredientName) {
     return mIngredientDao.daoGetIngredientFromName(ingredientName);
   }
+
+  public Ingredient repositoryGetIngredientFromSearchName(String searchIngredientName) {
+    return mIngredientDao.daoGetIngredientFromSearchName(searchIngredientName);
+  }
+
   //TODO add other properties of ingredient type here
 //  public Ingredient repositoryGetIngredientFromNameConcern(String ingredientName, String ingredientConcern) {
 //    return mIngredientDao.daoGetIngredientFromNameConcern(ingredientName, ingredientConcern);
