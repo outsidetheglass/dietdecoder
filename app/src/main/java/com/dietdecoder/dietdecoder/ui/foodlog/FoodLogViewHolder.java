@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +21,12 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.foodlog.AreYouSureActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.DetailFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.time.Instant;
 
-public class FoodLogViewHolder extends RecyclerView.ViewHolder {
+public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -33,7 +35,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
   public TextView foodLogItemView;
   public ImageButton foodLogItemOptionButton;
   private Context foodLogContext;
-
+  private FoodLog mFoodLog;
 
   private FoodLogViewHolder(View itemView) {
     super(itemView);
@@ -43,7 +45,30 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
 
   }
 
+
+
+  static FoodLogViewHolder create(ViewGroup logParent) {
+
+    Context logContext = logParent.getContext();
+    LayoutInflater logInflater = LayoutInflater.from(logContext);
+    View logView = logInflater.inflate(
+            R.layout.recyclerview_food_log_item,
+            logParent,
+            false
+    );
+
+    return new FoodLogViewHolder(logView);
+  }
+
+
   public void bind(FoodLog foodLog) {
+    // make the recyclerview populated with the info of each food log
+    // get the info first
+    // print it pretty
+    // attach a listener to the options to act on
+    // edit, duplicate, delete, or detail clicked
+
+    this.mFoodLog = foodLog;
 
     // info on the foodlog
     // in order to bind it to the recyclerview
@@ -93,113 +118,70 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder {
     // set part of it bold and part of it not bold
     foodLogItemView.setText(Util.setBoldItalicSpan(boldString, notBoldString, italicString,
             notItalicString));
-//
-//    foodLogItemView = Util.setTextWithSpan(foodLogItemView, boldString, notBoldString, Util.boldStyle);
 
     // if the item options is clicked, open the menu for options on that item
-    foodLogItemOptionButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Toast.makeText(foodLogContext, "Was clicked", Toast.LENGTH_SHORT).show();
+    foodLogItemOptionButton.setOnClickListener(this);
 
-        // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(foodLogContext, foodLogItemView);
+  }
 
-        // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-          @Override
-          public boolean onMenuItemClick(MenuItem foodLogMenuItem) {
+  @Override
+  public void onClick(View view) {
+    // Initializing the popup menu and giving the reference as current logContext
+    PopupMenu popupMenu = new PopupMenu(foodLogContext, foodLogItemOptionButton);
+    // Inflating popup menu from popup_menu.xml file
+    popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
+    popupMenu.setGravity(Gravity.END);
+    // if an option in the menu is clicked
+    popupMenu.setOnMenuItemClickListener(foodLogMenuItem -> {
 
-            // if edit clicked
-            if ( foodLogMenuItem.getTitle().toString() == foodLogContext.getString(R.string.edit))
-            {
-              Toast.makeText(foodLogContext, "Edit was clicked", Toast.LENGTH_SHORT).show();
-              // go to double check are they sure to update fragment with our food log id
-              Intent intent = new Intent(foodLogContext, EditFoodLogActivity.class);
-              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLog.getMFoodLogId().toString());
-              foodLogContext.startActivity(intent);
-            }
-            // if delete clicked
-            else if ( foodLogMenuItem.getTitle().toString()  == foodLogContext.getString(R.string.delete ))
-            {
-              Toast.makeText(foodLogContext, "Delete was clicked", Toast.LENGTH_SHORT).show();
-              // delete this log, go activity double checking if they want to
-              Intent intent = new Intent(foodLogContext, AreYouSureActivity.class);
-              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_DELETE_FOOD_LOG);
-              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLog.getMFoodLogId().toString());
-              foodLogContext.startActivity(intent);
+      // make edit the default for duplicate and edit both go there
+      Intent mIntent = new Intent(foodLogContext, EditFoodLogActivity.class);
 
-            }
-            // if duplicate clicked
-            else if ( foodLogMenuItem.getTitle().toString()  == foodLogContext.getString(R.string.duplicate ))
-            {
-              Toast.makeText(foodLogContext, "Duplicate was clicked", Toast.LENGTH_SHORT).show();
+      // which button was clicked
+      switch (foodLogMenuItem.getItemId()) {
 
-              Intent intent = new Intent(foodLogContext, EditFoodLogActivity.class);
-              intent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_DUPLICATE);
-              intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                      Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-              String foodLogToDuplicateString = foodLog.getMFoodLogId().toString();
-              Log.d(TAG, foodLogToDuplicateString);
-              intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogToDuplicateString);
-              foodLogContext.startActivity(intent);
+        case R.id.duplicate_option:
+          // edit fragment checks for if we're a duplicate or not for what to set
+          mIntent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_DUPLICATE);
+          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+          break;
 
+        case R.id.edit_option:
+          // tell the edit activity we want the full edit fragment
+          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+          Log.d(TAG, "inside edit option click: " + mIntent.getStringExtra(
+                  Util.ARGUMENT_FRAGMENT_GO_TO));
+          break;
 
-//
-//              Calendar foodLogCalendar = foodLog.getFoodLogDateTimeCalendar();
-//              Integer foodLogNumberDayOfMonth = foodLogCalendar.get(Calendar.DAY_OF_MONTH);
-//              Integer foodLogYear = foodLogCalendar.get(Calendar.YEAR);
-//              Integer foodLogMonth = foodLogCalendar.get(Calendar.MONTH);
-//              Integer foodLogHour = foodLogCalendar.get(Calendar.HOUR_OF_DAY);
-//              Integer foodLogMinute = foodLogCalendar.get(Calendar.MINUTE);
-//
-//
-//              foodLogContext.startActivity(
-//                new Intent(foodLogContext, NewFoodLogActivity.class)
-//                  .putExtra(
-//                  "ingredientName", mFoodLogIngredientName)
-//                  .putExtra("ingredientDateTimeDay", foodLogNumberDayOfMonth)
-//                  .putExtra("ingredientDateTimeMonth", foodLogMonth)
-//                  .putExtra("ingredientDateTimeYear", foodLogYear)
-//                  .putExtra("ingredientDateTimeHour", foodLogHour)
-//                  .putExtra("ingredientDateTimeMinute", foodLogMinute)
-//                  .putExtra("ingredientDateTimeAcquired", mFoodLogDateTimeAcquired)
-//                  .putExtra("ingredientDateTimeCooked", mFoodLogDateTimeCooked)
-//              );
-            }
-            // if more details clicked
-            else if ( foodLogMenuItem.getTitle().toString() == foodLogContext.getString(R.string.detail) )
-            {
-              Intent detailIntent = new Intent(foodLogContext, DetailFoodLogActivity.class);
-              detailIntent.putExtra("food_log_detail", mFoodLogString);
-              foodLogContext.startActivity(detailIntent);
-            }
+        case R.id.delete_option:
+// delete this log, go activity double checking if they want to
+          mIntent = new Intent(foodLogContext, AreYouSureActivity.class);
+          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                  Util.ARGUMENT_GO_TO_DELETE_FOOD_LOG);
+          break;
 
-            return true;
-          }
-        });
-        // Showing the popup menu
-        popupMenu.show();
-      }
+        case R.id.detail_option:
+          mIntent = new Intent(foodLogContext, DetailFoodLogActivity.class);
+          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                  Util.ARGUMENT_GO_TO_DETAIL_FOOD_LOG);
+          break;
+
+        default:
+          break;
+      }//end switch case
+
+      // adding string after switch cases because delete and detail make new intents
+      String foodLogIdString = mFoodLog.getMFoodLogId().toString();
+      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+
+      foodLogContext.startActivity(mIntent);
+
+      return true;
     });
+    // Showing the popup menu
+    popupMenu.show();
 
   }
-
-
-  static FoodLogViewHolder create(ViewGroup logParent) {
-
-    Context logContext = logParent.getContext();
-    LayoutInflater logInflater = LayoutInflater.from(logContext);
-    View logView = logInflater.inflate(
-      R.layout.recyclerview_food_log_item,
-      logParent,
-      false
-    );
-
-    return new FoodLogViewHolder(logView);
-  }
-
-
 }//end log view holder class

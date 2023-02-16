@@ -35,7 +35,7 @@ public class NewFoodLogActivity extends AppCompatActivity  {
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
     private final Activity thisActivity = NewFoodLogActivity.this;
 
-    int mFragmentContainerView = R.id.fragment_container_view_new_food_log;
+    int mFragmentContainerView = Util.fragmentContainerViewAddFoodLog;
     Bundle mBundle;
 
     Integer mHour, mMinute, mDay, mMonth, mYear;

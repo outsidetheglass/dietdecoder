@@ -30,7 +30,7 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
   @Override
   public void onBindViewHolder(RecipeViewHolder holderRecipe, int positionRecipe) {
     Recipe currentRecipe = getItem(positionRecipe);
-    Log.d(TAG, "onBindViewHolder: " + currentRecipe.getRecipeName());
+
 
     // TODO fix get names to be recursive for all ingredients
     holderRecipe.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredientName());

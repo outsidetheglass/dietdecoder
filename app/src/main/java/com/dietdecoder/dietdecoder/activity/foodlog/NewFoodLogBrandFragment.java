@@ -1,5 +1,6 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -113,11 +114,14 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
                 //update the food log
                 mFoodLog.setMBrand(mBrand);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+                mFoodLogIdString = mFoodLog.getMFoodLogId().toString();
 
                 //TODO not done, go to cooked and acquired fragments and make them
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), mFoodLogIdString,
-                        Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY,
-                        Util.ARGUMENT_FROM_INGREDIENT_BRAND));
+                Class<EditFoodLogActivity> mActivity = EditFoodLogActivity.class;
+                Intent intent = new Intent(getContext(), mActivity);
+                intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
+                intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+                getContext().startActivity(intent);
                 break;
             default:
                 break;

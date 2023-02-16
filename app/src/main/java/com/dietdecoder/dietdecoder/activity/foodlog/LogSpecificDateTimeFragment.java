@@ -243,7 +243,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                     // actually go to the next place now
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(Util.fragmentContainerView, logPartOfDayFragment);
+                    ft.replace(Util.fragmentContainerViewEditFoodLog, logPartOfDayFragment);
                     ft.commit();
                 }
                 // else it means go back to main activity or edit

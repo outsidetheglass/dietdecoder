@@ -581,6 +581,10 @@ public abstract class SymptomRoomDatabase extends RoomDatabase {
             ) //end INSTANCE
 
             .addCallback(sRoomDatabaseCallback)
+                  // allow main thread queries can lock the UI for a long time, not the best way
+                  // to get access to livedata main thread
+                  // TODO fix this
+                  .allowMainThreadQueries()
             //.addMigrations(MIGRATION_1_2)
             .build();
 

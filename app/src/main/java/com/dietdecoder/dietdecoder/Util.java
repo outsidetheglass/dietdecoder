@@ -37,8 +37,10 @@ public class Util {
     public static final StyleSpan boldStyle = new StyleSpan(Typeface.BOLD);
     public static final StyleSpan italicStyle = new StyleSpan(Typeface.ITALIC);
 
-    public static final int fragmentContainerView = R.id.fragment_container_view_edit_food_log;
+    public static final int fragmentContainerViewEditFoodLog = R.id.fragment_container_view_edit_food_log;
 
+    public static final int fragmentContainerViewAddFoodLog =
+            R.id.fragment_container_view_new_food_log;
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
@@ -79,6 +81,8 @@ public class Util {
     public static final String ARGUMENT_GO_TO_SPECIFIC_TIME_FRAGMENT = "go_to_specific_time";
 
     public static final String ARGUMENT_GO_TO_DELETE_FOOD_LOG = "go_to_delete_food_log";
+    public static final String ARGUMENT_GO_TO_DETAIL_FOOD_LOG = "go_to_delete_food_log";
+
     public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG_ACTIVITY =
             "go_to_edit_food_log_activity";
     public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT =

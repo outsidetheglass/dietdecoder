@@ -59,6 +59,7 @@ public class EditFoodLogActivity extends AppCompatActivity  {
         if ( getIntent().getExtras() != null ) {
             mBundle = getIntent().getExtras();
 
+            Log.d(TAG, mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID));
             // if coming from duplicate, copy it and put the new ID in the bundle
             if (Objects.equals(mBundle.getString(Util.ARGUMENT_ACTION), Util.ARGUMENT_DUPLICATE)) {
                 String foodLogIdString =
@@ -80,10 +81,12 @@ public class EditFoodLogActivity extends AppCompatActivity  {
             mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_FRAGMENT_GO_TO);
 
 
+            Log.d(TAG, "after get string go to " + mWhichFragmentGoTo);
             // check which fragment we should start next based on
             // which button was pressed in the fragment we just came from
             Fragment mNextFragment = whichFragmentNext(mWhichFragmentGoTo);
 
+            Log.d(TAG, "after method which fragment " + mNextFragment.toString());
             if ( mNextFragment != null ) {
                 // put down the activity parent was edit food log
 
@@ -93,6 +96,7 @@ public class EditFoodLogActivity extends AppCompatActivity  {
                 // given from the previous fragment
                 mNextFragment.setArguments(mBundle);
 
+                Log.d(TAG, mNextFragment.getArguments().toString());
                 // start the next fragment
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -110,6 +114,7 @@ public class EditFoodLogActivity extends AppCompatActivity  {
 
     private Fragment whichFragmentNext(String whichFragmentGoTo) {
 
+        Log.d(TAG, whichFragmentGoTo);
         nextFragment = null;
         // change which fragment starts based on which button was pressed
         if (Objects.equals(whichFragmentGoTo,

@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.ingredient.IngredientActivity;
@@ -15,8 +19,8 @@ import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.recipe.RecipeActivity;
 import com.dietdecoder.dietdecoder.activity.symptom.SymptomActivity;
 
-//TODO fix edit delete button
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       //set view
       setContentView(R.layout.activity_main);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+    toolbar.setTitle(getResources().getString(R.string.app_name));
+    toolbar.setOnMenuItemClickListener(this);
 
 
     // Button to got to recipe's page
@@ -48,4 +55,37 @@ public class MainActivity extends AppCompatActivity {
 
   } //end onCreate
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+      if (item.getItemId() == R.id.action_settings) {
+                Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+
+        // do something
+        } else if (item.getItemId() == R.id.action_go_home) {
+          // do something
+        startActivity(new Intent(thisActivity, MainActivity.class));
+      } else {
+        // do something
+      }
+
+      return false;
+    }
+//
+//        @Override
+//        public boolean onCreateOptionsMenu(Menu menu){
+//            getMenuInflater().inflate(R.menu.menu_main, menu);
+//            return super.onCreateOptionsMenu(menu);
+//        }
+//
+
+
+
+
+
+
+
+  @Override
+  public void onPointerCaptureChanged(boolean hasCapture) {
+    super.onPointerCaptureChanged(hasCapture);
+  }
 } // end MainActivity

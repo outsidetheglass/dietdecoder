@@ -3,10 +3,13 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,11 +22,14 @@ import com.dietdecoder.dietdecoder.R;
 //import com.dietdecoder.dietdecoder.ui.LogListAdapter;
 //import com.dietdecoder.dietdecoder.ui.LogViewModel;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FoodLogActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,7 +74,10 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
               public void onChanged(List<FoodLog> logs) {
                 // Update the cached copy of the words in the adapter.
                 mFoodLogListAdapter.submitList(logs);
-                }
+                //TODO this is where we should be checking ingredient and recipe adapters
+                // and adding the ingredient or recipe if it doesn't exist
+
+              }
             });
 
     // FAB to add new log
@@ -81,8 +90,6 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
     switch (view.getId()) {
       // which button was clicked
       case R.id.add_button_log:
-        Toast.makeText(thisActivity, getResources().getString(R.string.adding),
-                Toast.LENGTH_SHORT).show();
         addIntent = new Intent(thisActivity, NewFoodLogActivity.class);
         startActivity(addIntent);
         break;
@@ -90,6 +97,7 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
         break;
     }//end switch case
   }//end onClick
+
 
 }//end LogActivity
 

@@ -5,6 +5,18 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+        android:textColor="@color/white"
+        android:icon="@drawable/ic_baseline_settings"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+    android:id="@+id/action_go_home"
+    android:orderInCategory="100"
+        android:tint="@android:color/white"
+        android:icon="@drawable/ic_baseline_home"
+    android:title="@string/action_go_home"
+    app:showAsAction="ifRoom"
+    />
 </menu>

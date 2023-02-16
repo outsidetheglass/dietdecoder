@@ -5,11 +5,15 @@ import android.database.Cursor;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
@@ -71,7 +75,9 @@ public class FoodLogViewModel extends AndroidViewModel {
 
 
   // add to database
-  public void viewModelInsertFoodLog(FoodLog foodLog) { mRepository.repositoryInsertFoodLog(foodLog); }
+  public void viewModelInsertFoodLog(FoodLog foodLog) {
+    mRepository.repositoryInsertFoodLog(foodLog);
+  }
 
   // edit log in database
   public void viewModelUpdateFoodLog(FoodLog foodLog) {

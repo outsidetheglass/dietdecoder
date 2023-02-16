@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
@@ -83,6 +85,10 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View view) {
 
+        Bundle mBundleNext = new Bundle();
+        mBundleNext.putString(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+        Fragment mNextFragment = null;
+
         switch (view.getId()) {
             // which button was clicked
             case R.id.button_log_date_time_choices_just_now:
@@ -97,8 +103,8 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
                 // we don't need to ask anything else about time or day
                 // so just start asking details on what was consumed
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
-                        Util.ARGUMENT_GO_TO_BRAND, Util.ARGUMENT_FROM_DATE_TIME_CHOICES));
+                // and which fragment to go to next
+                mNextFragment = new NewFoodLogBrandFragment();
                 break;
 
             case R.id.button_log_date_time_choices_earlier_today:
@@ -112,9 +118,8 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                 mFoodLog.setMDateTimeConsumed(mInstantConsumed);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
-                        Util.ARGUMENT_GO_TO_BRAND,
-                        Util.ARGUMENT_FROM_DATE_TIME_CHOICES));
+                // and which fragment to go to next
+                mNextFragment = new NewFoodLogBrandFragment();
                 break;
 
             case R.id.button_log_date_time_choices_yesterday:
@@ -126,23 +131,29 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                 mFoodLog.setMDateTimeConsumed(mInstantConsumed);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
-                        Util.ARGUMENT_GO_TO_PART_OF_DAY,
-                        Util.ARGUMENT_FROM_DATE_TIME_CHOICES));
+                // and which fragment to go to next
+                mNextFragment = new LogPartOfDayFragment();
                 break;
 
             case R.id.button_log_date_time_choices_another_date:
                 Toast.makeText(getContext(), getResources().getString(R.string.toast_another_date),
                         Toast.LENGTH_SHORT).show();
 
-                startActivity(Util.intentWithFoodLogIdStringButton(getActivity(), foodLogIdString,
-                        Util.ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT,
-                        Util.ARGUMENT_FROM_DATE_TIME_CHOICES));
+                // and which fragment to go to next
+                mNextFragment = new LogSpecificDateTimeFragment();
                 break;
 
             default:
                 break;
         }//end switch case
+
+        // put which we're changing into the bundle
+        mNextFragment.setArguments(mBundleNext);
+        // actually go to the next place now
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(Util.fragmentContainerViewAddFoodLog, mNextFragment);
+        ft.commit();
 
     }//end onClick
 

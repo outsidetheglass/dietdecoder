@@ -70,14 +70,11 @@ public class IngredientActivity extends AppCompatActivity {
     // turn LiveData into list and set that in Adapter so we can get positions
     mIngredientListAdapter.setIngredientList(mActivityAllIngredients.getValue());
 
-    //TODO move this if statement to setIngredientList somehow
-    if ( mActivityAllIngredients != null ) {
-      mActivityAllIngredients.observe(this, ingredients -> {
-        // Update the cached copy of the words in the adapter.
-        mIngredientListAdapter.submitList(ingredients);
-      });
+    mActivityAllIngredients.observe(this, ingredients -> {
+      // Update the cached copy of the words in the adapter.
+      mIngredientListAdapter.submitList(ingredients);
+    });
 
-    }
 
     // FAB to add new ingredient
     addIngredientButton = findViewById(R.id.add_button_ingredient);
