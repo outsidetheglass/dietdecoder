@@ -1,15 +1,13 @@
-package com.dietdecoder.dietdecoder.activity.foodlog;
+package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -19,31 +17,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
-//import com.dietdecoder.dietdecoder.database.log.Log;
-//import com.dietdecoder.dietdecoder.ui.LogListAdapter;
-//import com.dietdecoder.dietdecoder.ui.LogViewModel;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
-import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogListAdapter;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
-import java.util.Objects;
 
-public class FoodLogActivity extends AppCompatActivity implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
+public class ListSymptomLogActivity extends AppCompatActivity implements View.OnClickListener,
+        Toolbar.OnMenuItemClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
   // Log.d(TAG, "onActivityResult: made it here");
-  private final Activity thisActivity = FoodLogActivity.this;
+  private final Activity thisActivity = ListSymptomLogActivity.this;
 
   Fragment mFragmentGoTo = null;
 
-  private FoodLogViewModel mFoodLogViewModel;
-  private FoodLogListAdapter mFoodLogListAdapter;
+  private SymptomLogViewModel mSymptomLogViewModel;
+  private SymptomLogListAdapter mSymptomLogListAdapter;
 
   public FloatingActionButton addButton;
 
@@ -52,33 +45,43 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_food_log);
+    setContentView(R.layout.activity_list_symptom_log);
 
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_food_log);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_list_symptom_log);
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
-    //TODO make scrollable left and right (maybe tabs) for automatic filters too, by category
-    // like snacks
+
+  //TODO Are you experiencing any symptoms right now?
+    //Any past symptoms to log?
+    //if yes, list symptoms to track from preferences
+
+    //checkbox for each symptom
+    // for each one clicked, open severity scale, autofill medium severity, option to click worse
+    // more than it's ever been before, adds new severity to scale
+    // when click save, for each severity scale save symptom severity
+    //any new types of symptoms or conditions?
+    //if yes, add
+    // list previous symptoms and ask when it stopped/changed, if they did
 
     // mate the view for listing the items in the log
-    RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
+    RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom_log);
     // add horizontal lines between each recyclerview item
-    recyclerViewFood.addItemDecoration(new DividerItemDecoration(recyclerViewFood.getContext(),
+    recyclerViewSymptom.addItemDecoration(new DividerItemDecoration(recyclerViewSymptom.getContext(),
             DividerItemDecoration.VERTICAL));
 
 
-    mFoodLogListAdapter = new FoodLogListAdapter(new FoodLogListAdapter.LogDiff());
-    recyclerViewFood.setAdapter(mFoodLogListAdapter);
-    recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
-    mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+    mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff());
+    recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
+    recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
+    mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-    mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this,
-            new Observer<List<FoodLog>>() {
+    mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
+            new Observer<List<SymptomLog>>() {
               @Override
-              public void onChanged(List<FoodLog> logs) {
+              public void onChanged(List<SymptomLog> logs) {
                 // Update the cached copy of the words in the adapter.
-                mFoodLogListAdapter.submitList(logs);
+                mSymptomLogListAdapter.submitList(logs);
                 //TODO this is where we should be checking ingredient and recipe adapters
                 // and adding the ingredient or recipe if it doesn't exist
 
@@ -86,7 +89,7 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
             });
 
     // FAB to add new log
-    addButton = findViewById(R.id.add_button_food_log);
+    addButton = findViewById(R.id.add_button_list_symptom_log);
     addButton.setOnClickListener(this);
   }
 
@@ -94,8 +97,8 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
   public void onClick(View view) {
     switch (view.getId()) {
       // which button was clicked
-      case R.id.add_button_food_log:
-        addIntent = new Intent(thisActivity, NewFoodLogActivity.class);
+      case R.id.add_button_list_symptom_log:
+        addIntent = new Intent(thisActivity, NewSymptomLogActivity.class);
         startActivity(addIntent);
         break;
       default:
@@ -114,8 +117,6 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
     } else if (item.getItemId() == R.id.action_go_home) {
       // do something
       startActivity(new Intent(thisActivity, MainActivity.class));
-    } else {
-      // do something
     }
 
     return false;

@@ -26,6 +26,8 @@ import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
+import java.util.Objects;
+
 public class IngredientViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -44,7 +46,9 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
     ingredientContext = itemView.getContext();
     ingredientItemView = itemView.findViewById(R.id.textview_ingredient_item);
     ingredientItemOptionButton = itemView.findViewById(R.id.imagebutton_ingredient_option);
-    listView = itemView.findViewById(R.id.list_view_new_food_log_name);
+
+    //TODO get list ingredient as type new food log working
+//    listView = itemView.findViewById(R.id.list_view_new_food_log_name);
   }
 
 
@@ -52,8 +56,10 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
 
     String ingredientName = ingredient.getIngredientName();
     String ingredientIdString = ingredient.getMIngredientId().toString();
-    //TODO add other properties of ingredient type here
-    //String ingredientConcern = ingredient.getIngredientConcern();
+    // if the other values exist, list them
+    if (!Objects.isNull(ingredient.getIngredientChemicalName())) {
+
+    }
 
     ingredientItemView.setText(ingredientName);
 
@@ -73,7 +79,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
           {
             //TODO turn this into a fragment, or just a popup
             Intent editIngredientIntent = new Intent(ingredientContext, EditIngredientActivity.class);
-            editIngredientIntent.putExtra("ingredient_name", ingredientName);
+            editIngredientIntent.putExtra(Util.ARGUMENT_INGREDIENT_ID, ingredientIdString);
             //TODO add other properties of ingredient type here
             //editIngredientIntent.putExtra("ingredient_concern", ingredientConcern);
             ingredientContext.startActivity( editIngredientIntent );
@@ -98,22 +104,23 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
       popupMenu.show();
     });
 
-    listView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-
-        Intent mIntent = new Intent(ingredientContext, NewFoodLogActivity.class);
-        mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                Util.ARGUMENT_GO_TO_NAME);
-
-        // TODO figure out a better way to do listview
-        // if can't, then just do this. Go back to add name with chosen name
-        mIntent.putExtra(Util.ARGUMENT_INGREDIENT_ID, ingredientIdString);
-        mIntent.putExtra(Util.ARGUMENT_INGREDIENT_NAME, ingredientName);
-
-        ingredientContext.startActivity(new Intent());
-      }
-    });
+    //TODO get add food log search ingredient database and autofill while user typing working
+    //listView.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//
+//        Intent mIntent = new Intent(ingredientContext, NewFoodLogActivity.class);
+//        mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+//                Util.ARGUMENT_GO_TO_NAME);
+//
+//        // TODO figure out a better way to do listview
+//        // if can't, then just do this. Go back to add name with chosen name
+//        mIntent.putExtra(Util.ARGUMENT_INGREDIENT_ID, ingredientIdString);
+//        mIntent.putExtra(Util.ARGUMENT_INGREDIENT_NAME, ingredientName);
+//
+//        ingredientContext.startActivity(new Intent());
+//      }
+//    });
   }
 
 

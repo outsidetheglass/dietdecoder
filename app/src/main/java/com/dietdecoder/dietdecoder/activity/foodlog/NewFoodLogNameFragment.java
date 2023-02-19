@@ -1,14 +1,17 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -45,6 +48,8 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
     String mSaveString, mEmptyTryAgainString, mName, foodLogIdString;
     Boolean isNameViewEmpty;
 
+    private KeyListener originalKeyListener;
+
     Bundle mBundle;
 
     FoodLogViewModel mFoodLogViewModel;
@@ -63,31 +68,31 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
         mEditTextIngredientName =
                 view.findViewById(R.id.edittext_new_food_log_name_ingredient_name);
         mEditTextIngredientName = Util.setEditTextWordWrapNoEnter(mEditTextIngredientName);
-
-        if (!Objects.isNull(getArguments())) {
-            Bundle mBundle = getArguments();
-            String ingredientIdString = mBundle.getString(Util.ARGUMENT_INGREDIENT_ID);
-            String ingredientName = mBundle.getString(Util.ARGUMENT_INGREDIENT_NAME);
-            mEditTextIngredientName.setText(ingredientName);
-        }
+        mEditTextIngredientName.setOnClickListener(this::onClick);
 
         mButtonSaveName = view.findViewById(R.id.button_new_food_log_name_save);
         mButtonSaveName.setOnClickListener(this);
 
-        mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
-
-        mListView = view.findViewById(R.id.list_view_new_food_log_name);
-        mEditTextIngredientName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId,
-                                          KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String searchData = mEditTextIngredientName.getText().toString();
-                    showResults(searchData); //passing string to search in your database to your method
-                    return true;
-                }
-                return false;
-            }
-        });
+        // TODO get search ingredients to autofill edittext value working
+//        if (!Objects.isNull(getArguments())) {
+//            Bundle mBundle = getArguments();
+//            String ingredientIdString = mBundle.getString(Util.ARGUMENT_INGREDIENT_ID);
+//            String ingredientName = mBundle.getString(Util.ARGUMENT_INGREDIENT_NAME);
+//            mEditTextIngredientName.setText(ingredientName);
+//        }
+        //mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+   //     mListView = view.findViewById(R.id.list_view_new_food_log_name);
+//        mEditTextIngredientName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            public boolean onEditorAction(TextView v, int actionId,
+//                                          KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                    String searchData = mEditTextIngredientName.getText().toString();
+//                    showResults(searchData); //passing string to search in your database to your method
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     // Inflate the layout for this fragment
     return view;
     }
@@ -95,6 +100,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
     private void showResults(String query) {
 
         Ingredient mIngredient = mIngredientViewModel.viewModelGetIngredientFromSearchName(query);
+        Toast.makeText(getActivity(), "ing: " + mIngredient.getIngredientName(), Toast.LENGTH_SHORT).show();
         mIngredientListAdapter =
                 new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
         mListView.setAdapter((ListAdapter) mIngredientListAdapter);
@@ -118,6 +124,10 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
         mEmptyTryAgainString = getResources().getString(R.string.empty_not_saved);
 
         switch (view.getId()) {
+            case R.id.edittext_new_food_log_name_ingredient_name:
+
+                //TODO show list view when edit text is clicked here or use oneditorchangelistener
+                break;
             case R.id.button_new_food_log_name_save:
                 isNameViewEmpty = TextUtils.isEmpty(mEditTextIngredientName.getText());
                 // if view is empty
@@ -157,6 +167,10 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
 
                 }
                 break;
+//            // TODO get ingredient search as they type name working
+//            case R.id.list_view_new_food_log_name:
+//                //mEditTextIngredientName.setText(mIngredient);
+//                break;
             default:
                 break;
         }

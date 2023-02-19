@@ -2,17 +2,15 @@ package com.dietdecoder.dietdecoder.ui.foodlog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +19,6 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.foodlog.AreYouSureActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.DetailFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.time.Instant;
@@ -80,26 +77,8 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     Instant mFoodLogDateTimeAcquired = foodLog.getMDateTimeAcquired();
     String mFoodLogString = foodLog.toString();
 
-    String boldString = "";
-    String notBoldString = "\n";
-    String italicString = "\n";
-    String notItalicString = "\n";
 
-    // bind the name and the time the food was eaten to the recyclerview item
-    // leave out brand if it isn't named
-    if ( TextUtils.isEmpty(mFoodLogBrand)) {
-      boldString = mFoodLogIngredientName;
-      notBoldString = notBoldString
-              .concat("(").concat(mFoodLogDateTime).concat(")");
-      }
-    else {
-      boldString = mFoodLogIngredientName;
-      notBoldString =
-              notBoldString
-                      .concat(mFoodLogBrand)
-                      .concat("\n(").concat(mFoodLogDateTime).concat(")");
-    }
-
+    // TODO fix this to be in Util so Ingredient and Recipe and Symptom can list as easily
     // for adding acquired and cooked to the string
     // how many days ago, if any, between when it was acquired and when it was consumed
     String acquiredRelativeDateToConsumed =
@@ -108,16 +87,17 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     String cookedRelativeDateToConsumed =
             Util.stringRelativeTimeFromInstant(mFoodLogDateTimeConsumed, mFoodLogDateTimeCooked);
 
-    italicString = italicString.concat("Acquired: ").concat(
-            acquiredRelativeDateToConsumed);
+    String unImportantString =
+            Util.setAcquiredString(acquiredRelativeDateToConsumed) + Util.setCookedString(cookedRelativeDateToConsumed);
 
-    notItalicString = notItalicString.concat("Cooked: ").concat(
-            cookedRelativeDateToConsumed);
+    String mFoodLogConsumedString = Util.stringFromInstant(mFoodLogDateTimeConsumed);
+
+    SpannableStringBuilder printString = Util.setViewHolderRecyclerViewString(mFoodLogIngredientName,
+            mFoodLogBrand, mFoodLogConsumedString, unImportantString );
 
 
     // set part of it bold and part of it not bold
-    foodLogItemView.setText(Util.setBoldItalicSpan(boldString, notBoldString, italicString,
-            notItalicString));
+    foodLogItemView.setText(printString);
 
     // if the item options is clicked, open the menu for options on that item
     foodLogItemOptionButton.setOnClickListener(this);

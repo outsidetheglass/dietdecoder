@@ -36,6 +36,20 @@ public class FirstStartWizardActivity extends AppCompatActivity {
       //set view
       setContentView(R.layout.activity_other);
 
+
+    //TODO What symptoms do you want to track?
+    //add those to symptoms
+    //Do you know the name of your condition(s) that you're wanting to track?
+    //if so, ask what condition they want to track
+    //add condition to conditions database
+    //get list of symptoms that are a part of that condition
+    // list symptoms in order of how common they are
+    //ask user to check which symptoms they want to track
+    //and ask how concerning that symptom is to them on scale, autoselect lowest concern
+    //ask user if they want to add any other symptoms to that condition
+    //ask if they want to add another condition or symptom
+    // for each symptom to track, open description box to type in description name
+
     // below code is used for
     // checking our permissions.
 //        if (checkPermission()) {

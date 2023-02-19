@@ -38,9 +38,13 @@ public class Util {
     public static final StyleSpan italicStyle = new StyleSpan(Typeface.ITALIC);
 
     public static final int fragmentContainerViewEditFoodLog = R.id.fragment_container_view_edit_food_log;
-
     public static final int fragmentContainerViewAddFoodLog =
             R.id.fragment_container_view_new_food_log;
+
+    //public static final int fragmentContainerViewEditSymptomLog = R.id
+    // .fragment_container_view_edit_symptom_log;
+    public static final int fragmentContainerViewAddSymptomLog =
+            R.id.fragment_container_view_new_symptom_log;
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
@@ -140,13 +144,14 @@ public class Util {
     ////////////////////////////////////////////////////////
 
     // make substring bold and italic and regular font
-    public static SpannableStringBuilder setBoldItalicSpan(String boldString, String notBoldString,
-                                       String italicString, String notItalicString) {
+    public static SpannableStringBuilder setBoldItalicPlainSpan(String boldString,
+                                                             String notBoldString,
+                                                           String italicString, String notItalicString) {
 
         // first string is bold
-            // so its length must be its own length
+        // so its length must be its own length
         // second string is plain
-            // must be its length plus first string
+        // must be its length plus first string
         // third string is italic
         // fourth string is plain
         int firstStringLength = boldString.length();
@@ -173,6 +178,28 @@ public class Util {
             if (!TextUtils.isEmpty(notItalicString)){
                 spannableStringBuilder.append(notItalicString);
             }
+        }
+
+        return spannableStringBuilder;
+
+    }
+
+    public static SpannableStringBuilder setBoldItalicSpan(String boldString, String notBoldString,
+                                                           String italicString) {
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(boldString);
+        // this is the location of the substring that you want to make bold
+        int start = 0;
+        int end = start + boldString.length();
+        // use exclusive to say we want this substring bold
+        spannableStringBuilder.setSpan(Util.boldStyle, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // append whatever else you want
+        spannableStringBuilder.append(notBoldString);
+
+        // if we have more strings to use, add them
+        if ( !TextUtils.isEmpty(italicString) ) {
+            spannableStringBuilder.append(italicString,
+                    Util.italicStyle, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         return spannableStringBuilder;
@@ -745,6 +772,55 @@ or at least achieves the same effect.
 
         return myFileName.toString();
     }
+
+    public static SpannableStringBuilder setViewHolderRecyclerViewString(String title, String subtitle,
+                                                                         String description,
+                                                                         String unImportantString) {
+
+        String boldString = "";
+        String notBoldString = "\n";
+
+        // bind the name and the time the food was eaten to the recyclerview item
+        // leave out brand if it isn't named
+        if ( TextUtils.isEmpty(subtitle)) {
+            boldString = title;
+            notBoldString = notBoldString
+                    .concat("(").concat(description).concat(")");
+        }
+        else {
+            boldString = title;
+            notBoldString =
+                    notBoldString
+                            .concat(subtitle)
+                            .concat("\n(").concat(description).concat(")");
+        }
+
+        return Util.setBoldItalicSpan(boldString, notBoldString, unImportantString);
+    }
+
+    public static String setAcquiredString(String string){
+        String italicString = "\n";
+        return italicString.concat("Acquired: ").concat(
+                string);
+    }
+
+    public static String setCookedString(String string){
+        String notItalicString = "\n";
+        return notItalicString.concat("Cooked: ").concat(
+                string);
+    }
+
+    public static String setDescriptionString(String string){
+        String notItalicString = "\n";
+        return notItalicString.concat("Description: ").concat(
+                string);
+    }
+    public static String setSeverityString(String string){
+        String notItalicString = "\n";
+        return notItalicString.concat("Severity: ").concat(
+                string);
+    }
+
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
 
