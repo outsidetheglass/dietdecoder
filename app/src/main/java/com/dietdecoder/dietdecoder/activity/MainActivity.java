@@ -18,6 +18,7 @@ import com.dietdecoder.dietdecoder.activity.ingredient.IngredientActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.recipe.RecipeActivity;
 import com.dietdecoder.dietdecoder.activity.symptom.SymptomActivity;
+import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
 
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -26,25 +27,31 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
   private final String TAG = "TAG: " + getClass().getSimpleName();
   private final Activity thisActivity = MainActivity.this;
 
-  public Button otherButton, logButton;
+  public Button otherButton, foodLogButton, symptomLogButton;
 
-  private Intent ingredientIntent, logIntent;
+  private Intent otherIntent, foodLogIntent, symptomLogIntent;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       //set view
       setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_main);
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
 
+    // Button to got to food log page
+    foodLogButton = findViewById(R.id.button_food_log);
+    foodLogButton.setOnClickListener( view -> {
+      foodLogIntent = new Intent(thisActivity, FoodLogActivity.class);
+      startActivity(foodLogIntent);
+    });
     // Button to got to recipe's page
-    logButton = findViewById(R.id.button_log);
-    logButton.setOnClickListener( view -> {
-      logIntent = new Intent(thisActivity, FoodLogActivity.class);
-      startActivity(logIntent);
+    symptomLogButton = findViewById(R.id.button_symptom_log);
+    symptomLogButton.setOnClickListener( view -> {
+      symptomLogIntent = new Intent(thisActivity, ListSymptomLogActivity.class);
+      startActivity(symptomLogIntent);
     });
 
     // Button to go to ingredient's list and edit and delete and add

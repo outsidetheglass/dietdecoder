@@ -9,6 +9,8 @@
   <string name="change_date_time">Let\'s go change the date/time...</string>
 
 
+  <string name="button_symptom_log">Symptom Log</string>
+  <string name="button_food_log">Food Log</string>
   <string name="button_save_new_ingredient">Save New Ingredient</string>
   <string name="button_save_edit_recipe">Save Ingredient</string>
   <string name="button_export_activity">Export Database</string>

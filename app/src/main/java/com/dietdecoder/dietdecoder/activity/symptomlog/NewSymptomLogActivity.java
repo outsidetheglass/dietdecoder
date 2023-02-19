@@ -12,12 +12,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogListAdapter;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -29,10 +38,12 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     int mFragmentContainerView = Util.fragmentContainerViewAddSymptomLog;
     Bundle mBundle;
 
-    Integer mHour, mMinute, mDay, mMonth, mYear;
     String mWhichFragmentGoTo;
 
     private Fragment nextFragment = null;
+
+    SymptomLogListAdapter mSymptomLogListAdapter;
+    SymptomLogViewModel mSymptomLogViewModel;
 
 
     public NewSymptomLogActivity() {
@@ -48,6 +59,31 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
         toolbar.setOnMenuItemClickListener(this);
 
         if (savedInstanceState == null) {
+
+            // mate the view for listing the items in the log
+            RecyclerView recyclerViewSymptomLogNameChoices =
+                    findViewById(R.id.recyclerview_new_symptom_log_name_choices);
+            // add horizontal lines between each recyclerview item
+            recyclerViewSymptomLogNameChoices.addItemDecoration(new DividerItemDecoration(recyclerViewSymptomLogNameChoices.getContext(),
+                    DividerItemDecoration.VERTICAL));
+
+
+            mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff());
+            recyclerViewSymptomLogNameChoices.setAdapter(mSymptomLogListAdapter);
+            recyclerViewSymptomLogNameChoices.setLayoutManager(new LinearLayoutManager(this));
+            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+
+            mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
+                    new Observer<List<SymptomLog>>() {
+                        @Override
+                        public void onChanged(List<SymptomLog> logs) {
+                            // Update the cached copy of the words in the adapter.
+                            mSymptomLogListAdapter.submitList(logs);
+
+                        }
+                    });
+
+
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //            Fragment newSymptomLogNameFragment = new NewSymptomLogNameFragment();

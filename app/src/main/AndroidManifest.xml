@@ -38,6 +38,9 @@
           android:exported="false"/>
       <activity android:name=".activity.ExportActivity"
           android:exported="false"/>
+      <activity android:name=".activity.FirstStartWizardActivity"
+          android:exported="false" />
+
 
 
       <activity android:name=".activity.foodlog.FoodLogActivity"
@@ -76,6 +79,13 @@
         android:exported="false" />
       <activity        android:name=".activity.symptom.DetailSymptomActivity"
         android:exported="false" />
+
+
+      <activity android:name=".activity.symptomlog.ListSymptomLogActivity"
+          android:exported="false" />
+      <activity android:name=".activity.symptomlog.NewSymptomLogActivity"
+          android:exported="false" />
+
 
 <!--  TODO get export as CSV working    -->
 <!--      <provider-->

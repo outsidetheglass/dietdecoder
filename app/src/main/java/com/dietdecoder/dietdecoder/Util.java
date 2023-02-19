@@ -44,7 +44,7 @@ public class Util {
     //public static final int fragmentContainerViewEditSymptomLog = R.id
     // .fragment_container_view_edit_symptom_log;
     public static final int fragmentContainerViewAddSymptomLog =
-            R.id.fragment_container_view_new_symptom_log;
+            R.id.recyclerview_new_symptom_log_name_choices;
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
@@ -374,7 +374,10 @@ public class Util {
         String relativityToInstant;
 
         // find the number of days between the two instants
-        int totalDaysApart = integerRelativeTimeFromInstant(printThisInstant,
+        int totalDaysApart = integerRelativeDateFromInstant(printThisInstant,
+                printRelativeToThisInstant);
+        // now the hours
+        int totalHoursApart = integerRelativeTimeFromInstant(printThisInstant,
                 printRelativeToThisInstant);
 
 
@@ -385,6 +388,11 @@ public class Util {
         // TODO fix this to get printed dates from strings, not here, can't get translated
         if ( totalDaysApart == 0 ){
             relativityToInstant = "Same day";
+            if (Math.abs(totalHoursApart) == 1){
+                relativityToInstant = "Lasted " + Math.abs(totalHoursApart) + " hour";
+            } else if (totalHoursApart != 0){
+                relativityToInstant = "Lasted " + Math.abs(totalHoursApart) + " hours";
+            }
         } else if ( totalDaysApart == 1 ){
             relativityToInstant = "Day before";
         } else if ( totalDaysApart == -1 )  {
@@ -399,8 +407,8 @@ public class Util {
 
         return relativityToInstant;
     }
-    public static Integer integerRelativeTimeFromInstant(Instant printThisInstant,
-                                                       Instant printRelativeToThisInstant){
+    public static Integer integerRelativeDateFromInstant(Instant printThisInstant,
+                                                         Instant printRelativeToThisInstant){
 
         Integer relativityToInstant;
 
@@ -436,6 +444,38 @@ public class Util {
 
 
         return totalDaysApart;
+    }
+
+    public static Integer integerRelativeTimeFromInstant(Instant printThisInstant,
+                                                         Instant printRelativeToThisInstant){
+
+        Integer totalHoursApart = 0;
+
+        Calendar printThisCalendar = GregorianCalendar.from(
+                printThisInstant.atZone( defaultZoneId )
+        ) ;
+        Calendar printRelativeToThisCalendar = GregorianCalendar.from(
+                printRelativeToThisInstant.atZone( defaultZoneId )
+        ) ;
+
+        Integer totalDaysApart = Util.integerRelativeDateFromInstant(printThisInstant,
+                printRelativeToThisInstant);
+
+
+        int olderHour = printRelativeToThisCalendar.get(Calendar.HOUR_OF_DAY);
+        int newerHour = printThisCalendar.get(Calendar.HOUR_OF_DAY);
+
+        // if it happened only on day of
+        if (totalDaysApart==0){
+            // get the later in day time minus earlier in day hour
+            totalHoursApart = newerHour - olderHour;
+        } else {
+            // it lasted longer than a day, so add the hours for number of days minus what time
+            // of day
+            totalHoursApart = totalDaysApart*24 + newerHour - olderHour;
+        }
+
+        return totalHoursApart;
     }
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -774,25 +814,27 @@ or at least achieves the same effect.
     }
 
     public static SpannableStringBuilder setViewHolderRecyclerViewString(String title, String subtitle,
-                                                                         String description,
+                                                                         String severity,
                                                                          String unImportantString) {
 
         String boldString = "";
-        String notBoldString = "\n";
+        String notBoldString = "";
 
         // bind the name and the time the food was eaten to the recyclerview item
         // leave out brand if it isn't named
         if ( TextUtils.isEmpty(subtitle)) {
             boldString = title;
-            notBoldString = notBoldString
-                    .concat("(").concat(description).concat(")");
+            if (!TextUtils.isEmpty(severity)) {
+                notBoldString = notBoldString
+                        .concat("\n(").concat(severity).concat(")");
+            }
         }
         else {
             boldString = title;
-            notBoldString =
-                    notBoldString
-                            .concat(subtitle)
-                            .concat("\n(").concat(description).concat(")");
+            notBoldString = notBoldString.concat("\n").concat(subtitle);
+            if (!TextUtils.isEmpty(severity)) {
+                            notBoldString = notBoldString.concat("\n(").concat(severity).concat(")");
+            }
         }
 
         return Util.setBoldItalicSpan(boldString, notBoldString, unImportantString);
@@ -811,14 +853,20 @@ or at least achieves the same effect.
     }
 
     public static String setDescriptionString(String string){
-        String notItalicString = "\n";
-        return notItalicString.concat("Description: ").concat(
-                string);
+        // only display if not empty
+        String notItalicString = "";
+        if (!TextUtils.isEmpty(string)) {
+            notItalicString = "\n";
+            notItalicString.concat("Description: ").concat(
+                    string);
+        }
+        return notItalicString;
     }
     public static String setSeverityString(String string){
-        String notItalicString = "\n";
+        // set the string out of 5 on the scale
+        String notItalicString = "";
         return notItalicString.concat("Severity: ").concat(
-                string);
+                string).concat("/5");
     }
 
     ////////////////////////////////////////////////////////

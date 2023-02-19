@@ -36,7 +36,7 @@ public class DetailFoodLogActivity extends AppCompatActivity implements Toolbar.
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_detail_food_log);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_food_log);
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
     mLogDetailView = findViewById(R.id.textview_log_detail_value);

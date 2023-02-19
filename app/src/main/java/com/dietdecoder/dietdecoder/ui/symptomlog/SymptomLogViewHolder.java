@@ -34,7 +34,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
   private SymptomLogViewHolder(View itemView) {
     super(itemView);
     symptomLogContext = itemView.getContext();
-    symptomLogItemView = itemView.findViewById(R.id.textview_log_item);
+    symptomLogItemView = itemView.findViewById(R.id.textview_symptom_log_item);
     symptomLogItemOptionButton = itemView.findViewById(R.id.imagebutton_symptom_log_option);
 
   }
@@ -75,14 +75,13 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     String mSymptomLogString = symptomLog.toString();
 
 
-    // for adding acquired and cooked to the string
-    // how many days ago, if any, between when it was acquired and when it was consumed
+    // how many days ago, if any, between when it began and changed
     String changedRelativeDateToBeganString =
             Util.stringRelativeTimeFromInstant(mSymptomLogBeganInstant,
                     mSymptomLogChangedInstant);
 
     String unImportantString =
-            Util.setDescriptionString(changedRelativeDateToBeganString);
+            Util.setDescriptionString(mSymptomLogDescription);
 
     String mSymptomLogBeganString = Util.stringFromInstant(mSymptomLogBeganInstant);
 

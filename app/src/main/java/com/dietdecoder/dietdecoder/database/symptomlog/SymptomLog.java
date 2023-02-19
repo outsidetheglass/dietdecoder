@@ -117,7 +117,7 @@ public class SymptomLog {
   }//end toString
 
 
-  public void setId(UUID id) {
+  public void setSymptomLogId(UUID id) {
     this.mSymptomLogId = id;
   }
 

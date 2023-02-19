@@ -48,7 +48,7 @@ public class EditFoodLogActivity extends AppCompatActivity implements Toolbar.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_edit_food_log);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
         if (savedInstanceState == null ) {
