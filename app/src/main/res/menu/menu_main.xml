@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dietdecoder.dietdecoder.activity.MainActivity">
     <item
+        android:id="@+id/action_more"
+        android:orderInCategory="100"
+        android:textColor="@color/white"
+        android:icon="@drawable/ic_baseline_more"
+        android:title="@string/action_more"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:textColor="@color/white"

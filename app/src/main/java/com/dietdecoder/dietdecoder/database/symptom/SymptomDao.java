@@ -28,14 +28,12 @@ public interface SymptomDao {
   @Update
   void symptomDaoUpdate(Symptom symptom);
 
-
-  //TODO: fix my Query's by
-  // replacing them with their object instead of strings
-  // probably need to make ID's for that to work
-
   // Select all symptoms from table and alphabetize them by name
   @Query("SELECT * FROM symptom_table ORDER BY symptomName ASC")
   LiveData<List<Symptom>> daoGetAlphabetizedSymptoms();
+
+  @Query("SELECT * FROM symptom_table WHERE symptomToTrack ORDER BY symptomName ASC")
+  LiveData<List<Symptom>> daoGetSymptomsToTrack();
 
   // Sort by specific chemical and alphabetize them by symptom name
   @Query("SELECT * FROM symptom_table WHERE symptomCategory LIKE :daoSymptomCategory ORDER BY symptomName ASC")

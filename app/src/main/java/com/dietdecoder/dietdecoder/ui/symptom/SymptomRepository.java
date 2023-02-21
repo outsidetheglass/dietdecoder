@@ -29,6 +29,12 @@ class SymptomRepository {
     return mSymptomDao.daoGetAlphabetizedSymptoms();
   }
 
+  LiveData<List<Symptom>> symptomRepositoryGetSymptomsToTrack() {
+    //use the dao instantiated in the SymptomRepository method
+    // to get all symptoms, alphabetized
+    return mSymptomDao.daoGetSymptomsToTrack();
+  }
+
   // get only symptoms matching category from database
   List<Symptom> symptomRepositoryGetSymptomInCategory(String symptomCategory) {
     return mSymptomDao.daoGetAllSymptomInCategory(symptomCategory);

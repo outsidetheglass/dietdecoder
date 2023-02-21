@@ -64,7 +64,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
     //if yes, add
     // list previous symptoms and ask when it stopped/changed, if they did
 
-    // mate the view for listing the items in the log
+    // make the view for listing the items in the log
     RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom_log);
     // add horizontal lines between each recyclerview item
     recyclerViewSymptom.addItemDecoration(new DividerItemDecoration(recyclerViewSymptom.getContext(),

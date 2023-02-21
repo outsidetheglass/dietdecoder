@@ -6,6 +6,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
@@ -14,11 +19,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.ingredient.IngredientActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.recipe.RecipeActivity;
-import com.dietdecoder.dietdecoder.activity.symptom.SymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -27,9 +34,12 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
   private final String TAG = "TAG: " + getClass().getSimpleName();
   private final Activity thisActivity = MainActivity.this;
 
-  public Button otherButton, foodLogButton, symptomLogButton;
+  private Button saveButton, foodLogButton, symptomLogButton;
 
-  private Intent otherIntent, foodLogIntent, symptomLogIntent;
+  private Intent foodLogIntent, symptomLogIntent;
+
+  private SymptomViewModel symptomViewModel;
+  private SymptomListAdapter symptomListAdapter;
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +50,13 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
+    //TODO
+    // make symptoms to track at top of main activity,
+    // then food log, symptom log next to each other at the bottom
 
-    // Button to got to food log page
+
+
+    // Button to go to food log page
     foodLogButton = findViewById(R.id.button_food_log);
     foodLogButton.setOnClickListener( view -> {
       foodLogIntent = new Intent(thisActivity, FoodLogActivity.class);
@@ -55,10 +70,33 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     });
 
     // Button to go to ingredient's list and edit and delete and add
-    otherButton = findViewById(R.id.button_other);
-    otherButton.setOnClickListener( view -> {
-      startActivity(new Intent(thisActivity, OtherActivity.class));
+    saveButton = findViewById(R.id.button_main_save);
+    saveButton.setOnClickListener( view -> {
+      startActivity(new Intent(thisActivity, ListSymptomLogActivity.class));
     });
+
+
+    // mate the view for listing the items in the log
+    RecyclerView recyclerViewLogASymptom = findViewById(R.id.recyclerview_log_a_symptom);
+    // add horizontal lines between each recyclerview item
+    recyclerViewLogASymptom.addItemDecoration(new DividerItemDecoration(recyclerViewLogASymptom.getContext(),
+            DividerItemDecoration.VERTICAL));
+
+
+    symptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
+    recyclerViewLogASymptom.setAdapter(symptomListAdapter);
+    recyclerViewLogASymptom.setLayoutManager(new LinearLayoutManager(this));
+    symptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
+
+    symptomViewModel.viewModelGetSymptomsToTrack().observe(this,
+            new Observer<List<Symptom>>() {
+              @Override
+              public void onChanged(List<Symptom> logs) {
+                // Update the cached copy of the words in the adapter.
+                symptomListAdapter.submitList(logs);
+              }
+            });
+
 
   } //end onCreate
 
@@ -67,12 +105,16 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     public boolean onMenuItemClick(MenuItem item) {
       if (item.getItemId() == R.id.action_settings) {
                 Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
-
-        // do something
-        } else if (item.getItemId() == R.id.action_go_home) {
-          // do something
+                //TODO go to settings/preferences
+        }
+      else if (item.getItemId() == R.id.action_go_home) {
         startActivity(new Intent(thisActivity, MainActivity.class));
-      } else {
+      }
+      else if (item.getItemId() == R.id.action_more) {
+        //TODO make this have a menu to select from instead of the other activity
+        startActivity(new Intent(thisActivity, OtherActivity.class));
+      }
+      else {
         // do something
       }
 

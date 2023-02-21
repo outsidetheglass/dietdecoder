@@ -60,6 +60,9 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
         if (savedInstanceState == null) {
 
+            //TODO when selected change font to red and add exclamation point icon next to it
+            // use icons for pain suffer types
+
             // mate the view for listing the items in the log
             RecyclerView recyclerViewSymptomLogNameChoices =
                     findViewById(R.id.recyclerview_new_symptom_log_name_choices);

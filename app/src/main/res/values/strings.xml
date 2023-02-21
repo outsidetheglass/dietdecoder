@@ -2,6 +2,7 @@
   <string name="app_name">Diet Decoder</string>
   <string name="action_settings">Settings</string>
   <string name="action_go_home">Go Home</string>
+  <string name="action_more">More</string>
 
   <string name="button_save">Save</string>
   <string name="button_cancel">Cancel</string>
@@ -9,7 +10,9 @@
   <string name="change_date_time">Let\'s go change the date/time...</string>
 
 
-  <string name="button_symptom_log">Symptom Log</string>
+  <string name="button_symptom_log">List All Symptom Logs</string>
+  <string name="textview_main_log_a_symptom">Log a Symptom</string>
+  <string name="button_current_symptom">Current Symptom</string>
   <string name="button_food_log">Food Log</string>
   <string name="button_save_new_ingredient">Save New Ingredient</string>
   <string name="button_save_edit_recipe">Save Ingredient</string>

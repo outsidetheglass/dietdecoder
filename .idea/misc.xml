@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable-anydpi/ic_baseline_home.xml" value="0.1225" />
+        <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable-anydpi/ic_baseline_more.xml" value="0.1755" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable-anydpi/ic_baseline_option.xml" value="0.1" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable-anydpi/ic_baseline_settings.xml" value="0.1225" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable/arrow_down_float.xml" value="0.1" />
@@ -60,6 +61,7 @@
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_ingredient_item.xml" value="0.1984375" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_item.xml" value="0.1984375" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_log_item.xml" value="0.1984375" />
+        <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_main_log_a_symptom_item.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_new_food_log_item.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_new_log_item.xml" value="0.31431159420289856" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recyclerview_new_symptom_log_name_choices_item.xml" value="0.11145833333333334" />

@@ -20,28 +20,33 @@ public class SymptomViewModel extends AndroidViewModel {
 
 
   private SymptomRepository mRepository;
-  //private LiveData<List<Symptom>> mViewModelAllSymptomsWithConcern;
-  private LiveData<List<Symptom>> mViewModelAllSymptoms;
+  //private LiveData<List<Symptom>> mViewModelAllSymptomsToTrackWithConcern;
+  private LiveData<List<Symptom>> mViewModelAllSymptomsToTrack;
 
 
   public SymptomViewModel(Application application) {
     super(application);
     mRepository = new SymptomRepository(application);
-    mViewModelAllSymptoms = mRepository.symptomRepositoryGetAllSymptoms();
+    mViewModelAllSymptomsToTrack = mRepository.symptomRepositoryGetSymptomsToTrack();
 
   }//end SymptomViewModel method
 
 
   //get all symptoms to list them
+  public LiveData<List<Symptom>> viewModelGetSymptomsToTrack() {
+    return mViewModelAllSymptomsToTrack;
+  }
+
   public LiveData<List<Symptom>> viewModelGetAllSymptoms() {
-    return mViewModelAllSymptoms;
+    return mRepository.symptomRepositoryGetAllSymptoms();
   }
 
   //get all symptoms with concern
   //TODO LiveData won't work twice like this I think
 //  public LiveData<List<Symptom>> viewModelGetSymptomsWithConcern(String paramConcern) {
-//    mViewModelAllSymptomsWithConcern = mRepository.repositoryGetSymptomsWithConcern(paramConcern);
-//    return mViewModelAllSymptomsWithConcern;
+//    mViewModelAllSymptomsToTrackWithConcern = mRepository.repositoryGetSymptomsWithConcern
+//    (paramConcern);
+//    return mViewModelAllSymptomsToTrackWithConcern;
 //  }
 
 
