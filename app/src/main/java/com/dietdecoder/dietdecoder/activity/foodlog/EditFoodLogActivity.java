@@ -3,7 +3,6 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -176,23 +175,23 @@ public class EditFoodLogActivity extends AppCompatActivity implements Toolbar.On
 
 
         // get the info to duplicate
-        String duplicatedFoodLogName = foodLog.getMIngredientName();
+        String duplicatedFoodLogName = foodLog.getIngredientId();
 
         // make the new food log from that name, it will set the date consumed to be now
         FoodLog duplicatedFoodLog = new FoodLog(duplicatedFoodLogName);
         mFoodLogViewModel.viewModelInsertFoodLog(duplicatedFoodLog);
 
         // get the other info to copy over from the original food log
-        Instant duplicatedFoodLogAcquired = foodLog.getMDateTimeAcquired();
-        Instant duplicatedFoodLogCooked = foodLog.getMDateTimeCooked();
-        String duplicatedFoodLogBrand = foodLog.getMBrand();
+        Instant duplicatedFoodLogAcquired = foodLog.getInstantAcquired();
+        Instant duplicatedFoodLogCooked = foodLog.getInstantCooked();
+        String duplicatedFoodLogBrand = foodLog.getBrand();
         // now update it with those values
-        duplicatedFoodLog.setMBrand(duplicatedFoodLogBrand);
-        duplicatedFoodLog.setMDateTimeAcquired(duplicatedFoodLogAcquired);
-        duplicatedFoodLog.setMDateTimeCooked(duplicatedFoodLogCooked);
+        duplicatedFoodLog.setBrand(duplicatedFoodLogBrand);
+        duplicatedFoodLog.setInstantAcquired(duplicatedFoodLogAcquired);
+        duplicatedFoodLog.setInstantCooked(duplicatedFoodLogCooked);
         mFoodLogViewModel.viewModelUpdateFoodLog(duplicatedFoodLog);
 
-        return duplicatedFoodLog.getMFoodLogId().toString();
+        return duplicatedFoodLog.getFoodLogId().toString();
     }
 
     @Override

@@ -115,7 +115,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
                 //then set the values from the food log
                 mInstantConsumed = Util.instantFromLocalDateTime(mEarlierTodayDateTime);
-                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+                mFoodLog.setInstantConsumed(mInstantConsumed);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
                 // and which fragment to go to next
@@ -128,7 +128,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
                 //then set the values from the food log
                 mInstantConsumed = Util.instantFromLocalDateTime(mYesterdayDateTime);
-                mFoodLog.setMDateTimeConsumed(mInstantConsumed);
+                mFoodLog.setInstantConsumed(mInstantConsumed);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
 
                 // and which fragment to go to next

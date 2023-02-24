@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -12,6 +15,7 @@ import java.util.UUID;
 
 
 @Entity(tableName = "symptom_table")
+@TypeConverters(Converters.class)
 public class Symptom {
 
   @PrimaryKey

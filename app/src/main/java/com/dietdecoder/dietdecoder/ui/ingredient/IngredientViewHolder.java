@@ -11,20 +11,14 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogNameFragment;
 import com.dietdecoder.dietdecoder.activity.ingredient.DeleteIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.DetailIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.EditIngredientActivity;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
 import java.util.Objects;
 
@@ -55,7 +49,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder {
   public void bind(Ingredient ingredient) {
 
     String ingredientName = ingredient.getIngredientName();
-    String ingredientIdString = ingredient.getMIngredientId().toString();
+    String ingredientIdString = ingredient.getIngredientId().toString();
     // if the other values exist, list them
     if (!Objects.isNull(ingredient.getIngredientChemicalName())) {
 

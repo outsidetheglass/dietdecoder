@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -268,7 +267,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
     }
 
     private String processedLine(FoodLog foodLog){
-        StringBuilder info = new StringBuilder(foodLog.getMIngredientName());
+        StringBuilder info = new StringBuilder(foodLog.getIngredientId());
         info.append("\n");
 
         return info.toString();

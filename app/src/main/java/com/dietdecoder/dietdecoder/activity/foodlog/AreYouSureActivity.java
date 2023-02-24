@@ -79,17 +79,17 @@ public class AreYouSureActivity extends AppCompatActivity  {
                         FoodLog foodLogToCopy = mFoodLogViewModel.viewModelGetFoodLogFromId(
                                 UUID.fromString(mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID)) );
                         // copy it with current datetime consumed
-                        String foodLogToCopyName = foodLogToCopy.getMIngredientName();
+                        String foodLogToCopyName = foodLogToCopy.getIngredientId();
                         FoodLog newFoodLog = new FoodLog(foodLogToCopyName);
                         // TODO put this somewhere else, like in the dao itself
-                        newFoodLog.setMBrand(foodLogToCopy.getMBrand());
-                        newFoodLog.setMDateTimeCooked(foodLogToCopy.getMDateTimeCooked());
-                        newFoodLog.setMDateTimeAcquired(foodLogToCopy.getMDateTimeAcquired());
+                        newFoodLog.setBrand(foodLogToCopy.getBrand());
+                        newFoodLog.setInstantCooked(foodLogToCopy.getInstantCooked());
+                        newFoodLog.setInstantAcquired(foodLogToCopy.getInstantAcquired());
                         mFoodLogViewModel.viewModelUpdateFoodLog(newFoodLog);
 
                         // go to edit log with our new food log
                         Intent intent = Util.intentWithFoodLogIdStringButtonActivity(thisActivity,
-                                newFoodLog.getMFoodLogId().toString(),
+                                newFoodLog.getFoodLogId().toString(),
                                 Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY, Util.ARGUMENT_ACTIVITY_FROM_ARE_YOU_SURE);
                         startActivity(intent);
 

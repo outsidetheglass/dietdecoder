@@ -1,22 +1,16 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.KeyListener;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DiffUtil;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
@@ -145,11 +138,11 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                     mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
                     mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
                     // with the ID of foodlog set
-                    foodLogIdString = foodLog.getMFoodLogId().toString();
+                    foodLogIdString = foodLog.getFoodLogId().toString();
 
                     //TODO move this adding ingredient in to the ingredient view model called
                     // from the observer in the food log activity
-                    addIngredientIfNotExist(foodLog.getMIngredientName());
+                    addIngredientIfNotExist(foodLog.getIngredientId());
 
 
                     // go to ask what date
@@ -190,7 +183,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
             Log.d(TAG, "Ingredient does not exist, making it now..." );
             Ingredient ingredient = new Ingredient(mIngredientName);
             mIngredientViewModel.viewModelInsert(ingredient);
-            Log.d(TAG,ingredient.getMIngredientId().toString()+" "+ingredient.getIngredientName());
+            Log.d(TAG,ingredient.getIngredientId().toString()+" "+ingredient.getIngredientName());
         } else {
             Log.d(TAG, "Ingredient exists: " + mIngredientViewModel.viewModelGetIngredientFromName(mIngredientName).getIngredientName());
         }//end checking if ingredient exists

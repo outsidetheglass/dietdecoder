@@ -19,7 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.util.UUID;
 
@@ -73,8 +75,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         mFoodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mFoodLogId);
 
         // then some values
-        mFoodLogIngredientName = mFoodLog.getMIngredientName();
-        mFoodLogIngredientBrand = mFoodLog.getMBrand();
+        mFoodLogIngredientName = mFoodLog.getIngredientId();
 
         // then use the food log to set the edit text views
         mEditTextIngredientName =
@@ -87,31 +88,32 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         // also throw listeners on them
         mEditTextIngredientName.setOnClickListener(this);
 
-        mEditTextIngredientBrand =
-                view.findViewById(R.id.edittext_edit_food_log_ingredient_brand);
-        mEditTextIngredientBrand = Util.setEditTextWordWrapNoEnter(mEditTextIngredientBrand);
-        mEditTextIngredientBrand.setText(mFoodLogIngredientBrand);
-        mEditTextIngredientBrand.setOnClickListener(this);
+        //TODO get this from ingredient database with ID
+//        mEditTextIngredientBrand =
+//                view.findViewById(R.id.edittext_edit_food_log_ingredient_brand);
+//        mEditTextIngredientBrand = Util.setEditTextWordWrapNoEnter(mEditTextIngredientBrand);
+//        mEditTextIngredientBrand.setText(mFoodLogIngredientBrand);
+//        mEditTextIngredientBrand.setOnClickListener(this);
 
         mEditTextConsumed =
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_consumed);
         mEditTextConsumed = Util.setEditTextWordWrapNoEnter(mEditTextConsumed);
         mEditTextConsumed.setInputType(InputType.TYPE_NULL);
-        mEditTextConsumed.setText(Util.stringFromInstant(mFoodLog.getMDateTimeConsumed()));
+        mEditTextConsumed.setText(Util.stringFromInstant(mFoodLog.getInstantConsumed()));
         mEditTextConsumed.setOnClickListener(this);
 
         mEditTextCooked =
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_cooked);
         mEditTextCooked = Util.setEditTextWordWrapNoEnter(mEditTextCooked);
         mEditTextCooked.setInputType(InputType.TYPE_NULL);
-        mEditTextCooked.setText(Util.stringFromInstant(mFoodLog.getMDateTimeCooked()));
+        mEditTextCooked.setText(Util.stringFromInstant(mFoodLog.getInstantCooked()));
         mEditTextCooked.setOnClickListener(this);
 
         mEditTextAcquired =
                 view.findViewById(R.id.edittext_edit_food_log_ingredient_acquired);
         mEditTextAcquired = Util.setEditTextWordWrapNoEnter(mEditTextAcquired);
         mEditTextAcquired.setInputType(InputType.TYPE_NULL);
-        mEditTextAcquired.setText(Util.stringFromInstant(mFoodLog.getMDateTimeAcquired()));
+        mEditTextAcquired.setText(Util.stringFromInstant(mFoodLog.getInstantAcquired()));
         mEditTextAcquired.setOnClickListener(this);
 
 
@@ -157,16 +159,25 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getContext(), mNothingChangedString, Toast.LENGTH_SHORT).show();
                     // we're done so go back to food log no changes
                 } else {
-                    // if view has a values, find which or both was changed
+                    // if view has a value, find which or both was changed
                     if ( isNameEdited ) {
                         // set strings
                         mName = mEditTextIngredientName.getText().toString();
-                        mFoodLog.setIngredientName(mName);
+                        //TODO get all ingredients that match this name and list the brands of
+                        // each to pick from or add a new one
+
+                        // get the view model holding the ingredient database, then the one with a
+                        // name matching our input, then the id, and set that on our food log
+                        mFoodLog.setIngredientId(
+                                new ViewModelProvider(this).get(IngredientViewModel.class)
+                                        .viewModelGetIngredientFromName(mName)
+                                        .getIngredientId()
+                        );
                     }
                     if ( isBrandEdited ) {
                         // get strings
                         mBrand = mEditTextIngredientBrand.getText().toString();
-                        mFoodLog.setMBrand(mBrand);
+                        mFoodLog.setBrand(mBrand);
                     }
                     // then update the model with the new name and/or brand
                     mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);

@@ -759,17 +759,17 @@ or at least achieves the same effect.
         Instant mInstant = null;
 
         if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_CONSUMED)) {
-            mInstant = foodLog.getMDateTimeConsumed();
+            mInstant = foodLog.getInstantConsumed();
         } else if (TextUtils.equals(whatToChange,
                 Util.ARGUMENT_CHANGE_COOKED)) {
-            mInstant = foodLog.getMDateTimeCooked();
+            mInstant = foodLog.getInstantCooked();
         } else if (TextUtils.equals(whatToChange,
                 Util.ARGUMENT_CHANGE_ACQUIRED)) {
-            mInstant = foodLog.getMDateTimeAcquired();
+            mInstant = foodLog.getInstantAcquired();
         } else {
             // default to consumed time
             Log.d(TAG, "Weren't given a argument for what to change, defaulting to consumed...");
-            mInstant = foodLog.getMDateTimeConsumed();
+            mInstant = foodLog.getInstantConsumed();
         }
 
         return Util.localDateTimeFromInstant(mInstant);
@@ -783,13 +783,13 @@ or at least achieves the same effect.
         Instant instant  = Util.instantFromLocalDateTime(localDateTime);
 
         if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_CONSUMED)) {
-            foodLog.setMDateTimeConsumed(instant);
+            foodLog.setInstantConsumed(instant);
         } else if (TextUtils.equals(whatToChange,
                 Util.ARGUMENT_CHANGE_COOKED)) {
-            foodLog.setMDateTimeCooked(instant);
+            foodLog.setInstantCooked(instant);
         } else if (TextUtils.equals(whatToChange,
                 Util.ARGUMENT_CHANGE_ACQUIRED)) {
-            foodLog.setMDateTimeAcquired(instant);
+            foodLog.setInstantAcquired(instant);
         }
         return foodLog;
     }

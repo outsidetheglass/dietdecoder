@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
@@ -20,6 +22,7 @@ import com.dietdecoder.dietdecoder.activity.foodlog.AreYouSureActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.DetailFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.time.Instant;
 
@@ -66,15 +69,20 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     // edit, duplicate, delete, or detail clicked
 
     this.mFoodLog = foodLog;
+    //TODO figure out how to get ingredient database info in here
+
+    String id =
+            new ViewModelProvider(this).get(IngredientViewModel.class)
+                    .viewModelGetIngredientFromName("Oat milk")
+                    .getIngredientId().toString();
 
     // info on the foodlog
     // in order to bind it to the recyclerview
     String mFoodLogDateTime = foodLog.getFoodLogDateTimeString();
-    String mFoodLogIngredientName = foodLog.getMIngredientName();
-    String mFoodLogBrand = foodLog.getMBrand();
-    Instant mFoodLogDateTimeConsumed = foodLog.getMDateTimeConsumed();
-    Instant mFoodLogDateTimeCooked = foodLog.getMDateTimeCooked();
-    Instant mFoodLogDateTimeAcquired = foodLog.getMDateTimeAcquired();
+    String mFoodLogIngredientName = foodLog.getIngredientId();
+    Instant mFoodLogDateTimeConsumed = foodLog.getInstantConsumed();
+    Instant mFoodLogDateTimeCooked = foodLog.getInstantCooked();
+    Instant mFoodLogDateTimeAcquired = foodLog.getInstantAcquired();
     String mFoodLogString = foodLog.toString();
 
 
@@ -153,7 +161,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
       }//end switch case
 
       // adding string after switch cases because delete and detail make new intents
-      String foodLogIdString = mFoodLog.getMFoodLogId().toString();
+      String foodLogIdString = mFoodLog.getFoodLogId().toString();
       mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
 
       foodLogContext.startActivity(mIntent);
@@ -164,4 +172,6 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     popupMenu.show();
 
   }
+
+
 }//end log view holder class

@@ -8,9 +8,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.dietdecoder.dietdecoder.database.Converters;
-import com.dietdecoder.dietdecoder.database.chemical.Chemical;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -21,70 +19,71 @@ public class Ingredient {
   @PrimaryKey
   @NonNull
   @ColumnInfo(name = "ingredientId")
-  private UUID mIngredientId;
+  private UUID ingredientId;
 
   @ColumnInfo(name = "ingredientName")
-  private String mIngredientName;
+  private String ingredientName;
+
+  @ColumnInfo(name = "ingredientBrand")
+  private String ingredientBrand;
+
 
   // type of chemical and its amount
   // i.e. fish gets tyramines fast and potato is high in solanine and tequila has less histamines than wine
   @ColumnInfo(name = "ingredientChemicalName")
-  private String mIngredientChemicalName;
+  private String ingredientChemicalName;
   @ColumnInfo(name = "ingredientChemicalAmountNumber")
-  private Double mIngredientChemicalAmountNumber;
+  private Double ingredientChemicalAmountNumber;
   @ColumnInfo(name = "ingredientChemicalAmountUnit")
-  private String mIngredientChemicalAmountUnit;
-
-//  @ColumnInfo(name = "ingredientExpiration")
-//  private LocalDateTime mIngredientExpiration;
+  private String ingredientChemicalAmountUnit;
 
   @Ignore
   public Ingredient(String ingredientName){
-    this(ingredientName, "Not available", 0.0, "Not available");
+    this(ingredientName, "", "Not available", 0.0, "Not available");
   }
 
-  public Ingredient(String ingredientName, String ingredientChemicalName, Double ingredientChemicalAmountNumber,
+  public Ingredient(String ingredientName, String ingredientBrand, String ingredientChemicalName,
+                    Double ingredientChemicalAmountNumber,
                     String ingredientChemicalAmountUnit) {
-    this.mIngredientId = UUID.randomUUID();
-    this.mIngredientName = ingredientName;
-    this.mIngredientChemicalName = ingredientChemicalName;
-    this.mIngredientChemicalAmountNumber = ingredientChemicalAmountNumber;
-    this.mIngredientChemicalAmountUnit = ingredientChemicalAmountUnit;
+    this.ingredientId = UUID.randomUUID();
+    this.ingredientName = ingredientName;
+    this.ingredientBrand = ingredientBrand;
+    this.ingredientChemicalName = ingredientChemicalName;
+    this.ingredientChemicalAmountNumber = ingredientChemicalAmountNumber;
+    this.ingredientChemicalAmountUnit = ingredientChemicalAmountUnit;
   }
 
-// with expiration
-//  public Ingredient(@NonNull String ingredientName,
-//                    Chemical ingredientChemical /*,LocalDateTime ingredientExpiration*/ ) {
-  // default is five days expired
-//  LocalDateTime.now().plusDays(5)
-//    this.mIngredientName = ingredientName;
-//    this.mIngredientChemicalNameAmount = ingredientChemical.getChemicalNameAmount();
-//    //this.mIngredientExpiration = ingredientExpiration;
-//  }
+
+  public UUID getIngredientId(){return ingredientId;}
+  public void setIngredientId(UUID id){this.ingredientId = id;}
+
+  public String getIngredientName(){return this.ingredientName;}
+  public void setIngredientName(String string){this.ingredientName = string;}
+
+  public String getIngredientBrand(){return this.ingredientBrand;}
+  public void setIngredientBrand(String string){this.ingredientBrand = string;}
 
 
-  public UUID getMIngredientId(){return mIngredientId;}
+  public String getIngredientChemicalName(){return this.ingredientChemicalName;}
+  public void setIngredientChemicalName(String string){this.ingredientChemicalName = string;}
 
-  public void setMIngredientId(UUID id){this.mIngredientId = id;}
+  public Double getIngredientChemicalAmountNumber() {return this.ingredientChemicalAmountNumber;}
+  public void setIngredientChemicalAmountNumber(Double ingredientChemicalAmountNumber){this.ingredientChemicalAmountNumber =
+          ingredientChemicalAmountNumber;}
 
-  public String getIngredientName(){return this.mIngredientName;}
-
-  public String getIngredientChemicalName(){return this.mIngredientChemicalName;}
-
-  public Double getIngredientChemicalAmountNumber() {return this.mIngredientChemicalAmountNumber;}
-
-  public String getIngredientChemicalAmountUnit() {return this.mIngredientChemicalAmountUnit;}
+  public String getIngredientChemicalAmountUnit() {return this.ingredientChemicalAmountUnit;}
+  public void setIngredientChemicalAmountUnit(String string){this.ingredientChemicalAmountUnit =
+          string;}
 
   @Override
   public String toString() {
     return "Ingredient{" +
-      "mIngredientName='" + mIngredientName + '\'' +
-      ", mIngredientChemicalName='" + mIngredientChemicalName + '\'' +
-      ", mIngredientChemicalAmountNumber=" + mIngredientChemicalAmountNumber +
-      ", mIngredientChemicalAmountUnit='" + mIngredientChemicalAmountUnit + '\'' +
+            "ingredientName='" + ingredientName + '\'' +
+            "ingredientBrand='" + ingredientBrand + '\'' +
+      ", ingredientChemicalName='" + ingredientChemicalName + '\'' +
+      ", ingredientChemicalAmountNumber=" + ingredientChemicalAmountNumber +
+      ", ingredientChemicalAmountUnit='" + ingredientChemicalAmountUnit + '\'' +
       '}';
   }
-
-  //public LocalDateTime getIngredientExpiration(){return this.mIngredientExpiration;}
 
 } //end Ingredient Entity

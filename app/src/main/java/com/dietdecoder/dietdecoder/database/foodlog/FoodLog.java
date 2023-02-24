@@ -11,6 +11,7 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.Converters;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.UUID;
@@ -23,143 +24,155 @@ public class FoodLog {
   @PrimaryKey
   @NonNull
   @ColumnInfo(name = "foodLogId")
-  private UUID mFoodLogId;
+  private UUID foodLogId;
 
-  // dateTime is when the log was made
-  @ColumnInfo(name = "dateTime")
-  private Instant mDateTime;
-
-  // change ingredient type to string ingredientName
+  // when the log was made
   @NonNull
-  @ColumnInfo(name = "ingredientName")
-  private String mIngredientName;
+  @ColumnInfo(name = "instantLogged")
+  private Instant instantLogged;
 
-  @ColumnInfo(name = "brand")
-  private String mBrand;
+  @NonNull
+  @ColumnInfo(name = "ingredientId")
+  private UUID ingredientId;
 
   // when it was consumed
-  @ColumnInfo(name = "dateTimeConsumed")
-  private Instant mDateTimeConsumed;
+  @ColumnInfo(name = "instantConsumed")
+  private Instant instantConsumed;
 
   // when it was bought or pulled from the garden, as close to time it died and began the decomposition process as possible
-  @ColumnInfo(name = "dateTimeAcquired")
-  private Instant mDateTimeAcquired;
+  @ColumnInfo(name = "instantAcquired")
+  private Instant instantAcquired;
 
   // when it was cooked or processed, the last part of the preparation process before being eaten
-  @ColumnInfo(name = "dateTimeCooked")
-  private Instant mDateTimeCooked;
+  @ColumnInfo(name = "instantCooked")
+  private Instant instantCooked;
+
+  // if purchased or known, when the food is expected to expire
+  @ColumnInfo(name = "instantExpiration")
+  private Instant instantExpiration;
 
 
 // use Ignore for which parameters are optional
   @Ignore
-  public FoodLog(String ingredientName) {
+  public FoodLog(UUID ingredientId) {
     // if only ingredient was given
     // empty for brand
     // acquired was yesterday and cooked and eaten now
-    this(ingredientName, "", Instant.now(), Instant.now().minus(1, ChronoUnit.DAYS), Instant.now());
+    this(ingredientId, Instant.now(), Instant.now().minus(1, ChronoUnit.DAYS),
+            Instant.now(), Instant.now().plus(1, ChronoUnit.DAYS));
   }
 
-  public FoodLog(@NonNull String ingredientName, String brand,
-                 Instant dateTimeConsumed, Instant dateTimeAcquired, Instant dateTimeCooked) {
-    this.mFoodLogId = UUID.randomUUID();
-    this.mDateTime = Instant.now();
-    this.mDateTimeConsumed = dateTimeConsumed;
-    this.mIngredientName = ingredientName;
-    this.mBrand = brand;
-    this.mDateTimeAcquired = dateTimeAcquired;
-    this.mDateTimeCooked = dateTimeCooked;
+  public FoodLog(@NonNull UUID ingredientId,
+                 Instant instantConsumed, Instant instantAcquired,
+                 Instant instantCooked, Instant instantExpiration) {
+    this.foodLogId = UUID.randomUUID();
+    this.ingredientId = ingredientId;
+    this.instantLogged = Instant.now();
+    this.instantConsumed = instantConsumed;
+    this.instantAcquired = instantAcquired;
+    this.instantCooked = instantCooked;
+    this.instantExpiration = instantExpiration;
   }
 
 
   // helpful functions for calculating off of the times
   public Instant getFoodLogDateTimeInstant() {
-    return(this.mDateTimeConsumed);
+    return(this.instantConsumed);
   }
   public String getFoodLogDateTimeString() {
-    return Util.stringFromInstant(this.mDateTimeConsumed);
+    return Util.stringFromInstant(this.instantConsumed);
   }
 
-  public Calendar getFoodLogDateTimeCalendar() {
-    return Util.calendarFromInstant(this.mDateTime);
+  public Calendar getFoodLogCalendar() {
+    return Util.calendarFromInstant(this.instantLogged);
   }
-
-  public String getFoodLogAge() {
-    //TODO: fix age so it can calculate how old logged grocery is
-    //TODO: or maybe just put this logic into exporting logic
-//    Integer groceryAge = this.mDatetime - this.mLog.getLogDateTimeAcquired()
-    return("Date Acquired: " + this.mDateTimeAcquired + "\nDate Cooked: " + this.mDateTimeCooked + "\nDate Used: " + this.mDateTime);
-  }
-
 
   // basic getters for the parameters
   // setters
   // and toString
   public String toString() {
     //if one of them is null it doesn't break
-    if (this.mDateTimeAcquired != null && this.mIngredientName != null && this.mBrand != null ) {
-      return ("Logged at: " + this.mDateTime + "\n"
-        + "\nConsumed at: " + this.mDateTimeConsumed + "\n"
-        + "\nAcquired at: " + this.mDateTimeAcquired + "\n"
-        + "\nIngredient Cooked at: " + this.mDateTimeCooked + "\n"
-        + "\nIngredient Name: " + this.mIngredientName + "\n"
-        + "\nBrand of Ingredient: " + this.mBrand + "\n");
+    if (this.instantAcquired != null && this.instantCooked != null && this.instantExpiration != null ) {
+      return ("Logged at: " + this.instantLogged + "\n"
+        + "\nConsumed at: " + this.instantConsumed + "\n"
+        + "\nAcquired at: " + this.instantAcquired + "\n"
+        + "\nIngredient Cooked at: " + this.instantCooked + "\n"
+        + "\nIngredient ID: " + this.ingredientId + "\n");
     } else
     {
-      return ("Logged at: " + this.mDateTime);
+      return ("Logged at: " + this.instantLogged);
     }
   }//end toString
 
-  public UUID getMFoodLogId() {
-    return mFoodLogId;
+  public UUID getFoodLogId() {
+    return foodLogId;
   }
-  public void setMFoodLogId(UUID id) {
-    this.mFoodLogId = id;
-  }
-
-  public Instant getMDateTime() {
-    return mDateTime;
-  }
-  public void setMDateTime(Instant dateTime) {
-    this.mDateTime = dateTime;
+  public void setFoodLogId(UUID id) {
+    this.foodLogId = id;
   }
 
-
-  public Instant getMDateTimeConsumed() {
-    return mDateTimeConsumed;
+  public Instant getInstantLogged() {
+    return instantLogged;
   }
-  public void setMDateTimeConsumed(Instant dateTimeConsumed) {
-    this.mDateTimeConsumed = dateTimeConsumed;
+  public void setInstantLogged(Instant instant) {
+    this.instantLogged = instant;
   }
 
 
-  public String getMIngredientName() {
-    return mIngredientName;
+  public Instant getInstantConsumed() {
+    return instantConsumed;
   }
-  public void setIngredientName(String ingredientName) {
-    this.mIngredientName = ingredientName;
-  }
-
-  public String getMBrand() {
-    return mBrand;
-  }
-  public void setMBrand(String brand) {
-    this.mBrand = brand;
+  public void setInstantConsumed(Instant instant) {
+    this.instantConsumed = instant;
   }
 
 
-  public Instant getMDateTimeAcquired() {
-    return mDateTimeAcquired;
+  public UUID getIngredientId() {
+    return ingredientId;
   }
-  public void setMDateTimeAcquired(Instant dateTimeAcquired) {
-    this.mDateTimeAcquired = dateTimeAcquired;
+  public void setIngredientId(UUID id) {
+    this.ingredientId = id;
   }
 
-  public Instant getMDateTimeCooked() {
-    return mDateTimeCooked;
+  public String getBrand() {
+    return ingredientBrand;
   }
-  public void setMDateTimeCooked(Instant dateTimeCooked) {
-    this.mDateTimeCooked = dateTimeCooked;
+  public void setBrand(String brand) {
+    this.ingredientBrand = brand;
   }
+
+
+  public Instant getInstantAcquired() {
+    return instantAcquired;
+  }
+  public void setInstantAcquired(Instant instantAcquired) {
+    this.instantAcquired = instantAcquired;
+  }
+
+  public Instant getInstantCooked() {
+    return instantCooked;
+  }
+  public void setInstantCooked(Instant instantCooked) {
+    this.instantCooked = instantCooked;
+  }
+
+  public Instant getInstantExpiration() {
+    return instantExpiration;
+  }
+  public void setInstantExpiration(Instant instant) {
+    this.instantExpiration = instant;
+  }
+
+
+
+//    //TODO: fix age so it can calculate how old logged grocery is
+//    //TODO: or maybe just put this logic into exporting logic
+//  public String getFoodLogAge() {
+////    Integer groceryAge = this.mDatetime - this.mLog.getLogDateTimeAcquired()
+//    return("Date Acquired: " + this.instantAcquired + "\nDate Cooked: " + this.instantCooked +
+//            "\nDate Used: " + this.mDateTime);
+//  }
+
 
 
 }

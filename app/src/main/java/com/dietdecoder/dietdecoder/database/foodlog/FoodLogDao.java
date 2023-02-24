@@ -45,15 +45,16 @@ public interface FoodLogDao {
   @Query("SELECT * FROM food_log_table")
   Cursor getCursorAllFoodLog();
 
-  @Query("SELECT * FROM food_log_table ORDER BY dateTimeConsumed DESC")
+  @Query("SELECT * FROM food_log_table ORDER BY instantConsumed DESC")
   LiveData<List<FoodLog>> daoGetAllFoodLog();
 
 
   // TODO fix this so it gets all on that date, not just that specific instant
-  @Query("SELECT * FROM food_log_table WHERE :onThisDateTime = dateTimeConsumed ORDER BY dateTimeConsumed")
-  List<FoodLog> daoGetAllFoodLogOnDate(Instant onThisDateTime);
+  @Query("SELECT * FROM food_log_table WHERE :onThisInstant = instantConsumed ORDER BY " +
+          "instantConsumed")
+  List<FoodLog> daoGetAllFoodLogOnDate(Instant onThisInstant);
 
-  @Query("SELECT * FROM food_log_table WHERE :onThisInstant = dateTimeConsumed ORDER BY dateTimeConsumed")
+  @Query("SELECT * FROM food_log_table WHERE :onThisInstant = instantConsumed ORDER BY instantConsumed")
   FoodLog daoGetFoodLogFromConsumedInstant(Instant onThisInstant);
 
   // get foodlog from ID
@@ -65,7 +66,8 @@ public interface FoodLogDao {
   FoodLog daoGetFoodLogFromId(UUID matchThisUuid);
 
   // TODO fix this so it gets all after that actual date
-  @Query("SELECT * FROM food_log_table WHERE dateTimeConsumed >= :laterThanThisDateTime ORDER BY dateTimeConsumed")
+  @Query("SELECT * FROM food_log_table WHERE instantConsumed >= :laterThanThisDateTime ORDER BY " +
+          "instantConsumed")
   List<FoodLog> daoGetAllFoodLogAfterDateTime(Instant laterThanThisDateTime);
 
 }

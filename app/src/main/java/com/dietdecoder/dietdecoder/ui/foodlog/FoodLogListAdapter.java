@@ -4,10 +4,12 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.util.List;
 
@@ -36,6 +38,11 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
   @Override
   public void onBindViewHolder(FoodLogViewHolder holder, int position) {
     FoodLog currentFoodLog = getItem(position);
+    mFoodLog.setIngredientId(
+            new ViewModelProvider().get(IngredientViewModel.class)
+                    .viewModelGetIngredientFromName(mName)
+                    .getIngredientId()
+    );
     holder.bind(currentFoodLog);
   }//end onBindViewHolder
 
@@ -51,7 +58,7 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
 
     @Override
     public boolean areContentsTheSame(@NonNull FoodLog oldItem, @NonNull FoodLog newItem) {
-      Log.d(TAG, "Adapter, newitem name: " + newItem.getMIngredientName());
+      Log.d(TAG, "Adapter, newitem name: " + newItem.getIngredientId());
       // check all parts of Log to see if they're the same
       isEqualName = oldItem.getFoodLogDateTimeInstant().equals(newItem.getFoodLogDateTimeInstant());
       //TODO add other properties of log type here
