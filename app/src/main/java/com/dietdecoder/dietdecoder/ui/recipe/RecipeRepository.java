@@ -4,22 +4,23 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.database.recipe.RecipeDao;
-import com.dietdecoder.dietdecoder.database.recipe.RecipeRoomDatabase;
 
 import java.util.List;
+import java.util.UUID;
 
 class RecipeRepository {
 
 
 
   private RecipeDao mRecipeDao;
-  private final RecipeRoomDatabase mRecipeDatabase;
+  private final DietDecoderRoomDatabase mRecipeDatabase;
 
   RecipeRepository(Application applicationRecipe) {
     // setup database to be returned via methods
-    mRecipeDatabase = RecipeRoomDatabase.getRecipeDatabase(applicationRecipe);
+    mRecipeDatabase = DietDecoderRoomDatabase.getDatabase(applicationRecipe);
     mRecipeDao = mRecipeDatabase.recipeDao();
   }
 
@@ -34,8 +35,8 @@ class RecipeRepository {
   }
 
   // get only ingredient from database for recipes
-  List<Recipe> repositoryGetRecipesWithIngredient(String ingredientName) {
-    return mRecipeDao.daoGetRecipesWithIngredient(ingredientName);
+  List<Recipe> repositoryGetRecipesWithIngredient(UUID ingredientId) {
+    return mRecipeDao.daoGetRecipesWithIngredient(ingredientId);
   }
 
   // get only given recipe using name
@@ -50,7 +51,7 @@ class RecipeRepository {
     return mRecipeDao.daoGetRecipeFromName(recipeName);
   }
 
-  public Recipe repositoryGetRecipeFromRecipeNameAndIngredient(String recipeName, String recipeIngredient) {
+  public Recipe repositoryGetRecipeFromRecipeNameAndIngredient(String recipeName, UUID recipeIngredient) {
     return mRecipeDao.daoGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);
   }
 
@@ -61,7 +62,7 @@ class RecipeRepository {
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryRecipeInsert(Recipe recipe) {
 
-    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mRecipeDao.daoRecipeInsert(recipe);
     });
 
@@ -70,8 +71,8 @@ class RecipeRepository {
   // You must call this on a non-UI thread
   void repositoryRecipeDelete(String recipeName, String recipeIngredient) {
 
-    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoRecipeDelete(recipeName, recipeIngredient);
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
+//      mRecipeDao.daoRecipeDelete(recipeName, recipeIngredient);
     });
 
   } // end delete
@@ -79,16 +80,16 @@ class RecipeRepository {
 
   void repositoryRecipeUpdateIngredient(String oldRecipeName, String oldRecipeIngredient, String newRecipeIngredient) {
 
-    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
+//      mRecipeDao.daoRecipeUpdateIngredient(oldRecipeName, oldRecipeIngredient, newRecipeIngredient);
     });
 
   } // end update ingredient
 
   void repositoryRecipeUpdateName(String oldRecipeName, String oldRecipeIngredient, String newRecipeName) {
 
-    RecipeRoomDatabase.recipeDatabaseWriteExecutor.execute(() -> {
-      mRecipeDao.daoRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
+//      mRecipeDao.daoRecipeUpdateName(oldRecipeName, oldRecipeIngredient, newRecipeName);
     });
 
   } // end update ingredient

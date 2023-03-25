@@ -112,7 +112,7 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
                 }
                 Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
                 //update the food log
-                mFoodLog.setBrand(mBrand);
+//                mFoodLog.setBrand(mBrand);
                 mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
                 mFoodLogIdString = mFoodLog.getFoodLogId().toString();
 
@@ -136,7 +136,7 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
         // now get the food log associated with that UUID
         this.mFoodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mId);
         //then set the values from the food log
-        this.mName = mFoodLog.getIngredientId();
+        this.mName = mFoodLog.getIngredientId().toString();
         this.mDateTimeString = this.mFoodLog.getFoodLogDateTimeString();
         this.mFoodLogIdString = this.mFoodLog.getFoodLogId().toString();
 

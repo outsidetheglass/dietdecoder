@@ -10,7 +10,9 @@
   <string name="change_date_time">Let\'s go change the date/time...</string>
 
 
-  <string name="button_symptom_log">List All Symptom Logs</string>
+  <string name="button_symptom_log">Symptom Log</string>
+  <string name="textview_title_new_symptom_log">Log a Symptom</string>
+  <string name="edittext_new_symptom_intensity">Intensity of Symptom Here</string>
   <string name="textview_main_log_a_symptom">Log a Symptom</string>
   <string name="button_current_symptom">Current Symptom</string>
   <string name="button_food_log">Food Log</string>
@@ -32,6 +34,9 @@
   <string name="title_log">Record Log</string>
   <string name="textview_24hr">(24 hour time)</string>
   <string name="pick_time">Pick Time</string>
+
+  <string name="question_textview_new_symptom_intensity_log">How intense is the symptom? (on a scale of 1/10, e.g. enter 5 for 5/10)</string>
+
 
   <string name="question_textview_new_log">What general time range are we concerned with?</string>
   <string name="button_just_now">Just Now</string>

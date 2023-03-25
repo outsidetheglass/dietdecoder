@@ -40,10 +40,13 @@ public class Util {
     public static final int fragmentContainerViewEditFoodLog = R.id.fragment_container_view_edit_food_log;
     public static final int fragmentContainerViewAddFoodLog =
             R.id.fragment_container_view_new_food_log;
+    public static final int fragmentContainerViewAddSymptomLog =
+            R.id.fragment_container_view_new_symptom_log;
+
 
     //public static final int fragmentContainerViewEditSymptomLog = R.id
     // .fragment_container_view_edit_symptom_log;
-    public static final int fragmentContainerViewAddSymptomLog =
+    public static final int fragmentContainerViewChooseSymptomLog =
             R.id.recyclerview_new_symptom_log_name_choices;
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
@@ -52,6 +55,10 @@ public class Util {
 
     public static final String ARGUMENT_INGREDIENT_ID = "ingredient_id";
     public static final String ARGUMENT_INGREDIENT_NAME = "ingredient_name";
+    public static final String ARGUMENT_SYMPTOM_ID = "symptom_id";
+    public static final String ARGUMENT_SYMPTOM_NAME = "symptom_name";
+    public static final String ARGUMENT_SYMPTOM_LOG_ID = "symptom_log_id";
+
 
 
     // check if we want to export as a csv or pdf or what
@@ -89,6 +96,7 @@ public class Util {
     public static final String ARGUMENT_GO_TO_SPECIFIC_DATE_FRAGMENT = "go_to_specific_date";
     public static final String ARGUMENT_GO_TO_SPECIFIC_TIME_FRAGMENT = "go_to_specific_time";
 
+
     public static final String ARGUMENT_GO_TO_DELETE_FOOD_LOG = "go_to_delete_food_log";
     public static final String ARGUMENT_GO_TO_DETAIL_FOOD_LOG = "go_to_delete_food_log";
 
@@ -97,6 +105,8 @@ public class Util {
     public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT =
             "go_to_edit_food_log_fragment";
     public static final String ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY = "go_to_food_log";
+    public static final String ARGUMENT_GO_TO_SYMPTOM_INTENSITY = "go_to_symptom_intensity";
+
 
 
 
@@ -112,6 +122,7 @@ public class Util {
     public static final String ARGUMENT_FROM_EDIT_FOOD_LOG = "from_edit_food_log";
     public static final String ARGUMENT_FRAGMENT_FROM_DELETE_FOOD_LOG =
             "from_fragment_delete_food_log";
+    public static final String ARGUMENT_FROM_INTENSITY_SYMPTOM = "from_intensity_symptom";
 
 
 
@@ -183,6 +194,22 @@ public class Util {
         return spannableStringBuilder;
 
     }
+
+    public static SpannableStringBuilder setBoldSpan(String boldString, String notBoldString) {
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(boldString);
+        // this is the location of the substring that you want to make bold
+        int start = 0;
+        int end = start + boldString.length();
+        // use exclusive to say we want this substring bold
+        spannableStringBuilder.setSpan(Util.boldStyle, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // append whatever else you want
+        spannableStringBuilder.append(notBoldString);
+
+        return spannableStringBuilder;
+
+    }
+
 
     public static SpannableStringBuilder setBoldItalicSpan(String boldString, String notBoldString,
                                                            String italicString) {
@@ -813,6 +840,15 @@ or at least achieves the same effect.
         return myFileName.toString();
     }
 
+    public static SpannableStringBuilder setViewHolderRecyclerViewStringNameDescription(String title,
+                                                                         String description) {
+
+        String boldString = title;
+        String notBoldString = description;
+
+        return Util.setBoldSpan(boldString, notBoldString);
+    }
+
     public static SpannableStringBuilder setViewHolderRecyclerViewString(String title, String subtitle,
                                                                          String severity,
                                                                          String unImportantString) {
@@ -862,11 +898,30 @@ or at least achieves the same effect.
         }
         return notItalicString;
     }
+    public static String setPlainDescriptionString(String description){
+        // nothing at first so if we don't have a description there's not a random new line
+        String plainString = description;
+
+        // only display if not empty
+        if (!TextUtils.isEmpty(description)) {
+
+            // we have some description, so let's make a newline after the title
+            plainString = "\n";
+
+            // then add our description
+            plainString = plainString.concat(description);
+        }
+        return plainString;
+    }
     public static String setSeverityString(String string){
         // set the string out of 5 on the scale
-        String notItalicString = "";
-        return notItalicString.concat("Severity: ").concat(
-                string).concat("/5");
+        String severityString = "";
+
+        if (string != null) {
+            severityString = severityString.concat("Severity: ").concat(
+                    string).concat("/10");
+        }
+        return severityString;
     }
 
     ////////////////////////////////////////////////////////

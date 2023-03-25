@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewHolder;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
 
     @Override
     public boolean areContentsTheSame(@NonNull SymptomLog oldItem, @NonNull SymptomLog newItem) {
-      Log.d(TAG, "Adapter, newitem name: " + newItem.getSymptomName());
+      Log.d(TAG, "Adapter, newitem name: " + newItem.getSymptomId());
       // check all parts of Log to see if they're the same
       isEqualName =
               oldItem.getInstantLogged().equals(newItem.getInstantLogged());

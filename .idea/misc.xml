@@ -13,6 +13,7 @@
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.1" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/drawable/roundcorners.xml" value="0.1" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_are_you_sure.xml" value="0.11510416666666666" />
+        <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_choose_symptom_log.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_delete_ingredient.xml" value="0.1" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_detail_food_log.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_detail_log.xml" value="0.15729483282674772" />
@@ -32,6 +33,7 @@
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_new_ingredient.xml" value="0.1984375" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_new_log.xml" value="0.16041666666666668" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_new_recipe.xml" value="0.1984375" />
+        <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_new_symptom_intensity_log.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_new_symptom_log.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_other.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/activity_recipe.xml" value="0.1984375" />
@@ -53,6 +55,7 @@
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_new_food_log_name.xml" value="0.1" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_new_food_log_time.xml" value="0.22418478260869565" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_new_food_log_what.xml" value="0.21331521739130435" />
+        <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_new_symptom_intensity_log.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_new_symptom_log_name_choices.xml" value="0.11145833333333334" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/fragment_time_picker.xml" value="0.2" />
         <entry key="..\:/Users/outsi/Documents/startup/dietDecoder/android/DietDecoder/app/src/main/res/layout/recycler_view_item.xml" value="0.1984375" />

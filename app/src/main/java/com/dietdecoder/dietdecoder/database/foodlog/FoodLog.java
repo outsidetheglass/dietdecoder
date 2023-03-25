@@ -32,6 +32,10 @@ public class FoodLog {
   private Instant instantLogged;
 
   @NonNull
+  @ColumnInfo(name = "ingredientName")
+  private String ingredientName;
+
+  @NonNull
   @ColumnInfo(name = "ingredientId")
   private UUID ingredientId;
 
@@ -54,17 +58,23 @@ public class FoodLog {
 
 // use Ignore for which parameters are optional
   @Ignore
-  public FoodLog(UUID ingredientId) {
+  public FoodLog(UUID ingredientId, String ingredientName) {
     // if only ingredient was given
     // empty for brand
     // acquired was yesterday and cooked and eaten now
-    this(ingredientId, Instant.now(), Instant.now().minus(1, ChronoUnit.DAYS),
-            Instant.now(), Instant.now().plus(1, ChronoUnit.DAYS));
+    this(ingredientId, ingredientName,
+            Instant.now(),
+            Instant.now().minus(1, ChronoUnit.DAYS),
+            Instant.now(),
+            Instant.now().plus(1, ChronoUnit.DAYS)
+    );
   }
 
-  public FoodLog(@NonNull UUID ingredientId,
-                 Instant instantConsumed, Instant instantAcquired,
-                 Instant instantCooked, Instant instantExpiration) {
+  public FoodLog(@NonNull UUID ingredientId, @NonNull String ingredientName,
+                 Instant instantConsumed,
+                 Instant instantAcquired,
+                 Instant instantCooked,
+                 Instant instantExpiration) {
     this.foodLogId = UUID.randomUUID();
     this.ingredientId = ingredientId;
     this.instantLogged = Instant.now();
@@ -134,13 +144,12 @@ public class FoodLog {
     this.ingredientId = id;
   }
 
-  public String getBrand() {
-    return ingredientBrand;
+  public String getIngredientName() {
+    return ingredientName;
   }
-  public void setBrand(String brand) {
-    this.ingredientBrand = brand;
+  public void setIngredientName(String name) {
+    this.ingredientName = name;
   }
-
 
   public Instant getInstantAcquired() {
     return instantAcquired;

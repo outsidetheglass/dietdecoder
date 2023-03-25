@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.database.ingredient.IngredientRoomDatabase;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ class IngredientRepository {
 
 
   private IngredientDao mIngredientDao;
-  private final IngredientRoomDatabase mIngredientDatabase;
+  private final DietDecoderRoomDatabase mIngredientDatabase;
 
   IngredientRepository(Application application) {
     // setup database to be returned via methods
-    mIngredientDatabase = IngredientRoomDatabase.getDatabase(application);
+    mIngredientDatabase = DietDecoderRoomDatabase.getDatabase(application);
     mIngredientDao = mIngredientDatabase.ingredientDao();
   }
 
@@ -57,7 +57,7 @@ class IngredientRepository {
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryInsertIngredient(Ingredient ingredient) {
 
-    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoInsertIngredient(ingredient);
     });
 
@@ -66,7 +66,7 @@ class IngredientRepository {
   // You must call this on a non-UI thread
   void repositoryDeleteIngredient(Ingredient ingredient) {
 
-    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoDeleteIngredient(ingredient);
     });
 
@@ -75,7 +75,7 @@ class IngredientRepository {
 //TODO add other properties of ingredient type here
 //  void repositoryUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
 //
-//    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+//    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
 //      mIngredientDao.daoUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
 //    });
 //
@@ -83,7 +83,7 @@ class IngredientRepository {
 
   void repositoryUpdateIngredientName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
 
-    IngredientRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoUpdateIngredientName(oldIngredientName, oldIngredientConcern, newIngredientName);
     });
 

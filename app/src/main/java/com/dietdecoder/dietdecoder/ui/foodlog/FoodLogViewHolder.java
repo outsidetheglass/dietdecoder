@@ -71,15 +71,15 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     this.mFoodLog = foodLog;
     //TODO figure out how to get ingredient database info in here
 
-    String id =
-            new ViewModelProvider(this).get(IngredientViewModel.class)
-                    .viewModelGetIngredientFromName("Oat milk")
-                    .getIngredientId().toString();
+//    String id =
+//            new ViewModelProvider(this).get(IngredientViewModel.class)
+//                    .viewModelGetIngredientFromName("Oat milk")
+//                    .getIngredientId().toString();
 
     // info on the foodlog
     // in order to bind it to the recyclerview
     String mFoodLogDateTime = foodLog.getFoodLogDateTimeString();
-    String mFoodLogIngredientName = foodLog.getIngredientId();
+    String mFoodLogIngredientName = foodLog.getIngredientId().toString();
     Instant mFoodLogDateTimeConsumed = foodLog.getInstantConsumed();
     Instant mFoodLogDateTimeCooked = foodLog.getInstantCooked();
     Instant mFoodLogDateTimeAcquired = foodLog.getInstantAcquired();
@@ -101,7 +101,7 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
     String mFoodLogConsumedString = Util.stringFromInstant(mFoodLogDateTimeConsumed);
 
     SpannableStringBuilder printString = Util.setViewHolderRecyclerViewString(mFoodLogIngredientName,
-            mFoodLogBrand, mFoodLogConsumedString, unImportantString );
+            "foodLogBrand", mFoodLogConsumedString, unImportantString );
 
 
     // set part of it bold and part of it not bold

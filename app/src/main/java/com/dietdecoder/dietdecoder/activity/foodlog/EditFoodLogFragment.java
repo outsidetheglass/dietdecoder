@@ -75,7 +75,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
         mFoodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mFoodLogId);
 
         // then some values
-        mFoodLogIngredientName = mFoodLog.getIngredientId();
+        mFoodLogIngredientName = mFoodLog.getIngredientId().toString();
 
         // then use the food log to set the edit text views
         mEditTextIngredientName =
@@ -177,7 +177,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
                     if ( isBrandEdited ) {
                         // get strings
                         mBrand = mEditTextIngredientBrand.getText().toString();
-                        mFoodLog.setBrand(mBrand);
+//                        mFoodLog.setBrand(mBrand);
                     }
                     // then update the model with the new name and/or brand
                     mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);

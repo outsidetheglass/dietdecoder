@@ -10,6 +10,7 @@ import androidx.room.Query;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.util.List;
+import java.util.UUID;
 
 @Dao
 public interface IngredientDao {
@@ -51,6 +52,10 @@ public interface IngredientDao {
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientName LIKE :searchIngredientName")
   Ingredient daoGetIngredientFromSearchName(String searchIngredientName);
+
+  @Query("SELECT * FROM ingredient_table WHERE ingredientId LIKE :searchIngredientId")
+  Ingredient daoGetFoodLogIngredientFromId(UUID searchIngredientId);
+
 
   /*
 

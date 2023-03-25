@@ -98,7 +98,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
     switch (view.getId()) {
       // which button was clicked
       case R.id.add_button_list_symptom_log:
-        addIntent = new Intent(thisActivity, NewSymptomLogActivity.class);
+        addIntent = new Intent(thisActivity, ChooseSymptomLogActivity.class);
         startActivity(addIntent);
         break;
       default:

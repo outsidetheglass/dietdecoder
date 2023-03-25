@@ -79,17 +79,20 @@ public class AreYouSureActivity extends AppCompatActivity  {
                         FoodLog foodLogToCopy = mFoodLogViewModel.viewModelGetFoodLogFromId(
                                 UUID.fromString(mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID)) );
                         // copy it with current datetime consumed
-                        String foodLogToCopyName = foodLogToCopy.getIngredientId();
-                        FoodLog newFoodLog = new FoodLog(foodLogToCopyName);
+                        //TODO fix this with name
+                        String foodLogToCopyName = foodLogToCopy.getIngredientId().toString();
+//                        FoodLog newFoodLog = new FoodLog(foodLogToCopyName);
                         // TODO put this somewhere else, like in the dao itself
-                        newFoodLog.setBrand(foodLogToCopy.getBrand());
-                        newFoodLog.setInstantCooked(foodLogToCopy.getInstantCooked());
-                        newFoodLog.setInstantAcquired(foodLogToCopy.getInstantAcquired());
-                        mFoodLogViewModel.viewModelUpdateFoodLog(newFoodLog);
+//                        newFoodLog.setBrand(foodLogToCopy.getBrand());
+//                        newFoodLog.setInstantCooked(foodLogToCopy.getInstantCooked());
+//                        newFoodLog.setInstantAcquired(foodLogToCopy.getInstantAcquired());
+//                        mFoodLogViewModel.viewModelUpdateFoodLog(newFoodLog);
+//                        String newId = newFoodLog.getFoodLogId().toString();
+                        String newId = foodLogToCopy.getFoodLogId().toString();
 
                         // go to edit log with our new food log
                         Intent intent = Util.intentWithFoodLogIdStringButtonActivity(thisActivity,
-                                newFoodLog.getFoodLogId().toString(),
+                                newId,
                                 Util.ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY, Util.ARGUMENT_ACTIVITY_FROM_ARE_YOU_SURE);
                         startActivity(intent);
 

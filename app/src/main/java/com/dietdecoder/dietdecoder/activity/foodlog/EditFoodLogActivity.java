@@ -175,18 +175,19 @@ public class EditFoodLogActivity extends AppCompatActivity implements Toolbar.On
 
 
         // get the info to duplicate
-        String duplicatedFoodLogName = foodLog.getIngredientId();
+        UUID duplicatedFoodLogId = foodLog.getIngredientId();
+        String duplicatedFoodLogName = foodLog.getIngredientName();
 
         // make the new food log from that name, it will set the date consumed to be now
-        FoodLog duplicatedFoodLog = new FoodLog(duplicatedFoodLogName);
+        FoodLog duplicatedFoodLog = new FoodLog(duplicatedFoodLogId, duplicatedFoodLogName);
         mFoodLogViewModel.viewModelInsertFoodLog(duplicatedFoodLog);
 
         // get the other info to copy over from the original food log
         Instant duplicatedFoodLogAcquired = foodLog.getInstantAcquired();
         Instant duplicatedFoodLogCooked = foodLog.getInstantCooked();
-        String duplicatedFoodLogBrand = foodLog.getBrand();
+//        String duplicatedFoodLogBrand = foodLog.getBrand();
         // now update it with those values
-        duplicatedFoodLog.setBrand(duplicatedFoodLogBrand);
+//        duplicatedFoodLog.setBrand(duplicatedFoodLogBrand);
         duplicatedFoodLog.setInstantAcquired(duplicatedFoodLogAcquired);
         duplicatedFoodLog.setInstantCooked(duplicatedFoodLogCooked);
         mFoodLogViewModel.viewModelUpdateFoodLog(duplicatedFoodLog);

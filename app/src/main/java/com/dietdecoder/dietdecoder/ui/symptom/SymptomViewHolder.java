@@ -2,18 +2,19 @@ package com.dietdecoder.dietdecoder.ui.symptom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.activity.symptom.DetailSymptomActivity;
+import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 public class SymptomViewHolder extends RecyclerView.ViewHolder {
@@ -24,56 +25,53 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
 
   // to set the text for what shows up in the UI
   public TextView symptomItemView;
-  public ImageButton symptomItemOptionButton;
+  public ImageButton symptomCheckButton;
   private Context symptomViewHolderContext;
 
   private SymptomViewHolder(View itemView) {
     super(itemView);
     symptomViewHolderContext = itemView.getContext();
     symptomItemView = itemView.findViewById(R.id.textview_symptom_item);
-    symptomItemOptionButton = itemView.findViewById(R.id.imagebutton_symptom_option);
+    symptomCheckButton = itemView.findViewById(R.id.imagebutton_symptom_option);
   }
 
 
   public void bind(Symptom symptom) {
 
     String symptomName = symptom.getSymptomName();
+    String symptomId = symptom.getSymptomId().toString();
     String symptomCategory = symptom.getSymptomCategory();
     String symptomDescription = symptom.getSymptomDescription();
     String symptomSufferType = symptom.getSymptomSufferType();
 
-    symptomItemView.setText( "Name:\n" + symptomName + "\n\nDescription:\n" + symptomDescription);
+    String unImportantString =
+            Util.setPlainDescriptionString(symptomDescription);
 
-    symptomItemOptionButton.setOnClickListener(new View.OnClickListener() {
+    // only show useful description, not just the name repeated
+    if ( TextUtils.equals(symptomName, symptomDescription) ) {
+      unImportantString = "";
+    }
+
+    SpannableStringBuilder printString =
+            Util.setViewHolderRecyclerViewStringNameDescription(symptomName, unImportantString );
+
+
+    // set part of it bold and part of it not bold
+    symptomItemView.setText( printString );
+
+    symptomCheckButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
 
-        // Initializing the popup menu and giving the reference as current symptomViewHolderContext
-        PopupMenu popupMenu = new PopupMenu(symptomViewHolderContext, symptomItemOptionButton);
+        // go to set the intensity of the symptom before coming back to ask about more symptoms
+        Intent addSymptomIntensityIntent = new Intent(symptomViewHolderContext,
+                NewSymptomLogActivity.class);
+        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_SYMPTOM_ID, symptomId);
+        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_GO_TO,
+                Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_SYMPTOM_NAME, symptomName);
+        symptomViewHolderContext.startActivity(addSymptomIntensityIntent);
 
-        // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.item_option_detail_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-          @Override
-          public boolean onMenuItemClick(MenuItem symptomMenuItem) {
-
-            Intent detailSymptomIntent = new Intent(symptomViewHolderContext, DetailSymptomActivity.class);
-            detailSymptomIntent.putExtra("symptom_name", symptomName);
-            detailSymptomIntent.putExtra("symptom_description", symptomDescription);
-            detailSymptomIntent.putExtra("symptom_suffertype", symptomSufferType);
-            detailSymptomIntent.putExtra("symptom_category", symptomCategory);
-
-            // if more details clicked
-            if ( symptomMenuItem.getTitle().toString() == symptomViewHolderContext.getString(R.string.detail) )
-            {
-              symptomViewHolderContext.startActivity(detailSymptomIntent);
-            }
-
-            return true;
-          }
-        });
-        // Showing the popup menu
-        popupMenu.show();
       }
     });
 

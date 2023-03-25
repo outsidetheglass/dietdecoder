@@ -45,6 +45,7 @@ public interface FoodLogDao {
   @Query("SELECT * FROM food_log_table")
   Cursor getCursorAllFoodLog();
 
+  //TODO change this into a multimap instead of putting name and id for ingredient in every time
   @Query("SELECT * FROM food_log_table ORDER BY instantConsumed DESC")
   LiveData<List<FoodLog>> daoGetAllFoodLog();
 

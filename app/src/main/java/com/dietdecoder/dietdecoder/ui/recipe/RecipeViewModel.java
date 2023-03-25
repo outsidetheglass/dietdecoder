@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 
 import java.util.List;
+import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
 // i.e. remove Fragment, Activity, View
@@ -39,8 +40,8 @@ public class RecipeViewModel extends AndroidViewModel {
   }
 
   //get all recipes with ingredient
-  public List<Recipe> viewModelGetRecipesWithIngredient(String paramIngredientName) {
-    return mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredientName);
+  public List<Recipe> viewModelGetRecipesWithIngredient(UUID paramIngredientId) {
+    return mRecipeRepository.repositoryGetRecipesWithIngredient(paramIngredientId);
   }
 
   public List<Recipe> viewModelGetAllRecipeFromName(String paramRecipeName){
@@ -52,8 +53,10 @@ public class RecipeViewModel extends AndroidViewModel {
     return mRecipeRepository.repositoryGetRecipeFromName(paramRecipeName);
   }
   // Get single recipe matching the name with a specific ingredient
-  public Recipe viewModelGetRecipeFromRecipeNameAndIngredient(String recipeName, String recipeIngredient){
-    return mRecipeRepository.repositoryGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);
+  public Recipe viewModelGetRecipeFromRecipeNameAndIngredientId(String recipeName,
+                                                              UUID recipeIngredientId){
+    return mRecipeRepository.repositoryGetRecipeFromRecipeNameAndIngredient(recipeName,
+            recipeIngredientId);
   }
 
   public List<Recipe> viewModelGetAllRecipeFromCategory(String recipeCategory){
@@ -76,8 +79,8 @@ public class RecipeViewModel extends AndroidViewModel {
   }
 
   // delete recipe in database
-  public void viewModelRecipeDelete(String recipeName, String recipeIngredient) {
-    mRecipeRepository.repositoryRecipeDelete(recipeName, recipeIngredient);
+  public void viewModelRecipeDelete(String recipeName, String recipeIngredientId) {
+    mRecipeRepository.repositoryRecipeDelete(recipeName, recipeIngredientId);
   }
 
 

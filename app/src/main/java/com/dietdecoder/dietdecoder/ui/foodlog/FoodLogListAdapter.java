@@ -38,11 +38,11 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
   @Override
   public void onBindViewHolder(FoodLogViewHolder holder, int position) {
     FoodLog currentFoodLog = getItem(position);
-    mFoodLog.setIngredientId(
-            new ViewModelProvider().get(IngredientViewModel.class)
-                    .viewModelGetIngredientFromName(mName)
-                    .getIngredientId()
-    );
+//    currentFoodLog.getIngredientId(
+//            new ViewModelProvider().get(IngredientViewModel.class)
+//                    .viewModelGetIngredientFromName(mName)
+//                    .getIngredientId()
+//    );
     holder.bind(currentFoodLog);
   }//end onBindViewHolder
 

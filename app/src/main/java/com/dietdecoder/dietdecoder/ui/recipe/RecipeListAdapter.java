@@ -1,6 +1,5 @@
 package com.dietdecoder.dietdecoder.ui.recipe;
 
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -33,7 +32,7 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
 
 
     // TODO fix get names to be recursive for all ingredients
-    holderRecipe.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredientName());
+    holderRecipe.bind(currentRecipe.getRecipeName() + ": " + currentRecipe.getRecipeIngredientId());
   }//end onBindViewHolder
 ;
   public static class RecipeDiff extends DiffUtil.ItemCallback<Recipe> {
@@ -51,7 +50,7 @@ public class RecipeListAdapter extends ListAdapter<Recipe, RecipeViewHolder> {
     public boolean areContentsTheSame(@NonNull Recipe oldRecipeItem, @NonNull Recipe newRecipeItem) {
       // check all parts of Recipe to see if they're the same
       isEqualRecipeName = oldRecipeItem.getRecipeName().equals(newRecipeItem.getRecipeName());
-      isEqualRecipeIngredient = oldRecipeItem.getRecipeIngredientName().equals(newRecipeItem.getRecipeIngredientName());
+      isEqualRecipeIngredient = oldRecipeItem.getRecipeIngredientId().equals(newRecipeItem.getRecipeIngredientId());
       isEqualRecipeCategory = oldRecipeItem.getRecipeCategory().equals(newRecipeItem.getRecipeCategory());
       return isEqualRecipeName && isEqualRecipeIngredient && isEqualRecipeCategory;
     } //end areContentsTheSame

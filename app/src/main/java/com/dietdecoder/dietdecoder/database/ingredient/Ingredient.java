@@ -39,7 +39,7 @@ public class Ingredient {
 
   @Ignore
   public Ingredient(String ingredientName){
-    this(ingredientName, "", "Not available", 0.0, "Not available");
+    this(ingredientName, "", "", 0.0, "");
   }
 
   public Ingredient(String ingredientName, String ingredientBrand, String ingredientChemicalName,

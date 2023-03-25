@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogRepository;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -49,8 +50,8 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
 
   // get single log using the instant
-  public List<SymptomLog> viewModelGetSymptomLogByName(String string) {
-    return mRepository.repositoryGetAllSymptomLogByName(string);
+  public List<SymptomLog> viewModelGetSymptomLogByName(UUID id) {
+    return mRepository.repositoryGetAllSymptomLogByName(id);
   }
   // get single log using the uuid
   public SymptomLog viewModelGetSymptomLogFromId(UUID uuid) {
@@ -82,6 +83,17 @@ public class SymptomLogViewModel extends AndroidViewModel {
   // delete log in database
   public void viewModelDeleteSymptomLog(SymptomLog symptomLog) {
     mRepository.repositoryDeleteSymptomLog(symptomLog);
+  }
+
+  // get average duration of symptom from most recent symptoms of same type
+  public Duration viewModelGetAverageSymptomDuration(String symptomName){
+    Duration averageDuration = mRepository.repositoryGetAverageSymptomDuration(symptomName);
+
+    if ( averageDuration.isZero() ) {
+      // TODO get default duration from symptom itself
+      averageDuration = Duration.ofHours(1);
+    }
+    return averageDuration;
   }
 
 

@@ -35,7 +35,7 @@ public class FoodLogViewModel extends AndroidViewModel {
   public FoodLogViewModel(Application application) {
     super(application);
     mRepository = new FoodLogRepository(application);
-    mViewModelAllFoodLogs = mRepository.repositoryGetAllFoodLogs();
+    mViewModelAllFoodLogs = mRepository.repositoryGetAllFoodLogs();;
 
   }//end LogViewModel method
 

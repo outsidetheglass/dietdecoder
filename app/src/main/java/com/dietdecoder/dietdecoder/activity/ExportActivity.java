@@ -267,7 +267,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
     }
 
     private String processedLine(FoodLog foodLog){
-        StringBuilder info = new StringBuilder(foodLog.getIngredientId());
+        StringBuilder info = new StringBuilder(foodLog.getIngredientId().toString());
         info.append("\n");
 
         return info.toString();

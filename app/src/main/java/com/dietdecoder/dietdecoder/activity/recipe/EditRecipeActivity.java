@@ -101,24 +101,4 @@ public class EditRecipeActivity extends AppCompatActivity {
     });
   }
 
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    super.onActivityResult(requestCode, resultCode, data);
-
-    String mRecipeName = data.getStringExtra("recipe_name");
-
-    // if we're here from starting a new recipe, or else know the name
-    // set the name
-    mEditRecipeOldNameView.setText(mRecipeName);
-    // set the other name view to invisible
-    mEditRecipeNewNameView.setVisibility(View.INVISIBLE);
-
-    // now use the repository, might also need the adapter
-    mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-    // this won't work with multiple ingredients
-    Recipe recipe = mRecipeViewModel.viewModelGetRecipeFromName(mRecipeName);
-
-    mEditRecipeOldIngredientView.setText(recipe.getRecipeIngredientName());
-
-  }
 }

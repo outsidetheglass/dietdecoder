@@ -30,7 +30,7 @@
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
       android:background="@drawable/roundcorners"
-      android:src="@drawable/ic_baseline_option"
+      android:src="@drawable/ic_baseline_sick"
       />
     />
     </RelativeLayout>

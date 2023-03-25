@@ -1,0 +1,65 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/constraintLayout_new_symptom_intensity_log"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+      android:id="@+id/textview_title_new_symptom_intensity_log_name_fragment"
+      android:text="@string/title_textview_new_log"
+      android:layout_width="match_parent"
+      android:layout_height="100dp"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_title"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+  <!--      android:textAppearance="@style/textview_title"-->
+
+
+  <TextView
+      android:id="@+id/textview_question_new_symptom_intensity_log"
+      android:text="@string/question_textview_new_symptom_intensity_log"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_main_content"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_symptom_intensity_log_name_fragment"/>
+
+  <EditText
+      android:id="@+id/edittext_new_symptom_intensity"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/edittext"
+      android:layout_margin="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:hint="@string/edittext_new_symptom_intensity"
+      android:layout_marginRight="@dimen/tiny_padding"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_symptom_intensity_log"
+      />
+
+  <Button
+      android:id="@+id/button_new_symptom_intensity_log_save"
+      android:text="@string/button_save"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/button_save"
+      android:layout_margin="@dimen/small_padding"
+      app:layout_constraintTop_toBottomOf="@+id/edittext_new_symptom_intensity"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

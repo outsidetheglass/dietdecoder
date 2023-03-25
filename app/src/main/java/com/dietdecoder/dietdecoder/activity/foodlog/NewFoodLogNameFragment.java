@@ -28,6 +28,7 @@ import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class NewFoodLogNameFragment extends Fragment implements View.OnClickListener {
 
@@ -119,7 +120,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
         switch (view.getId()) {
             case R.id.edittext_new_food_log_name_ingredient_name:
 
-                //TODO show list view when edit text is clicked here or use oneditorchangelistener
+                //TODO show list view when edit text is clicked here or use onEditorchangelistener
                 break;
             case R.id.button_new_food_log_name_save:
                 isNameViewEmpty = TextUtils.isEmpty(mEditTextIngredientName.getText());
@@ -134,7 +135,19 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                     mName = mEditTextIngredientName.getText().toString();
                     // name is enough to save the food log
                     // it will default to having been consumed now
-                    FoodLog foodLog = new FoodLog(mName);
+                    //TODO fix mName instead of ID
+                    Ingredient useThisIngredient = null;
+                    Ingredient ingredient =
+                            mIngredientViewModel.viewModelGetIngredientFromName(mName);
+                    if (Objects.isNull(ingredient)){
+                        // if the ingredient wasn't found it doesn't exist, so make it
+                        useThisIngredient = new Ingredient(mName);
+                        mIngredientViewModel.viewModelInsert(useThisIngredient);
+                    } else {
+                        // if the ingredient did exist, the one we use should be it
+                        useThisIngredient = ingredient;
+                    }
+                    FoodLog foodLog = new FoodLog(useThisIngredient.getIngredientId(), mName);
                     mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
                     mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
                     // with the ID of foodlog set
@@ -142,7 +155,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
 
                     //TODO move this adding ingredient in to the ingredient view model called
                     // from the observer in the food log activity
-                    addIngredientIfNotExist(foodLog.getIngredientId());
+//                    addIngredientIfNotExist(foodLog.getIngredientId());
 
 
                     // go to ask what date

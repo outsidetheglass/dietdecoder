@@ -5,12 +5,16 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLogDao;
-import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLogRoomDatabase;
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 class SymptomLogRepository {
@@ -18,11 +22,11 @@ class SymptomLogRepository {
 
 
   private SymptomLogDao mSymptomLogDao;
-  private final SymptomLogRoomDatabase mSymptomLogDatabase;
+  private final DietDecoderRoomDatabase mSymptomLogDatabase;
 
   SymptomLogRepository(Application application) {
     // setup database to be returned via methods
-    mSymptomLogDatabase = SymptomLogRoomDatabase.getDatabase(application);
+    mSymptomLogDatabase = DietDecoderRoomDatabase.getDatabase(application);
     mSymptomLogDao = mSymptomLogDatabase.symptomLogDao();
   }
 
@@ -36,8 +40,8 @@ class SymptomLogRepository {
   }
 
   // get list of logs that are of a certain type
-  public List<SymptomLog> repositoryGetAllSymptomLogByName(String name) {
-    return mSymptomLogDao.daoGetAllSymptomLogByName(name);
+  public List<SymptomLog> repositoryGetAllSymptomLogByName(UUID id) {
+    return mSymptomLogDao.daoGetAllSymptomLogById(id);
   }
 
   // get single log that is on a certain date
@@ -62,7 +66,7 @@ class SymptomLogRepository {
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryInsertSymptomLog(SymptomLog symptomLog) {
 
-    SymptomLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomLogDao.daoSymptomLogInsert(symptomLog);
     });
 
@@ -71,7 +75,7 @@ class SymptomLogRepository {
   // You must call this on a non-UI thread
   void repositoryDeleteSymptomLog(SymptomLog symptomLog) {
 
-    SymptomLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomLogDao.daoSymptomLogDelete(symptomLog);
     });
 
@@ -80,11 +84,42 @@ class SymptomLogRepository {
 
   void repositoryUpdateSymptomLog(SymptomLog symptomLog) {
 
-    SymptomLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomLogDao.daoSymptomLogUpdate(symptomLog);
     });
 
   } // end update
+
+  // get given number of symptom logs matching the given symptom's name
+  List<SymptomLog> repositoryGetSomeSymptomLogsByName(String symptomName, Integer howManyLogs){
+    List<SymptomLog> someSymptomLogs = null;
+    if ( !Objects.isNull(mSymptomLogDao.daoGetAllSymptomLogByName(symptomName)) ) {
+      someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLogByName(symptomName, howManyLogs);
+    }
+    return someSymptomLogs;
+  }//end get some logs
+
+  Duration repositoryGetAverageSymptomDuration(String symptomName){
+    // our eventual answer for how long the average duration of a recent list of symptom logs is
+    Duration averageDuration = Duration.ZERO;
+    //values to calculate as we go
+    Instant instantBegan, instantChanged;
+    //our list of logs if there is at least one
+    List<SymptomLog> someSymptomLogs = repositoryGetSomeSymptomLogsByName(symptomName, 10);
+
+    // for each symptom log in our list
+    // calculate the duration from when it began to when it changed
+    // and add those durations to our list of all durations
+    for (SymptomLog symptomLog : someSymptomLogs) {
+      instantBegan = symptomLog.getInstantBegan();
+      instantChanged = symptomLog.getInstantChanged();
+      Duration timeElapsed = Duration.between(instantBegan, instantChanged);
+      // calculate the average
+      averageDuration = averageDuration.plus(timeElapsed).dividedBy(2);
+    }
+
+    return averageDuration;
+  } // end average duration method
 
 
 

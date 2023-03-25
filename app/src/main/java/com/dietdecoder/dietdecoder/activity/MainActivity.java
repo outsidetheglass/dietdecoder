@@ -69,33 +69,29 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
       startActivity(symptomLogIntent);
     });
 
+    //TODO put question by question way of adding symptoms here
     // Button to go to ingredient's list and edit and delete and add
-    saveButton = findViewById(R.id.button_main_save);
-    saveButton.setOnClickListener( view -> {
-      startActivity(new Intent(thisActivity, ListSymptomLogActivity.class));
-    });
-
-
-    // mate the view for listing the items in the log
-    RecyclerView recyclerViewLogASymptom = findViewById(R.id.recyclerview_log_a_symptom);
-    // add horizontal lines between each recyclerview item
-    recyclerViewLogASymptom.addItemDecoration(new DividerItemDecoration(recyclerViewLogASymptom.getContext(),
-            DividerItemDecoration.VERTICAL));
-
-
-    symptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
-    recyclerViewLogASymptom.setAdapter(symptomListAdapter);
-    recyclerViewLogASymptom.setLayoutManager(new LinearLayoutManager(this));
-    symptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-
-    symptomViewModel.viewModelGetSymptomsToTrack().observe(this,
-            new Observer<List<Symptom>>() {
-              @Override
-              public void onChanged(List<Symptom> logs) {
-                // Update the cached copy of the words in the adapter.
-                symptomListAdapter.submitList(logs);
-              }
-            });
+//    saveButton = findViewById(R.id.button_main_save);
+//    saveButton.setOnClickListener( view -> {
+//      startActivity(new Intent(thisActivity, ListSymptomLogActivity.class));
+//    });
+    // make the view for listing the items in the log
+//    RecyclerView recyclerViewLogASymptom = findViewById(R.id.recyclerview_log_a_symptom);
+//    // add horizontal lines between each recyclerview item
+//    recyclerViewLogASymptom.addItemDecoration(new DividerItemDecoration(recyclerViewLogASymptom.getContext(),
+//            DividerItemDecoration.VERTICAL));
+//    symptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
+//    recyclerViewLogASymptom.setAdapter(symptomListAdapter);
+//    recyclerViewLogASymptom.setLayoutManager(new LinearLayoutManager(this));
+//    symptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
+//    symptomViewModel.viewModelGetSymptomsToTrack().observe(this,
+//            new Observer<List<Symptom>>() {
+//              @Override
+//              public void onChanged(List<Symptom> logs) {
+//                // Update the cached copy of the words in the adapter.
+//                symptomListAdapter.submitList(logs);
+//              }
+//            });
 
 
   } //end onCreate

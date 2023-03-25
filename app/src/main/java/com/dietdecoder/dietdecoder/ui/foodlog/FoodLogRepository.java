@@ -6,11 +6,14 @@ import android.database.Cursor;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLogRoomDatabase;
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLogDao;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 class FoodLogRepository {
@@ -18,34 +21,48 @@ class FoodLogRepository {
 
 
   private FoodLogDao mFoodLogDao;
-  private final FoodLogRoomDatabase mFoodLogDatabase;
+//  private IngredientDao mIngredientDao;
+  private final DietDecoderRoomDatabase mFoodLogDatabase;
 
   FoodLogRepository(Application application) {
     // setup database to be returned via methods
-    mFoodLogDatabase = FoodLogRoomDatabase.getDatabase(application);
+    mFoodLogDatabase = DietDecoderRoomDatabase.getDatabase(application);
     mFoodLogDao = mFoodLogDatabase.foodLogDao();
+//    mIngredientDao = mFoodLogDatabase.ingredientDao();
   }
 
 
   // queries on a separate thread
   // Observed LiveData will notify the observer when the data has changed.
-  // TODO I deleted the private declaration before, but it might need it
   public LiveData<List<FoodLog>> repositoryGetAllFoodLogs() {
     //use the dao instantiated in the FoodLogRepository method
     // to get all logs, alphabetized
     return mFoodLogDao.daoGetAllFoodLog();
   }
 
-  // get only one property from database for logs
-  //TODO add other properties of log type here
-//  LiveData<List<FoodLog>> repositoryGetFoodLogsWithConcern(String concern) {
-//    return mFoodLogDao.daoGetFoodLogsWithConcern(concern);
-//  }
 
   // get list of logs that are on a certain date
   public List<FoodLog> repositoryGetAllFoodLogOnDate(Instant instant) {
     return mFoodLogDao.daoGetAllFoodLogOnDate(instant);
   }
+
+//
+//  public List<Ingredient> repositoryGetAllFoodLogIngredients(List<FoodLog> foodLogs) {
+//    List<Ingredient> foodLogIngredients = null;
+//    // for each food log we have
+//    //TODO use SQL in the DAO to get all the ingredients matching any of the given foodlog ids
+//    for (FoodLog foodLog: foodLogs) {
+////      find the ingredient matching that food log's ingredient ID
+//      Ingredient ingredient =
+//              mIngredientDao.daoGetFoodLogIngredientFromId(foodLog.getIngredientId());
+//      // if we got an ingredient matching that ID
+//      if (!Objects.isNull(ingredient))  {
+//        // then add it to our list of ingredients to return
+//        foodLogIngredients.add(ingredient);
+//      }
+//    }
+//    return foodLogIngredients;
+//  }
 
   // get single log that is on a certain date
   public FoodLog repositoryGetFoodLogFromConsumedInstant(Instant instant) {
@@ -73,7 +90,7 @@ class FoodLogRepository {
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryInsertFoodLog(FoodLog foodLog) {
 
-    FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mFoodLogDao.daoFoodLogInsert(foodLog);
     });
 
@@ -82,7 +99,7 @@ class FoodLogRepository {
   // You must call this on a non-UI thread
   void repositoryDeleteFoodLog(FoodLog foodLog) {
 
-    FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mFoodLogDao.daoFoodLogDelete(foodLog);
     });
 
@@ -91,7 +108,7 @@ class FoodLogRepository {
 
   void repositoryUpdateFoodLog(FoodLog foodLog) {
 
-    FoodLogRoomDatabase.databaseWriteExecutor.execute(() -> {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mFoodLogDao.daoFoodLogUpdate(foodLog);
     });
 

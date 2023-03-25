@@ -1,7 +1,6 @@
 package com.dietdecoder.dietdecoder.ui.symptomlog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
@@ -64,15 +63,20 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     this.mSymptomLog = symptomLog;
 
+    Log.d(TAG, mSymptomLog.getSymptomName());
     // info on the symptomlog
     // in order to bind it to the recyclerview
     String mSymptomLogName = symptomLog.getSymptomName();
     String mSymptomLogDescription = symptomLog.getDescription();
     Instant mSymptomLogBeganInstant = symptomLog.getInstantBegan();
     Instant mSymptomLogChangedInstant = symptomLog.getInstantChanged();
-    Integer mSymptomSeverityInteger = symptomLog.getSeverityScale();
-    String mSymptomSeverityString = Util.setSeverityString(mSymptomSeverityInteger.toString());
-    String mSymptomLogString = symptomLog.toString();
+//    Integer mSymptomSeverityInteger = symptomLog.getSeverityScale();
+    String mSymptomSeverityString = "Severity N/A";
+//    String mSymptomSeverityString = Util.setSeverityString(mSymptomSeverityInteger.toString());
+    if ( symptomLog.getSeverityScale() != null) {
+      mSymptomSeverityString = symptomLog.getSeverityScale().toString();
+    }
+    //String mSymptomLogString = symptomLog.toString();
 
 
     // how many days ago, if any, between when it began and changed
