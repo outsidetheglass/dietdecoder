@@ -113,7 +113,7 @@ class SymptomLogRepository {
     for (SymptomLog symptomLog : someSymptomLogs) {
       instantBegan = symptomLog.getInstantBegan();
       instantChanged = symptomLog.getInstantChanged();
-      Duration timeElapsed = Duration.between(instantBegan, instantChanged);
+      Duration timeElapsed = Duration.between(instantBegan, instantChanged).abs();
       // calculate the average
       averageDuration = averageDuration.plus(timeElapsed).dividedBy(2);
     }

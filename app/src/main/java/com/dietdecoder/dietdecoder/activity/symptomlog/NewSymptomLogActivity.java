@@ -61,14 +61,17 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
             // give the intensity fragment which symptom we're setting
             mBundle = getIntent().getExtras();
-            newSymptomIntensityFragment.setArguments(mBundle);
 
             // get the ID of the symptom chosen to make a log of
             UUID symptomId = UUID.fromString(mBundle.getString(Util.ARGUMENT_SYMPTOM_ID));
             String symptomName = mBundle.getString(Util.ARGUMENT_SYMPTOM_NAME);
-            // make the symptom log and set its intensity
+            // make the symptom log and set its intensity and put its ID to send to fragment
             SymptomLog symptomIntensityLog = new SymptomLog(symptomId, symptomName);
             mSymptomLogViewModel.viewModelInsertSymptomLog(symptomIntensityLog);
+            mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID,
+                    symptomIntensityLog.getSymptomLogId().toString());
+
+            newSymptomIntensityFragment.setArguments(mBundle);
 
 
             fragmentTransaction

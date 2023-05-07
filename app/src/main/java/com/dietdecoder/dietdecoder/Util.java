@@ -16,6 +16,7 @@ import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -82,6 +83,8 @@ public class Util {
     public static final String ARGUMENT_ACTIVITY_FROM_EDIT_FOOD_LOG = "activity_from_edit_food_log";
     public static final String ARGUMENT_ACTIVITY_FROM_NEW_FOOD_LOG = "activity_from_new_food_log";
     public static final String ARGUMENT_ACTIVITY_FROM_ARE_YOU_SURE = "from_are_you_sure";
+    public static final String ARGUMENT_ACTIVITY_FROM_NEW_SYMPTOM_LOG = "from_new_symptom_log";
+
 
 
 
@@ -136,6 +139,8 @@ public class Util {
     public static final String ARGUMENT_CHANGE_CONSUMED = "change_consumed";
     public static final String ARGUMENT_CHANGE_COOKED = "change_cooked";
     public static final String ARGUMENT_CHANGE_ACQUIRED = "change_acquired";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_BEGIN = "change_symptom_begin";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_CHANGED = "change_symptom_changed";
 
 
     public static final String ARGUMENT_ONLY_SET = "only_set";
@@ -574,6 +579,11 @@ public class Util {
     public static Instant instantFromLocalDateTime(LocalDateTime localDateTime){
         return localDateTime.toInstant( defaultZoneId.getRules().getOffset(localDateTime) );
     }
+    public static Instant instantFromDurationAndStartInstant(Instant instantStart,
+                                                             Duration duration){
+
+        return instantStart.plus(duration);
+    }
 
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -862,14 +872,15 @@ or at least achieves the same effect.
             boldString = title;
             if (!TextUtils.isEmpty(severity)) {
                 notBoldString = notBoldString
-                        .concat("\n(").concat(severity).concat(")");
+                        .concat("\n").concat(severity).concat("/10");
             }
         }
         else {
             boldString = title;
             notBoldString = notBoldString.concat("\n").concat(subtitle);
             if (!TextUtils.isEmpty(severity)) {
-                            notBoldString = notBoldString.concat("\n(").concat(severity).concat(")");
+                            notBoldString = notBoldString.concat("\n").concat(severity).concat(
+                                    "/10");
             }
         }
 

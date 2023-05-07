@@ -43,6 +43,7 @@
       android:textAppearance="@style/edittext"
       android:layout_margin="@dimen/tiny_padding"
       android:textAlignment="center"
+      android:inputType="number"
       android:hint="@string/edittext_new_symptom_intensity"
       android:layout_marginRight="@dimen/tiny_padding"
       app:layout_constraintHorizontal_bias="0.498"

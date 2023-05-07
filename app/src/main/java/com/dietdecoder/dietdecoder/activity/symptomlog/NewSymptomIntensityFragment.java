@@ -2,6 +2,7 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.KeyListener;
 import android.util.Log;
@@ -89,7 +90,11 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
 //
 //                break;
             case R.id.button_new_symptom_intensity_log_save:
-                isIntensityViewEmpty = TextUtils.isEmpty(mEditTextSymptomIntensity.getText());
+                // get int
+
+                Editable symptomIntensityViewEditable =
+                        mEditTextSymptomIntensity.getText();
+                isIntensityViewEmpty = TextUtils.isEmpty(symptomIntensityViewEditable.toString());
                 // if view is empty
                 if ( isIntensityViewEmpty ) {
                     // set intent to tell user try again
@@ -97,24 +102,20 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                 } else {
                     // if view has a values
                     Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
-                    // get int
+
+                    // set the intensity
                     Integer symptomIntensity =
-                            Integer.getInteger(mEditTextSymptomIntensity.getText().toString());
-
-
-
+                            Integer.parseInt(symptomIntensityViewEditable.toString());
                     mSymptomLogViewModel =
                             new ViewModelProvider(this).get(SymptomLogViewModel.class);
                     UUID mSymptomLogId =
-                            UUID.fromString(mBundle.getString(Util.ARGUMENT_SYMPTOM_ID));
+                            UUID.fromString(mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID));
                     SymptomLog symptomIntensityLog =
                             mSymptomLogViewModel.viewModelGetSymptomLogFromId(mSymptomLogId);
-                    // set the intensity
                     symptomIntensityLog.setSeverityScale(symptomIntensity);
                     mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomIntensityLog);
 
-                    //TODO get go to date working
-                    // with the ID of symptom intensity log go set date
+                    // go to date fragment to set when the symptom happened
                     symptomIntensityLogIdString =
                             symptomIntensityLog.getSymptomLogId().toString();
                     Bundle mBundleNext = new Bundle();
@@ -122,15 +123,17 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                             symptomIntensityLogIdString);
                     mBundleNext.putString(Util.ARGUMENT_FRAGMENT_FROM,
                             Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
+                    mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
                     // and which fragment to go to next
                     Fragment mNextFragment = new LogDateTimeChoicesFragment();
                     // put which we're changing into the bundle
                     mNextFragment.setArguments(mBundleNext);
                     // actually go to the next place now
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(Util.fragmentContainerViewAddSymptomLog, mNextFragment);
-                    ft.commit();
+                    getParentFragmentManager().beginTransaction()
+                            .replace(Util.fragmentContainerViewAddSymptomLog, mNextFragment)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
 
                     // go back to new symptom if replacing fragment doesn't work
 //                    Intent listSymptomIntensityIntent = new Intent(getContext(),

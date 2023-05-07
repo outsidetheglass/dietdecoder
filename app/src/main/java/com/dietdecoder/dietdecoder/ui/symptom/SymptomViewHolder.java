@@ -32,7 +32,7 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
     super(itemView);
     symptomViewHolderContext = itemView.getContext();
     symptomItemView = itemView.findViewById(R.id.textview_symptom_item);
-    symptomCheckButton = itemView.findViewById(R.id.imagebutton_symptom_option);
+    symptomCheckButton = itemView.findViewById(R.id.imagebutton_symptom_option_circle);
   }
 
 

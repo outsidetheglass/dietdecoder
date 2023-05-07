@@ -23,8 +23,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.TextUtils;
 
 import java.time.Instant;
@@ -48,7 +51,16 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
     Bundle mBundle, mBundleNext;
     FoodLogViewModel mFoodLogViewModel;
+    SymptomLogViewModel mSymptomLogViewModel;
     FoodLog mFoodLog;
+    SymptomLog mSymptomLog;
+    Boolean settingFoodLog = Boolean.FALSE;
+    Boolean settingSymptomLog = Boolean.FALSE;
+    Boolean isSymptomLogBeginInstantSet = Boolean.FALSE;
+    Boolean isSymptomLogChangedInstantSet = Boolean.FALSE;
+    String mLogIdString;
+    TextView titleTextView;
+    int mFragmentContainer;
 
     Instant mInstant, mInstantSet;
 
@@ -75,6 +87,9 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //TODO finish setting this up for food vs symptom
+        titleTextView = view.findViewById(R.id.textview_title_log_specific_date);
+
         // set the listener on the save button
         mDateButtonSave = view.findViewById(R.id.button_log_specific_date_save);
         mDateButtonSave.setOnClickListener(this);
@@ -93,10 +108,50 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
         if ( !getArguments().isEmpty() ) {
             // get info about what date time we're starting from
             mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
             mBundle = getArguments();
-            mFoodLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
-            mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
-            mWhereFrom = mBundle.getString(Util.ARGUMENT_ACTIVITY_FROM);
+
+            // find out if we have a food log or symptom log to set the date time of
+            // if food log ID was given then set that
+            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) ) {
+                settingFoodLog = Boolean.TRUE;
+                mLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
+                // now get the food log associated with that UUID
+                mFoodLog =
+                        mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mLogIdString));
+                // when we have to replace the fragment container, replace the right one
+                mFragmentContainer = Util.fragmentContainerViewAddSymptomLog;
+                mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+                mWhereFrom = mBundle.getString(Util.ARGUMENT_ACTIVITY_FROM);
+                // now get the info associated with that UUID
+                mFoodLog =
+                        mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mFoodLogIdString));
+                mDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange, mFoodLog);
+
+            } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) ) {
+                settingSymptomLog = Boolean.TRUE;
+                mLogIdString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID);
+                // now get the info associated with that UUID
+                mSymptomLog =
+                        mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(mLogIdString));
+
+                mFragmentContainer = Util.fragmentContainerViewAddFoodLog;
+                if ( !isSymptomLogBeginInstantSet ){
+                    // if begin hasn't been set yet, then that's what we're changing
+                    mBundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+                    mDateTime = Util.localDateTimeFromInstant(mSymptomLog.getInstantBegan());
+                    titleTextView.setText(getResources().getString(R.string.title_log_begin));
+                } else {
+                    // we have changed begin so now set changed/ended instead
+                    mBundle.remove(Util.ARGUMENT_CHANGE);
+                    mBundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED);
+                    mDateTime = Util.localDateTimeFromInstant(mSymptomLog.getInstantChanged());
+                    titleTextView.setText(getResources().getString(R.string.title_log_change));
+                }
+                mWhereFrom = Util.ARGUMENT_ACTIVITY_FROM_NEW_SYMPTOM_LOG;
+
+            }
+
 
 
             // if we're only supposed to set one or the other
@@ -109,10 +164,6 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 //                }
 //            }
 
-            // now get the info associated with that UUID
-            mFoodLog =
-                    mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mFoodLogIdString));
-            mDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange, mFoodLog);
             // Current date and time
             mHour = mDateTime.getHour();
             mMinute = mDateTime.getMinute();
@@ -225,12 +276,24 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                         mDateTime.withDayOfMonth(mDay).withMonth(mMonth+1).withYear(mYear)
                                 .withMinute(mMinute).withHour(mHour);
 
-                // then set the values from the food log
-                mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange,
-                        mFoodLog, mDateTimeSet);
+                if (settingSymptomLog){
+                    if (mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN) {
+                        mSymptomLog.setInstantBegan(Util.instantFromLocalDateTime(mDateTimeSet));
+                    } else {
+                        mSymptomLog.setInstantChanged(Util.instantFromLocalDateTime(mDateTimeSet));
 
-                // update our food log with the new date consumed
-                mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+                    }
+                    mSymptomLogViewModel.viewModelUpdateSymptomLog(mSymptomLog);
+
+                    } else {
+
+                    // then set the values from the food log
+                    mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange,
+                            mFoodLog, mDateTimeSet);
+                    // update our food log with the new date consumed
+                    mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
+                }
+
 
                 // go back to activity to go to the next fragment
                 // with our picked date
@@ -241,10 +304,11 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                     LogPartOfDayFragment logPartOfDayFragment = new LogPartOfDayFragment();
                     logPartOfDayFragment.setArguments(mBundleNext);
                     // actually go to the next place now
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(Util.fragmentContainerViewEditFoodLog, logPartOfDayFragment);
-                    ft.commit();
+                    getParentFragmentManager().beginTransaction()
+                            .replace(Util.fragmentContainerViewEditFoodLog, logPartOfDayFragment)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
                 }
                 // else it means go back to main activity or edit
                 else {
@@ -260,8 +324,12 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
                     } else {
                         // not from edit so we're done here
-                        // go back to food log activity
-                        startActivity(new Intent(getActivity(), FoodLogActivity.class));
+                        if (settingSymptomLog){
+                            startActivity(new Intent(getActivity(), ListSymptomLogActivity.class));
+                        } else {
+                            // go back to food log activity
+                            startActivity(new Intent(getActivity(), FoodLogActivity.class));
+                        }
                     }
 
                 }

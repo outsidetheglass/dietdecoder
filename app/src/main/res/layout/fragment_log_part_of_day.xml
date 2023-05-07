@@ -21,7 +21,7 @@
       app:layout_constraintTop_toTopOf="parent"/>
 
   <TextView
-      android:id="@+id/textview_question_log_date_time_choices_time"
+      android:id="@+id/textview_question_log_part_of_day_specific_time_range"
       android:text="@string/textview_question_log_part_of_day_specific_time_range"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/small_padding"
-      app:layout_constraintTop_toBottomOf="@+id/textview_question_log_date_time_choices_time"
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_log_part_of_day_specific_time_range"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
   <Button

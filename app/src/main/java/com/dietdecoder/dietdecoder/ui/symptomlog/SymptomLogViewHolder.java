@@ -34,7 +34,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     super(itemView);
     symptomLogContext = itemView.getContext();
     symptomLogItemView = itemView.findViewById(R.id.textview_symptom_log_item);
-    symptomLogItemOptionButton = itemView.findViewById(R.id.imagebutton_symptom_log_option);
+//    symptomLogItemOptionButton = itemView.findViewById(R.id.imagebutton_symptom_option_circle);
 
   }
 
@@ -63,7 +63,6 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     this.mSymptomLog = symptomLog;
 
-    Log.d(TAG, mSymptomLog.getSymptomName());
     // info on the symptomlog
     // in order to bind it to the recyclerview
     String mSymptomLogName = symptomLog.getSymptomName();
@@ -98,12 +97,15 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     symptomLogItemView.setText(printString);
 
     // if the item options is clicked, open the menu for options on that item
-    symptomLogItemOptionButton.setOnClickListener(this);
+//    symptomLogItemOptionButton.setOnClickListener(this);
 
   }
 
   @Override
   public void onClick(View view) {
+    //when clicked change image to filled in with sick person image
+    //ic_baseline_sick
+
     // Initializing the popup menu and giving the reference as current logContext
     PopupMenu popupMenu = new PopupMenu(symptomLogContext, symptomLogItemOptionButton);
     // Inflating popup menu from popup_menu.xml file

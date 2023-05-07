@@ -168,7 +168,8 @@ static final UUID symptomDaoWriteExecute(){
   symptomDao.symptomDaoInsert(
           new Symptom(
                   "low energy level",
-                  "Energy level super low. Hard to move, think, care. Not in a depressed like they don't exist anymore way, just in a everything is blurry and it's like moving in slow motion while the world is in normal speed.",
+                  "Energy level super low. Hard to move, think, care. Everything is blurry and " +
+                          "it's like moving in slow motion while the world is in normal speed.",
                   "neurological",
                   "energy", Boolean.FALSE, 0, 3600)
   );

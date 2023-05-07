@@ -32,10 +32,14 @@
   <string name="textview_new_log_ingredient_brand">Brand of ingredient</string>
   <string name="title_textview_new_log_ingredient_date">Date Time Consumed</string>
   <string name="title_log">Record Log</string>
+  <string name="title_log_change">Record Log For End</string>
+  <string name="title_log_begin">Record Log For Begin</string>
+
   <string name="textview_24hr">(24 hour time)</string>
   <string name="pick_time">Pick Time</string>
 
   <string name="question_textview_new_symptom_intensity_log">How intense is the symptom? (on a scale of 1/10, e.g. enter 5 for 5/10)</string>
+  <string name="question_textview_new_symptom_intensity_log_changed_time">That set when the symptom started. Now, when did the symptom end?</string>
 
 
   <string name="question_textview_new_log">What general time range are we concerned with?</string>

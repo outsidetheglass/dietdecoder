@@ -91,7 +91,7 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
     if ( averageDuration.isZero() ) {
       // TODO get default duration from symptom itself
-      averageDuration = Duration.ofHours(1);
+      averageDuration = Duration.ofSeconds(3600);
     }
     return averageDuration;
   }
