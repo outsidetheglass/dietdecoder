@@ -64,6 +64,11 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
 
         mBundle = getArguments();
 
+
+        // TODO add symptom log for all symptom IDs chosen
+        // TODO fix, right now it only will work for first symptom and maybe not even that
+        // TODO make it work for intensity for all symptoms
+
         //TODO change this to integer instead of edittext
         mEditTextSymptomIntensity =
                 view.findViewById(R.id.edittext_new_symptom_intensity);

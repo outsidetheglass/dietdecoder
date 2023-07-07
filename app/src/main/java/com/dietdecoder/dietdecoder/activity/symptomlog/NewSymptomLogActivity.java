@@ -135,6 +135,10 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
     private Fragment whichFragmentNext(String whichFragmentGoTo) {
 
+        // TODO add symptom log for all symptom IDs chosen
+        // TODO fix, right now it only will work for first symptom and maybe not even that
+        // TODO make it work for intensity for all symptoms
+
         // change which fragment starts based on which button was pressed
         if (Objects.equals(whichFragmentGoTo,
                 Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY)) {

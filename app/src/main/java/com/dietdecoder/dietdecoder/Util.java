@@ -60,6 +60,7 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_NAME = "symptom_name";
     public static final String ARGUMENT_SYMPTOM_LOG_ID = "symptom_log_id";
 
+    public static final String ARGUMENT_SYMPTOMS_TO_ADD = "symptoms_to_add";
 
 
     // check if we want to export as a csv or pdf or what

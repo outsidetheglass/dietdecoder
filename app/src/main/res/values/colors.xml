@@ -6,9 +6,14 @@
     <color name="lightest_green">#E2FBE1</color>
     <color name="orange_200">#DA7903</color>
     <color name="orange_700">#873701</color>
+    <color name="red_200">#FC8686</color>
+    <color name="red_500">#770000</color>
+    <color name="red_700">#980303</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#A1A1A1</color>
     <color name="color_title">#003300</color>
     <color name="button_label">#FFFFFF</color>
+    <color name="selected_text_color">@color/red_700</color>
+    <color name="unselected_text_color">@color/green_700</color>
 </resources>

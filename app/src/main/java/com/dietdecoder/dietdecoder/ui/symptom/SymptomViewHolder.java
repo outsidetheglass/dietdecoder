@@ -1,7 +1,13 @@
 package com.dietdecoder.dietdecoder.ui.symptom;
 
+import static com.dietdecoder.dietdecoder.R.*;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,12 +33,18 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
   public TextView symptomItemView;
   public ImageButton symptomCheckButton;
   private Context symptomViewHolderContext;
+  ColorStateList selectedColor;
+  ColorStateList unSelectedColor;
 
   private SymptomViewHolder(View itemView) {
     super(itemView);
     symptomViewHolderContext = itemView.getContext();
-    symptomItemView = itemView.findViewById(R.id.textview_symptom_item);
-    symptomCheckButton = itemView.findViewById(R.id.imagebutton_symptom_option_circle);
+    symptomItemView = itemView.findViewById(id.textview_symptom_item);
+    symptomCheckButton = itemView.findViewById(id.imagebutton_symptom_option_circle);
+    selectedColor = itemView.getResources().getColorStateList(color.selected_text_color,
+            symptomViewHolderContext.getTheme());
+    unSelectedColor = itemView.getResources().getColorStateList(color.unselected_text_color,
+            symptomViewHolderContext.getTheme());
   }
 
 
@@ -63,15 +75,22 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
       @Override
       public void onClick(View v) {
 
-        // go to set the intensity of the symptom before coming back to ask about more symptoms
-        Intent addSymptomIntensityIntent = new Intent(symptomViewHolderContext,
-                NewSymptomLogActivity.class);
-        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_SYMPTOM_ID, symptomId);
-        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_GO_TO,
-                Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
-        addSymptomIntensityIntent.putExtra(Util.ARGUMENT_SYMPTOM_NAME, symptomName);
-        symptomViewHolderContext.startActivity(addSymptomIntensityIntent);
+        //change text color to show it was clicked, change to red
+        symptomItemView.setTextColor(selectedColor);
 
+        //TODO change pain face to question mark, when selected in here make it an icon for that
+        // pain suffer type or default sick face
+
+      }
+    });
+
+    symptomItemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        //change text color to show it was unclicked, change back to unselected color
+        if (symptomItemView.getTextColors() == selectedColor ) {
+          symptomItemView.setTextColor(unSelectedColor);
+        }
       }
     });
 
@@ -83,7 +102,7 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
     Context symptomViewHolderContext = symptomParent.getContext();
     LayoutInflater symptomInflater = LayoutInflater.from(symptomViewHolderContext);
     View symptomView = symptomInflater.inflate(
-      R.layout.recyclerview_symptom_item,
+      layout.recyclerview_symptom_item,
       symptomParent,
       false
     );

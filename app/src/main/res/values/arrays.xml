@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="colors">
+        <item>@color/green_500</item>
+        <item>@color/green_200</item>
+        <item>@color/green_700</item>
+        <item>@color/red_200</item>
+        <item>@color/red_500</item>
+        <item>@color/red_700</item>
+        <item>@color/black</item>
+        <item>@color/white</item>
+        <item>@color/gray</item>
+        <item>@color/color_title</item>
+        <item>@color/button_label</item>
+        <item>@color/lightest_green</item>
+        <item>@color/orange_200</item>
+        <item>@color/orange_700</item>
+    </array>
+</resources>
