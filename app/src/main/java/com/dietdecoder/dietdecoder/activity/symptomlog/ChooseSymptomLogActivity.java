@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -30,25 +23,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.LogDateTimeChoicesFragment;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
-import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewHolder;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
     private final Activity thisActivity = ChooseSymptomLogActivity.this;
+    private Context thisContext;
 
     //TODO fix names
     int mFragmentContainerView = Util.fragmentContainerViewChooseSymptomLog;
@@ -56,6 +44,8 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
 
     String mWhichFragmentGoTo, mSaveString, mEmptyTryAgainString;
     Button mButtonSaveName;
+
+    ArrayList<String> mSymptomsSelectedIdsArrayListStrings = null;
 
     private Fragment nextFragment = null;
 
@@ -65,9 +55,6 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
 
     ColorStateList selectedColor;
     ColorStateList unSelectedColor;
-
-    ArrayList<String> symptomsSelectedIdsArrayListStrings = null;
-
 
     public ChooseSymptomLogActivity() {
         super(R.layout.activity_choose_symptom_log);
@@ -81,7 +68,14 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
+        thisContext = thisActivity.getApplicationContext();
+
+
         if (savedInstanceState == null) {
+
+            // basic variable setup
+            mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
+            mBundle = new Bundle();
 
             //save button
             mButtonSaveName = findViewById(R.id.button_choose_symptom_log_save);
@@ -140,14 +134,14 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
     @Override
     public void onClick(View view) {
 
-        // setup for adding which symptoms to add to the intent
-        Context symptomViewHolderContext = getApplicationContext();
-        Intent addSymptomIntensityIntent = new Intent(symptomViewHolderContext,
+        // basic variables setup
+        // the next activity to go to from here
+        Intent addSymptomIntensityIntent = new Intent(thisActivity,
                 NewSymptomLogActivity.class);
-
         // get saving string from resources so everything can translate languages easy
         mSaveString = getResources().getString(R.string.saving);
         mEmptyTryAgainString = getResources().getString(R.string.empty_not_saved);
+
 
         switch (view.getId()) {
             //do something when edittext is clicked
@@ -157,15 +151,13 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
             case R.id.button_choose_symptom_log_save:
                 // get int
 //
-                // TODO check if any were chosen
-                // TODO if none chosen, show error on save click
-                // TODO if one or more was chosen, send those on to what time and intensity for each
                 for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
 
                     final RecyclerView.ViewHolder holder =
                             recyclerViewSymptomNameChoices.getChildViewHolder(recyclerViewSymptomNameChoices.getChildAt(i));
                     TextView viewHolderTextView =
                             holder.itemView.findViewById(R.id.textview_symptom_item);
+                    //Log.d(TAG, "viewHolderTextView "+viewHolderTextView.getText());
 
                     int textViewColorInt =
                             viewHolderTextView.getTextColors().getDefaultColor();
@@ -174,33 +166,50 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
                             holder.itemView.getResources().getColorStateList(R.color.selected_text_color,
                             getTheme());
                     int selectInt = selectedColor.getDefaultColor();
+//                    Log.d(TAG, "selectInt "+selectInt);
+//                    Log.d(TAG, "textViewColorInt"+textViewColorInt);
+
                     // if the text color of the current item in the list is the color set when
                     // selected by the user
                     if (Objects.equals(selectInt, textViewColorInt) ){
+                        // get the ID of the symptom that has the selected color text
                         int position = holder.getBindingAdapterPosition();
-                        Symptom currentSymptomSelected =
-                                mSymptomListAdapter.getCurrentList().get(position);
+                        String currentSymptomSelectedViewModel =
+                                mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
+                                        .getSymptomId().toString();
+                        // add that string ID to our array of selected symptoms
+                        mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedViewModel);
+
+
+//                        Log.d(TAG,
+//                                "mSymptomListAdapter.getCurrentList() "+currentSymptomSelected.toString());
+//                        Log.d(TAG,
+//                                "holder.itemView "
+//                                        + holder.itemView.getContext().getResources().toString());
 
                         // add symptom ID to list that will be passed into fragment to add
                         // these symptoms in symptom logs
-                        String currentSymptomIdString = String.valueOf(currentSymptomSelected.getSymptomId());
-                        symptomsSelectedIdsArrayListStrings.add(currentSymptomIdString);
+                        //String currentSymptomIdString =
+                               // String.valueOf(currentSymptomSelected.getSymptomId());
+                        //symptomsSelectedIdsArrayListStrings.add(currentSymptomIdString);
                     }
                 }
 
-                // after done with the for loop, all the symptoms to add have been put in to the
-                // array
-                // check if symptoms to add array is empty
-                if ( symptomsSelectedIdsArrayListStrings.isEmpty() ) {
+                // after done with the for loop,
+                // all the symptoms to add have been put into the array
+                // so first we check if symptoms to add array is empty
+                if ( mSymptomsSelectedIdsArrayListStrings.isEmpty() ) {
                     // if empty, alert user none were selected and don't do anything else
                     Toast.makeText(getApplicationContext(), mEmptyTryAgainString, Toast.LENGTH_SHORT).show();
                 } else {
                     // if not empty, put the array into the intent to go add symptoms
-                    mBundle.putString(Util.ARGUMENT_SYMPTOMS_TO_ADD,
-                            String.valueOf(symptomsSelectedIdsArrayListStrings));
+                    mBundle.putString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD,
+                            String.valueOf(mSymptomsSelectedIdsArrayListStrings));
                     addSymptomIntensityIntent.putExtras(mBundle);
+//                    Log.d(TAG, "mSymptomListIdString "+ mSymptomsSelectedIdsArrayListStrings.toString() );
+
                     // go to set the intensity of the symptom
-                    symptomViewHolderContext.startActivity(addSymptomIntensityIntent);
+                    startActivity(addSymptomIntensityIntent);
 
                 }
 

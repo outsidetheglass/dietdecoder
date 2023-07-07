@@ -11,6 +11,7 @@ import androidx.room.Update;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.List;
+import java.util.UUID;
 
 @Dao
 public interface SymptomDao {
@@ -42,7 +43,12 @@ public interface SymptomDao {
 //  @Query("SELECT * FROM symptom_table WHERE symptomName = :daoSymptomName AND symptomIntensity = :daoSymptomIntensity")
 //  Symptom daoGetSymptomWithNameIntensity(String daoSymptomName, Integer daoSymptomIntensity);
 //
-  @Query("SELECT * FROM symptom_table WHERE symptomName = :daoSymptomName")
-  Symptom daoGetSymptomWithName(String daoSymptomName);
+@Query("SELECT * FROM symptom_table WHERE symptomName = :daoSymptomName")
+Symptom daoGetSymptomWithName(String daoSymptomName);
+
+  @Query("SELECT * FROM symptom_table WHERE symptomId = :daoSymptomId")
+  Symptom daoGetSymptomWithId(UUID daoSymptomId);
+
+
 
 }

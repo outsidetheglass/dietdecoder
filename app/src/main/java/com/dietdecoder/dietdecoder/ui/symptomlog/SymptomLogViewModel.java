@@ -42,6 +42,7 @@ public class SymptomLogViewModel extends AndroidViewModel {
     return mViewModelAllSymptomLogs;
   }
 
+
   //get all logs on date TODO make work
 //  public List<SymptomLog> viewModelGetAllSymptomLogOnDate(Instant instant) {
 //    mViewModelAllSymptomLogsOnDate = mRepository.repositoryGetAllSymptomLogOnDate(instant);

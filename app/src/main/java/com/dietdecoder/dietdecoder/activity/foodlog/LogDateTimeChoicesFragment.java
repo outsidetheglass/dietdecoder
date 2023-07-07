@@ -80,6 +80,11 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
         questionTextView = view.findViewById(R.id.textview_question_log_date_time_choices_time);
 
+        //TODO make this work for setting all the arrays passed in to be the same as single
+        if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD).contains(",")) {
+            // do things here for multiple IDs
+        }
+
         // find out if we have a food log or symptom log to set the date time of
         // if food log ID was given then set that
         if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) ) {

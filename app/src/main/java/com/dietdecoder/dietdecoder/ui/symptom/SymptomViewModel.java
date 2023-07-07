@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.List;
+import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
 // i.e. remove Fragment, Activity, View
@@ -54,6 +55,11 @@ public class SymptomViewModel extends AndroidViewModel {
   public Symptom viewModelGetSymptomFromName(String paramSymptomName) {
     return mRepository.symptomRepositoryGetSymptomFromName(paramSymptomName);
   }
+  //get single symptom from the UUID
+  public Symptom viewModelGetSymptomFromId(UUID paramSymptomId) {
+    return mRepository.symptomRepositoryGetSymptomFromId(paramSymptomId);
+  }
+
   public List<Symptom> viewModelGetAllSymptomFromCategory(String symptomCategory){
     return mRepository.symptomRepositoryGetSymptomInCategory(symptomCategory);
   }

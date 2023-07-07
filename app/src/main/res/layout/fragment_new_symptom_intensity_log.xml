@@ -36,6 +36,20 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textview_title_new_symptom_intensity_log_name_fragment"/>
 
+  <TextView
+      android:id="@+id/subsubtitle_textview_symptom_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/symptom_detail_name_textview"
+      android:padding="@dimen/small_padding"
+      android:textAppearance="@style/textview_main_content"
+      android:layout_marginLeft="@dimen/big_padding"
+      android:layout_marginTop="@dimen/big_padding"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_symptom_intensity_log"
+      />
+
   <EditText
       android:id="@+id/edittext_new_symptom_intensity"
       android:layout_width="wrap_content"
@@ -49,7 +63,7 @@
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_symptom_intensity_log"
+      app:layout_constraintTop_toBottomOf="@+id/subsubtitle_textview_symptom_name"
       />
 
   <Button

@@ -1,8 +1,10 @@
 package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,8 +19,10 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +32,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
     private final Activity thisActivity = NewSymptomLogActivity.this;
+    private Context thisContext;
 
     int mFragmentContainerView = Util.fragmentContainerViewAddSymptomLog;
     Bundle mBundle;
@@ -45,41 +50,86 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // make toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_new_symptom_log);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
+        // declare and set variables
+        thisContext = thisActivity.getApplicationContext();
         SymptomLogViewModel mSymptomLogViewModel =
                 new ViewModelProvider(this).get(SymptomLogViewModel.class);
-
+        SymptomViewModel mSymptomViewModel =
+                new ViewModelProvider(this).get(SymptomViewModel.class);
+        ArrayList<String> mSymptomsToAddArrayListIdStrings = new ArrayList<>();
+        ArrayList<String> mSymptomLogsToAddArrayListIdStrings = new ArrayList<>();
 
         // if we had no view made, go straight to asking user for intensity
         if (savedInstanceState == null) {
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment newSymptomIntensityFragment = new NewSymptomIntensityFragment();
 
             // give the intensity fragment which symptom we're setting
-            mBundle = getIntent().getExtras();
 
-            // get the ID of the symptom chosen to make a log of
-            UUID symptomId = UUID.fromString(mBundle.getString(Util.ARGUMENT_SYMPTOM_ID));
-            String symptomName = mBundle.getString(Util.ARGUMENT_SYMPTOM_NAME);
-            // make the symptom log and set its intensity and put its ID to send to fragment
-            SymptomLog symptomIntensityLog = new SymptomLog(symptomId, symptomName);
-            mSymptomLogViewModel.viewModelInsertSymptomLog(symptomIntensityLog);
-            mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID,
-                    symptomIntensityLog.getSymptomLogId().toString());
+            // get the info about which symptom we're logging
+            // check if info passed in exists, if not then go home
+            if ( getIntent().getExtras() != null ) {
+                // get the info
+                mBundle = getIntent().getExtras();
 
-            newSymptomIntensityFragment.setArguments(mBundle);
+                // get the array of Id's of symptoms to add
+                String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD);
+                // clean the array string
+                mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
+                // go through the string and at the comma's add that ID to the array
+                for (String mSymptomIdString : mSymptomIdsToAddString.split(",")) {
+                    mSymptomsToAddArrayListIdStrings.add(mSymptomIdString);
+
+                    //get info on the symptom to make the log based on defaults
+                    UUID symptomId = UUID.fromString(mSymptomIdString);
+                    String symptomName = mSymptomViewModel.viewModelGetSymptomFromId(symptomId).getSymptomName();
+                    // make the symptom log
+                    SymptomLog symptomLog = new SymptomLog(symptomId, symptomName);
+                    mSymptomLogViewModel.viewModelInsertSymptomLog(symptomLog);
+                    // put its ID in array to send to fragment
+                    mSymptomLogsToAddArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
+                }
+                //set the array string of symptom log Ids to the bundle
+                mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
+                        mSymptomLogsToAddArrayListIdStrings.toString() );
+                // set that first to change is the intensity of the symptoms
+                mBundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO,
+                        Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+                newSymptomIntensityFragment.setArguments(mBundle);
+
+                //Log.d(TAG, "mSymptomIdsToAddString"+ mSymptomIdsToAddString);
+//                Log.d(TAG, "mSymptomsToAddArrayListIdStrings.get(1)"+ mSymptomsToAddArrayListIdStrings.get(1));
+                Log.d(TAG,
+                        "mSymptomLogsToAddArrayListIdStrings "+ mSymptomLogsToAddArrayListIdStrings);
 
 
-            fragmentTransaction
-                    .replace(mFragmentContainerView,
-                            newSymptomIntensityFragment)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
+                // then go to the specific fragments to change away from the defaults
+                fragmentTransaction
+                        .replace(mFragmentContainerView,
+                                newSymptomIntensityFragment)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                // there's no information about which symptom to add, so
+                // tell the user that they got here by mistake, it's a bug
+                // must choose which symptom before this activity
+                String mWrongPlaceLetsGoHome =
+                        getResources().getString(R.string.wrong_place_lets_go_home);
+                Toast.makeText(getApplicationContext(), mWrongPlaceLetsGoHome,
+                        Toast.LENGTH_SHORT).show();
+                Intent goHomeIntent = new Intent(thisContext,
+                        MainActivity.class);
+                thisContext.startActivity(goHomeIntent);
+            }
+
         }
 
         // leaving this here in case I want this activity to do more than just intensity

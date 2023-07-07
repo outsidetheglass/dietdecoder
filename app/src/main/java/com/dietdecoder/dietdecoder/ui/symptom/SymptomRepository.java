@@ -9,6 +9,7 @@ import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptom.SymptomDao;
 
 import java.util.List;
+import java.util.UUID;
 
 class SymptomRepository {
 
@@ -44,6 +45,11 @@ class SymptomRepository {
   public Symptom symptomRepositoryGetSymptomFromName(String symptomName) {
     return mSymptomDao.daoGetSymptomWithName(symptomName);
   }
+  // get only given symptom using id
+  public Symptom symptomRepositoryGetSymptomFromId(UUID symptomId) {
+    return mSymptomDao.daoGetSymptomWithId(symptomId);
+  }
+
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.

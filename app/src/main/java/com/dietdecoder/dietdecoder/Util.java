@@ -16,11 +16,13 @@ import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Objects;
@@ -60,7 +62,11 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_NAME = "symptom_name";
     public static final String ARGUMENT_SYMPTOM_LOG_ID = "symptom_log_id";
 
-    public static final String ARGUMENT_SYMPTOMS_TO_ADD = "symptoms_to_add";
+    public static final String ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD = "symptom_ids_to_add";
+    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
+    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
+            "symptom_log_ids_to_add_original";
+
 
 
     // check if we want to export as a csv or pdf or what
@@ -159,6 +165,17 @@ public class Util {
     ////////////////////////////////////////////////////////
     // for displaying values////////////////////////////////
     ////////////////////////////////////////////////////////
+
+
+    // clean a string that was turned from an ArrayList into a string
+    // for bundling between activities
+    public static String cleanArrayString(String paramString){
+        String mString = paramString;
+        // remove first and last brackets and whitespace
+        mString = mString.substring( 1, mString.length() - 1 );
+        mString.replaceAll(" ", "");
+        return mString;
+    }
 
     // make substring bold and italic and regular font
     public static SpannableStringBuilder setBoldItalicPlainSpan(String boldString,

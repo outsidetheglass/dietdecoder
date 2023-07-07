@@ -95,7 +95,11 @@
   <string name="title_textview_new_ingredient">New Ingredient</string>
   <string name="enter_ingredient_edittext_name">Type Ingredient Name Here</string>
   <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
+
   <string name="empty_not_saved">Not saved because it is empty.</string>
+  <string name="wrong_place_lets_go_home">Error on page, let\'s go home and try again. Report this bug please.</string>
+  <string name="heads_up_all_times_same">All times for symptoms will be set to be the same; if you want to set any single symptom different, use the edit button in the list of logs.</string>
+
 
   <string name="title_edit_ingredient_textview">Enter New Values</string>
   <string name="enter_new_ingredient_edittext_name">Fixed Ingredient Name Here</string>
