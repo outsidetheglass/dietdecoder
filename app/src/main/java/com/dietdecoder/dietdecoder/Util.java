@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -10,10 +11,13 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
+import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.lang.reflect.Array;
@@ -63,9 +67,15 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_LOG_ID = "symptom_log_id";
 
     public static final String ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD = "symptom_ids_to_add";
+    public static final String ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY =
+            "how_many_symptom_ids_to_add";
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
             "symptom_log_ids_to_add_original";
+    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
+    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
+            "symptom_log_ids_to_add_original";
+
 
 
 
@@ -148,6 +158,7 @@ public class Util {
     public static final String ARGUMENT_CHANGE_ACQUIRED = "change_acquired";
     public static final String ARGUMENT_CHANGE_SYMPTOM_BEGIN = "change_symptom_begin";
     public static final String ARGUMENT_CHANGE_SYMPTOM_CHANGED = "change_symptom_changed";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_INTENSITY = "change_symptom_intensity";
 
 
     public static final String ARGUMENT_ONLY_SET = "only_set";
@@ -173,8 +184,26 @@ public class Util {
         String mString = paramString;
         // remove first and last brackets and whitespace
         mString = mString.substring( 1, mString.length() - 1 );
-        mString.replaceAll(" ", "");
+        mString = mString.replaceAll("\\s", "");
         return mString;
+    }
+
+    // clean the bundled string and return an Array List
+    public static ArrayList<String> cleanBundledStringIntoArrayList(String paramStringToCleanIntoArrayList){
+
+        ArrayList<String> mStringArray = new ArrayList<String>();
+
+        // remove brackets and spaces
+        String mCleanedSplitSymptomLodIdsToAddString =
+                Util.cleanArrayString(paramStringToCleanIntoArrayList);
+
+        // make it into an array for each ID
+        for (String symptomLogIdString : mCleanedSplitSymptomLodIdsToAddString.split(",")) {
+            mStringArray.add(symptomLogIdString);
+        }
+
+        return mStringArray;
+
     }
 
     // make substring bold and italic and regular font
@@ -752,6 +781,7 @@ public class Util {
         return mIntent;
     }
 
+
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
 
@@ -798,6 +828,27 @@ or at least achieves the same effect.
         }
 
         return isEditedBoolean;
+    }
+
+    public static Boolean isIntegerBetween1to10(Integer paramInteger) {
+        Boolean answer = Boolean.FALSE;
+
+        if (paramInteger != 1 ||
+                paramInteger != 2 ||
+                paramInteger != 3 ||
+                paramInteger != 4 ||
+                paramInteger!= 5 ||
+                paramInteger != 6 ||
+                paramInteger != 7 ||
+                paramInteger != 8 ||
+                paramInteger != 9 ||
+                paramInteger != 10 ) {
+            answer = Boolean.TRUE;
+        } else {
+            answer = Boolean.FALSE;
+        }
+
+        return answer;
     }
 
     ////////////////////////////////////////////////////////

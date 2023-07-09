@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.foodlog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,28 +37,29 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
 
-    LocalDateTime mNowDateTime = LocalDateTime.now(), mEarlierTodayDateTime, mYesterdayDateTime,
-            mDayBeforeYesterdayDateTime;
     Button mButtonJustNow, mButtonEarlierToday, mButtonAnotherDate, mButtonYesterday;
+    TextView questionTextView;
 
     // TODO set this to be a preference
     Integer hoursEarlierInt = 4;
     String mLogIdString;
-    int mFragmentContainer;
 
     Bundle mBundle;
+    int mFragmentContainer;
+
     FoodLogViewModel mFoodLogViewModel;
     SymptomLogViewModel mSymptomLogViewModel;
     FoodLog mFoodLog;
-    SymptomLog mSymptomLog;
+    SymptomLog mCurrentSymptomLog;
+
     Boolean settingFoodLog = Boolean.FALSE;
     Boolean settingSymptomLog = Boolean.FALSE;
     Boolean isSymptomLogBeginInstantSet = Boolean.FALSE;
     Boolean isSymptomLogChangedInstantSet = Boolean.FALSE;
-    TextView questionTextView;
-
     Instant mInstantConsumed, mInstantBegan, mInstant;
-
+    LocalDateTime mNowDateTime = LocalDateTime.now(), mEarlierTodayDateTime, mYesterdayDateTime,
+            mDayBeforeYesterdayDateTime;
+    ArrayList<String> mSymptomLogIdsToAddStringArray;
 
 
     public LogDateTimeChoicesFragment() {
@@ -80,29 +83,37 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
         questionTextView = view.findViewById(R.id.textview_question_log_date_time_choices_time);
 
-        //TODO make this work for setting all the arrays passed in to be the same as single
-        if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD).contains(",")) {
-            // do things here for multiple IDs
-        }
 
         // find out if we have a food log or symptom log to set the date time of
         // if food log ID was given then set that
         if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) ) {
+            //TODO make food logs multiple set array same as symptoms
             settingFoodLog = Boolean.TRUE;
             mLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
             // now get the food log associated with that UUID
             mFoodLog =
                     mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mLogIdString));
             // when we have to replace the fragment container, replace the right one
+            mFragmentContainer = Util.fragmentContainerViewAddFoodLog;
+
+        } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) ) {
+            //if it's an array, setting all the arrays passed in to be the same as single
+            if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD).contains(",")) {
+                // do things here for multiple IDs
+
+                // parse the name from the array of ids and put that in the textview
+                // clean the string of its brackets and spaces
+                // turn into array list
+                mSymptomLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
+                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD)
+                );
+
+            }
+
+            // when we have to replace the fragment container, replace the right one
             mFragmentContainer = Util.fragmentContainerViewAddSymptomLog;
 
-        } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) ) {
             settingSymptomLog = Boolean.TRUE;
-            mLogIdString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID);
-            mSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(mLogIdString));
-
-            mFragmentContainer = Util.fragmentContainerViewAddFoodLog;
             if ( mBundle.containsKey(Util.ARGUMENT_CHANGE) ){
                 if (mBundle.getString(Util.ARGUMENT_CHANGE).equals(Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
                     isSymptomLogBeginInstantSet = Boolean.FALSE;
@@ -232,40 +243,64 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     private void setSymptomInstants(LocalDateTime localDateTime, Fragment whereTo){
         mInstant = Util.instantFromLocalDateTime(localDateTime);
 
-        // check if this is the first run through of the fragment, i.e. should we set begin
-        // or when the symptom changed/ended
-        // if begin has already been set then we set the changed time
-        if ( isSymptomLogBeginInstantSet ) {
-            // we don't set begin because it already was
-            // so set the end instant
-            mSymptomLog.setInstantChanged(mInstant);
-            // set the database with the updated symptom log times
-            mSymptomLogViewModel.viewModelUpdateSymptomLog(mSymptomLog);
-            isSymptomLogChangedInstantSet = Boolean.TRUE;
-            // we're done so go back to list symptoms log
-            goToListSymptomLog();
+        Log.d(TAG, "mSymptomLogIdsToAddStringArray " + mSymptomLogIdsToAddStringArray );
+        // for each symptom log ID
+        for (String symptomLogIdString : mSymptomLogIdsToAddStringArray) {
+            //TODO fix this, the log is being fetched but the for loop is broken somehow, it
+            // breaks even though it can retrieve the ID
+
+            // get symptom log from the list array
+            mCurrentSymptomLog =
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(
+                            symptomLogIdString
+                    ));
+            Log.d(TAG, "symptomLogIdString " + symptomLogIdString);
+            Log.d(TAG, "mCurrentSymptomLog id " + mCurrentSymptomLog.getSymptomId().toString());
+            // check if this is the first run through of the fragment, i.e. should we set begin
+            // or when the symptom changed/ended
+            // if begin has already been set then we set the changed time
+            if (isSymptomLogBeginInstantSet) {
+                // we don't set begin because it already was
+                // so set the end instant
+                mCurrentSymptomLog.setInstantChanged(mInstant);
+            } else {
+                // begin has not been set yet, so set that first
+                mCurrentSymptomLog.setInstantBegan(mInstant);
+
+                // and then that means the end should be set to the default for now
+                // so find the average duration of the recent symptom logs of the same symptom
+                Duration averageDuration =
+                        mSymptomLogViewModel.viewModelGetAverageSymptomDuration(
+                                mCurrentSymptomLog.getSymptomName()
+                        );
+                // and set default for changed time to be from that average
+                mCurrentSymptomLog.setInstantChanged(
+                        Util.instantFromDurationAndStartInstant(mInstantBegan,
+                        averageDuration)
+                );
+            }
+            // set the database with the updated symptom log time
+            mSymptomLogViewModel.viewModelUpdateSymptomLog(mCurrentSymptomLog);
         }
-        else {
-            // begin has not been set yet, so set that first
-            mSymptomLog.setInstantBegan(mInstant);
+
+        // check again if this is first runthrough of fragment to see where to go now
+        if (isSymptomLogBeginInstantSet) {
+            // if we're in this fragment and begin has been set, we just set symptom changed
+            isSymptomLogChangedInstantSet = Boolean.TRUE;
+            // so we're done so go back to list symptoms log
+            //TODO when back in list symptom log from here
+            // make the newly added symptoms highlight new color so user can see it worked
+            // so they easily can click which ones to modify if they need to
+            goToListSymptomLog();
+        } else {
+            // we're done setting begin, so we'll go to set symptom changed now
             isSymptomLogBeginInstantSet = Boolean.TRUE;
             mBundle.remove(Util.ARGUMENT_CHANGE);
             mBundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED);
-
-            // and then that means the end should be set to the default for now
-            // so find the average duration of the recent symptom logs of the same symptom
-            Duration averageDuration =
-                    mSymptomLogViewModel.viewModelGetAverageSymptomDuration(mSymptomLog.getSymptomName());
-            // and set default for changed time to be from that average
-            mSymptomLog.setInstantChanged(Util.instantFromDurationAndStartInstant(mInstantBegan,
-                    averageDuration));
-            // set the database with the updated symptom log times
-            mSymptomLogViewModel.viewModelUpdateSymptomLog(mSymptomLog);
-
             // if they clicked yesterday
             // then it should set defaults to yesterday at same time as now
             // but now go to part of day for real time
-            if ( !Objects.isNull(whereTo)){
+            if (!Objects.isNull(whereTo)) {
                 goToNextFragment(whereTo);
             } else {
                 // else they did not click yesterday and time has been set, so we need to set
@@ -279,6 +314,8 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                 mButtonYesterday.setVisibility(View.INVISIBLE);
             }
         }
+
+
     }
 
     private void setFoodLogConsumedInstant(LocalDateTime localDateTime, Fragment whereTo){

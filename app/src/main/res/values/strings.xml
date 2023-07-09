@@ -99,7 +99,7 @@
   <string name="empty_not_saved">Not saved because it is empty.</string>
   <string name="wrong_place_lets_go_home">Error on page, let\'s go home and try again. Report this bug please.</string>
   <string name="heads_up_all_times_same">All times for symptoms will be set to be the same; if you want to set any single symptom different, use the edit button in the list of logs.</string>
-
+  <string name="invalid_input_not_int_between_one_and_ten_try_again">Not saved because it is invalid input, not a number between 1 and 10. Try again.</string>
 
   <string name="title_edit_ingredient_textview">Enter New Values</string>
   <string name="enter_new_ingredient_edittext_name">Fixed Ingredient Name Here</string>

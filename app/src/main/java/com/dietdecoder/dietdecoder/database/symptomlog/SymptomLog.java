@@ -40,8 +40,8 @@ public class SymptomLog {
   @ColumnInfo(name = "description")
   private String description;
 
-  @ColumnInfo(name = "severityScale")
-  private Integer severityScale;
+  @ColumnInfo(name = "intensityScale")
+  private Integer intensityScale;
 
   // when it began
   @ColumnInfo(name = "instantBegan")
@@ -58,7 +58,7 @@ public class SymptomLog {
     // if only symptom was given
     // empty for description
     // changed default is an hour from now
-    // default concern and severity is lowest
+    // default concern and intensity is lowest
     this(symptomId, symptomName,
             Instant.now(),
             Instant.now().plus(1, ChronoUnit.HOURS),
@@ -72,7 +72,7 @@ public class SymptomLog {
                     Instant instantBegan,
                     Instant instantChanged,
                     String description,
-                    Integer severityScale) {
+                    Integer intensityScale) {
     this.symptomLogId = UUID.randomUUID();
     this.symptomName = symptomName;
     this.instantLogged = Instant.now();
@@ -80,7 +80,7 @@ public class SymptomLog {
     this.instantChanged = instantChanged;
     this.symptomId = symptomId;
     this.description = description;
-    this.severityScale = severityScale;
+    this.intensityScale = intensityScale;
   }
 
   // basic getters for the parameters
@@ -100,8 +100,8 @@ public class SymptomLog {
     return(this.description);
   }
 
-  public Integer getSeverityScale() {
-    return(this.severityScale);
+  public Integer getIntensityScale() {
+    return(this.intensityScale);
   }
 
   public Instant getInstantLogged() {
@@ -115,16 +115,16 @@ public class SymptomLog {
   }
 
   public String toString() {
-    String severityString = "\n Severity: ";
-    if (this.severityScale != null){
-      severityString = severityString.concat(this.severityScale.toString() + "\n");
+    String intensityString = "\n Intensity: ";
+    if (this.intensityScale != null){
+      intensityString = intensityString.concat(this.intensityScale.toString() + "\n");
     }
       return ("ID:" + this.symptomLogId.toString() + "\n"+
               "Logged at: " + this.instantLogged.toString() + "\n"
               + "\nSymptom ID: " + this.symptomLogId + "\n"
               + "\nWhen Began: " + this.instantBegan.toString() + "\n"
         + "\nWhen Changed/Ended: " + this.instantChanged.toString() + "\n"
-        + "\nSymptom Description: " + this.description + "\n" + severityString);
+        + "\nSymptom Description: " + this.description + "\n" + intensityString);
   }//end toString
 
 
@@ -153,8 +153,8 @@ public class SymptomLog {
     this.description = string;
   }
 
-  public void setSeverityScale(Integer integer) {
-    this.severityScale = integer;
+  public void setIntensityScale(Integer integer) {
+    this.intensityScale = integer;
   }
 
 

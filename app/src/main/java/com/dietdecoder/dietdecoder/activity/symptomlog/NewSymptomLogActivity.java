@@ -83,8 +83,10 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD);
                 // clean the array string
                 mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
+                //Log.d(TAG, mSymptomIdsToAddString);
                 // go through the string and at the comma's add that ID to the array
                 for (String mSymptomIdString : mSymptomIdsToAddString.split(",")) {
+                    //Log.d(TAG, mSymptomIdString);
                     mSymptomsToAddArrayListIdStrings.add(mSymptomIdString);
 
                     //get info on the symptom to make the log based on defaults
@@ -106,8 +108,8 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
                 //Log.d(TAG, "mSymptomIdsToAddString"+ mSymptomIdsToAddString);
 //                Log.d(TAG, "mSymptomsToAddArrayListIdStrings.get(1)"+ mSymptomsToAddArrayListIdStrings.get(1));
-                Log.d(TAG,
-                        "mSymptomLogsToAddArrayListIdStrings "+ mSymptomLogsToAddArrayListIdStrings);
+//                Log.d(TAG,
+//                        "mSymptomLogsToAddArrayListIdStrings "+ mSymptomLogsToAddArrayListIdStrings);
 
 
                 // then go to the specific fragments to change away from the defaults

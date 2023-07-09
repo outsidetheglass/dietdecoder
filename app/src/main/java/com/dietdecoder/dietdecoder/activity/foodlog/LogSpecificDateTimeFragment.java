@@ -40,37 +40,30 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, "onClick: mDatePickerDateTime = " + mDatePickerDateTime.getHour());
 
-    Integer mHour, mMinute, mDay, mMonth, mYear;
-    String mFoodLogIdString, mOnlySetDateOrTime, mWhatToChange, mWhereFrom;
-
-    LocalDateTime mDatePickerDateTime;
-    LocalDateTime mDateTime, mDateTimeSet;
     Button mDateButtonSave;
     DatePicker mDatePicker;
     EditText mEditTextTime, mEditTextDate;
+    TextView titleTextView, mTextViewTimePicker;
 
     Bundle mBundle, mBundleNext;
     FoodLogViewModel mFoodLogViewModel;
     SymptomLogViewModel mSymptomLogViewModel;
     FoodLog mFoodLog;
     SymptomLog mSymptomLog;
-    Boolean settingFoodLog = Boolean.FALSE;
-    Boolean settingSymptomLog = Boolean.FALSE;
-    Boolean isSymptomLogBeginInstantSet = Boolean.FALSE;
-    Boolean isSymptomLogChangedInstantSet = Boolean.FALSE;
-    String mLogIdString;
-    TextView titleTextView;
-    int mFragmentContainer;
 
+    Integer mHour, mMinute, mDay, mMonth, mYear;
+    String mFoodLogIdString, mOnlySetDateOrTime, mWhatToChange, mWhereFrom, mLogIdString;
+    int mFragmentContainer, hour, minute;
     Instant mInstant, mInstantSet;
-
-    Boolean isFromEditFoodLog;
+    LocalDateTime mDatePickerDateTime, mDateTime, mDateTimeSet;
+    Boolean isFromEditFoodLog, settingFoodLog = Boolean.FALSE, settingSymptomLog = Boolean.FALSE,
+            isSymptomLogBeginInstantSet = Boolean.FALSE, isSymptomLogChangedInstantSet =
+            Boolean.FALSE;
 
     // IDs for which dialog to open
     static final int TIME_DIALOG_ID = 1111;
     static final int DATE_DIALOG_ID = 1112;
-    TextView mTextViewTimePicker;
-    int hour, minute;
+
 
     public LogSpecificDateTimeFragment() {
         super(R.layout.fragment_log_specific_date_time);
@@ -110,11 +103,11 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
             mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
             mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
             mBundle = getArguments();
-
             // find out if we have a food log or symptom log to set the date time of
             // if food log ID was given then set that
-            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) ) {
+            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD) ) {
                 settingFoodLog = Boolean.TRUE;
+                //TODO change this when food log is an array
                 mLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
                 // now get the food log associated with that UUID
                 mFoodLog =
@@ -128,7 +121,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                         mFoodLogViewModel.viewModelGetFoodLogFromId(UUID.fromString(mFoodLogIdString));
                 mDateTime = Util.getDateTimeConsumedAcquiredCooked(mWhatToChange, mFoodLog);
 
-            } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) ) {
+            } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) ) {
                 settingSymptomLog = Boolean.TRUE;
                 mLogIdString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID);
                 // now get the info associated with that UUID

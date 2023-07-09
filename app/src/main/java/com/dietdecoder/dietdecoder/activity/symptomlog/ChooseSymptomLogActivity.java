@@ -180,18 +180,6 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
                         // add that string ID to our array of selected symptoms
                         mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedViewModel);
 
-
-//                        Log.d(TAG,
-//                                "mSymptomListAdapter.getCurrentList() "+currentSymptomSelected.toString());
-//                        Log.d(TAG,
-//                                "holder.itemView "
-//                                        + holder.itemView.getContext().getResources().toString());
-
-                        // add symptom ID to list that will be passed into fragment to add
-                        // these symptoms in symptom logs
-                        //String currentSymptomIdString =
-                               // String.valueOf(currentSymptomSelected.getSymptomId());
-                        //symptomsSelectedIdsArrayListStrings.add(currentSymptomIdString);
                     }
                 }
 
@@ -205,6 +193,9 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
                     // if not empty, put the array into the intent to go add symptoms
                     mBundle.putString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD,
                             String.valueOf(mSymptomsSelectedIdsArrayListStrings));
+                    mBundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY,
+                            String.valueOf(mSymptomsSelectedIdsArrayListStrings.size()));
+                    mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL, String.valueOf(mSymptomsSelectedIdsArrayListStrings));
                     addSymptomIntensityIntent.putExtras(mBundle);
 //                    Log.d(TAG, "mSymptomListIdString "+ mSymptomsSelectedIdsArrayListStrings.toString() );
 

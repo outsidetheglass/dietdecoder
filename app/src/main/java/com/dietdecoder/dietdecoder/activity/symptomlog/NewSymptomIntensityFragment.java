@@ -40,6 +40,7 @@ import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,19 +56,24 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
     EditText mEditTextSymptomIntensity;
     TextView mTextViewSymptomName;
     ListView mListView;
-
-    String mSaveString, mEmptyTryAgainString, mName, symptomIntensityLogIdString,
-    mCurrentSymptomName, mSymptomLogIdsToAddStringOriginal;
-    Boolean isIntensityViewEmpty;
-
     private KeyListener originalKeyListener;
 
-    Bundle mBundle;
+    String mSaveString, mEmptyTryAgainString, mName, symptomIntensityLogIdString, mCurrentSymptomLogIdToAddString,
+    mCurrentSymptomName, mSymptomLogIdsToAddStringArrayOriginal,
+            symptomIntensityViewEditableString, mInvalidTryAgainString, mSymptomLogIdsToAddString,
+            mSymptomLogIdsToAddOriginalString, mAllTimesAreSame;
+    Boolean isIntensityViewEmpty;
+    Integer symptomIntensity, mHowManyIdsToAdd;
+    UUID mSymptomLogId;
 
     SymptomLog mCurrentSymptomLog;
     SymptomLogViewModel mSymptomLogViewModel;
     SymptomLogListAdapter mSymptomLogListAdapter;
-    ArrayList<String> mSymptomLogIdsToAddString;
+    ArrayList<String> mSymptomLogIdsToAddStringArray;
+
+    Fragment mNextFragment, mRepeatThisFragment, mDefaultNextFragment;
+    Bundle mBundle, mBundleNext;
+
 
     public NewSymptomIntensityFragment() {
         super(R.layout.fragment_new_symptom_intensity_log);
@@ -90,9 +96,7 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                     getResources().getString(R.string.wrong_place_lets_go_home);
             Toast.makeText(thisContext, mWrongPlaceLetsGoHome,
                     Toast.LENGTH_SHORT).show();
-            Intent goHomeIntent = new Intent(thisContext,
-                    MainActivity.class);
-            thisContext.startActivity(goHomeIntent);
+            goToListSymptomLog();
         } else {
             // get the info
             mBundle = getArguments();
@@ -103,27 +107,40 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
             //activate watching the save button for a click
             mButtonSaveName.setOnClickListener(this);
             // to pass on to the time and date fragments, save the original untouched array string
-            mSymptomLogIdsToAddStringOriginal =
+            mSymptomLogIdsToAddStringArrayOriginal =
                     mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL);
-
-
-            // TODO add symptom log for all symptom IDs chosen
-            // TODO fix, right now it only will work for first symptom and maybe not even that
-            // TODO make it work for intensity for all symptoms
-
-            // parse the name from the array of ids and put that in the textview
-            //TODO when intensity is chosen, remove that Id from list to check
+            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+            // default next place to go should be the next fragment
+            mNextFragment = new LogDateTimeChoicesFragment();
+            mBundleNext = new Bundle();
             mTextViewSymptomName = view.findViewById(R.id.subsubtitle_textview_symptom_name);
             // this is our holder string, remove from this arraylist as we go
-            mSymptomLogIdsToAddString = new ArrayList<String>();
+            mSymptomLogIdsToAddStringArray = new ArrayList<String>();
+            // after intensity is done being set the next default place is date times
+            mDefaultNextFragment = new LogDateTimeChoicesFragment();
+            // repeating this fragment
+            mRepeatThisFragment = new NewSymptomIntensityFragment();
+            mSymptomLogIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD);
+            mSymptomLogIdsToAddOriginalString =
+                    mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL);
 
-            for (String symptomLogIdString :
-                    Util.cleanArrayString(mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD)).split(",")) {
-                mSymptomLogIdsToAddString.add(symptomLogIdString);
-            }
+            //how many ids to add
+            mHowManyIdsToAdd =
+                    Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY));
+
+            // parse the name from the array of ids and put that in the textview
+            // clean the string of its brackets and spaces
+            // turn into array list
+            mSymptomLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
+                    mSymptomLogIdsToAddString
+            );
+            // get first log in the list array
             mCurrentSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(mSymptomLogIdsToAddString.get(0)));
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(
+                                    mSymptomLogIdsToAddStringArray.get(0)
+                            ));
 
+            // put in the UI what symptom we're changing now
             mTextViewSymptomName.setText(mCurrentSymptomLog.getSymptomName());
 
 
@@ -134,25 +151,29 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
 
             //TODO get the median choice out of recent logs and set the default
             // intensity/severity to that
+//            //TODO convert this average duration to the intensity log add
+//            Duration averageDuration =
+//                    mSymptomLogViewModel.viewModelGetAverageSymptomDuration(mCurrentSymptomLog.getSymptomName());
+//            // and set default for changed time to be from that average
+//            mCurrentSymptomLog.setInstantChanged(Util.instantFromDurationAndStartInstant(mInstantBegan,
+//                    averageDuration));
 
-            // Integer medianRecentSeverity = ;
-            //mEditTextSymptomIntensity.setText(mCurrentSymptomLog.getSeverityScale(medianRecentSeverity));
-
+            // Integer medianRecentIntensity = ;
+            //mEditTextSymptomIntensity.setText(mCurrentSymptomLog.getIntensityScale
+            // (medianRecentIntensity));
             //mEditTextSymptomIntensity.setOnClickListener(this::onClick);
 
-            //TODO list all symptoms and their default values
-            // TODO have edit and delete buttons
+            // TODO have delete button
+
+            // TODO have progress bar on bottom for how many symptoms are to be set and have been
+            //  set
 
         }
-
-
-
-
-
 
     // Inflate the layout for this fragment
     return view;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -160,7 +181,9 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
         // get saving string from resources so everything can translate languages easy
         mSaveString = getResources().getString(R.string.saving);
         mEmptyTryAgainString = getResources().getString(R.string.empty_not_saved);
-        String mAllTimesAreSame = getResources().getString(R.string.heads_up_all_times_same);
+        mInvalidTryAgainString =
+                getResources().getString(R.string.invalid_input_not_int_between_one_and_ten_try_again);
+        mAllTimesAreSame = getResources().getString(R.string.heads_up_all_times_same);
 
         switch (view.getId()) {
             //do something when edittext is clicked
@@ -168,89 +191,63 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
 //
 //                break;
             case R.id.button_new_symptom_intensity_log_save:
-                // get int
+                // get what the user input for intensity
+                symptomIntensityViewEditableString = mEditTextSymptomIntensity.getText().toString();
+                isIntensityViewEmpty = TextUtils.isEmpty(symptomIntensityViewEditableString);
 
-                Editable symptomIntensityViewEditable =
-                        mEditTextSymptomIntensity.getText();
-                isIntensityViewEmpty = TextUtils.isEmpty(symptomIntensityViewEditable.toString());
                 // if view is empty
                 if ( isIntensityViewEmpty ) {
                     // TODO set ask user to leave as default, being the most common used number
                     //  for this symptom
                     // set intent to tell user try again
                     Toast.makeText(getContext(), mEmptyTryAgainString, Toast.LENGTH_SHORT).show();
-                } else {
-                    // if view has a values
+                }
+                // if the number is not between 1 and 10 solid integer
+                else if ( !Util.isIntegerBetween1to10( Integer.parseInt(symptomIntensityViewEditableString) ) ) {
+                    // not a valid intensity number, tell user to try again
+                    Toast.makeText(getContext(), mInvalidTryAgainString, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // if view has a valid value
+                    // tell user we're saving it
                     Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
 
-                    // set the intensity
-                    Integer symptomIntensity =
-                            Integer.parseInt(symptomIntensityViewEditable.toString());
-                    mSymptomLogViewModel =
-                            new ViewModelProvider(this).get(SymptomLogViewModel.class);
-                    UUID mSymptomLogId =
-                            UUID.fromString(mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID));
-                    SymptomLog symptomIntensityLog =
-                            mSymptomLogViewModel.viewModelGetSymptomLogFromId(mSymptomLogId);
-                    symptomIntensityLog.setSeverityScale(symptomIntensity);
-                    mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomIntensityLog);
+                    // get the intensity from the user input
+                    symptomIntensity =
+                            Integer.parseInt(symptomIntensityViewEditableString);
+                    // then set the intensity
+                    mCurrentSymptomLog.setIntensityScale(symptomIntensity);
+                    // update the log
+                    mSymptomLogViewModel.viewModelUpdateSymptomLog(mCurrentSymptomLog);
 
+                    Log.d(TAG, "before removing mSymptomLogIdsToAddStringArray " +
+                            mSymptomLogIdsToAddStringArray.toString());
+                    Log.d(TAG, "mSymptomLogIdsToAddStringArray.size() " +
+                            mSymptomLogIdsToAddStringArray.size());
                     // we've added it in, so remove this symptom from the ones to add
-                    mSymptomLogIdsToAddString.remove(0);
+                    mSymptomLogIdsToAddStringArray.remove(mCurrentSymptomLog.getSymptomId().toString());
+                    // and lower our count for how many left to add
+                    mHowManyIdsToAdd = mHowManyIdsToAdd - 1;
 
-                    // if this is the last intensity to check
-                    if ( mSymptomLogIdsToAddString.isEmpty() ) {
-                        // if there's more than one symptom,
-                        // checked by if original string has a comma,
-                        // alert user that all symptoms will have the same time and date,
-                        // they can be individually edited from the symptom log menu
-                        if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD).contains(",")) {
-                            Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
-                        }
+                    Log.d(TAG, "after removing mSymptomLogIdsToAddStringArray " +
+                            mSymptomLogIdsToAddStringArray.toString());
+                    Log.d(TAG, "mSymptomLogIdsToAddStringArray.size() " +
+                            mSymptomLogIdsToAddStringArray.size());
+                    // if this is the last intensity to check,
+                    // checked by if the number of Ids left to add logs of is bigger than 0
+                    if ( mHowManyIdsToAdd == 0 ) {
                         //TODO make times show up and modifiable back in add new logs if I want,
-                        // probably don't need all these fragments, or make it a preference
+                        // probably don't need all these fragments, or make it a preference when
+                        // they want to be asked when the symptom happened
 
-                        // go to date fragment to set when the symptom happened
-                        symptomIntensityLogIdString =
-                                symptomIntensityLog.getSymptomLogId().toString();
-                        Bundle mBundleNext = new Bundle();
-                        // set the IDs to add to be the ones from the previous bundle
-                        mBundleNext.putString( Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
-                                mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) );
-                        mBundleNext.putString(Util.ARGUMENT_FRAGMENT_FROM,
-                                Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
-                        mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
-                        // and which fragment to go to next
-                        Fragment mNextFragment = new LogDateTimeChoicesFragment();
-                        // put which we're changing into the bundle
-                        mNextFragment.setArguments(mBundleNext);
-                        // actually go to the next place now
-                        getParentFragmentManager().beginTransaction()
-                                .replace(Util.fragmentContainerViewAddSymptomLog, mNextFragment)
-                                .setReorderingAllowed(true)
-                                .addToBackStack(null)
-                                .commit();
+                        // go to date fragment to set when the symptom(s) happened
+                        mNextFragment = mDefaultNextFragment;
                     } else {
                         // not the last in the array, repeat this fragment
-                        Fragment mNextFragment = new NewSymptomIntensityFragment();
-                        Bundle mBundleNext = new Bundle();
-                        mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL,
-                                mSymptomLogIdsToAddStringOriginal);
-                        mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
-                                mSymptomLogIdsToAddString.toString());
-                        // put which we're changing into the bundle
-                        mNextFragment.setArguments(mBundleNext);
+                        mNextFragment = mRepeatThisFragment;
                         // actually go to the next place now
-                        getParentFragmentManager().beginTransaction()
-                                .replace(Util.fragmentContainerViewAddSymptomLog, mNextFragment)
-                                .setReorderingAllowed(true)
-                                .addToBackStack(null)
-                                .commit();
                     }
-                    // go back to new symptom if replacing fragment doesn't work
-//                    Intent listSymptomIntensityIntent = new Intent(getContext(),
-//                            ListSymptomLogActivity.class);
-//                    startActivity(listSymptomIntensityIntent);
+                    goToNextFragment(mNextFragment);
 
                 }
                 break;
@@ -260,6 +257,70 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
         }
     }//end onClick
 
+
+    private void goToListSymptomLog(){
+        thisContext.startActivity(new Intent(thisContext,
+                ListSymptomLogActivity.class));
+    }
+
+    private void goToNextFragment(Fragment nextFragment){
+        // and now which fragment to go to next
+
+        // if nothing given use the default fragment
+        if ( Objects.isNull(nextFragment)) {
+            // so just go home
+            nextFragment = mDefaultNextFragment;
+        } else {
+            // we were given a fragment to use
+            // let's set all the info the next fragment will need
+
+            // if this is not the last intensity to check
+            if ( mHowManyIdsToAdd > 0 ) {
+                // if there's still logs left to change intensity of
+                // add the current log IDs left to add into the bundle
+                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
+                        mSymptomLogIdsToAddStringArray.toString());
+                // and also add the original full array
+                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL,
+                        mSymptomLogIdsToAddStringArrayOriginal);
+                mBundleNext.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY,
+                        mHowManyIdsToAdd.toString());
+                // we're still changing intensity
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_INTENSITY);
+            } else {
+                // there are no intensities left to set
+                // add the original array as our array
+                // the rest are all set together so it doesn't need to be a changing array, so we
+                // don't need original and mutable array both, just need one
+                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
+                    mSymptomLogIdsToAddStringArrayOriginal);
+                // reset to setting begin time date for the next fragment
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+
+                Log.d(TAG,
+                        "mSymptomLogIdsToAddStringArrayOriginal " + mSymptomLogIdsToAddStringArrayOriginal);
+                // if there's more than one symptom,
+                // checked by if original string has a comma,
+                // alert user that all symptoms will have the same time and date,
+                // they can be individually edited from the symptom log menu
+                if (mSymptomLogIdsToAddStringArrayOriginal.contains(",")) {
+                    Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            mBundleNext.putString(Util.ARGUMENT_FRAGMENT_FROM,
+                    Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
+            // put which we're changing into the bundle
+            nextFragment.setArguments(mBundleNext);
+        }
+
+        // actually go to the next place now
+        getParentFragmentManager().beginTransaction()
+                .replace(Util.fragmentContainerViewAddSymptomLog, nextFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
 
 
 }

@@ -69,11 +69,11 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     String mSymptomLogDescription = symptomLog.getDescription();
     Instant mSymptomLogBeganInstant = symptomLog.getInstantBegan();
     Instant mSymptomLogChangedInstant = symptomLog.getInstantChanged();
-//    Integer mSymptomSeverityInteger = symptomLog.getSeverityScale();
-    String mSymptomSeverityString = "Severity N/A";
-//    String mSymptomSeverityString = Util.setSeverityString(mSymptomSeverityInteger.toString());
-    if ( symptomLog.getSeverityScale() != null) {
-      mSymptomSeverityString = symptomLog.getSeverityScale().toString();
+//    Integer mSymptomIntensityInteger = symptomLog.getIntensityScale();
+    String mSymptomIntensityString = "Intensity N/A";
+//    String mSymptomIntensityString = Util.setIntensityString(mSymptomIntensityInteger.toString());
+    if ( symptomLog.getIntensityScale() != null) {
+      mSymptomIntensityString = symptomLog.getIntensityScale().toString();
     }
     //String mSymptomLogString = symptomLog.toString();
 
@@ -90,7 +90,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     SpannableStringBuilder printString =
             Util.setViewHolderRecyclerViewString(mSymptomLogName,
-            changedRelativeDateToBeganString, mSymptomSeverityString, unImportantString );
+            changedRelativeDateToBeganString, mSymptomIntensityString, unImportantString );
 
 
     // set part of it bold and part of it not bold
