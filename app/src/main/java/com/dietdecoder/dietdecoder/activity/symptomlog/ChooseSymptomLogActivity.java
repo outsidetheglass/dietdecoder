@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -135,9 +136,6 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
     public void onClick(View view) {
 
         // basic variables setup
-        // the next activity to go to from here
-        Intent addSymptomIntensityIntent = new Intent(thisActivity,
-                NewSymptomLogActivity.class);
         // get saving string from resources so everything can translate languages easy
         mSaveString = getResources().getString(R.string.saving);
         mEmptyTryAgainString = getResources().getString(R.string.empty_not_saved);
@@ -188,19 +186,15 @@ public class ChooseSymptomLogActivity extends AppCompatActivity implements Toolb
                 // so first we check if symptoms to add array is empty
                 if ( mSymptomsSelectedIdsArrayListStrings.isEmpty() ) {
                     // if empty, alert user none were selected and don't do anything else
-                    Toast.makeText(getApplicationContext(), mEmptyTryAgainString, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(thisContext, mEmptyTryAgainString,
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     // if not empty, put the array into the intent to go add symptoms
-                    mBundle.putString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD,
-                            String.valueOf(mSymptomsSelectedIdsArrayListStrings));
-                    mBundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY,
-                            String.valueOf(mSymptomsSelectedIdsArrayListStrings.size()));
-                    mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL, String.valueOf(mSymptomsSelectedIdsArrayListStrings));
-                    addSymptomIntensityIntent.putExtras(mBundle);
-//                    Log.d(TAG, "mSymptomListIdString "+ mSymptomsSelectedIdsArrayListStrings.toString() );
-
+                    mBundle =
+                            Util.setBundleNewSymptomLogIntensity(mSymptomsSelectedIdsArrayListStrings);
                     // go to set the intensity of the symptom
-                    startActivity(addSymptomIntensityIntent);
+                    Log.d(TAG, "symptoms array " + mSymptomsSelectedIdsArrayListStrings);
+                    Util.goToAddSymptomLogWithBundle(thisActivity, mBundle);
 
                 }
 

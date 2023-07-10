@@ -1,8 +1,10 @@
 package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogListAdapter;
@@ -32,6 +35,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
   private final String TAG = "TAG: " + getClass().getSimpleName();
   // Log.d(TAG, "onActivityResult: made it here");
   private final Activity thisActivity = ListSymptomLogActivity.this;
+  private Context thisContext;
 
   Fragment mFragmentGoTo = null;
 
@@ -52,6 +56,8 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
+    thisContext = getBaseContext();
+
   //TODO Are you experiencing any symptoms right now?
     //Any past symptoms to log?
     //if yes, list symptoms to track from preferences
@@ -64,33 +70,37 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
     //if yes, add
     // list previous symptoms and ask when it stopped/changed, if they did
 
-    // make the view for listing the items in the log
-    RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom_log);
-    // add horizontal lines between each recyclerview item
-    recyclerViewSymptom.addItemDecoration(new DividerItemDecoration(recyclerViewSymptom.getContext(),
-            DividerItemDecoration.VERTICAL));
+    // if we had no view made, go straight to asking user for intensity
+    if (savedInstanceState == null) {
+      // make the view for listing the items in the log
+      RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom_log);
+      // add horizontal lines between each recyclerview item
+      recyclerViewSymptom.addItemDecoration(new DividerItemDecoration(recyclerViewSymptom.getContext(),
+              DividerItemDecoration.VERTICAL));
 
 
-    mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff());
-    recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
-    recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
-    mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff());
+      recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
+      recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
+      mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-    mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
-            new Observer<List<SymptomLog>>() {
-              @Override
-              public void onChanged(List<SymptomLog> logs) {
-                // Update the cached copy of the words in the adapter.
-                mSymptomLogListAdapter.submitList(logs);
-                //TODO this is where we should be checking ingredient and recipe adapters
-                // and adding the ingredient or recipe if it doesn't exist
+      mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
+              new Observer<List<SymptomLog>>() {
+                @Override
+                public void onChanged(List<SymptomLog> logs) {
+                  // Update the cached copy of the words in the adapter.
+                  mSymptomLogListAdapter.submitList(logs);
+                  //TODO this is where we should be checking ingredient and recipe adapters
+                  // and adding the ingredient or recipe if it doesn't exist
 
-              }
-            });
+                }
+              });
 
-    // FAB to add new log
-    addButton = findViewById(R.id.add_button_list_symptom_log);
-    addButton.setOnClickListener(this);
+      // FAB to add new log
+      addButton = findViewById(R.id.add_button_list_symptom_log);
+      addButton.setOnClickListener(this);
+    }
+
   }
 
   @Override
@@ -98,9 +108,11 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
     switch (view.getId()) {
       // which button was clicked
       case R.id.add_button_list_symptom_log:
-        addIntent = new Intent(thisActivity, ChooseSymptomLogActivity.class);
-        startActivity(addIntent);
+        // go to the list of symptoms the user experiences to allow user to select which ones
+        // they're having now and then make those symptom logs
+        Util.goToChooseSymptomLogActivity(thisActivity);
         break;
+        // TODO add edit and delete buttons in here
       default:
         break;
     }//end switch case
@@ -112,11 +124,10 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
   public boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_settings) {
       Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+      // TODO go to preferences when those have been made
 
-      // do something
     } else if (item.getItemId() == R.id.action_go_home) {
-      // do something
-      startActivity(new Intent(thisActivity, MainActivity.class));
+      Util.goToMainActivity(thisActivity);
     }
 
     return false;

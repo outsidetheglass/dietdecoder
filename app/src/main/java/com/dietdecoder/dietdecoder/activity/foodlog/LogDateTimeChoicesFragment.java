@@ -1,5 +1,6 @@
 package com.dietdecoder.dietdecoder.activity.foodlog;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import java.util.UUID;
 public class LogDateTimeChoicesFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
+    private Activity thisActivity;
 
     Button mButtonJustNow, mButtonEarlierToday, mButtonAnotherDate, mButtonYesterday;
     TextView questionTextView;
@@ -77,11 +79,13 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        thisActivity = this.getActivity();
         // set the food log id to add time to the bundle
         mBundle = getArguments();
         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
         mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
         questionTextView = view.findViewById(R.id.textview_question_log_date_time_choices_time);
+        mSymptomLogIdsToAddStringArray = new ArrayList<>();
 
 
         // find out if we have a food log or symptom log to set the date time of
@@ -211,9 +215,6 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
     }//end onClick
 
-    private void goToListSymptomLog(){
-        startActivity(new Intent(getActivity(), ListSymptomLogActivity.class));
-    }
 
     private void goToNextFragment(Fragment nextFragment){
 
@@ -230,11 +231,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         // put which we're changing into the bundle
         nextFragment.setArguments(mBundle);
         // actually go to the next place now
-        getParentFragmentManager().beginTransaction()
-                .replace(mFragmentContainer, nextFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+        Util.startNextFragment(getParentFragmentManager().beginTransaction(), mFragmentContainer, nextFragment);
     }
 
     //set the begin instant
@@ -243,19 +240,14 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     private void setSymptomInstants(LocalDateTime localDateTime, Fragment whereTo){
         mInstant = Util.instantFromLocalDateTime(localDateTime);
 
-        Log.d(TAG, "mSymptomLogIdsToAddStringArray " + mSymptomLogIdsToAddStringArray );
         // for each symptom log ID
         for (String symptomLogIdString : mSymptomLogIdsToAddStringArray) {
-            //TODO fix this, the log is being fetched but the for loop is broken somehow, it
-            // breaks even though it can retrieve the ID
 
             // get symptom log from the list array
             mCurrentSymptomLog =
                     mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(
                             symptomLogIdString
                     ));
-            Log.d(TAG, "symptomLogIdString " + symptomLogIdString);
-            Log.d(TAG, "mCurrentSymptomLog id " + mCurrentSymptomLog.getSymptomId().toString());
             // check if this is the first run through of the fragment, i.e. should we set begin
             // or when the symptom changed/ended
             // if begin has already been set then we set the changed time
@@ -273,6 +265,9 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                         mSymptomLogViewModel.viewModelGetAverageSymptomDuration(
                                 mCurrentSymptomLog.getSymptomName()
                         );
+
+                //TODO fix this, it's breaking somewhere
+
                 // and set default for changed time to be from that average
                 mCurrentSymptomLog.setInstantChanged(
                         Util.instantFromDurationAndStartInstant(mInstantBegan,
@@ -291,7 +286,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
             //TODO when back in list symptom log from here
             // make the newly added symptoms highlight new color so user can see it worked
             // so they easily can click which ones to modify if they need to
-            goToListSymptomLog();
+            Util.goToListSymptomLog(thisActivity);
         } else {
             // we're done setting begin, so we'll go to set symptom changed now
             isSymptomLogBeginInstantSet = Boolean.TRUE;

@@ -38,8 +38,13 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     Bundle mBundle;
 
     String mWhichFragmentGoTo;
+    ArrayList<String> mSymptomsToAddArrayListIdStrings, mSymptomLogsToAddArrayListIdStrings;
 
-    private Fragment nextFragment = null;
+    private Fragment mNextFragment = null;
+
+    SymptomLog mSymptomLog;
+    SymptomLogViewModel mSymptomLogViewModel;
+    SymptomViewModel mSymptomViewModel;
 
 
     public NewSymptomLogActivity() {
@@ -55,21 +60,19 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
-        // declare and set variables
-        thisContext = thisActivity.getApplicationContext();
-        SymptomLogViewModel mSymptomLogViewModel =
-                new ViewModelProvider(this).get(SymptomLogViewModel.class);
-        SymptomViewModel mSymptomViewModel =
-                new ViewModelProvider(this).get(SymptomViewModel.class);
-        ArrayList<String> mSymptomsToAddArrayListIdStrings = new ArrayList<>();
-        ArrayList<String> mSymptomLogsToAddArrayListIdStrings = new ArrayList<>();
 
         // if we had no view made, go straight to asking user for intensity
         if (savedInstanceState == null) {
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment newSymptomIntensityFragment = new NewSymptomIntensityFragment();
+            // declare and set variables
+            mNextFragment = new NewSymptomIntensityFragment();
+            thisContext = thisActivity.getApplicationContext();
+            mSymptomLogViewModel =
+                    new ViewModelProvider(this).get(SymptomLogViewModel.class);
+            mSymptomViewModel =
+                    new ViewModelProvider(this).get(SymptomViewModel.class);
+            mSymptomsToAddArrayListIdStrings = new ArrayList<>();
+            mSymptomLogsToAddArrayListIdStrings = new ArrayList<>();
 
             // give the intensity fragment which symptom we're setting
 
@@ -98,27 +101,14 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                     // put its ID in array to send to fragment
                     mSymptomLogsToAddArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
                 }
-                //set the array string of symptom log Ids to the bundle
-                mBundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
-                        mSymptomLogsToAddArrayListIdStrings.toString() );
-                // set that first to change is the intensity of the symptoms
-                mBundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO,
-                        Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
-                newSymptomIntensityFragment.setArguments(mBundle);
-
-                //Log.d(TAG, "mSymptomIdsToAddString"+ mSymptomIdsToAddString);
-//                Log.d(TAG, "mSymptomsToAddArrayListIdStrings.get(1)"+ mSymptomsToAddArrayListIdStrings.get(1));
-//                Log.d(TAG,
-//                        "mSymptomLogsToAddArrayListIdStrings "+ mSymptomLogsToAddArrayListIdStrings);
-
-
+                // putting set bundle in Util so it's easier for me to see what exactly is in
+                // each bundle
+                mBundle = Util.setBundleNewSymptomLog(mSymptomLogsToAddArrayListIdStrings);
+                mNextFragment.setArguments(mBundle);
                 // then go to the specific fragments to change away from the defaults
-                fragmentTransaction
-                        .replace(mFragmentContainerView,
-                                newSymptomIntensityFragment)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
+                Util.startNextFragment(getSupportFragmentManager().beginTransaction(), mFragmentContainerView,
+                        mNextFragment);
+
             } else {
                 // there's no information about which symptom to add, so
                 // tell the user that they got here by mistake, it's a bug
@@ -127,9 +117,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                         getResources().getString(R.string.wrong_place_lets_go_home);
                 Toast.makeText(getApplicationContext(), mWrongPlaceLetsGoHome,
                         Toast.LENGTH_SHORT).show();
-                Intent goHomeIntent = new Intent(thisContext,
-                        MainActivity.class);
-                thisContext.startActivity(goHomeIntent);
+                Util.goToMainActivity(thisActivity);
             }
 
         }
@@ -177,7 +165,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
             // do something
         } else if (item.getItemId() == R.id.action_go_home) {
             // do something
-            startActivity(new Intent(thisActivity, MainActivity.class));
+            Util.goToMainActivity(thisActivity);
         } else {
             // do something
         }
@@ -196,10 +184,10 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY)) {
             // we know the day but not the time
             // ask that before we can move on
-            nextFragment = new NewSymptomIntensityFragment();
+            mNextFragment = new NewSymptomIntensityFragment();
 
         }
-        return nextFragment;
+        return mNextFragment;
     }
 
     public void onPointerCaptureChanged(boolean hasCapture) {

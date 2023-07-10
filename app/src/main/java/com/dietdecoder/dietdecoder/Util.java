@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,11 +14,17 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.dietdecoder.dietdecoder.activity.MainActivity;
+import com.dietdecoder.dietdecoder.activity.OtherActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
+import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 
 import java.lang.reflect.Array;
@@ -197,9 +204,12 @@ public class Util {
         String mCleanedSplitSymptomLodIdsToAddString =
                 Util.cleanArrayString(paramStringToCleanIntoArrayList);
 
+        Log.d(TAG,
+                "mCleanedSplitSymptomLodIdsToAddString " + mCleanedSplitSymptomLodIdsToAddString);
         // make it into an array for each ID
         for (String symptomLogIdString : mCleanedSplitSymptomLodIdsToAddString.split(",")) {
             mStringArray.add(symptomLogIdString);
+            Log.d(TAG, "symptomLogIdString " + symptomLogIdString);
         }
 
         return mStringArray;
@@ -781,6 +791,44 @@ public class Util {
         return mIntent;
     }
 
+    // bundle the relevant information between fragments for adding new symptom log intensity
+    public static Bundle setBundleNewSymptomLogIntensity ( ArrayList<String> newLogIdStringArray){
+
+        Bundle bundle = new Bundle();
+        String newLogIdString = newLogIdStringArray.toString();
+        String newLogIdStringArraySize = String.valueOf(newLogIdStringArray.size());
+
+        // put info about the symptoms to add
+        bundle.putString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD, newLogIdString);
+        bundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY, newLogIdStringArraySize);
+        // where we want to go next
+        bundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+
+        return bundle;
+    }
+
+    // bundle the relevant information between fragments for adding new symptom log
+    public static Bundle setBundleNewSymptomLog ( ArrayList<String> newLogIdStringArray){
+
+        Bundle bundle = new Bundle();
+        String newLogIdString = newLogIdStringArray.toString();
+        String newLogIdStringArraySize = String.valueOf(newLogIdStringArray.size());
+
+        // where we want to go next
+        bundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+
+        //set the array string of symptom log Ids to the bundle
+        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
+                newLogIdString );
+        // also how big the array is for ease of coding, TODO remove this and replace with .size
+        //  () in the activity or something more efficient
+        bundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY, newLogIdStringArraySize);
+        // original array, TODO also replace this inefficiency with better array usage or something
+        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL, newLogIdString);
+
+        return bundle;
+    }
+
 
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -851,6 +899,53 @@ or at least achieves the same effect.
         return answer;
     }
 
+    ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////
+    // start commonly used functions //////////
+    ////////////////////////////////////////////////////////
+
+    public static void startNextFragment(FragmentTransaction paramFragmentTransaction,
+                                         int paramFragmentContainerView,
+                                         Fragment paramNextFragment ) {
+        paramFragmentTransaction
+                .replace(paramFragmentContainerView,
+                        paramNextFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    // make going to each of the activities easier
+    public static void goToListSymptomLog(Activity paramActivity){
+        paramActivity.startActivity(new Intent(paramActivity,
+                ListSymptomLogActivity.class));
+    }
+    public static void goToMainActivity(Activity paramActivity){
+        paramActivity.startActivity(new Intent(paramActivity,
+                MainActivity.class));
+    }
+    public static void goToChooseSymptomLogActivity(Activity paramActivity){
+        paramActivity.startActivity(new Intent(paramActivity,
+                ChooseSymptomLogActivity.class));
+    }
+    public static void goToOtherActivity(Activity paramActivity){
+        paramActivity.startActivity(new Intent(paramActivity,
+                OtherActivity.class));
+    }
+    public static void goToFoodLogActivity(Activity paramActivity){
+        paramActivity.startActivity(new Intent(paramActivity,
+                FoodLogActivity.class));
+    }
+    public static void goToAddSymptomLogWithBundle(Activity paramActivity, Bundle paramBundle){
+        Intent intent = new Intent(paramActivity,
+                NewSymptomLogActivity.class);
+        intent.putExtras(paramBundle);
+        paramActivity.startActivity(intent);
+    }
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
 
