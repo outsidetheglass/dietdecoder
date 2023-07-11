@@ -103,4 +103,16 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
 
+  <Button
+      android:id="@+id/button_log_part_of_day_all_day"
+      android:text="@string/button_all_day"
+      android:background="@color/green_500"
+      android:textColor="@color/button_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/small_padding"
+      app:layout_constraintTop_toBottomOf="@+id/button_log_part_of_day_more_specific_time"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

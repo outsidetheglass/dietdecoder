@@ -32,6 +32,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.Tex
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -265,9 +266,14 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                 // which here should be the instant the name was saved
                 // or a specific time if they chose that first and then came here
                 // set the early date time to current time but with early hour and minute to 0
-                mDateTimeSet =
-                        mDateTime.withDayOfMonth(mDay).withMonth(mMonth+1).withYear(mYear)
-                                .withMinute(mMinute).withHour(mHour);
+
+                Bundle integerBundleToSetDateTime = new Bundle();
+                integerBundleToSetDateTime.putInt(Util.ARGUMENT_MONTH, mMonth);
+                integerBundleToSetDateTime.putInt(Util.ARGUMENT_YEAR, mYear);
+                integerBundleToSetDateTime.putInt(Util.ARGUMENT_DAY, mDay);
+                integerBundleToSetDateTime.putInt(Util.ARGUMENT_HOUR, mHour);
+                integerBundleToSetDateTime.putInt(Util.ARGUMENT_MINUTE, mMinute);
+
 
                 if (settingSymptomLog){
                     if (mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN) {
@@ -282,7 +288,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
                     // then set the values from the food log
                     mFoodLog = Util.setFoodLogConsumedAcquiredCooked(mWhatToChange,
-                            mFoodLog, mDateTimeSet);
+                            mFoodLog, integerBundleToSetDateTime);
                     // update our food log with the new date consumed
                     mFoodLogViewModel.viewModelUpdateFoodLog(mFoodLog);
                 }

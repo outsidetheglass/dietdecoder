@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -24,8 +25,10 @@ import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomIntensityFragment;
 import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
 import java.lang.reflect.Array;
 import java.time.Duration;
@@ -45,6 +48,7 @@ public class Util {
     public static String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
             "Aug",
             "Sept", "Oct", "Nov", "Dec" };
+
 
     public static final ZoneId defaultZoneId = ZoneId.systemDefault();
 
@@ -79,9 +83,9 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
             "symptom_log_ids_to_add_original";
-    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
+    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD = "food_log_ids_to_add";
     public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
-            "symptom_log_ids_to_add_original";
+            "food_log_ids_to_add_original";
 
 
 
@@ -189,8 +193,10 @@ public class Util {
     // for bundling between activities
     public static String cleanArrayString(String paramString){
         String mString = paramString;
-        // remove first and last brackets and whitespace
-        mString = mString.substring( 1, mString.length() - 1 );
+        // remove first and last brackets if it has them
+        mString = mString.replaceAll("\\[", "");
+        mString = mString.replaceAll("\\]", "");
+        // and remove any whitespace
         mString = mString.replaceAll("\\s", "");
         return mString;
     }
@@ -846,15 +852,37 @@ What setSingleLine(true) does is calling setHorizontallyScrolling(true) and setL
 In turn, the call to setLines(1) is like calling setMinLines(1) and setMaxLines(1) in one call.
 Some input types (i.e., the constants from InputType.TYPE_*) calls setSingleLine(true) implicitly,
 or at least achieves the same effect.
- */
-// IMPORTANT, do this before any of the code following it
-        editText.setSingleLine(true);
-// IMPORTANT, to allow wrapping
-        editText.setHorizontallyScrolling(false);
-// IMPORTANT, or else your edit text would wrap but not expand to multiple lines
-        editText.setMaxLines(6);
+     */
+    // IMPORTANT, do this before any of the code following it
+            editText.setSingleLine(true);
+    // IMPORTANT, to allow wrapping
+            editText.setHorizontallyScrolling(false);
+    // IMPORTANT, or else your edit text would wrap but not expand to multiple lines
+            editText.setMaxLines(6);
 
         return editText;
+    }
+
+    // set numberpicker values
+    public static NumberPicker setNumberPicker(NumberPicker numberPicker,
+                                               String[] displayStringList, Integer defaultValue){
+        // the lowest number in the list, then minus one
+        // to give us the index to set the numberpicker with
+        Integer minimumIntegerIndex = Integer.parseInt(displayStringList[0]) - 1;
+        // get the last in the list by getting the length, minus one to make an index
+        Integer indexForLastValueInStringList = displayStringList.length - 1;
+        // parse the last number in the list, then minus one to give an index
+        Integer maximumIntegerIndex =
+                Integer.parseInt(displayStringList[indexForLastValueInStringList]) - 1;
+
+        // make a number picker for the intensity of the symptom
+        numberPicker.setDisplayedValues(displayStringList);
+        numberPicker.scrollBy(minimumIntegerIndex,maximumIntegerIndex);
+        numberPicker.setMinValue(minimumIntegerIndex);
+        numberPicker.setMaxValue(maximumIntegerIndex);
+        numberPicker.setValue(defaultValue-1);
+        numberPicker.setWrapSelectorWheel(false);
+        return numberPicker;
     }
 
     ////////////////////////////////////////////////////////
@@ -976,20 +1004,110 @@ or at least achieves the same effect.
         return Util.localDateTimeFromInstant(mInstant);
     }
 
+    // given an instant and a bundle with at least some integers of minute, hour, month, day, year,
+    // update the instant to match what was given in the bundle
+    public static Instant setInstantFromBundle (Instant logInstant, Bundle
+    integerBundleToSetDateTime){
+
+        LocalDateTime localDateTime = null;
+        localDateTime = Util.localDateTimeFromInstant(logInstant);
+        Integer monthInteger = localDateTime.getMonthValue()-1;
+        Integer yearInteger = localDateTime.getYear();
+        Integer minuteInteger = localDateTime.getMinute();
+        Integer dayInteger = localDateTime.getDayOfMonth();
+        Integer hourInteger = localDateTime.getHour();
+
+
+        // check in the bundle for each of the date time values
+        // if it contains the value
+        if ( integerBundleToSetDateTime.containsKey(Util.ARGUMENT_MONTH) ) {
+            // set the value from the bundle
+            monthInteger = integerBundleToSetDateTime.getInt(Util.ARGUMENT_MONTH);
+        }
+        if ( integerBundleToSetDateTime.containsKey(Util.ARGUMENT_YEAR) ) {
+            yearInteger = integerBundleToSetDateTime.getInt(Util.ARGUMENT_YEAR);
+        }
+        if ( integerBundleToSetDateTime.containsKey(Util.ARGUMENT_MINUTE) ) {
+            minuteInteger = integerBundleToSetDateTime.getInt(Util.ARGUMENT_MINUTE);
+        }
+        if ( integerBundleToSetDateTime.containsKey(Util.ARGUMENT_DAY) ) {
+            dayInteger = integerBundleToSetDateTime.getInt(Util.ARGUMENT_DAY);
+        }
+        if ( integerBundleToSetDateTime.containsKey(Util.ARGUMENT_HOUR) ) {
+            hourInteger = integerBundleToSetDateTime.getInt(Util.ARGUMENT_HOUR);
+        }
+
+        localDateTime =
+                localDateTime.withDayOfMonth(dayInteger).withMonth(monthInteger+1).withYear(yearInteger)
+                        .withMinute(minuteInteger).withHour(hourInteger);
+
+        return Util.instantFromLocalDateTime(localDateTime);
+    }
+
+
+    public static Bundle setBundleFoodLogInstants(Bundle bundle, String whatToChange){
+
+        // start with consumed, then ask for cooked, then ask for acquired
+        if (whatToChange == Util.ARGUMENT_CHANGE_CONSUMED) {
+            bundle.remove(Util.ARGUMENT_CHANGE);
+            bundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_COOKED);
+        } else if (whatToChange == Util.ARGUMENT_CHANGE_COOKED) {
+            //TODO add logic here for making cooked and acquired set to be same as previous food
+            // log
+            bundle.remove(Util.ARGUMENT_CHANGE);
+            bundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_ACQUIRED);
+        } else if (whatToChange == Util.ARGUMENT_CHANGE_ACQUIRED) {
+            bundle.remove(Util.ARGUMENT_CHANGE);
+        }
+
+        return bundle;
+    }
+
+    // return a symptom log with the new began or changed instants set
+    public static SymptomLog setSymptomLogBeganChanged(String whatToChange,
+                                                       SymptomLog symptomLog,
+                                                       Bundle integerBundleToSetDateTime){
+
+        if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
+            // get the instant we have already so we have correct date
+            Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
+                    integerBundleToSetDateTime);
+            symptomLog.setInstantBegan(instantToSet);
+        } else {
+            Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantChanged(),
+                    integerBundleToSetDateTime);
+            symptomLog.setInstantChanged(instantToSet);
+        }
+
+        //then set the values from the symptom log
+        //then set the values from the food log
+        return symptomLog;
+    }
+
     // return a food log with the instant of when consumed or acquired or cooked happened
     public static FoodLog setFoodLogConsumedAcquiredCooked(String whatToChange,
                                                            FoodLog foodLog,
-                                                           LocalDateTime localDateTime) {
+                                                           Bundle integerBundleToSetDateTime) {
 
-        Instant instant  = Util.instantFromLocalDateTime(localDateTime);
+        Instant instant;
 
         if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_CONSUMED)) {
+
+            // using the bundle and instant we want to change, set the localdatetime to that
+            instant = Util.setInstantFromBundle(foodLog.getInstantConsumed(),
+                    integerBundleToSetDateTime);
+
+            // and set that fixed value back in the food log
             foodLog.setInstantConsumed(instant);
-        } else if (TextUtils.equals(whatToChange,
-                Util.ARGUMENT_CHANGE_COOKED)) {
+        }
+        else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_COOKED)) {
+            instant = Util.setInstantFromBundle(foodLog.getInstantCooked(),
+                    integerBundleToSetDateTime);
             foodLog.setInstantCooked(instant);
-        } else if (TextUtils.equals(whatToChange,
-                Util.ARGUMENT_CHANGE_ACQUIRED)) {
+        }
+        else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_ACQUIRED)) {
+            instant = Util.setInstantFromBundle(foodLog.getInstantAcquired(),
+                    integerBundleToSetDateTime);
             foodLog.setInstantAcquired(instant);
         }
         return foodLog;

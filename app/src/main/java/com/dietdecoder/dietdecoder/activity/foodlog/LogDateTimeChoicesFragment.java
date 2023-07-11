@@ -58,7 +58,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     Boolean settingSymptomLog = Boolean.FALSE;
     Boolean isSymptomLogBeginInstantSet = Boolean.FALSE;
     Boolean isSymptomLogChangedInstantSet = Boolean.FALSE;
-    Instant mInstantConsumed, mInstantBegan, mInstant;
+    Instant mInstantConsumed, mInstant;
     LocalDateTime mNowDateTime = LocalDateTime.now(), mEarlierTodayDateTime, mYesterdayDateTime,
             mDayBeforeYesterdayDateTime;
     ArrayList<String> mSymptomLogIdsToAddStringArray;
@@ -92,6 +92,19 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         // if food log ID was given then set that
         if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) ) {
             //TODO make food logs multiple set array same as symptoms
+            // change which fragment we'll go to next based on what we're changing
+            //TODO coming from logpartofday too, make it work with which food log it has
+//            if (mWhatToChange == Util.ARGUMENT_CHANGE_CONSUMED) {
+//                // when consumed is done being set,
+//                // we'll circle back around and ask user for acquired and cooked
+//                mDefaultNextFragment = new LogDateTimeChoicesFragment();
+//            } else if (mWhatToChange == Util.ARGUMENT_CHANGE_ACQUIRED) {
+//                mDefaultNextFragment = new LogDateTimeChoicesFragment();
+//            } else if (mWhatToChange == Util.ARGUMENT_CHANGE_COOKED) {
+//                // after cooked is set go to the next info needed
+//                mDefaultNextFragment = new NewFoodLogBrandFragment();
+//            }
+
             settingFoodLog = Boolean.TRUE;
             mLogIdString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
             // now get the food log associated with that UUID
@@ -111,7 +124,6 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                 mSymptomLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
                         mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD)
                 );
-
             }
 
             // when we have to replace the fragment container, replace the right one
@@ -266,11 +278,9 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                                 mCurrentSymptomLog.getSymptomName()
                         );
 
-                //TODO fix this, it's breaking somewhere
-
                 // and set default for changed time to be from that average
                 mCurrentSymptomLog.setInstantChanged(
-                        Util.instantFromDurationAndStartInstant(mInstantBegan,
+                        Util.instantFromDurationAndStartInstant(mInstant,
                         averageDuration)
                 );
             }

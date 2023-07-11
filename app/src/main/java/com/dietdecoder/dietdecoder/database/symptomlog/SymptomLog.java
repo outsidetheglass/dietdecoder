@@ -40,8 +40,9 @@ public class SymptomLog {
   @ColumnInfo(name = "description")
   private String description;
 
-  @ColumnInfo(name = "intensityScale")
-  private Integer intensityScale;
+  // how bad it was out of 10
+  @ColumnInfo(name = "intensity")
+  private Integer intensity;
 
   // when it began
   @ColumnInfo(name = "instantBegan")
@@ -72,7 +73,7 @@ public class SymptomLog {
                     Instant instantBegan,
                     Instant instantChanged,
                     String description,
-                    Integer intensityScale) {
+                    Integer intensity) {
     this.symptomLogId = UUID.randomUUID();
     this.symptomName = symptomName;
     this.instantLogged = Instant.now();
@@ -80,7 +81,7 @@ public class SymptomLog {
     this.instantChanged = instantChanged;
     this.symptomId = symptomId;
     this.description = description;
-    this.intensityScale = intensityScale;
+    this.intensity = intensity;
   }
 
   // basic getters for the parameters
@@ -100,8 +101,8 @@ public class SymptomLog {
     return(this.description);
   }
 
-  public Integer getIntensityScale() {
-    return(this.intensityScale);
+  public Integer getIntensity() {
+    return(this.intensity);
   }
 
   public Instant getInstantLogged() {
@@ -116,8 +117,8 @@ public class SymptomLog {
 
   public String toString() {
     String intensityString = "\n Intensity: ";
-    if (this.intensityScale != null){
-      intensityString = intensityString.concat(this.intensityScale.toString() + "\n");
+    if (this.intensity != null){
+      intensityString = intensityString.concat(this.intensity.toString() + "\n");
     }
       return ("ID:" + this.symptomLogId.toString() + "\n"+
               "Logged at: " + this.instantLogged.toString() + "\n"
@@ -153,8 +154,8 @@ public class SymptomLog {
     this.description = string;
   }
 
-  public void setIntensityScale(Integer integer) {
-    this.intensityScale = integer;
+  public void setIntensity(Integer integer) {
+    this.intensity = integer;
   }
 
 

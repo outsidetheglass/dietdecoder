@@ -121,6 +121,12 @@ class SymptomLogRepository {
     return averageDuration;
   } // end average duration method
 
+  // get most recent symptom log with symptom
+  SymptomLog repositoryGetMostRecentSymptomLogWithSymptom(String symptomName){
 
+    SymptomLog symptomLogWithSameSymptom =
+          mSymptomLogDao.daoGetSomeSymptomLogByName(symptomName, 1).get(0);
+    return symptomLogWithSameSymptom;
+  }
 
 } //end SymptomLogRepository class

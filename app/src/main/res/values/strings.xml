@@ -38,7 +38,7 @@
   <string name="textview_24hr">(24 hour time)</string>
   <string name="pick_time">Pick Time</string>
 
-  <string name="question_textview_new_symptom_intensity_log">How intense is the symptom? (on a scale of 1/10, e.g. enter 5 for 5/10)</string>
+  <string name="question_textview_new_symptom_intensity_log">How intense is the symptom?</string>
   <string name="question_textview_new_symptom_intensity_log_changed_time">That set when the symptom started. Now, when did the symptom end?</string>
 
 
@@ -67,6 +67,7 @@
   <string name="button_evening">Evening</string>
   <string name="button_midday">Midday</string>
   <string name="button_specific_time">More Specific Time</string>
+  <string name="button_all_day">All Day</string>
   <string name="toast_more_specific_time">Time to pick a more specific time then!</string>
   <string name="toast_just_now">Just now it is</string>
   <string name="toast_earlier_today">Then let\'s go with a random earlier time</string>
@@ -76,7 +77,9 @@
   <string name="toast_part_of_day_midday">Midday it is!</string>
   <string name="toast_part_of_day_afternoon">Afternoon it shall be</string>
   <string name="toast_part_of_day_evening">Evening has been chosen</string>
-  <string name="toast_part_of_day_midnight">Midnight snack, yum!</string>
+  <string name="toast_part_of_day_midnight">Midnight, gotcha!</string>
+  <string name="toast_part_of_day_all_day">All day, huh? Ouch.</string>
+
 
 
   <string name="textview_colon">:</string>

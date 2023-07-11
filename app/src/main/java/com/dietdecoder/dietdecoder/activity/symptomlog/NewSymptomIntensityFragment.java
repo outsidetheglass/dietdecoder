@@ -50,11 +50,11 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
 
     String mSaveString, mEmptyTryAgainString, mName, symptomIntensityLogIdString, mCurrentSymptomLogIdToAddString,
     mCurrentSymptomName, mSymptomLogIdsToAddStringArrayOriginal,
-            symptomIntensityViewEditableString, mInvalidTryAgainString, mSymptomLogIdsToAddString,
+            mCurrentSymptomLogIdString, mInvalidTryAgainString, mSymptomLogIdsToAddString,
             mSymptomLogIdsToAddOriginalString, mAllTimesAreSame;
     String[] mDisplayedStringList;
     Boolean isIntensityViewEmpty;
-    Integer symptomIntensity, mHowManyIdsToAdd, mIntensitySelected;
+    Integer symptomIntensity, mHowManyIdsToAdd, mIntensitySelected, mIntensityOfMostRecentSymptomLogWithSameSymptomName;
     UUID mSymptomLogId;
 
     SymptomLog mCurrentSymptomLog;
@@ -116,7 +116,6 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
 
-            Log.d(TAG, "bundle " + mBundle.toString());
             // to pass on to the time and date fragments, save the original untouched array string
             mSymptomLogIdsToAddStringArrayOriginal =
                     mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL);
@@ -133,33 +132,27 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
             );
 
             // set the current symptom to be the first
-            setCurrentSymptom(mSymptomLogIdsToAddStringArray.get(0));
+            mCurrentSymptomLogIdString = mSymptomLogIdsToAddStringArray.get(0);
+            setCurrentSymptomTextViewNumberPicker(mCurrentSymptomLogIdString);
+
+            mCurrentSymptomLog = mSymptomLogViewModel.viewModelGetSymptomLogFromId(
+                    UUID.fromString(mCurrentSymptomLogIdString) );
+            mCurrentSymptomName = mCurrentSymptomLog.getSymptomName();
 
             // numbers to put in the number picker for how intense the symptom is
-            mDisplayedStringList = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-            //TODO change the default intensity selected to be the median chosen in recent logs
-            mIntensitySelected = Integer.parseInt(mDisplayedStringList[0]);
-            // make a number picker for the intensity of the symptom
-            mNumberPicker.setDisplayedValues(mDisplayedStringList);
-            mNumberPicker.scrollBy(0,9);
-            mNumberPicker.setMinValue(0);
-            mNumberPicker.setMaxValue(9);
-            mNumberPicker.setWrapSelectorWheel(false);
+            mDisplayedStringList =
+                    getResources().getStringArray(R.array.strings_one_to_ten);
+
+            // set our default intensity to first in list if no symptom has been logged yet, and
+            // set to most recent log with same symptom name if it exists
+            mIntensitySelected = setIntensityDefault(mCurrentSymptomName);
+
+
+            // set our numberpicker with our string of 1 to 10 and with default value of the same
+            // as most recent symptom log with the same symptom
+            mNumberPicker = Util.setNumberPicker(mNumberPicker, mDisplayedStringList, mIntensitySelected);
             mNumberPicker.setOnValueChangedListener(this);
 
-            //TODO get the median choice out of recent logs and set the default
-            // intensity/severity to that
-//            //TODO convert this average duration to the intensity log add
-//            Duration averageDuration =
-//                    mSymptomLogViewModel.viewModelGetAverageSymptomDuration(mCurrentSymptomLog.getSymptomName());
-//            // and set default for changed time to be from that average
-//            mCurrentSymptomLog.setInstantChanged(Util.instantFromDurationAndStartInstant(mInstantBegan,
-//                    averageDuration));
-
-            // Integer medianRecentIntensity = ;
-            //mEditTextSymptomIntensity.setText(mCurrentSymptomLog.getIntensityScale
-            // (medianRecentIntensity));
-            //mEditTextSymptomIntensity.setOnClickListener(this::onClick);
 
             // TODO have delete this symptom button
 
@@ -173,14 +166,20 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
     }
 
 
-    private void setCurrentSymptom(String paramSymptomLogIdToAddString){
+    // change the name on the text view to new current symptom and the new default intensity value
+    private void setCurrentSymptomTextViewNumberPicker(String paramSymptomLogIdToAddString){
 
         // get first log in the list array
         UUID uuid = UUID.fromString(paramSymptomLogIdToAddString);
         mCurrentSymptomLog = mSymptomLogViewModel.viewModelGetSymptomLogFromId(uuid);
+        mCurrentSymptomName = mCurrentSymptomLog.getSymptomName();
 
         // put in the UI what symptom we're changing now
-        mTextViewSymptomName.setText(mCurrentSymptomLog.getSymptomName());
+        mTextViewSymptomName.setText(mCurrentSymptomName);
+
+        // also reset the default value on the number picker
+        mIntensitySelected = setIntensityDefault(mCurrentSymptomName);
+        mNumberPicker.setValue(mIntensitySelected);
     }
 
     @Override
@@ -204,14 +203,10 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                     Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
 
                     // then set the intensity
-                    mCurrentSymptomLog.setIntensityScale(mIntensitySelected);
+                    mCurrentSymptomLog.setIntensity(mIntensitySelected);
                     // update the log
                     mSymptomLogViewModel.viewModelUpdateSymptomLog(mCurrentSymptomLog);
 
-//                    Log.d(TAG, "before removing mSymptomLogIdsToAddStringArray " +
-//                            mSymptomLogIdsToAddStringArray.toString());
-//                    Log.d(TAG, "mSymptomLogIdsToAddStringArray.size() " +
-//                            mSymptomLogIdsToAddStringArray.size());
                     // we've added it in, so remove this symptom from the ones to add
                     mSymptomLogIdsToAddStringArray.remove(mCurrentSymptomLog.getSymptomId().toString());
                     // and lower our count for how many left to add
@@ -277,8 +272,6 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                 // reset to setting begin time date for the next fragment
                 mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
 
-                Log.d(TAG,
-                        "mSymptomLogIdsToAddStringArrayOriginal " + mSymptomLogIdsToAddStringArrayOriginal);
                 // if there's more than one symptom,
                 // checked by if original string has a comma,
                 // alert user that all symptoms will have the same time and date,
@@ -303,9 +296,30 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         // get the index of the spot in the array chosen
-        int valuePicker1 = picker.getValue();
+        int valuePicker = picker.getValue();
         // get the string value of the chosen intensity
-        mIntensitySelected =  Integer.parseInt(mDisplayedStringList[valuePicker1]);
-        //Log.d("picker value", mDisplayedStringList[valuePicker1]);
+        mIntensitySelected =  Integer.parseInt(mDisplayedStringList[valuePicker]);
     }
+
+    private Integer setIntensityDefault(String mCurrentSymptomName){
+        // if there is no symptom log with same symptom name
+        if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
+                mCurrentSymptomName ) )) {
+            // set our integer to first in the list
+            mIntensitySelected =
+                    Integer.parseInt(mDisplayedStringList[0]);
+        } else {
+            // get the most recent intensity from most recent log and
+            // set the default intensity to that
+            mIntensityOfMostRecentSymptomLogWithSameSymptomName =
+                    mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
+                                    mCurrentSymptomName )
+                            .getIntensity();
+
+            // set our default choice to save intensity of to be the most recent value
+            mIntensitySelected = mIntensityOfMostRecentSymptomLogWithSameSymptomName;
+        }
+        return mIntensitySelected;
+    }
+
 }

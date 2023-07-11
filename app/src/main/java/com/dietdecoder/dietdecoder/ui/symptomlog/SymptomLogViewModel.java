@@ -97,5 +97,13 @@ public class SymptomLogViewModel extends AndroidViewModel {
     return averageDuration;
   }
 
+  // get most recent symptom log of symptom
+  public SymptomLog viewModelGetMostRecentSymptomLogWithSymptom(String symptomName){
+    SymptomLog symptomLogWithSameSymptom =
+            mRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomName);
+    return symptomLogWithSameSymptom;
+  }
+
+
 
 } //end LogViewModel class

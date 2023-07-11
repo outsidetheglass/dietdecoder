@@ -72,8 +72,8 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 //    Integer mSymptomIntensityInteger = symptomLog.getIntensityScale();
     String mSymptomIntensityString = "Intensity N/A";
 //    String mSymptomIntensityString = Util.setIntensityString(mSymptomIntensityInteger.toString());
-    if ( symptomLog.getIntensityScale() != null) {
-      mSymptomIntensityString = symptomLog.getIntensityScale().toString();
+    if ( symptomLog.getIntensity() != null) {
+      mSymptomIntensityString = symptomLog.getIntensity().toString();
     }
     //String mSymptomLogString = symptomLog.toString();
 
