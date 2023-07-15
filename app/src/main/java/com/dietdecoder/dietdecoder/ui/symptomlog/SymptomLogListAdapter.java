@@ -49,54 +49,35 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
   public void onBindViewHolder(SymptomLogViewHolder holder, int position) {
     SymptomLog currentSymptomLog = getItem(position);
     Symptom currentSymptomLogSymptom = null;
-    // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
-    // I should add a try catch here that adds symptom to database if null after this for loop
-//    Log.d(TAG, "currentSymptomLog: " + currentSymptomLog.toString());
-//    Log.d(TAG, "currentSymptomLog.getSymptomId(): " + currentSymptomLog.getSymptomLogId().toString());
-//    Log.d(TAG,
-//            "currentSymptomLog.getSymptomId(): " + currentSymptomLog.getSymptomLogSymptomId().toString());
-//    for ( Symptom symptom : mSymptomArrayList) {
-//      Log.d(TAG, "for loop: " + symptom.toString());
-//      Log.d(TAG, "for loop getSymptomId(): " + symptom.getSymptomId().toString());
-//      if ( Objects.equals(symptom.getSymptomId(), currentSymptomLog.getSymptomLogSymptomId()) ){
-//        currentSymptomLogSymptom = symptom;
-//      }
-//    }
-//    Log.d(TAG,
-//            " currentSymptomLog.getSymptomId(): " + currentSymptomLog.getSymptomLogSymptomId().toString());
-    //TODO get current symptom working somehow
-//    UUID logId = currentSymptomLog.getSymptomLogId();
-//    Symptom currentSymptomLogSymptom =
-//            mSymptomViewModel.viewModelGetSymptomFromId(currentSymptomLog.getSymptomId());
-//    ArrayList<Symptom> mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
-//    Symptom randomSymptom = mSymptomViewModel.viewModelGetSymptomFromName("body " +
-//            "ache");
-//    Log.d(TAG, "logId " + logId.toString());
-//    Symptom tryAgainSymptom =
-//            mSymptomLogViewModel.viewModelGetSymptomFromSymptomLogId(logId);
-//    Log.d(TAG, "tryAgainSymptom " + tryAgainSymptom.toString());
-//    Log.d(TAG,
-//            "symptom id in adapter" + mSymptomViewModel.viewModelGetSymptomFromId(mSymptoms.get(0).getSymptomId()).toString());
-//    Log.d(TAG,
-//            "randomSymptom: " + randomSymptom.toString());
-//    Log.d(TAG,
-//            " mSymptomViewModel.viewModelGetSymptomFromId(currentSymptomLog.getSymptomId(): " +
-//                    mSymptomViewModel.viewModelGetSymptomFromId(
-//                            currentSymptomLog.getSymptomId()
-//                    ).toString());
-//    Log.d(TAG,
-//            " mSymptomViewModel.viewModelGetSymptomFromId(: " +
-//                    mSymptomViewModel.viewModelGetSymptomFromId(
-//                            UUID.fromString("12994891-cba8" +
-//                                    "-41b3-b0db-a1dd54e02ad5")
-//                    ).toString());
-////
-//    Log.d(TAG,
-//            " currentSymptomLogSymptom: " + currentSymptomLogSymptom.toString());
+    UUID currentSymptomLogSymptomId = currentSymptomLog.getSymptomLogSymptomId();
 
-    holder.bind(currentSymptomLog
-            //, currentSymptomLogSymptom
-    );
+    // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
+    // find the symptom matching the id of the log we were given
+    int i = 0;
+    UUID symptomIdToCheck = mSymptomArrayList.get(i).getSymptomId();
+    // while this symptom in the array's id does not match the current symptom log's symptom id
+    // and don't go out of bounds by checking for an index of the array bigger than the array size
+    while ( !Objects.equals(symptomIdToCheck,
+            currentSymptomLogSymptomId ) && i < mSymptomArrayList.size()) {
+      // check the next symptom id in the array
+      i++;
+      symptomIdToCheck = mSymptomArrayList.get(i).getSymptomId();
+    }
+    // when we break, check it's the correct symptom, if it's not that means it was the last in
+    // the list and is invalid
+    if ( Objects.equals(symptomIdToCheck,
+            currentSymptomLogSymptomId )) {
+      currentSymptomLogSymptom = mSymptomArrayList.get(i);
+    } else {
+      //TODO add logic here for alerting user for broken symptom
+      Log.d(TAG,
+              "symptom in this symptom log, this log id: " +
+                      currentSymptomLogSymptomId.toString() +
+                      " was not found in list of symptoms, need to add symptom" +
+              " and find out how this symptom log got added without a valid symptom.");
+    }
+
+    holder.bind(currentSymptomLog, currentSymptomLogSymptom);
   }//end onBindViewHolder
 
   public static class LogDiff extends DiffUtil.ItemCallback<SymptomLog> {
@@ -131,7 +112,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
     }
   }
 
-  public void setLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayListList){
+  public void setSymptomLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayListList){
 
     this.mSymptomArrayList = symptomArrayListList;
     this.submitList(logs);

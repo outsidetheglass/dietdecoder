@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,11 @@ public interface IngredientDao {
 
   @Query("UPDATE ingredient_table SET ingredientName = :newIngredientName WHERE ingredientName = :oldIngredientName AND ingredientChemicalName = :oldIngredientChemicalName")
   void daoUpdateIngredientName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientName);
+
+
+  // Sort by specific chemical and alphabetize them by symptom name
+  @Query("SELECT * FROM ingredient_table ORDER BY ingredientName ASC")
+  List<Ingredient> daoGetAllIngredientArrayList();
 
 
   // LiveData is a lifecycle library class for live database access

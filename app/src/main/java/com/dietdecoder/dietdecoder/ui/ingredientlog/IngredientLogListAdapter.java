@@ -1,5 +1,6 @@
 package com.dietdecoder.dietdecoder.ui.ingredientlog;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,11 +9,15 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewHolder;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class IngredientLogListAdapter extends ListAdapter<IngredientLog, IngredientLogViewHolder> {
 
@@ -44,10 +49,36 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
   @Override
   public void onBindViewHolder(IngredientLogViewHolder holder, int position) {
     IngredientLog currentIngredientLog = getItem(position);
-//    Ingredient currentIngredientLogIngredient =
-//            mIngredientViewModel.viewModelGetIngredientFromId(currentIngredientLog.getIngredientLogIngredientId());
-//    holder.bind(currentIngredientLog, currentIngredientLogIngredient);
-    holder.bind(currentIngredientLog);
+    Ingredient currentIngredientLogIngredient = null;
+    UUID currentIngredientLogIngredientId = currentIngredientLog.getIngredientLogIngredientId();
+
+    // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
+    // find the symptom matching the id of the log we were given
+    int i = 0;
+    UUID symptomIdToCheck = mIngredientArrayList.get(i).getIngredientId();
+    // while this symptom in the array's id does not match the current symptom log's symptom id
+    // and don't go out of bounds by checking for an index of the array bigger than the array size
+    while ( !Objects.equals(symptomIdToCheck,
+            currentIngredientLogIngredientId ) && i < mIngredientArrayList.size()) {
+      // check the next symptom id in the array
+      i++;
+      symptomIdToCheck = mIngredientArrayList.get(i).getIngredientId();
+    }
+    // when we break, check it's the correct symptom, if it's not that means it was the last in
+    // the list and is invalid
+    if ( Objects.equals(symptomIdToCheck,
+            currentIngredientLogIngredientId )) {
+      currentIngredientLogIngredient = mIngredientArrayList.get(i);
+    } else {
+      //TODO add logic here for alerting user for broken symptom
+      Log.d(TAG,
+              "symptom in this symptom log, this log id: " +
+                      currentIngredientLogIngredientId.toString() +
+                      " was not found in list of symptoms, need to add symptom" +
+                      " and find out how this symptom log got added without a valid symptom.");
+    }
+
+    holder.bind(currentIngredientLog, currentIngredientLogIngredient);
   }//end onBindViewHolder
 
   public static class LogDiff extends DiffUtil.ItemCallback<IngredientLog> {
@@ -81,6 +112,12 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
       this.mIngredientLogArrayList = ingredientLogList;
       notifyDataSetChanged();
     }
+  }
+
+  public void setIngredientLogListSubmitList(List logs, ArrayList<Ingredient> ingredientArrayList){
+
+    this.mIngredientArrayList = ingredientArrayList;
+    this.submitList(logs);
   }
 
 } //end class LogListAdapter

@@ -42,19 +42,10 @@
           android:exported="false" />
 
 
-
-      <activity android:name=".activity.foodlog.FoodLogActivity"
-        android:exported="false"/>
-      <activity        android:name=".activity.AreYouSureActivity"
-          android:exported="false" />
-      <activity        android:name=".activity.foodlog.ListFoodLogActivity"
-          android:exported="false" />
-      <activity        android:name=".activity.foodlog.ChooseRecipeActivity"
+      <activity        android:name=".activity.ingredientlog.ListIngredientLogActivity"
           android:exported="false" />
       <activity        android:name=".activity.DetailActivity"
         android:exported="false" />
-      <activity        android:name=".activity.foodlog.NewFoodLogActivity"
-          android:exported="false" />
       <activity        android:name=".activity.EditActivity"
           android:exported="false" />
 

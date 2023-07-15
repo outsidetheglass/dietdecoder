@@ -338,6 +338,8 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
     }
 
     private Integer setIntensityDefault(String mCurrentSymptomName){
+        //TODO fix intensity color gradient, it breaks with default is 10 I think
+
         // if there is no symptom log with same symptom name
         if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
                 mCurrentSymptomName ) )) {

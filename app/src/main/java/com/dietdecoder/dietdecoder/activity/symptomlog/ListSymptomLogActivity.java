@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -84,10 +83,10 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
               DividerItemDecoration.VERTICAL));
 
 
-//      mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-//      mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
-//      Log.d(TAG,
-//              "symptom in list symptom " + mSymptoms.get(0).toString());
+      mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
+      mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
+      Log.d(TAG,
+              "symptom in list symptom " + mSymptoms.get(0).toString());
       mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff()
               //, mSymptoms
               //, mSymptomViewModel, mSymptomLogViewModel
@@ -101,9 +100,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onChanged(List<SymptomLog> logs) {
                   // Update the cached copy of the words in the adapter.
-                  Log.d(TAG, "list in observer " + logs.toString());
-                  mSymptomLogListAdapter.submitList(logs);
-                  //mSymptomLogListAdapter.setLogListSubmitList(logs, mSymptoms);
+                  mSymptomLogListAdapter.setSymptomLogListSubmitList(logs, mSymptoms);
                   //TODO this is where we should be checking ingredient and recipe adapters
                   // and adding the ingredient or recipe if it doesn't exist
 

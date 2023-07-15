@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -37,20 +36,22 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
     //TODO set this to be preferences a different time
     Integer mEarlyHour = 8;
+    // personally 8am and 11pm work for me, but preferences should be set in case they want 1am
+    // or 9pm or something else
+    Integer mEarliestHour = mEarlyHour;
     Integer mMiddayHour = 12;
     Integer mAfternoonHour = 15;
     Integer mEveningHour = 19;
     Integer mMidnightHour = 23;
-    // personally 8am and 11pm work for me, but preferences should be set in case they want 1am
-    // or 9pm or something else
-    Integer mEarliestHour = mEarlyHour;
     Integer mLatestHour = mMidnightHour;
+    ArrayList<Integer> mHourChoicesArrayList;
+
 
     Button mButtonEarly, mButtonMidday, mButtonAfternoon, mButtonEvening,
             mButtonMidnight, mButtonSpecificTime, mButtonAllDay;
     TextView questionTextView;
 
-    Bundle mBundle;
+    Bundle mBundle, mButtonBundle;
     Fragment mDefaultNextFragment, mNextFragment;
 
     Instant mInstantToChange, mInstantConsumed;
@@ -58,6 +59,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             isSymptomLogBeginInstantSet = Boolean.FALSE, isSymptomLogChangedInstantSet =
             Boolean.FALSE;
     ArrayList<String> mSymptomLogIdsToAddStringArray, mFoodLogIdsToAddStringArray;
+    ArrayList<Button> mButtonsArrayList;
     LocalDateTime mFoodLogDateTime, mDateTime;
     Integer mHourToSet;
     String mLogIdString, foodLogIdString, mFragmentGoTo, mWhatToChange, mSymptomLogIdsToAddString, mFoodLogIdsToAddString;
@@ -65,7 +67,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
     FoodLogViewModel mFoodLogViewModel;
     SymptomLogViewModel mSymptomLogViewModel;
     FoodLog mFoodLog;
-    SymptomLog mSymptomLog;
+    SymptomLog mCurrentSymptomLog;
 
     public LogPartOfDayFragment() {
         super(R.layout.fragment_log_part_of_day);
@@ -95,6 +97,10 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         questionTextView = view.findViewById(R.id.textview_question_log_part_of_day_specific_time_range);
         mButtonEarly = view.findViewById(R.id.button_log_part_of_day_early);
         mButtonEarly.setOnClickListener(this);
+        //TODO make util hold times of part of day and which button it is, then put this in
+        // function to find what time and which button to set invisible
+//        mButtonBundle = new Bundle();
+        //mButtonBundle.putInt(Util.PART_OF_DAY_EARLY, R.id.button_log_part_of_day_early);
         mButtonMidday = view.findViewById(R.id.button_log_part_of_day_midday);
         mButtonMidday.setOnClickListener(this);
         mButtonAfternoon = view.findViewById(R.id.button_log_part_of_day_afternoon);
@@ -107,6 +113,24 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         mButtonSpecificTime.setOnClickListener(this);
         // all day button only for symptom log adding
         mButtonAllDay = view.findViewById(R.id.button_log_part_of_day_all_day);
+
+        mHourChoicesArrayList = new ArrayList<Integer>();
+        mButtonsArrayList = new ArrayList<>();
+
+        mHourChoicesArrayList.add(mEarlyHour);
+        mButtonsArrayList.add(mButtonEarly);
+
+        mHourChoicesArrayList.add(mMiddayHour);
+        mButtonsArrayList.add(mButtonMidday);
+
+        mHourChoicesArrayList.add(mAfternoonHour);
+        mButtonsArrayList.add(mButtonAfternoon);
+
+        mHourChoicesArrayList.add(mEveningHour);
+        mButtonsArrayList.add(mButtonEvening);
+
+        mHourChoicesArrayList.add(mMidnightHour);
+        mButtonsArrayList.add(mButtonMidnight);
 
 
         // find out if we have a food log or symptom log to set the date time of
@@ -129,7 +153,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                 mDefaultNextFragment = new LogDateTimeChoicesFragment();
             } else if (mWhatToChange == Util.ARGUMENT_CHANGE_COOKED) {
                 // after cooked is set go to the next info needed
-                mDefaultNextFragment = new NewFoodLogBrandFragment();
+                //mDefaultNextFragment = new NewFoodLogBrandFragment();
             }
 
             // set our array from the strings passed in
@@ -166,11 +190,88 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             // parse the ids from the string into an array
             mSymptomLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(mSymptomLogIdsToAddString);
 
+            // get the first log in the string array
+            UUID currentId = UUID.fromString(mSymptomLogIdsToAddStringArray.get(0));
+
+            mCurrentSymptomLog  =
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(currentId);
+            // first time through this we're setting begin so leave second one null
+            setButtonVisibilityByInstantAlreadySet(Instant.now(), null);
+            //TODO get button visibility to work for all all logs
+//            setButtonVisibilityByInstantAlreadySet(mCurrentIngredientLog.getInstantAcquired(),
+//                    mCurrentIngredientLog.getInstantConsumed());
         }
 
 
     }//end onViewCreated
 
+    //TODO get this working so if they've already chosen a later time it doesn't show earlier times
+    public void setButtonVisibilityByInstantAlreadySet(Instant firstInstant, Instant secondInstant){
+
+        // TODO get this working for ingredient log as well, with acquired coming before cooked
+        //  and cooked coming before consumed
+
+        // if we are here to set when symptom began
+        // it can't have began before now,
+        // or else we're not recording our actual symptoms just predicting them which is wrong.
+        Instant validWhenBeforeOrOnThisInstant = null;
+        // so set our valid instants
+        // is if it's begin, the valid times are hours before now (same for changed)
+
+        // there is no too early to be valid time for began
+        Instant validWhenAfterOrOnThisInstant = null;
+        Integer validWhenAfterOrOnThisHour = 0;
+
+        if ( firstInstant == null ) {
+            // we don't have a time for before
+            validWhenBeforeOrOnThisInstant = Instant.now();
+        } else {
+            // not null so set to that
+            validWhenBeforeOrOnThisInstant = firstInstant;
+        }
+        Integer validBeforeOrOnThisHour =
+                Util.localDateTimeFromInstant(validWhenBeforeOrOnThisInstant).getHour();
+
+        if ( secondInstant == null ){
+            // all hours 0 or greater will be valid, so this works for began
+            validWhenAfterOrOnThisInstant = null;
+            validWhenAfterOrOnThisHour = 0;
+        } else {
+            validWhenAfterOrOnThisInstant = secondInstant;
+            validWhenAfterOrOnThisHour =
+                    Util.localDateTimeFromInstant(validWhenAfterOrOnThisInstant).getHour();
+        }
+
+
+
+        // if began has been set then we're here to set changed/ended
+//        if ( isSymptomLogBeginInstantSet ) {
+//            // if it's changed, the valid times are after the begin time and before now or now
+//            validWhenAfterOrOnThisInstant = firstInstant;
+//            validWhenAfterOrOnThisHour =
+//                    Util.localDateTimeFromInstant(validWhenAfterOrOnThisInstant).getHour();
+//        }
+
+        // TODO change this to cases for the int in the arraylist from util
+        int i = 0;
+        // we don't care about same day or not, this fragment is just about changing part of day
+        // if it's a different day then changed will get set to began's day when we set the hour
+        // for each hour we have a choice button for, look through them
+        for ( Button button : mButtonsArrayList) {
+            // check that the hour the button corresponds to is
+            Integer hourOfButton = mHourChoicesArrayList.get(i);
+            // less than now (so if it's noon, hide the afternoon, evening and midnight buttons
+            // which are larger numbers than our valid hour)
+            // also later or same time than when it began
+            if ( hourOfButton > validBeforeOrOnThisHour || validWhenAfterOrOnThisHour > hourOfButton ) {
+                // if it is less, then set that corresponding button to invisible so the user isn't
+                // distracted by illogical buttons
+//                getView().findViewById(case 1 button)
+                button.setVisibility(View.INVISIBLE);
+            }
+            i++;
+        }
+    }
 
     @Override
     public void onClick(View view) {
@@ -247,10 +348,14 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
     private void setSymptomLogInstants(ArrayList<String> symptomLogIdsToAddStringArray,
                                        Bundle bundleHourToSet){
 
+        // get the first log
+        SymptomLog symptomLog =
+                mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(symptomLogIdsToAddStringArray.get(0)));
+
         // for each string in array update that log's instant began
         for (String symptomLogIdString: symptomLogIdsToAddStringArray){
             // now get the food log associated with each UUID
-            SymptomLog symptomLog =
+            symptomLog =
                     mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(symptomLogIdString));
             symptomLog = Util.setSymptomLogBeganChanged(mWhatToChange, symptomLog,
                     bundleHourToSet);
@@ -264,6 +369,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             mBundle.remove(Util.ARGUMENT_CHANGE);
             mBundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED);
             mWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED;
+            // reset which buttons to be invisible
+            setButtonVisibilityByInstantAlreadySet(Instant.now(),
+                    symptomLog.getInstantBegan());
         } else {
             // done so lets go home
             Util.goToListSymptomLog(thisActivity);

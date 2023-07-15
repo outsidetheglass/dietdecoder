@@ -7,7 +7,9 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +50,14 @@ class IngredientRepository {
   public Ingredient repositoryGetIngredientFromId(UUID uuid) {
     return mIngredientDao.daoGetIngredientFromId(uuid);
   }
+
+
+
+  // get only symptoms matching category from database
+  ArrayList<Ingredient> repositoryGetAllIngredientArrayList() {
+    return new ArrayList<Ingredient>(mIngredientDao.daoGetAllIngredientArrayList());
+  }
+
 
 
   public Ingredient repositoryGetIngredientFromSearchName(String searchIngredientName) {

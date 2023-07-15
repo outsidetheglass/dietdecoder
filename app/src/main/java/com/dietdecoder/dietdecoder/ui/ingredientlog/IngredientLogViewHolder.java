@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
@@ -61,7 +62,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
   }
 
 
-  public void bind(IngredientLog ingredientLog) {
+  public void bind(IngredientLog ingredientLog, Ingredient ingredient) {
     // make the recyclerview populated with the info of each ingredient log
     // get the info first
     // print it pretty
@@ -73,8 +74,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     // info on the ingredientlog
     // in order to bind it to the recyclerview
     mIngredientLogIdString = ingredientLog.getIngredientLogId().toString();
-    //TODO get name working
-    //mIngredientLogIngredientName = repositoryGetIngredientNameFromIngredientId;
+    String mIngredientLogIngredientName = ingredient.getIngredientName();
     String mIngredientLogIdString = ingredientLog.getIngredientLogId().toString();
     String mIngredientLogIngredientIdString = ingredientLog.getIngredientLogIngredientId().toString();
     Instant mIngredientLogConsumedInstant = ingredientLog.getInstantConsumed();
@@ -89,9 +89,8 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
 
 
     // how many days ago, if any, between when it was cooked and consumed
-    String changedRelativeDateToBeganString =
-            Util.stringRelativeTimeFromInstant(mIngredientLogCookedInstant,
-                    mIngredientLogConsumedInstant);
+    String mIngredientLogCookedString =
+            Util.stringFromInstant(mIngredientLogCookedInstant);
 
     String unImportantString =
             Util.setDescriptionString(mIngredientLogAmount + ", " + Util.stringFromInstant(mIngredientLogAcquiredInstant));
@@ -99,8 +98,8 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     String mIngredientLogConsumedString = Util.stringFromInstant(mIngredientLogConsumedInstant);
 
     SpannableStringBuilder printString =
-            Util.setViewHolderRecyclerViewString(mIngredientLogIngredientIdString,
-            changedRelativeDateToBeganString, mIngredientLogConsumedString, unImportantString );
+            Util.setViewHolderRecyclerViewString(mIngredientLogIngredientName,
+                    "", mIngredientLogConsumedString, "");
 
 
     // set part of it bold and part of it not bold

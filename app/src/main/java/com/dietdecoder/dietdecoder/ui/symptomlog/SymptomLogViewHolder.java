@@ -62,9 +62,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
   }
 
 
-  public void bind(SymptomLog symptomLog
-         // , Symptom symptom
-  ) {
+  public void bind(SymptomLog symptomLog, Symptom symptom) {
     // make the recyclerview populated with the info of each symptom log
     // get the info first
     // print it pretty
@@ -75,8 +73,8 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     // info on the symptomlog
     // in order to bind it to the recyclerview
-    //String mSymptomLogName = symptom.getSymptomName();
-    String mSymptomLogName = symptomLog.getSymptomLogSymptomName();
+    String mSymptomLogName = symptom.getSymptomName();
+//    String mSymptomLogName = symptomLog.getSymptomLogSymptomName();
      mSymptomLogIdString = symptomLog.getSymptomLogId().toString();
     String mSymptomLogDescription = symptomLog.getSymptomLogSymptomDescription();
     Instant mSymptomLogBeganInstant = symptomLog.getInstantBegan();

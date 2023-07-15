@@ -61,19 +61,8 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
 
     thisContext = getBaseContext();
 
-  //TODO Are you experiencing any ingredients right now?
-    //Any past ingredients to log?
-    //if yes, list ingredients to track from preferences
 
-    //checkbox for each ingredient
-    // for each one clicked, open severity scale, autofill medium severity, option to click worse
-    // more than it's ever been before, adds new severity to scale
-    // when click save, for each severity scale save ingredient severity
-    //any new types of ingredients or conditions?
-    //if yes, add
-    // list previous ingredients and ask when it stopped/changed, if they did
-
-    // if we had no view made, go straight to asking user for intensity
+    // if we have no view made
     if (savedInstanceState == null) {
       // make the view for listing the items in the log
       RecyclerView recyclerViewIngredient = findViewById(R.id.recyclerview_list_ingredient_log);
@@ -83,7 +72,7 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
 
 
       mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
-      //mIngredients = mIngredientViewModel.viewModelGetAllIngredientArrayList();
+      mIngredients = mIngredientViewModel.viewModelGetAllIngredientArrayList();
       mIngredientLogListAdapter =
               new IngredientLogListAdapter(new IngredientLogListAdapter.LogDiff()
                       //, mIngredientViewModel
@@ -97,7 +86,7 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
                 @Override
                 public void onChanged(List<IngredientLog> logs) {
                   // Update the cached copy of the words in the adapter.
-                  mIngredientLogListAdapter.submitList(logs);
+                  mIngredientLogListAdapter.setIngredientLogListSubmitList(logs, mIngredients);
                   //TODO this is where we should be checking ingredient and recipe adapters
                   // and adding the ingredient or recipe if it doesn't exist
 

@@ -21,12 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dietdecoder.dietdecoder.activity.DetailActivity;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
-import com.dietdecoder.dietdecoder.activity.AreYouSureActivity;
 import com.dietdecoder.dietdecoder.activity.EditActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.ChooseRecipeActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.ListFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ListIngredientLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
@@ -714,7 +709,7 @@ public class Util {
                 mIntent.putExtra(Util.ARGUMENT_FROM, whereFrom);
             } else {
                 // default to guessing we're making a new food log
-                mIntent = new Intent(activity, NewFoodLogActivity.class);
+               // mIntent = new Intent(activity, NewFoodLogActivity.class);
                 // where we want to go next
                 mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, whereGoTo);
                 // which fragment we came from
@@ -1140,7 +1135,7 @@ or at least achieves the same effect.
             intent = new Intent(context, ChooseSymptomActivity.class);
         }
         else if ( TextUtils.equals(idStringType, Util.ARGUMENT_FOOD_LOG_ID_ARRAY) ) {
-            intent = new Intent(context, ChooseRecipeActivity.class);
+           // intent = new Intent(context, ChooseRecipeActivity.class);
         }
         else if ( TextUtils.equals(idStringType,
                 Util.ARGUMENT_INGREDIENT_ID_ARRAY) ) {
@@ -1177,9 +1172,9 @@ or at least achieves the same effect.
         paramActivity.startActivity(new Intent(paramActivity,
                 OtherActivity.class));
     }
-    public static void goToFoodLogActivity(Activity paramActivity){
+    public static void goToListIngredientLogActivity(Activity paramActivity){
         paramActivity.startActivity(new Intent(paramActivity,
-                FoodLogActivity.class));
+                ListIngredientLogActivity.class));
     }
 
     // go to the edit activity with our id and what type of action and array we're using
@@ -1206,17 +1201,7 @@ or at least achieves the same effect.
             context.startActivity(intent);
         }
     }
-    public static void goToAreYouSureActivity(Context context, String whatAction,
-                                              String idStringType,
-                                              String idString){
-
-        Intent intent = new Intent(context,
-                AreYouSureActivity.class);
-        intent.putExtra(Util.ARGUMENT_ACTION, whatAction);
-
-        intent.putExtra(idStringType, idString);
-        context.startActivity(intent);
-    }
+    
     public static void goToDetailActivity(Context symptomLogContext, String whatAction,
                                           String idStringType,
                                           String idString){

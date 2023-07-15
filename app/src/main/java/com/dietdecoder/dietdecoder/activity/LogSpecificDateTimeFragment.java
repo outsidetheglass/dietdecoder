@@ -21,8 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -135,7 +133,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
                     mDefaultNextFragment = new LogDateTimeChoicesFragment();
                 } else if (mWhatToChange == Util.ARGUMENT_CHANGE_COOKED) {
                     // after cooked is set go to the next info needed
-                    mDefaultNextFragment = new NewFoodLogBrandFragment();
+                    //mDefaultNextFragment = new NewFoodLogBrandFragment();
                 }
             } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
                 settingSymptomLog = Boolean.TRUE;
@@ -362,7 +360,7 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
             mDefaultNextFragment = new LogDateTimeChoicesFragment();
         } else if (mWhatToChange == Util.ARGUMENT_CHANGE_COOKED) {
             // after cooked is set go to the next info needed
-            mDefaultNextFragment = new NewFoodLogBrandFragment();
+           // mDefaultNextFragment = new NewFoodLogBrandFragment();
         }
 
         //TODO either here or don't go in to set bundle, ask user if food was cooked and acquired

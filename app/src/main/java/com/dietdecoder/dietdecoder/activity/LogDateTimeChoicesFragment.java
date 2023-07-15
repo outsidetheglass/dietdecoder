@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -130,6 +129,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                     isSymptomLogChangedInstantSet = Boolean.FALSE;
                 } else {
                     isSymptomLogBeginInstantSet = Boolean.TRUE;
+
                 }
             }
         }
@@ -232,7 +232,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         // if nothing given use the default fragment
         if ( Objects.isNull(nextFragment)) {
             // so just start asking details on what was consumed
-            nextFragment = new NewFoodLogBrandFragment();
+            //nextFragment = new NewFoodLogBrandFragment();
         }
         // put which we're changing into the bundle
         nextFragment.setArguments(mBundle);

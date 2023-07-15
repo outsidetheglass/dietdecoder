@@ -3,21 +3,16 @@ package com.dietdecoder.dietdecoder.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogFragment;
-import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.EditSymptomLogFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -71,11 +66,11 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                     mBundle.putString(Util.ARGUMENT_FOOD_LOG_ID, duplicatedFoodLogIdString);
 
                     // start the next fragment
-                    Util.startNextFragment(getSupportFragmentManager().beginTransaction(),
-                            mFragmentContainerView, new EditFoodLogFragment());
+//                    Util.startNextFragment(getSupportFragmentManager().beginTransaction(),
+//                            mFragmentContainerView, new EditFoodLogFragment());
                 }
 
-                mNextFragment = new EditFoodLogFragment();
+//                mNextFragment = new EditFoodLogFragment();
                 // TODO remove this, I think this code is silly, just go into food log edit fragment
                 //  and go
                 //  straight to the right next fragment from there, don't come back here waste of

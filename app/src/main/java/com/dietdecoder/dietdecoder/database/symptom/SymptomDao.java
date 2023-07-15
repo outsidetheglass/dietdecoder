@@ -41,7 +41,7 @@ public interface SymptomDao {
   @Query("SELECT * FROM symptom_table WHERE symptomCategory LIKE :daoSymptomCategory ORDER BY symptomName ASC")
   List<Symptom> daoGetAllSymptomInCategory(String daoSymptomCategory);
 
-  // Sort by specific chemical and alphabetize them by symptom name
+  // Sort by specific and alphabetize them by name
   @Query("SELECT * FROM symptom_table ORDER BY symptomName ASC")
   List<Symptom> daoGetAllSymptomArrayList();
 

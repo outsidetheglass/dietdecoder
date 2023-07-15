@@ -81,7 +81,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
             // basic variable setup
             mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
-            if ( getIntent().getExtras().isEmpty() ) {
+            if ( getIntent().getExtras() == null ) {
                 mBundle = new Bundle();
             } else {
                 mBundle = getIntent().getExtras();

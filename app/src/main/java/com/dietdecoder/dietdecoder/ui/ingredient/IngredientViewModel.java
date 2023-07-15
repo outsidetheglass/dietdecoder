@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +55,11 @@ public class IngredientViewModel extends AndroidViewModel {
   // get single ingredient using the name
   public Ingredient viewModelGetIngredientFromId(UUID uuid) {
     return mRepository.repositoryGetIngredientFromId(uuid);
+  }
+
+
+  public ArrayList<Ingredient> viewModelGetAllIngredientArrayList(){
+    return mRepository.repositoryGetAllIngredientArrayList();
   }
 
 
