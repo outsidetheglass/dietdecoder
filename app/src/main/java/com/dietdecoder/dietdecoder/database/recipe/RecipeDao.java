@@ -50,6 +50,11 @@ public interface RecipeDao {
   @Query("SELECT * FROM recipe_table WHERE recipeName = :daoRecipeName")
   Recipe daoGetRecipeFromName(String daoRecipeName);
 
+  @Query("SELECT * FROM recipe_table WHERE recipeId = :daoRecipeId")
+  Recipe daoGetRecipeFromId(UUID daoRecipeId);
+
+
+
   @Query("SELECT * FROM recipe_table WHERE recipeName = :daoRecipeName AND recipeIngredientId = " +
           ":daoRecipeIngredientId")
   Recipe daoGetRecipeFromRecipeNameAndIngredient(String daoRecipeName,

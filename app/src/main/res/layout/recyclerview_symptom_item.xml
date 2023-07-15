@@ -30,7 +30,7 @@
           android:layout_alignParentEnd="true"
           android:layout_alignParentTop="true"
           android:background="@drawable/roundcorners"
-          android:src="@drawable/ic_baseline_sick"
+          android:src="@drawable/ic_baseline_empty_circle"
           />
     </RelativeLayout>
   </androidx.cardview.widget.CardView>

@@ -47,6 +47,10 @@ public class RecipeViewModel extends AndroidViewModel {
   public List<Recipe> viewModelGetAllRecipeFromName(String paramRecipeName){
     return mRecipeRepository.repositoryGetAllRecipeFromName(paramRecipeName);
   }
+  public Recipe viewModelGetRecipeFromId(UUID paramRecipeId){
+    return mRecipeRepository.repositoryGetRecipeFromId(paramRecipeId);
+  }
+
 
   // get single recipe using the name
   public Recipe viewModelGetRecipeFromName(String paramRecipeName) {

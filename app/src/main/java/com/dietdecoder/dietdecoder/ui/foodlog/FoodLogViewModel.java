@@ -5,15 +5,13 @@ import android.database.Cursor;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
+import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogRepository;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
@@ -27,7 +25,6 @@ public class FoodLogViewModel extends AndroidViewModel {
 
 
   private FoodLogRepository mRepository;
-  //TODO add other properties
   private List<FoodLog> mViewModelAllFoodLogsOnDate;
   private LiveData<List<FoodLog>> mViewModelAllFoodLogs;
 
@@ -35,7 +32,7 @@ public class FoodLogViewModel extends AndroidViewModel {
   public FoodLogViewModel(Application application) {
     super(application);
     mRepository = new FoodLogRepository(application);
-    mViewModelAllFoodLogs = mRepository.repositoryGetAllFoodLogs();;
+    mViewModelAllFoodLogs = mRepository.repositoryGetAllFoodLogs();
 
   }//end LogViewModel method
 
@@ -45,17 +42,18 @@ public class FoodLogViewModel extends AndroidViewModel {
     return mViewModelAllFoodLogs;
   }
 
-  //get all logs on date
-  public List<FoodLog> viewModelGetAllFoodLogOnDate(Instant instant) {
-    mViewModelAllFoodLogsOnDate = mRepository.repositoryGetAllFoodLogOnDate(instant);
-    return mViewModelAllFoodLogsOnDate;
-  }
+
+  //get all logs on date TODO make work
+//  public List<FoodLog> viewModelGetAllFoodLogOnDate(Instant instant) {
+//    mViewModelAllFoodLogsOnDate = mRepository.repositoryGetAllFoodLogOnDate(instant);
+//    return mViewModelAllFoodLogsOnDate;
+//  }
 
 
   // get single log using the instant
-  public FoodLog viewModelGetFoodLogFromConsumedInstant(Instant instant) {
-    return mRepository.repositoryGetFoodLogFromConsumedInstant(instant);
-  }
+//  public List<FoodLog> viewModelGetFoodLogByIngredientName(String name) {
+//    return mRepository.repositoryGetAllFoodLogByIngredientName(name);
+//  }
   // get single log using the uuid
   public FoodLog viewModelGetFoodLogFromId(UUID uuid) {
     return mRepository.repositoryGetFoodLogFromId(uuid);
@@ -68,9 +66,8 @@ public class FoodLogViewModel extends AndroidViewModel {
 
 
   //TODO add other properties of log type here
-  // and change log to foodlog
-//  public Log viewModelGetLogFromNameConcern(String logName, String logConcern){
-//    return mRepository.repositoryGetLogFromNameConcern(logName, logConcern);
+//  public FoodLog viewModelGetFoodLogFromNameConcern(String logName, String logConcern){
+//    return mRepository.repositoryGetFoodLogFromNameConcern(logName, logConcern);
 //  }
 
 
@@ -88,6 +85,25 @@ public class FoodLogViewModel extends AndroidViewModel {
   public void viewModelDeleteFoodLog(FoodLog foodLog) {
     mRepository.repositoryDeleteFoodLog(foodLog);
   }
+
+  // get average duration of symptom from most recent symptoms of same type
+//  public Duration viewModelGetAverageSymptomDuration(String symptomName){
+//    Duration averageDuration = mRepository.repositoryGetAverageSymptomDuration(symptomName);
+//
+//    if ( averageDuration.isZero() ) {
+//      // TODO get default duration from symptom itself
+//      averageDuration = Duration.ofSeconds(3600);
+//    }
+//    return averageDuration;
+//  }
+//
+//  // get most recent symptom log of symptom
+//  public FoodLog viewModelGetMostRecentFoodLogWithSymptom(String symptomName){
+//    FoodLog foodLogWithSameSymptom =
+//            mRepository.repositoryGetMostRecentFoodLogWithSymptom(symptomName);
+//    return foodLogWithSameSymptom;
+//  }
+
 
 
 } //end LogViewModel class

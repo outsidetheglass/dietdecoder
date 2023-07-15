@@ -45,13 +45,17 @@
 
       <activity android:name=".activity.foodlog.FoodLogActivity"
         android:exported="false"/>
-      <activity        android:name=".activity.foodlog.AreYouSureActivity"
-        android:exported="false" />
-      <activity        android:name=".activity.foodlog.DetailFoodLogActivity"
+      <activity        android:name=".activity.AreYouSureActivity"
+          android:exported="false" />
+      <activity        android:name=".activity.foodlog.ListFoodLogActivity"
+          android:exported="false" />
+      <activity        android:name=".activity.foodlog.ChooseRecipeActivity"
+          android:exported="false" />
+      <activity        android:name=".activity.DetailActivity"
         android:exported="false" />
       <activity        android:name=".activity.foodlog.NewFoodLogActivity"
           android:exported="false" />
-      <activity        android:name=".activity.foodlog.EditFoodLogActivity"
+      <activity        android:name=".activity.EditActivity"
           android:exported="false" />
 
 
@@ -83,7 +87,7 @@
 
       <activity android:name=".activity.symptomlog.ListSymptomLogActivity"
           android:exported="false" />
-      <activity android:name=".activity.symptomlog.ChooseSymptomLogActivity"
+      <activity android:name=".activity.symptomlog.ChooseSymptomActivity"
           android:exported="false" />
       <activity android:name=".activity.symptomlog.NewSymptomLogActivity"
           android:exported="false" />

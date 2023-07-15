@@ -2,18 +2,22 @@ package com.dietdecoder.dietdecoder.database;
 
 import android.content.Context;
 import android.graphics.LinearGradient;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLogDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLogDao;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.database.recipe.RecipeDao;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
@@ -26,21 +30,22 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {FoodLog.class, Ingredient.class, Recipe.class, Symptom.class,
+@Database(entities = {FoodLog.class, Ingredient.class, IngredientLog.class, Recipe.class,
+        Symptom.class,
         SymptomLog.class},
         version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class DietDecoderRoomDatabase extends RoomDatabase {
 
+  private static final String TAG = "TAG: " + DietDecoderRoomDatabase.class.getSimpleName();
 
 
   public abstract FoodLogDao foodLogDao();
   public abstract IngredientDao ingredientDao();
+  public abstract IngredientLogDao ingredientLogDao();
   public abstract RecipeDao recipeDao();
   public abstract SymptomDao symptomDao();
   public abstract SymptomLogDao symptomLogDao();
-
-  private static String headacheThrobbingName = "throbbing headache";
 
   private static volatile DietDecoderRoomDatabase INSTANCE;
 
@@ -64,9 +69,10 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
           Ingredient ingredient = ingredientDaoWriteExecute();
           foodLogDaoWriteExecute(ingredient);
           recipeDaoWriteExecute(ingredient.getIngredientId());
-          UUID symptomId = symptomDaoWriteExecute();
+          ingredientLogDaoWriteExecute(ingredient.getIngredientId());
 
-          symptomLogDaoWriteExecute(symptomId, headacheThrobbingName);
+          Symptom symptom = symptomDaoWriteExecute();
+          symptomLogDaoWriteExecute(symptom.getSymptomId(), symptom.getSymptomName());
         });
 
       }
@@ -138,6 +144,15 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
     FoodLog foodLog = new FoodLog(ingredient.getIngredientId(), ingredient.getIngredientName());
     foodLogDao.daoFoodLogInsert(foodLog);
   }
+  static final void ingredientLogDaoWriteExecute(UUID ingredientId){
+
+    //dao.deleteAll();
+    IngredientLogDao ingredientLogDao = INSTANCE.ingredientLogDao();
+    //dao.deleteAll();
+
+    IngredientLog ingredientLog  = new IngredientLog(ingredientId);
+    ingredientLogDao.daoIngredientLogInsert(ingredientLog);
+  }
 
   static final void recipeDaoWriteExecute(UUID ingredientId){
 
@@ -153,7 +168,7 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
 //            recipeDao.daoRecipeInsert(recipe);
   }
 
-static final UUID symptomDaoWriteExecute(){
+static final Symptom symptomDaoWriteExecute(){
   SymptomDao symptomDao = INSTANCE.symptomDao();
   //symptomDao.deleteAll();
 
@@ -444,7 +459,7 @@ static final UUID symptomDaoWriteExecute(){
 
   // Headache related
   Symptom headacheThrobbing = new Symptom(
-          headacheThrobbingName,
+          "throbbing headache",
           "Head throbbing with pain behind the temples. Pulses with more pain on triggering sensations like light, sound.",
           "headache",
           "throb", Boolean.TRUE, 0, 3600);
@@ -681,15 +696,15 @@ static final UUID symptomDaoWriteExecute(){
                   "mark", Boolean.FALSE, 0, 3600)
   );
 
-  return headacheThrobbing.getSymptomId();
+  return symptomDao.daoGetAnySymptom();
 }
 
-static final void symptomLogDaoWriteExecute(UUID symptomId, String symptomName){
+static final void symptomLogDaoWriteExecute(UUID symptomLogSymptomId, String symptomLogSymptomName){
 
   SymptomLogDao symptomLogDao = INSTANCE.symptomLogDao();
   //dao.deleteAll();
 
-  SymptomLog symptomLog = new SymptomLog(symptomId, symptomName);
+  SymptomLog symptomLog = new SymptomLog(symptomLogSymptomId, symptomLogSymptomName);
   symptomLogDao.daoSymptomLogInsert(symptomLog);
 }
 } //end LogRoomDatabase

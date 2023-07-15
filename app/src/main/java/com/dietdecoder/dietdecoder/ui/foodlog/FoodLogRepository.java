@@ -5,13 +5,14 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
+import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLogDao;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
+import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -21,14 +22,12 @@ class FoodLogRepository {
 
 
   private FoodLogDao mFoodLogDao;
-//  private IngredientDao mIngredientDao;
   private final DietDecoderRoomDatabase mFoodLogDatabase;
 
   FoodLogRepository(Application application) {
     // setup database to be returned via methods
     mFoodLogDatabase = DietDecoderRoomDatabase.getDatabase(application);
     mFoodLogDao = mFoodLogDatabase.foodLogDao();
-//    mIngredientDao = mFoodLogDatabase.ingredientDao();
   }
 
 
@@ -40,31 +39,13 @@ class FoodLogRepository {
     return mFoodLogDao.daoGetAllFoodLog();
   }
 
-
-  // get list of logs that are on a certain date
-  public List<FoodLog> repositoryGetAllFoodLogOnDate(Instant instant) {
-    return mFoodLogDao.daoGetAllFoodLogOnDate(instant);
-  }
-
-//
-//  public List<Ingredient> repositoryGetAllFoodLogIngredients(List<FoodLog> foodLogs) {
-//    List<Ingredient> foodLogIngredients = null;
-//    // for each food log we have
-//    //TODO use SQL in the DAO to get all the ingredients matching any of the given foodlog ids
-//    for (FoodLog foodLog: foodLogs) {
-////      find the ingredient matching that food log's ingredient ID
-//      Ingredient ingredient =
-//              mIngredientDao.daoGetFoodLogIngredientFromId(foodLog.getIngredientId());
-//      // if we got an ingredient matching that ID
-//      if (!Objects.isNull(ingredient))  {
-//        // then add it to our list of ingredients to return
-//        foodLogIngredients.add(ingredient);
-//      }
-//    }
-//    return foodLogIngredients;
+  // get list of logs that are of a certain type
+//  public List<FoodLog> repositoryGetAllFoodLogByName(UUID id) {
+//    return mFoodLogDao.daoGetAllFoodLogByName(id);
 //  }
 
   // get single log that is on a certain date
+  //TODO make this work
   public FoodLog repositoryGetFoodLogFromConsumedInstant(Instant instant) {
     return mFoodLogDao.daoGetFoodLogFromConsumedInstant(instant);
   }
@@ -74,14 +55,9 @@ class FoodLogRepository {
     return mFoodLogDao.daoGetFoodLogFromId(uuid);
   }
 
-  // get all logs happening after a certain date
-  public List<FoodLog> repositoryGetAllFoodLogAfterDateTime(Instant instant) {
-    return mFoodLogDao.daoGetAllFoodLogAfterDateTime(instant);
-  }
-
   // get all logs cursor
   public Cursor repositoryGetCursorAllFoodLog() {
-    return mFoodLogDao.getCursorAllFoodLog();
+    return mFoodLogDao.daoGetCursorAllFoodLog();
   }
 
 
@@ -114,6 +90,43 @@ class FoodLogRepository {
 
   } // end update
 
+  // get given number of symptom logs matching the given symptom's name
+//  List<FoodLog> repositoryGetSomeFoodLogsByName(String symptomName, Integer howManyLogs){
+//    List<FoodLog> someFoodLogs = null;
+//    if ( !Objects.isNull(mFoodLogDao.daoGetAllFoodLogByName(symptomName)) ) {
+//      someFoodLogs = mFoodLogDao.daoGetSomeFoodLogByName(symptomName, howManyLogs);
+//    }
+//    return someFoodLogs;
+//  }//end get some logs
 
+//  Duration repositoryGetAverageSymptomDuration(String symptomName){
+//    // our eventual answer for how long the average duration of a recent list of symptom logs is
+//    Duration averageDuration = Duration.ZERO;
+//    //values to calculate as we go
+//    Instant instantBegan, instantChanged;
+//    //our list of logs if there is at least one
+//    List<FoodLog> someFoodLogs = repositoryGetSomeFoodLogsByName(symptomName, 10);
+//
+//    // for each symptom log in our list
+//    // calculate the duration from when it began to when it changed
+//    // and add those durations to our list of all durations
+//    for (FoodLog foodLog : someFoodLogs) {
+//      instantBegan = foodLog.getInstantBegan();
+//      instantChanged = foodLog.getInstantChanged();
+//      Duration timeElapsed = Duration.between(instantBegan, instantChanged).abs();
+//      // calculate the average
+//      averageDuration = averageDuration.plus(timeElapsed).dividedBy(2);
+//    }
+//
+//    return averageDuration;
+//  } // end average duration method
+
+  // get most recent symptom log with symptom
+//  FoodLog repositoryGetMostRecentFoodLogWithSymptom(String symptomName){
+//
+//    FoodLog foodLogWithSameSymptom =
+//            mFoodLogDao.daoGetSomeFoodLogByName(symptomName, 1).get(0);
+//    return foodLogWithSameSymptom;
+//  }
 
 } //end FoodLogRepository class

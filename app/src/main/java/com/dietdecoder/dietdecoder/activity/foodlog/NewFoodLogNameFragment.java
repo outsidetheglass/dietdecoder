@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -49,6 +50,7 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
     FoodLogViewModel mFoodLogViewModel;
     IngredientViewModel mIngredientViewModel;
     IngredientListAdapter mIngredientListAdapter;
+    Ingredient useThisIngredient;
 
     public NewFoodLogNameFragment() {
         super(R.layout.fragment_new_food_log_name);
@@ -63,6 +65,8 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                 view.findViewById(R.id.edittext_new_food_log_name_ingredient_name);
         mEditTextIngredientName = Util.setEditTextWordWrapNoEnter(mEditTextIngredientName);
         mEditTextIngredientName.setOnClickListener(this::onClick);
+        mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+        mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
         mButtonSaveName = view.findViewById(R.id.button_new_food_log_name_save);
         mButtonSaveName.setOnClickListener(this);
@@ -74,7 +78,6 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
 //            String ingredientName = mBundle.getString(Util.ARGUMENT_INGREDIENT_NAME);
 //            mEditTextIngredientName.setText(ingredientName);
 //        }
-        //mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
    //     mListView = view.findViewById(R.id.list_view_new_food_log_name);
 //        mEditTextIngredientName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            public boolean onEditorAction(TextView v, int actionId,
@@ -135,20 +138,21 @@ public class NewFoodLogNameFragment extends Fragment implements View.OnClickList
                     mName = mEditTextIngredientName.getText().toString();
                     // name is enough to save the food log
                     // it will default to having been consumed now
-                    //TODO fix mName instead of ID
-                    Ingredient useThisIngredient = null;
-                    Ingredient ingredient =
-                            mIngredientViewModel.viewModelGetIngredientFromName(mName);
-                    if (Objects.isNull(ingredient)){
+                    // if there isn't any ingredient with this name in the database
+                    try {
+                        // if the ingredient did exist, the one we use should be it
+                        useThisIngredient = mIngredientViewModel.viewModelGetIngredientFromName(mName);
+                    } catch (Exception exception) {
                         // if the ingredient wasn't found it doesn't exist, so make it
                         useThisIngredient = new Ingredient(mName);
                         mIngredientViewModel.viewModelInsert(useThisIngredient);
-                    } else {
-                        // if the ingredient did exist, the one we use should be it
-                        useThisIngredient = ingredient;
+                        useThisIngredient = mIngredientViewModel.viewModelGetIngredientFromName(mName);
                     }
-                    FoodLog foodLog = new FoodLog(useThisIngredient.getIngredientId(), mName);
-                    mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+                    Log.d(TAG, " name " + useThisIngredient.getIngredientName());
+                    Log.d(TAG, " ing " + useThisIngredient.toString());
+                    UUID ingredientId = useThisIngredient.getIngredientId();
+                    Log.d(TAG, " id " + ingredientId.toString());
+                    FoodLog foodLog = new FoodLog(ingredientId, mName);
                     mFoodLogViewModel.viewModelInsertFoodLog(foodLog);
                     // with the ID of foodlog set
                     foodLogIdString = foodLog.getFoodLogId().toString();

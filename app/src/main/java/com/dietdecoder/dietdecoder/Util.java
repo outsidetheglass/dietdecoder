@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -17,20 +18,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.dietdecoder.dietdecoder.activity.DetailActivity;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
+import com.dietdecoder.dietdecoder.activity.AreYouSureActivity;
+import com.dietdecoder.dietdecoder.activity.EditActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.ChooseRecipeActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.ListFoodLogActivity;
 import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
-import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomLogActivity;
+import com.dietdecoder.dietdecoder.activity.ingredientlog.ListIngredientLogActivity;
+import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
-import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomIntensityFragment;
 import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
-import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -55,7 +58,7 @@ public class Util {
     public static final StyleSpan boldStyle = new StyleSpan(Typeface.BOLD);
     public static final StyleSpan italicStyle = new StyleSpan(Typeface.ITALIC);
 
-    public static final int fragmentContainerViewEditFoodLog = R.id.fragment_container_view_edit_food_log;
+    public static final int fragmentContainerViewEdit = R.id.fragment_container_view_edit;
     public static final int fragmentContainerViewAddFoodLog =
             R.id.fragment_container_view_new_food_log;
     public static final int fragmentContainerViewAddSymptomLog =
@@ -65,7 +68,7 @@ public class Util {
     //public static final int fragmentContainerViewEditSymptomLog = R.id
     // .fragment_container_view_edit_symptom_log;
     public static final int fragmentContainerViewChooseSymptomLog =
-            R.id.recyclerview_new_symptom_log_name_choices;
+            R.id.recyclerview_symptom_name_choices;
     ///////////////////////////////////////////////////////
     //////// Set the arguments to pass between fragments///
     ///////////////////////////////////////////////////////
@@ -77,15 +80,18 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_NAME = "symptom_name";
     public static final String ARGUMENT_SYMPTOM_LOG_ID = "symptom_log_id";
 
-    public static final String ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD = "symptom_ids_to_add";
+    public static final String ARGUMENT_INGREDIENT_LOG_ID_ARRAY = "ingredient_id_array";
+    public static final String ARGUMENT_SYMPTOM_ID_ARRAY = "symptom_id_array";
     public static final String ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY =
-            "how_many_symptom_ids_to_add";
-    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD = "symptom_log_ids_to_add";
-    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
-            "symptom_log_ids_to_add_original";
-    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD = "food_log_ids_to_add";
-    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD_ORIGINAL =
-            "food_log_ids_to_add_original";
+            "how_many_symptom_log_ids";
+    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY = "symptom_log_id_array";
+    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL =
+            "symptom_log_id_array_original";
+    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY = "food_log_id_array";
+    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_ORIGINAL =
+            "food_log_id_array_original";
+    public static final String ARGUMENT_INGREDIENT_ID_ARRAY = "ingredient_id_array";
+    public static final String ARGUMENT_RECIPE_ID_ARRAY = "recipe_id_array";
 
 
 
@@ -94,10 +100,14 @@ public class Util {
     public static final String ARGUMENT_CSV = "csv";
     public static final String ARGUMENT_PDF = "pdf";
 
+
     // action to take given this argument
     public static final String ARGUMENT_ACTION = "action";
     // actions to take
-    public static final String ARGUMENT_DUPLICATE = "duplicate";
+    public static final String ARGUMENT_ACTION_DUPLICATE = "action_duplicate";
+    public static final String ARGUMENT_ACTION_EDIT = "action_edit";
+    public static final String ARGUMENT_ACTION_DELETE = "action_delete";
+    public static final String ARGUMENT_ACTION_DETAIL = "action_detail";
 
 
     // which activity or fragment we are from
@@ -131,10 +141,16 @@ public class Util {
     public static final String ARGUMENT_GO_TO_DELETE_FOOD_LOG = "go_to_delete_food_log";
     public static final String ARGUMENT_GO_TO_DETAIL_FOOD_LOG = "go_to_delete_food_log";
 
-    public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG_ACTIVITY =
-            "go_to_edit_food_log_activity";
-    public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT =
-            "go_to_edit_food_log_fragment";
+    public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG =
+            "go_to_edit_food_log";
+    public static final String ARGUMENT_GO_TO_EDIT_SYMPTOM_LOG =
+            "go_to_edit_symptom_log";
+    public static final String ARGUMENT_GO_TO_EDIT_SYMPTOM =
+            "go_to_edit_symptom";
+    public static final String ARGUMENT_GO_TO_EDIT_RECIPE =
+            "go_to_edit_recipe";
+    public static final String ARGUMENT_GO_TO_EDIT_INGREDIENT =
+            "go_to_edit_ingredient";
     public static final String ARGUMENT_GO_TO_FOOD_LOG_ACTIVITY = "go_to_food_log";
     public static final String ARGUMENT_GO_TO_SYMPTOM_INTENSITY = "go_to_symptom_intensity";
 
@@ -207,20 +223,46 @@ public class Util {
         ArrayList<String> mStringArray = new ArrayList<String>();
 
         // remove brackets and spaces
-        String mCleanedSplitSymptomLodIdsToAddString =
+        String mCleanedSplitString =
                 Util.cleanArrayString(paramStringToCleanIntoArrayList);
 
-        Log.d(TAG,
-                "mCleanedSplitSymptomLodIdsToAddString " + mCleanedSplitSymptomLodIdsToAddString);
         // make it into an array for each ID
-        for (String symptomLogIdString : mCleanedSplitSymptomLodIdsToAddString.split(",")) {
-            mStringArray.add(symptomLogIdString);
-            Log.d(TAG, "symptomLogIdString " + symptomLogIdString);
+        // double checked, this works fine even if there is only one value and no comma
+        for (String cleanString : mCleanedSplitString.split(",")) {
+            mStringArray.add(cleanString);
         }
 
         return mStringArray;
 
     }
+
+    // clean the bundled string and return an Array List
+    public static ArrayList<String> setIdArrayFromBundle(Bundle paramBundle){
+
+        ArrayList<String> mIdStringArray = new ArrayList<String>();
+        String stringFromBundle = null;
+
+        if ( paramBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) != null ) {
+            stringFromBundle = paramBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
+        } else if (paramBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
+            stringFromBundle = paramBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY);
+        } else if (paramBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
+            stringFromBundle = paramBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY);
+        } else if (paramBundle.getString(Util.ARGUMENT_RECIPE_ID_ARRAY) != null){
+            stringFromBundle = paramBundle.getString(Util.ARGUMENT_RECIPE_ID_ARRAY);
+        } else if (paramBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY) != null){
+            stringFromBundle = paramBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
+        }
+
+        // remove brackets and spaces
+        mIdStringArray =
+                Util.cleanBundledStringIntoArrayList(stringFromBundle);
+
+        return mIdStringArray;
+
+    }
+
+
 
     // make substring bold and italic and regular font
     public static SpannableStringBuilder setBoldItalicPlainSpan(String boldString,
@@ -664,8 +706,8 @@ public class Util {
         // if it doesn't exist, make it
         if ( activity.getIntent() == null ) {
             // if we want to go to edit or add
-            if ( TextUtils.equals(whereGoTo, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_ACTIVITY)) {
-                mIntent = new Intent(activity, EditFoodLogActivity.class);
+            if ( TextUtils.equals(whereGoTo, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG)) {
+                mIntent = new Intent(activity, EditActivity.class);
                 // where we want to go next
                 mIntent.putExtra(Util.ARGUMENT_GO_TO, whereGoTo);
                 // which fragment we came from
@@ -805,7 +847,7 @@ public class Util {
         String newLogIdStringArraySize = String.valueOf(newLogIdStringArray.size());
 
         // put info about the symptoms to add
-        bundle.putString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD, newLogIdString);
+        bundle.putString(Util.ARGUMENT_SYMPTOM_ID_ARRAY, newLogIdString);
         bundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY, newLogIdStringArraySize);
         // where we want to go next
         bundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
@@ -824,16 +866,35 @@ public class Util {
         bundle.putString(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
 
         //set the array string of symptom log Ids to the bundle
-        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD,
+        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
                 newLogIdString );
         // also how big the array is for ease of coding, TODO remove this and replace with .size
         //  () in the activity or something more efficient
         bundle.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY, newLogIdStringArraySize);
         // original array, TODO also replace this inefficiency with better array usage or something
-        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD_ORIGINAL, newLogIdString);
+        bundle.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL, newLogIdString);
 
         return bundle;
     }
+
+
+    // bundle the relevant information between fragments for log instant
+    public static Bundle setBundleGivenIntegersOfDateTime ( Integer minute, Integer hour,
+                                                            Integer day, Integer month,
+                                                            Integer year){
+        // get the instant of the log
+        // which here should be the instant the name was saved
+        // or a specific time if they chose that first and then came here
+        Bundle integerBundleToSetDateTime = new Bundle();
+        integerBundleToSetDateTime.putInt(Util.ARGUMENT_MONTH, month);
+        integerBundleToSetDateTime.putInt(Util.ARGUMENT_YEAR, year);
+        integerBundleToSetDateTime.putInt(Util.ARGUMENT_DAY, day);
+        integerBundleToSetDateTime.putInt(Util.ARGUMENT_HOUR, hour);
+        integerBundleToSetDateTime.putInt(Util.ARGUMENT_MINUTE, minute);
+
+        return integerBundleToSetDateTime;
+    }
+
 
 
     ////////////////////////////////////////////////////////
@@ -865,7 +926,8 @@ or at least achieves the same effect.
 
     // set numberpicker values
     public static NumberPicker setNumberPicker(NumberPicker numberPicker,
-                                               String[] displayStringList, Integer defaultValue){
+                                               String[] displayStringList, Integer defaultValue,
+                                               Color defaultValueColor){
         // the lowest number in the list, then minus one
         // to give us the index to set the numberpicker with
         Integer minimumIntegerIndex = Integer.parseInt(displayStringList[0]) - 1;
@@ -882,6 +944,8 @@ or at least achieves the same effect.
         numberPicker.setMaxValue(maximumIntegerIndex);
         numberPicker.setValue(defaultValue-1);
         numberPicker.setWrapSelectorWheel(false);
+        // TODO this is a lot of parsing and converting, is colorstatelist really better than color?
+        //numberPicker.setBackgroundColor(Color.parseColor(String.valueOf(defaultValueColor)));
         return numberPicker;
     }
 
@@ -927,8 +991,22 @@ or at least achieves the same effect.
         return answer;
     }
 
-    ////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     ////////////////////////////////////////////////////////
@@ -946,6 +1024,44 @@ or at least achieves the same effect.
                 .commit();
     }
 
+    public static void startNextFragmentActionChangeIdArray(FragmentTransaction paramFragmentTransaction,
+                                         int paramFragmentContainerView, Fragment paramNextFragment,
+                                                            String paramActionString,
+                                                            String paramChangeString,
+                                                            String paramIdTypeString,
+                                                            String paramIdString ) {
+        Bundle bundle = new Bundle();
+        // set action, duplicate or edit or delete
+        bundle.putString(ARGUMENT_ACTION, paramActionString);
+        // set what we want to change, acquired, consumed, began, changed etc
+        bundle.putString(ARGUMENT_CHANGE, paramChangeString);
+        // set whether we're food log or symptom log etc type, and then also the id array itself
+        bundle.putString(paramIdTypeString, paramIdString);
+
+        // put the arguments into where we're going next
+        paramNextFragment.setArguments(bundle);
+        // go there
+        startNextFragment(paramFragmentTransaction, paramFragmentContainerView, paramNextFragment);
+    }
+    public static void startNextActivityActionChangeIdArray(Activity paramThisActivity,
+                                                            Class paramNextActivityClass,
+                                                            String paramActionString,
+                                                            String paramChangeString,
+                                                            String paramIdTypeString,
+                                                            String paramIdString ) throws ClassNotFoundException {
+
+        Intent intent = new Intent(paramThisActivity.getApplicationContext(),
+                paramNextActivityClass);
+        // set action, duplicate or edit or delete
+        intent.putExtra(ARGUMENT_ACTION, paramActionString);
+        // set what we want to change, acquired, consumed, began, changed etc
+        intent.putExtra(ARGUMENT_CHANGE, paramChangeString);
+        // set whether we're food log or symptom log etc type, and then also the id array itself
+        intent.putExtra(paramIdTypeString, paramIdString);
+
+        // go there
+        paramThisActivity.startActivity(intent);
+    }
 
     // make going to each of the activities easier
     public static void goToListSymptomLog(Activity paramActivity){
@@ -956,9 +1072,106 @@ or at least achieves the same effect.
         paramActivity.startActivity(new Intent(paramActivity,
                 MainActivity.class));
     }
+    public static void goToListActivityTypeId(Context context, Activity activity,
+                                        String idStringType,
+                                        String idString){
+
+        Intent intent = null;
+        String whereGoTo = null;
+        Class nextActivity = null;
+
+        // shenanigans to make it work no matter if coming from a fragment, activity, or view holder
+        if ( activity != null ) {
+            context = activity.getApplicationContext();
+            Activity useForIntent = activity;
+            Activity useForStartActivity = activity;
+            Class activityClassToGoTo = setClassActivity(idStringType);
+            intent = new Intent(useForIntent, activityClassToGoTo);
+            // type is symptom or food log or symptom log or ingredient or recipe
+            // not necessarily going to list with any specific logs in mind
+            if ( idString != null ) {
+                intent.putExtra(idStringType, idString);
+            }
+            useForStartActivity.startActivity(intent);
+        } else {
+
+            Class activityClassToGoTo = setClassActivity(idStringType);
+            Context useForIntent = context;
+            Context useForStartActivity = context;
+            intent = new Intent(useForIntent, activityClassToGoTo);
+            // type is symptom or food log or symptom log or ingredient or recipe
+            // not necessarily going to list with any specific logs in mind
+            if ( idString != null ) {
+                intent.putExtra(idStringType, idString);
+            }
+            // type is symptom or food log or symptom log or ingredient or recipe
+            intent.putExtra(idStringType, idString);
+            useForStartActivity.startActivity(intent);
+        }
+
+
+    }
+
+    public static Class setClassActivity(String idStringType){
+
+        Class nextActivityClass = null;
+        // go to the right list activity based on what type of id string we have
+        if ( TextUtils.equals(idStringType, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
+            nextActivityClass = ListSymptomLogActivity.class;
+        }
+        else if ( TextUtils.equals(idStringType, Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY) ) {
+            nextActivityClass = ListIngredientLogActivity.class;
+        }
+        else {
+            // can't list if we don't have a list to go to
+            nextActivityClass = MainActivity.class;
+        } //TODO make the other list activities
+
+        return nextActivityClass;
+    }
+    public static void goToChooseActivityTypeId(Context context,
+                                              String idStringType){
+
+        Intent intent = null;
+        String whereGoTo = null;
+
+        // go to the right list activity based on what type of id string we have
+        if ( TextUtils.equals(idStringType, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
+            intent = new Intent(context, ChooseSymptomActivity.class);
+        }
+        else if ( TextUtils.equals(idStringType, Util.ARGUMENT_FOOD_LOG_ID_ARRAY) ) {
+            intent = new Intent(context, ChooseRecipeActivity.class);
+        }
+        else if ( TextUtils.equals(idStringType,
+                Util.ARGUMENT_INGREDIENT_ID_ARRAY) ) {
+            //TODO make the list activities
+//            intent = new Intent(context, ListIngredientActivity.class);
+        }
+        else if ( TextUtils.equals(idStringType,
+                Util.ARGUMENT_SYMPTOM_ID_ARRAY) ) {
+//            intent = new Intent(context, ListSymptomActivity.class);
+        }
+        else if ( TextUtils.equals(idStringType,
+                Util.ARGUMENT_RECIPE_ID_ARRAY) ) {
+//            intent = new Intent(context, ListRecipeActivity.class);
+        }
+
+        // type is symptom or food log or symptom log or ingredient or recipe
+        context.startActivity(intent);
+    }
+
+    public static void goToEditFoodLogActivity(Activity paramActivity, String mFoodLogIdString,
+                                               String whereGoTo){
+
+        Intent intent = new Intent(paramActivity, EditActivity.class);
+        intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
+        intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
+                whereGoTo);
+        paramActivity.startActivity(intent);
+    }
     public static void goToChooseSymptomLogActivity(Activity paramActivity){
         paramActivity.startActivity(new Intent(paramActivity,
-                ChooseSymptomLogActivity.class));
+                ChooseSymptomActivity.class));
     }
     public static void goToOtherActivity(Activity paramActivity){
         paramActivity.startActivity(new Intent(paramActivity,
@@ -968,14 +1181,74 @@ or at least achieves the same effect.
         paramActivity.startActivity(new Intent(paramActivity,
                 FoodLogActivity.class));
     }
+
+    // go to the edit activity with our id and what type of action and array we're using
+    public static void goToEditActivityActionTypeId(Context context, Activity activity,
+                                                    String whatAction,
+                                        String idStringType,
+                                        String idString){
+        //action is duplicate or normal edit
+        if ( activity != null ) {
+            context = activity.getApplicationContext();
+            Intent intent = new Intent(activity,
+                    EditActivity.class);
+            intent.putExtra(Util.ARGUMENT_ACTION, whatAction);
+            // type is symptom or food log or symptom log or ingredient or recipe
+            intent.putExtra(idStringType, idString);
+            activity.startActivity(intent);
+        } else {
+
+            Intent intent = new Intent(context,
+                    EditActivity.class);
+            intent.putExtra(Util.ARGUMENT_ACTION, whatAction);
+            // type is symptom or food log or symptom log or ingredient or recipe
+            intent.putExtra(idStringType, idString);
+            context.startActivity(intent);
+        }
+    }
+    public static void goToAreYouSureActivity(Context context, String whatAction,
+                                              String idStringType,
+                                              String idString){
+
+        Intent intent = new Intent(context,
+                AreYouSureActivity.class);
+        intent.putExtra(Util.ARGUMENT_ACTION, whatAction);
+
+        intent.putExtra(idStringType, idString);
+        context.startActivity(intent);
+    }
+    public static void goToDetailActivity(Context symptomLogContext, String whatAction,
+                                          String idStringType,
+                                          String idString){
+
+        Intent intent = new Intent(symptomLogContext,
+                DetailActivity.class);
+        intent.putExtra(Util.ARGUMENT_ACTION, whatAction);
+        intent.putExtra(idStringType, idString);
+        symptomLogContext.startActivity(intent);
+    }
+
     public static void goToAddSymptomLogWithBundle(Activity paramActivity, Bundle paramBundle){
         Intent intent = new Intent(paramActivity,
                 NewSymptomLogActivity.class);
         intent.putExtras(paramBundle);
         paramActivity.startActivity(intent);
     }
-    ////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     ////////////////////////////////////////////////////////
@@ -983,7 +1256,7 @@ or at least achieves the same effect.
     ////////////////////////////////////////////////////////
 
     public static LocalDateTime getDateTimeConsumedAcquiredCooked(String whatToChange,
-                                                           FoodLog foodLog) {
+                                                                  FoodLog foodLog) {
 
         Instant mInstant = null;
 
@@ -1003,12 +1276,31 @@ or at least achieves the same effect.
 
         return Util.localDateTimeFromInstant(mInstant);
     }
+    public static LocalDateTime getDateTimeBeganChanged(String whatToChange,
+                                                                  SymptomLog symptomLog) {
 
-    // given an instant and a bundle with at least some integers of minute, hour, month, day, year,
+        Instant mInstant = null;
+
+        if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
+            mInstant = symptomLog.getInstantBegan();
+        } else if (TextUtils.equals(whatToChange,
+                Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED)) {
+            mInstant = symptomLog.getInstantChanged();
+        } else {
+            // default to consumed time
+            Log.d(TAG, "Weren't given an argument for what to change, defaulting to logged time.." +
+                    ".");
+            mInstant = symptomLog.getInstantLogged();
+        }
+
+        return Util.localDateTimeFromInstant(mInstant);
+    }
+
     // update the instant to match what was given in the bundle
     public static Instant setInstantFromBundle (Instant logInstant, Bundle
     integerBundleToSetDateTime){
 
+        // given an instant and a bundle with at least some integers of minute, hour, month, day, year
         LocalDateTime localDateTime = null;
         localDateTime = Util.localDateTimeFromInstant(logInstant);
         Integer monthInteger = localDateTime.getMonthValue()-1;
@@ -1058,6 +1350,7 @@ or at least achieves the same effect.
             bundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_ACQUIRED);
         } else if (whatToChange == Util.ARGUMENT_CHANGE_ACQUIRED) {
             bundle.remove(Util.ARGUMENT_CHANGE);
+            bundle.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_COOKED);
         }
 
         return bundle;

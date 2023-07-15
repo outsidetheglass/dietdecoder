@@ -10,6 +10,7 @@ import androidx.room.Update;
 
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,11 @@ public interface SymptomDao {
   // Sort by specific chemical and alphabetize them by symptom name
   @Query("SELECT * FROM symptom_table WHERE symptomCategory LIKE :daoSymptomCategory ORDER BY symptomName ASC")
   List<Symptom> daoGetAllSymptomInCategory(String daoSymptomCategory);
+
+  // Sort by specific chemical and alphabetize them by symptom name
+  @Query("SELECT * FROM symptom_table ORDER BY symptomName ASC")
+  List<Symptom> daoGetAllSymptomArrayList();
+
 //
 //  @Query("SELECT * FROM symptom_table WHERE symptomName = :daoSymptomName AND symptomIntensity = :daoSymptomIntensity")
 //  Symptom daoGetSymptomWithNameIntensity(String daoSymptomName, Integer daoSymptomIntensity);
@@ -48,6 +54,10 @@ Symptom daoGetSymptomWithName(String daoSymptomName);
 
   @Query("SELECT * FROM symptom_table WHERE symptomId = :daoSymptomId")
   Symptom daoGetSymptomWithId(UUID daoSymptomId);
+
+
+  @Query("SELECT * FROM symptom_table LIMIT 1")
+  Symptom daoGetAnySymptom();
 
 
 

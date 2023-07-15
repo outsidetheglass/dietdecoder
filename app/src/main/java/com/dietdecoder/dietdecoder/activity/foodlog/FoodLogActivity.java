@@ -61,33 +61,40 @@ public class FoodLogActivity extends AppCompatActivity implements View.OnClickLi
     //TODO make scrollable left and right (maybe tabs) for automatic filters too, by category
     // like snacks
 
-    // mate the view for listing the items in the log
-    RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
-    // add horizontal lines between each recyclerview item
-    recyclerViewFood.addItemDecoration(new DividerItemDecoration(recyclerViewFood.getContext(),
-            DividerItemDecoration.VERTICAL));
+    if (savedInstanceState == null) {
+      // mate the view for listing the items in the log
+      RecyclerView recyclerViewFood = findViewById(R.id.recyclerview_log_food);
+      // add horizontal lines between each recyclerview item
+      recyclerViewFood.addItemDecoration(new DividerItemDecoration(recyclerViewFood.getContext(),
+              DividerItemDecoration.VERTICAL));
 
 
-    mFoodLogListAdapter = new FoodLogListAdapter(new FoodLogListAdapter.LogDiff());
-    recyclerViewFood.setAdapter(mFoodLogListAdapter);
-    recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
-    mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+      mFoodLogListAdapter = new FoodLogListAdapter(new FoodLogListAdapter.LogDiff());
+      recyclerViewFood.setAdapter(mFoodLogListAdapter);
+      recyclerViewFood.setLayoutManager(new LinearLayoutManager(this));
+      mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
 
-    mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this,
-            new Observer<List<FoodLog>>() {
-              @Override
-              public void onChanged(List<FoodLog> logs) {
-                // Update the cached copy of the words in the adapter.
-                mFoodLogListAdapter.submitList(logs);
-                //TODO this is where we should be checking ingredient and recipe adapters
-                // and adding the ingredient or recipe if it doesn't exist
+      mFoodLogViewModel.viewModelGetAllFoodLogs().observe(this,
+              new Observer<List<FoodLog>>() {
+                @Override
+                public void onChanged(List<FoodLog> logs) {
 
-              }
-            });
+                  Log.d(TAG, " logs " + logs.toString());
+                  // Update the cached copy of the words in the adapter.
+                  mFoodLogListAdapter.submitList(logs);
+                  //TODO this is where we should be checking ingredient and recipe adapters
+                  // and adding the ingredient or recipe if it doesn't exist
 
-    // FAB to add new log
-    addButton = findViewById(R.id.add_button_food_log);
-    addButton.setOnClickListener(this);
+                }
+              });
+
+      Log.d(TAG, " food number" + recyclerViewFood.getChildCount());
+      Log.d(TAG,
+              " mFoodLogViewModel getIngredientName " + mFoodLogViewModel.viewModelGetAllFoodLogs().toString());
+      // FAB to add new log
+      addButton = findViewById(R.id.add_button_food_log);
+      addButton.setOnClickListener(this);
+    }
   }
 
   @Override

@@ -8,6 +8,9 @@
   <string name="button_cancel">Cancel</string>
   <string name="nothing_changed_not_saved">Nothing changed, returning without saving...</string>
   <string name="change_date_time">Let\'s go change the date/time...</string>
+  <string name="change_symptom">Let\'s go change the symptom...</string>
+  <string name="change_intensity">Let\'s go change the intensity of the symptom...</string>
+
 
 
   <string name="button_symptom_log">Symptom Log</string>
@@ -15,7 +18,11 @@
   <string name="edittext_new_symptom_intensity">Intensity of Symptom Here</string>
   <string name="textview_main_log_a_symptom">Log a Symptom</string>
   <string name="button_current_symptom">Current Symptom</string>
+  <string name="textview_title_new_recipe_log">Log a Recipe</string>
+
   <string name="button_food_log">Food Log</string>
+  <string name="button_ingredient_log">Diet Log</string>
+
   <string name="button_save_new_ingredient">Save New Ingredient</string>
   <string name="button_save_edit_recipe">Save Ingredient</string>
   <string name="button_export_activity">Export Database</string>
@@ -100,9 +107,11 @@
   <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
 
   <string name="empty_not_saved">Not saved because it is empty.</string>
+  <string name="too_many_selected_not_saved">Not saved because too many were selected.</string>
   <string name="wrong_place_lets_go_home">Error on page, let\'s go home and try again. Report this bug please.</string>
   <string name="heads_up_all_times_same">All times for symptoms will be set to be the same; if you want to set any single symptom different, use the edit button in the list of logs.</string>
   <string name="invalid_input_not_int_between_one_and_ten_try_again">Not saved because it is invalid input, not a number between 1 and 10. Try again.</string>
+
 
   <string name="title_edit_ingredient_textview">Enter New Values</string>
   <string name="enter_new_ingredient_edittext_name">Fixed Ingredient Name Here</string>
@@ -116,6 +125,9 @@
   <string name="textview_title_delete">Delete Ingredient</string>
   <string name="button_delete">Delete Ingredient</string>
   <string name="value_not_found_not_deleted">Ingredient not Deleted, Value not Found</string>
+
+  <string name="title_textview_detail">Details</string>
+  <string name="button_edit">Edit</string>
 
 
   <string name="title_edit_recipe_textview">Enter old and new values for Recipe</string>
@@ -161,10 +173,19 @@
   <string name="when_consumed">Consumed/Drank/Ate at:</string>
   <string name="when_cooked">Cooked/Prepared at:</string>
   <string name="when_acquired">Acquired/Bought/Harvested at:</string>
+  <string name="symptom_name">Symptom Name:</string>
+  <string name="when_began">Began at:</string>
+  <string name="when_changed">Changed/Ended at:</string>
+  <string name="how_much_intensity">Intensity:</string>
+  <string name="button_done">Done</string>
 
-  <string name="title_textview_delete_food_log">Delete Log</string>
-  <string name="textview_question_delete_food_log">Are you sure you want to delete this log?</string>
-  <string name="textview_question_edit_food_log_edit_what">What would you like to edit?</string>
+
+
+
+  <string name="title_textview_delete_log">Delete Log</string>
+  <string name="textview_question_delete">Are you sure you want to delete this?</string>
+  <string name="textview_question_edit">What would you like to edit?</string>
+
 
 
   <string name="unknown_brand">Unknown</string>

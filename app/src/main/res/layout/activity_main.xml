@@ -93,8 +93,8 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
   <Button
-      android:id="@+id/button_food_log"
-      android:text="@string/button_food_log"
+      android:id="@+id/button_ingredient_log"
+      android:text="@string/button_ingredient_log"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAppearance="@style/button_main"

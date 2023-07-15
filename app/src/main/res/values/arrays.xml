@@ -28,4 +28,16 @@
         <item>@string/nine</item>
         <item>@string/ten</item>
     </array>
+    <integer-array name="colors_intensity_scale_one_to_ten">
+        <item>@color/purple_blue_pale</item>
+        <item>@color/blue_pale</item>
+        <item>@color/blue_green_pale</item>
+        <item>@color/green_bright</item>
+        <item>@color/yellow_green_bright</item>
+        <item>@color/yellow_bright</item>
+        <item>@color/yellow_orange_bright</item>
+        <item>@color/orange_bright</item>
+        <item>@color/orange_red_bright</item>
+        <item>@color/red_bright</item>
+    </integer-array>
 </resources>

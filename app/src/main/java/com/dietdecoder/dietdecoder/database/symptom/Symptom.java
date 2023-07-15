@@ -135,6 +135,6 @@ public String getSymptomSufferType(){return this.mSymptomSufferType;}
 
   public String toString(){
 
-    return "\nConcern level: " + this.mSymptomConcernScale.toString();
+    return "\nName: " + this.mSymptomName + "\nId: " + this.mSymptomId.toString();
   }
 } //end Symptom Entity

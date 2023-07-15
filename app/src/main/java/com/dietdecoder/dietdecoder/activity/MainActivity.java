@@ -7,37 +7,26 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
-import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 
-import java.util.List;
 
-
-public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
   private final Activity thisActivity = MainActivity.this;
   private Context thisContext;
 
-  private Button saveButton, foodLogButton, symptomLogButton;
+  private Button saveButton, ingredientLogButton, symptomLogButton;
 
   private Intent foodLogIntent, symptomLogIntent;
 
@@ -60,17 +49,13 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     // then food log, symptom log next to each other at the bottom
 
 
-
     // Button to go to food log page
-    foodLogButton = findViewById(R.id.button_food_log);
-    foodLogButton.setOnClickListener( view -> {
-      Util.goToFoodLogActivity(thisActivity);
-    });
+    ingredientLogButton = findViewById(R.id.button_ingredient_log);
+    ingredientLogButton.setOnClickListener(this::onClick);
+
     // Button to got to recipe's page
     symptomLogButton = findViewById(R.id.button_symptom_log);
-    symptomLogButton.setOnClickListener( view -> {
-      Util.goToListSymptomLog(thisActivity);
-    });
+    symptomLogButton.setOnClickListener(this::onClick);
 
     //TODO put question by question way of adding symptoms here
     // Button to go to ingredient's list and edit and delete and add
@@ -128,6 +113,25 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 //
 
 
+  @Override
+  public void onClick(View view) {
+
+    switch (view.getId()) {
+      // save button was pressed
+      case R.id.button_ingredient_log:
+        Util.goToListActivityTypeId(null, thisActivity, Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY,
+                null);
+        break;
+
+      case R.id.button_symptom_log:
+        Util.goToListActivityTypeId(null, thisActivity, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, null);
+        break;
+
+      default:
+        break;
+
+    }
+  }
 
 
 

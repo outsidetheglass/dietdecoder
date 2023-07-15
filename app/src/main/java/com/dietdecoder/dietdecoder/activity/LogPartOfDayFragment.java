@@ -1,10 +1,8 @@
-package com.dietdecoder.dietdecoder.activity.foodlog;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -27,7 +25,6 @@ import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 public class LogPartOfDayFragment extends Fragment implements View.OnClickListener {
@@ -88,7 +85,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         // set the listeners on the buttons
         // to run onClick method when they are clicked
 
-        thisActivity = getActivity().getParent();
+        thisActivity = getActivity();
         mBundle = getArguments();
         mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
 
@@ -113,7 +110,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
 
         // find out if we have a food log or symptom log to set the date time of
-        if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD) ) {
+        if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) ) {
             // we're setting food logs
             settingFoodLog = Boolean.TRUE;
             // when we have to replace the fragment container, replace the right one
@@ -136,9 +133,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             }
 
             // set our array from the strings passed in
-            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD) ) {
+            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) ) {
                 mFoodLogIdsToAddString =
-                        mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY_TO_ADD);
+                        mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY);
             } else {
                 // if it isn't an array just set the one
                 mFoodLogIdsToAddString = mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID);
@@ -148,7 +145,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                     Util.cleanBundledStringIntoArrayList(mFoodLogIdsToAddString);
 
 
-        } else if (  mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) ) {
+        } else if (  mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
             //TODO just remove single symptom log id, it just should always be an array
             //we're setting symptom logs
             settingSymptomLog = Boolean.TRUE;
@@ -159,9 +156,9 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             mButtonAllDay.setOnClickListener(this);
 
             //if it's an array, setting all the arrays passed in to be the same as single
-            if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) ) {
+            if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
                 mSymptomLogIdsToAddString =
-                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD);
+                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
             } else {
                 // if it isn't an array just set the one
                 mSymptomLogIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID);
@@ -254,7 +251,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         for (String symptomLogIdString: symptomLogIdsToAddStringArray){
             // now get the food log associated with each UUID
             SymptomLog symptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(symptomLogIdString));
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(symptomLogIdString));
             symptomLog = Util.setSymptomLogBeganChanged(mWhatToChange, symptomLog,
                     bundleHourToSet);
             mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomLog);

@@ -43,7 +43,7 @@ public interface FoodLogDao {
   //void prepareForInsertion(long insertion_point);
 
   @Query("SELECT * FROM food_log_table")
-  Cursor getCursorAllFoodLog();
+  Cursor daoGetCursorAllFoodLog();
 
   //TODO change this into a multimap instead of putting name and id for ingredient in every time
   @Query("SELECT * FROM food_log_table ORDER BY instantConsumed DESC")

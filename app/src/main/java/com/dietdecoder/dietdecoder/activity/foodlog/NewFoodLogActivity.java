@@ -15,6 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.LogPartOfDayFragment;
+import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 
 import java.util.Objects;

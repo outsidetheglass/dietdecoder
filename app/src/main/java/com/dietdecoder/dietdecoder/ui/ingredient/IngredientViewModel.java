@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 
 import java.util.List;
+import java.util.UUID;
 
 // NOTE: all other extends in other java files must be AndroidViewModel like this
 // i.e. remove Fragment, Activity, View
@@ -48,6 +49,10 @@ public class IngredientViewModel extends AndroidViewModel {
   // get single ingredient using the name
   public Ingredient viewModelGetIngredientFromName(String paramIngredientName) {
     return mRepository.repositoryGetIngredientFromName(paramIngredientName);
+  }
+  // get single ingredient using the name
+  public Ingredient viewModelGetIngredientFromId(UUID uuid) {
+    return mRepository.repositoryGetIngredientFromId(uuid);
   }
 
 

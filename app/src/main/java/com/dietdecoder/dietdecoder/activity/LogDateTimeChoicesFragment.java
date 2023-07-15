@@ -1,10 +1,7 @@
-package com.dietdecoder.dietdecoder.activity.foodlog;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +11,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
+import com.dietdecoder.dietdecoder.activity.foodlog.NewFoodLogBrandFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
@@ -113,16 +107,16 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
             // when we have to replace the fragment container, replace the right one
             mFragmentContainer = Util.fragmentContainerViewAddFoodLog;
 
-        } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD) ) {
+        } else if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID) || mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
             //if it's an array, setting all the arrays passed in to be the same as single
-            if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD).contains(",")) {
+            if (mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY).contains(",")) {
                 // do things here for multiple IDs
 
                 // parse the name from the array of ids and put that in the textview
                 // clean the string of its brackets and spaces
                 // turn into array list
                 mSymptomLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
-                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_TO_ADD)
+                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY)
                 );
             }
 
@@ -257,7 +251,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
             // get symptom log from the list array
             mCurrentSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromId(UUID.fromString(
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(
                             symptomLogIdString
                     ));
             // check if this is the first run through of the fragment, i.e. should we set begin
@@ -275,7 +269,7 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
                 // so find the average duration of the recent symptom logs of the same symptom
                 Duration averageDuration =
                         mSymptomLogViewModel.viewModelGetAverageSymptomDuration(
-                                mCurrentSymptomLog.getSymptomName()
+                                mCurrentSymptomLog.getSymptomLogSymptomName()
                         );
 
                 // and set default for changed time to be from that average

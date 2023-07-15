@@ -1,20 +1,24 @@
 package com.dietdecoder.dietdecoder.ui.symptomlog;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
 import java.time.Instant;
@@ -23,18 +27,22 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
+  Class mActivityClass;
 
   // to set the text for what shows up in the UI
   public TextView symptomLogItemView;
-  public ImageButton symptomLogItemOptionButton;
   private Context symptomLogContext;
   private SymptomLog mSymptomLog;
+  ImageButton mSymptomLogCheckButton;
+
+  String mSymptomLogIdString;
 
   private SymptomLogViewHolder(View itemView) {
     super(itemView);
     symptomLogContext = itemView.getContext();
+    mActivityClass = itemView.getClass();
     symptomLogItemView = itemView.findViewById(R.id.textview_symptom_log_item);
-//    symptomLogItemOptionButton = itemView.findViewById(R.id.imagebutton_symptom_option_circle);
+    mSymptomLogCheckButton = itemView.findViewById(R.id.imagebutton_symptom_log_option);
 
   }
 
@@ -54,7 +62,9 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
   }
 
 
-  public void bind(SymptomLog symptomLog) {
+  public void bind(SymptomLog symptomLog
+         // , Symptom symptom
+  ) {
     // make the recyclerview populated with the info of each symptom log
     // get the info first
     // print it pretty
@@ -65,15 +75,17 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     // info on the symptomlog
     // in order to bind it to the recyclerview
-    String mSymptomLogName = symptomLog.getSymptomName();
-    String mSymptomLogDescription = symptomLog.getDescription();
+    //String mSymptomLogName = symptom.getSymptomName();
+    String mSymptomLogName = symptomLog.getSymptomLogSymptomName();
+     mSymptomLogIdString = symptomLog.getSymptomLogId().toString();
+    String mSymptomLogDescription = symptomLog.getSymptomLogSymptomDescription();
     Instant mSymptomLogBeganInstant = symptomLog.getInstantBegan();
     Instant mSymptomLogChangedInstant = symptomLog.getInstantChanged();
 //    Integer mSymptomIntensityInteger = symptomLog.getIntensityScale();
     String mSymptomIntensityString = "Intensity N/A";
 //    String mSymptomIntensityString = Util.setIntensityString(mSymptomIntensityInteger.toString());
-    if ( symptomLog.getIntensity() != null) {
-      mSymptomIntensityString = symptomLog.getIntensity().toString();
+    if ( symptomLog.getSymptomLogSymptomIntensity() != null) {
+      mSymptomIntensityString = symptomLog.getSymptomLogSymptomIntensity().toString();
     }
     //String mSymptomLogString = symptomLog.toString();
 
@@ -97,69 +109,70 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     symptomLogItemView.setText(printString);
 
     // if the item options is clicked, open the menu for options on that item
-//    symptomLogItemOptionButton.setOnClickListener(this);
+    mSymptomLogCheckButton.setOnClickListener(this);
 
   }
 
   @Override
   public void onClick(View view) {
-    //when clicked change image to filled in with sick person image
-    //ic_baseline_sick
 
-    // Initializing the popup menu and giving the reference as current logContext
-    PopupMenu popupMenu = new PopupMenu(symptomLogContext, symptomLogItemOptionButton);
-    // Inflating popup menu from popup_menu.xml file
-    popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-    popupMenu.setGravity(Gravity.END);
-    // if an option in the menu is clicked
-    popupMenu.setOnMenuItemClickListener(symptomLogMenuItem -> {
+    switch (view.getId()) {
+      // when the options button next to the symptom log is chosen
+      case R.id.imagebutton_symptom_log_option:
+        
+        // Initializing the popup menu and giving the reference as current logContext
+        PopupMenu popupMenu = new PopupMenu(symptomLogContext, mSymptomLogCheckButton);
+        // Inflating popup menu from popup_menu.xml file
+        popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
+        popupMenu.setGravity(Gravity.END);
+        // if an option in the menu is clicked
+        popupMenu.setOnMenuItemClickListener(symptomLogMenuItem -> {
+          // which button was clicked
+          switch (symptomLogMenuItem.getItemId()) {
 
-      // make edit the default for duplicate and edit both go there
-//      Intent mIntent = new Intent(symptomLogContext, EditSymptomLogActivity.class);
+            // go to the right activity, edit or delete or details,
+            // and then the action to take is either duplicate, edit, or delete
+            // and go with the ID array string of the object
+            case R.id.duplicate_option:
+              // edit fragment checks for if we're a duplicate or not for what to set
+              Util.goToEditActivityActionTypeId(symptomLogContext, null,
+                      Util.ARGUMENT_ACTION_DUPLICATE,
+                      Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,  mSymptomLogIdString);
+              break;
 
-      // which button was clicked
-      switch (symptomLogMenuItem.getItemId()) {
+            case R.id.edit_option:
+              // tell the edit activity we want the full edit fragment
+              Util.goToEditActivityActionTypeId(symptomLogContext, null,
+                      Util.ARGUMENT_ACTION_EDIT, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
+                      mSymptomLogIdString);
+              break;
 
-        case R.id.duplicate_option:
-          // edit fragment checks for if we're a duplicate or not for what to set
-//          mIntent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_DUPLICATE);
-//          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-//                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-          break;
+            case R.id.delete_option:
+              // delete this log, go activity double checking if they want to
+              Util.goToDetailActivity(symptomLogContext, Util.ARGUMENT_ACTION_DELETE,
+                      Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+              break;
 
-        case R.id.edit_option:
-          // tell the edit activity we want the full edit fragment
-//          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-//                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-//                  Util.ARGUMENT_FRAGMENT_GO_TO));
-          break;
+            case R.id.detail_option:
+              Util.goToDetailActivity(symptomLogContext, Util.ARGUMENT_ACTION_DETAIL,
+                      Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+              break;
 
-        case R.id.delete_option:
-// delete this log, go activity double checking if they want to
-//          mIntent = new Intent(symptomLogContext, AreYouSureActivity.class);
-//          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-//                  Util.ARGUMENT_GO_TO_DELETE_FOOD_LOG);
-          break;
+            default:
+              break;
+          }//end switch case for which menu item was chosen
 
-        case R.id.detail_option:
-//          mIntent = new Intent(symptomLogContext, DetailSymptomLogActivity.class);
-//          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-//                  Util.ARGUMENT_GO_TO_DETAIL_FOOD_LOG);
-          break;
-
-        default:
-          break;
-      }//end switch case
-
-      // adding string after switch cases because delete and detail make new intents
-      String symptomLogIdString = mSymptomLog.getSymptomLogId().toString();
 //      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, symptomLogIdString);
 //      symptomLogContext.startActivity(mIntent);
 
-      return true;
-    });
-    // Showing the popup menu
-    popupMenu.show();
+          return true;
+        });
+        // Showing the popup menu
+        popupMenu.show();
 
+        break;
+      default:
+        break;
+    }// end switch case for options button clicked
   }
 }//end log view holder class

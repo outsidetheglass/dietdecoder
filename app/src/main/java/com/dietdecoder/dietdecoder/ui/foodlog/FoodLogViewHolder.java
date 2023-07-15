@@ -1,28 +1,24 @@
 package com.dietdecoder.dietdecoder.ui.foodlog;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.foodlog.AreYouSureActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.DetailFoodLogActivity;
-import com.dietdecoder.dietdecoder.activity.foodlog.EditFoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.time.Instant;
 
@@ -33,15 +29,17 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
 
   // to set the text for what shows up in the UI
   public TextView foodLogItemView;
-  public ImageButton foodLogItemOptionButton;
   private Context foodLogContext;
   private FoodLog mFoodLog;
+  ImageButton mFoodLogCheckButton;
+
+  String mFoodLogIdString;
 
   private FoodLogViewHolder(View itemView) {
     super(itemView);
     foodLogContext = itemView.getContext();
-    foodLogItemView = itemView.findViewById(R.id.textview_log_item);
-    foodLogItemOptionButton = itemView.findViewById(R.id.imagebutton_food_log_option);
+    foodLogItemView = itemView.findViewById(R.id.textview_food_log_item);
+    mFoodLogCheckButton = itemView.findViewById(R.id.imagebutton_food_log_option);
 
   }
 
@@ -62,116 +60,150 @@ public class FoodLogViewHolder extends RecyclerView.ViewHolder implements View.O
 
 
   public void bind(FoodLog foodLog) {
-    // make the recyclerview populated with the info of each food log
+    // make the recyclerview populated with the info of each symptom log
     // get the info first
     // print it pretty
     // attach a listener to the options to act on
     // edit, duplicate, delete, or detail clicked
 
     this.mFoodLog = foodLog;
-    //TODO figure out how to get ingredient database info in here
-
-//    String id =
-//            new ViewModelProvider(this).get(IngredientViewModel.class)
-//                    .viewModelGetIngredientFromName("Oat milk")
-//                    .getIngredientId().toString();
 
     // info on the foodlog
     // in order to bind it to the recyclerview
-    String mFoodLogDateTime = foodLog.getFoodLogDateTimeString();
-    String mFoodLogIngredientName = foodLog.getIngredientId().toString();
-    Instant mFoodLogDateTimeConsumed = foodLog.getInstantConsumed();
-    Instant mFoodLogDateTimeCooked = foodLog.getInstantCooked();
-    Instant mFoodLogDateTimeAcquired = foodLog.getInstantAcquired();
-    String mFoodLogString = foodLog.toString();
+    String mFoodLogName = foodLog.getIngredientName();
+    mFoodLogIdString = foodLog.getFoodLogId().toString();
+    Instant mFoodLogInstantAcquired = foodLog.getInstantAcquired();
+    Instant mFoodLogInstantCooked = foodLog.getInstantCooked();
+    Instant mFoodLogInstantConsumed = foodLog.getInstantConsumed();
+//    Integer mSymptomIntensityInteger = foodLog.getIntensityScale();
+    String mSymptomIntensityString = "Intensity N/A";
+//    String mSymptomIntensityString = Util.setIntensityString(mSymptomIntensityInteger.toString());
+//    if ( foodLog.getIntensity() != null) {
+//      mSymptomIntensityString = foodLog.getIntensity().toString();
+//    }
+    //String mFoodLogString = foodLog.toString();
 
 
-    // TODO fix this to be in Util so Ingredient and Recipe and Symptom can list as easily
-    // for adding acquired and cooked to the string
-    // how many days ago, if any, between when it was acquired and when it was consumed
-    String acquiredRelativeDateToConsumed =
-            Util.stringRelativeTimeFromInstant(mFoodLogDateTimeConsumed, mFoodLogDateTimeAcquired);
-    // same for cooked
-    String cookedRelativeDateToConsumed =
-            Util.stringRelativeTimeFromInstant(mFoodLogDateTimeConsumed, mFoodLogDateTimeCooked);
+    // how many days ago, if any, between when it began and changed
+    String changedRelativeDateToBeganString =
+            Util.stringRelativeTimeFromInstant(mFoodLogInstantCooked,
+                    mFoodLogInstantConsumed);
 
     String unImportantString =
-            Util.setAcquiredString(acquiredRelativeDateToConsumed) + Util.setCookedString(cookedRelativeDateToConsumed);
+            Util.setDescriptionString(mFoodLogInstantAcquired.toString());
 
-    String mFoodLogConsumedString = Util.stringFromInstant(mFoodLogDateTimeConsumed);
+    String mFoodLogBeganString = Util.stringFromInstant(mFoodLogInstantCooked);
 
-    SpannableStringBuilder printString = Util.setViewHolderRecyclerViewString(mFoodLogIngredientName,
-            "foodLogBrand", mFoodLogConsumedString, unImportantString );
+    SpannableStringBuilder printString =
+            Util.setViewHolderRecyclerViewString(mFoodLogName,
+                    changedRelativeDateToBeganString, mSymptomIntensityString, unImportantString );
 
 
     // set part of it bold and part of it not bold
     foodLogItemView.setText(printString);
 
     // if the item options is clicked, open the menu for options on that item
-    foodLogItemOptionButton.setOnClickListener(this);
+    mFoodLogCheckButton.setOnClickListener(this);
+
+
+
+// info on the foodlog
+    // in order to bind it to the recyclerview
+//    String mFoodLogDateTime = foodLog.getFoodLogDateTimeString();
+//    String mFoodLogIngredientName = foodLog.getIngredientId().toString();
+//    Instant mFoodLogDateTimeConsumed = foodLog.getInstantConsumed();
+//    Instant mFoodLogDateTimeCooked = foodLog.getInstantCooked();
+//    Instant mFoodLogDateTimeAcquired = foodLog.getInstantAcquired();
+//    String mFoodLogString = foodLog.toString();
+//
+//
+//    // TODO fix this to be in Util so Ingredient and Recipe and Symptom can list as easily
+//    // for adding acquired and cooked to the string
+//    // how many days ago, if any, between when it was acquired and when it was consumed
+//    String acquiredRelativeDateToConsumed =
+//            Util.stringRelativeTimeFromInstant(mFoodLogDateTimeConsumed, mFoodLogDateTimeAcquired);
+//    // same for cooked
+//    String cookedRelativeDateToConsumed =
+//            Util.stringRelativeTimeFromInstant(mFoodLogDateTimeConsumed, mFoodLogDateTimeCooked);
+//
+//    String unImportantString =
+//            Util.setAcquiredString(acquiredRelativeDateToConsumed) + Util.setCookedString(cookedRelativeDateToConsumed);
+//
+//    String mFoodLogConsumedString = Util.stringFromInstant(mFoodLogDateTimeConsumed);
+//
+//    SpannableStringBuilder printString = Util.setViewHolderRecyclerViewString(mFoodLogIngredientName,
+//            "foodLogBrand", mFoodLogConsumedString, unImportantString );
+//
+//
+//    // set part of it bold and part of it not bold
+//    foodLogItemView.setText(printString);
+//
+//    // if the item options is clicked, open the menu for options on that item
+//    foodLogItemOptionButton.setOnClickListener(this);
 
   }
 
   @Override
   public void onClick(View view) {
-    // Initializing the popup menu and giving the reference as current logContext
-    PopupMenu popupMenu = new PopupMenu(foodLogContext, foodLogItemOptionButton);
-    // Inflating popup menu from popup_menu.xml file
-    popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-    popupMenu.setGravity(Gravity.END);
-    // if an option in the menu is clicked
-    popupMenu.setOnMenuItemClickListener(foodLogMenuItem -> {
 
-      // make edit the default for duplicate and edit both go there
-      Intent mIntent = new Intent(foodLogContext, EditFoodLogActivity.class);
+    switch (view.getId()) {
+      // when the options button next to the symptom log is chosen
+      case R.id.imagebutton_food_log_option:
 
-      // which button was clicked
-      switch (foodLogMenuItem.getItemId()) {
+        // Initializing the popup menu and giving the reference as current logContext
+        PopupMenu popupMenu = new PopupMenu(foodLogContext, mFoodLogCheckButton);
+        // Inflating popup menu from popup_menu.xml file
+        popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
+        popupMenu.setGravity(Gravity.END);
+        // if an option in the menu is clicked
+        popupMenu.setOnMenuItemClickListener(foodLogMenuItem -> {
+          // which button was clicked
+          switch (foodLogMenuItem.getItemId()) {
 
-        case R.id.duplicate_option:
-          // edit fragment checks for if we're a duplicate or not for what to set
-          mIntent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_DUPLICATE);
-          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-          break;
+            // go to the right activity, edit or delete or details,
+            // and then the action to take is either duplicate, edit, or delete
+            // and go with the ID array string of the object
+            case R.id.duplicate_option:
+              // edit fragment checks for if we're a duplicate or not for what to set
+              Util.goToEditActivityActionTypeId(foodLogContext, null,
+                      Util.ARGUMENT_ACTION_DUPLICATE,
+                      Util.ARGUMENT_FOOD_LOG_ID_ARRAY,  mFoodLogIdString);
+              break;
 
-        case R.id.edit_option:
-          // tell the edit activity we want the full edit fragment
-          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                  Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
-          Log.d(TAG, "inside edit option click: " + mIntent.getStringExtra(
-                  Util.ARGUMENT_FRAGMENT_GO_TO));
-          break;
+            case R.id.edit_option:
+              // tell the edit activity we want the full edit fragment
+              Util.goToEditActivityActionTypeId(foodLogContext, null,
+                      Util.ARGUMENT_ACTION_EDIT, Util.ARGUMENT_FOOD_LOG_ID_ARRAY,
+                      mFoodLogIdString);
+              break;
 
-        case R.id.delete_option:
-// delete this log, go activity double checking if they want to
-          mIntent = new Intent(foodLogContext, AreYouSureActivity.class);
-          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                  Util.ARGUMENT_GO_TO_DELETE_FOOD_LOG);
-          break;
+            case R.id.delete_option:
+              // delete this log, go activity double checking if they want to
+              Util.goToDetailActivity(foodLogContext, Util.ARGUMENT_ACTION_DELETE,
+                      Util.ARGUMENT_FOOD_LOG_ID_ARRAY, mFoodLogIdString);
+              break;
 
-        case R.id.detail_option:
-          mIntent = new Intent(foodLogContext, DetailFoodLogActivity.class);
-          mIntent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO,
-                  Util.ARGUMENT_GO_TO_DETAIL_FOOD_LOG);
-          break;
+            case R.id.detail_option:
+              Util.goToDetailActivity(foodLogContext, Util.ARGUMENT_ACTION_DETAIL,
+                      Util.ARGUMENT_FOOD_LOG_ID_ARRAY, mFoodLogIdString);
+              break;
 
-        default:
-          break;
-      }//end switch case
+            default:
+              break;
+          }//end switch case for which menu item was chosen
 
-      // adding string after switch cases because delete and detail make new intents
-      String foodLogIdString = mFoodLog.getFoodLogId().toString();
-      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+//      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+//      foodLogContext.startActivity(mIntent);
 
-      foodLogContext.startActivity(mIntent);
+          return true;
+        });
+        // Showing the popup menu
+        popupMenu.show();
 
-      return true;
-    });
-    // Showing the popup menu
-    popupMenu.show();
-
+        break;
+      default:
+        break;
+    }// end switch case for options button clicked
   }
-
-
 }//end log view holder class
+

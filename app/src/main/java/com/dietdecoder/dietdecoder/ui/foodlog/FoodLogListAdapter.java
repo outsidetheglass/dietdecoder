@@ -38,6 +38,8 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
   @Override
   public void onBindViewHolder(FoodLogViewHolder holder, int position) {
     FoodLog currentFoodLog = getItem(position);
+    Log.d(TAG, " position " + position);
+    Log.d(TAG, " current " + currentFoodLog);
 //    currentFoodLog.getIngredientId(
 //            new ViewModelProvider().get(IngredientViewModel.class)
 //                    .viewModelGetIngredientFromName(mName)
@@ -58,9 +60,8 @@ public class FoodLogListAdapter extends ListAdapter<FoodLog, FoodLogViewHolder> 
 
     @Override
     public boolean areContentsTheSame(@NonNull FoodLog oldItem, @NonNull FoodLog newItem) {
-      Log.d(TAG, "Adapter, newitem name: " + newItem.getIngredientId());
       // check all parts of Log to see if they're the same
-      isEqualName = oldItem.getFoodLogDateTimeInstant().equals(newItem.getFoodLogDateTimeInstant());
+      isEqualName = oldItem.getInstantLogged().equals(newItem.getInstantLogged());
       //TODO add other properties of log type here
       //isEqualConcern = oldItem.getLogConcern().equals(newItem.getLogConcern());
       return isEqualName/* && isEqualConcern*/;

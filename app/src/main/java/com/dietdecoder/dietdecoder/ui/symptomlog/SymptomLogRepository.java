@@ -6,6 +6,8 @@ import android.database.Cursor;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
+import com.dietdecoder.dietdecoder.database.symptom.SymptomDao;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLogDao;
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
@@ -22,12 +24,14 @@ class SymptomLogRepository {
 
 
   private SymptomLogDao mSymptomLogDao;
-  private final DietDecoderRoomDatabase mSymptomLogDatabase;
+//  private SymptomDao mSymptomDao;
+  private final DietDecoderRoomDatabase mDatabase;
 
   SymptomLogRepository(Application application) {
     // setup database to be returned via methods
-    mSymptomLogDatabase = DietDecoderRoomDatabase.getDatabase(application);
-    mSymptomLogDao = mSymptomLogDatabase.symptomLogDao();
+    mDatabase = DietDecoderRoomDatabase.getDatabase(application);
+    mSymptomLogDao = mDatabase.symptomLogDao();
+//    mSymptomDao = mDatabase.symptomDao();
   }
 
 
@@ -39,9 +43,10 @@ class SymptomLogRepository {
     return mSymptomLogDao.daoGetAllSymptomLog();
   }
 
+
   // get list of logs that are of a certain type
-  public List<SymptomLog> repositoryGetAllSymptomLogByName(UUID id) {
-    return mSymptomLogDao.daoGetAllSymptomLogById(id);
+  public List<SymptomLog> repositoryGetAllSymptomLogFromSymptomId(UUID id) {
+    return mSymptomLogDao.daoGetAllSymptomLogFromSymptomId(id);
   }
 
   // get single log that is on a certain date
@@ -51,9 +56,16 @@ class SymptomLogRepository {
 //  }
 
   // get single log that from uuid
-  public SymptomLog repositoryGetSymptomLogFromId(UUID uuid) {
-    return mSymptomLogDao.daoGetSymptomLogFromId(uuid);
+  public SymptomLog repositoryGetSymptomLogFromLogId(UUID uuid) {
+    return mSymptomLogDao.daoGetSymptomLogFromLogId(uuid);
   }
+
+  // experiment to see if I can get a object from another dao
+//  public Symptom repositoryGetSymptomFromSymptomLogId(UUID uuid){
+//    UUID symptomId = mSymptomLogDao.daoGetSymptomLogFromLogId(uuid).getSymptomLogSymptomId();
+//    Symptom symptom = mSymptomDao.daoGetSymptomWithId(symptomId);
+//    return symptom;
+//  }
 
   // get all logs cursor
   public Cursor repositoryGetCursorAllSymptomLog() {

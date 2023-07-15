@@ -6,6 +6,7 @@ import android.database.Cursor;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogRepository;
 
@@ -42,6 +43,10 @@ public class SymptomLogViewModel extends AndroidViewModel {
     return mViewModelAllSymptomLogs;
   }
 
+  // TODO get experiment to cross reference daos working
+//  public Symptom viewModelGetSymptomFromSymptomLogId(UUID uuid){
+//    return mRepository.repositoryGetSymptomFromSymptomLogId(uuid);
+//  }
 
   //get all logs on date TODO make work
 //  public List<SymptomLog> viewModelGetAllSymptomLogOnDate(Instant instant) {
@@ -51,12 +56,12 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
 
   // get single log using the instant
-  public List<SymptomLog> viewModelGetSymptomLogByName(UUID id) {
-    return mRepository.repositoryGetAllSymptomLogByName(id);
+  public List<SymptomLog> viewModelGetSymptomLogFromSymptomId(UUID id) {
+    return mRepository.repositoryGetAllSymptomLogFromSymptomId(id);
   }
   // get single log using the uuid
-  public SymptomLog viewModelGetSymptomLogFromId(UUID uuid) {
-    return mRepository.repositoryGetSymptomLogFromId(uuid);
+  public SymptomLog viewModelGetSymptomLogFromLogId(UUID uuid) {
+    return mRepository.repositoryGetSymptomLogFromLogId(uuid);
   }
 
   // cursor for exporting

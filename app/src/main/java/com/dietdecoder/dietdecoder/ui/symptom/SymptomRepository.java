@@ -8,6 +8,7 @@ import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptom.SymptomDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,36 +25,42 @@ class SymptomRepository {
     mSymptomDao = mSymptomDatabase.symptomDao();
   }
 
-  LiveData<List<Symptom>> symptomRepositoryGetAllSymptoms() {
+  LiveData<List<Symptom>> repositoryGetAllSymptoms() {
     //use the dao instantiated in the SymptomRepository method
     // to get all symptoms, alphabetized
     return mSymptomDao.daoGetAlphabetizedSymptoms();
   }
 
-  LiveData<List<Symptom>> symptomRepositoryGetSymptomsToTrack() {
+  LiveData<List<Symptom>> repositoryGetSymptomsToTrack() {
     //use the dao instantiated in the SymptomRepository method
     // to get all symptoms, alphabetized
     return mSymptomDao.daoGetSymptomsToTrack();
   }
 
   // get only symptoms matching category from database
-  List<Symptom> symptomRepositoryGetSymptomInCategory(String symptomCategory) {
+  List<Symptom> repositoryGetSymptomInCategory(String symptomCategory) {
     return mSymptomDao.daoGetAllSymptomInCategory(symptomCategory);
   }
 
+  // get only symptoms matching category from database
+  ArrayList<Symptom> repositoryGetAllSymptomArrayList() {
+    return new ArrayList<Symptom>(mSymptomDao.daoGetAllSymptomArrayList());
+  }
+
+
   // get only given symptom using name
-  public Symptom symptomRepositoryGetSymptomFromName(String symptomName) {
+  public Symptom repositoryGetSymptomFromName(String symptomName) {
     return mSymptomDao.daoGetSymptomWithName(symptomName);
   }
   // get only given symptom using id
-  public Symptom symptomRepositoryGetSymptomFromId(UUID symptomId) {
+  public Symptom repositoryGetSymptomFromId(UUID symptomId) {
     return mSymptomDao.daoGetSymptomWithId(symptomId);
   }
 
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
-  void symptomRepositoryInsert(Symptom symptom) {
+  void repositoryInsert(Symptom symptom) {
 
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomDao.symptomDaoInsert(symptom);
@@ -62,7 +69,7 @@ class SymptomRepository {
   } // end insert
 
   // You must call this on a non-UI thread
-  void symptomRepositoryDelete(Symptom symptom) {
+  void repositoryDelete(Symptom symptom) {
 
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomDao.symptomDaoDelete(symptom);
@@ -71,7 +78,7 @@ class SymptomRepository {
   } // end delete
 
 
-  void symptomRepositoryUpdate(Symptom symptom) {
+  void repositoryUpdate(Symptom symptom) {
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mSymptomDao.symptomDaoUpdate(symptom);});
   } // end update

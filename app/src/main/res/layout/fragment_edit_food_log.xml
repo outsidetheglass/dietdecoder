@@ -22,8 +22,8 @@
 
 
   <TextView
-      android:id="@+id/textview_question_edit_food_log"
-      android:text="@string/textview_question_edit_food_log_edit_what"
+      android:id="@+id/textview_question_edit"
+      android:text="@string/textview_question_edit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAlignment="center"

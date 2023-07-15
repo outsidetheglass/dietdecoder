@@ -21,11 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListSymptomLogActivity extends AppCompatActivity implements View.OnClickListener,
@@ -40,7 +43,9 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
   Fragment mFragmentGoTo = null;
 
   private SymptomLogViewModel mSymptomLogViewModel;
+  private SymptomViewModel mSymptomViewModel;
   private SymptomLogListAdapter mSymptomLogListAdapter;
+  public ArrayList<Symptom> mSymptoms;
 
   public FloatingActionButton addButton;
 
@@ -79,7 +84,14 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
               DividerItemDecoration.VERTICAL));
 
 
-      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff());
+//      mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
+//      mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
+//      Log.d(TAG,
+//              "symptom in list symptom " + mSymptoms.get(0).toString());
+      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff()
+              //, mSymptoms
+              //, mSymptomViewModel, mSymptomLogViewModel
+              );
       recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
@@ -89,7 +101,9 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onChanged(List<SymptomLog> logs) {
                   // Update the cached copy of the words in the adapter.
+                  Log.d(TAG, "list in observer " + logs.toString());
                   mSymptomLogListAdapter.submitList(logs);
+                  //mSymptomLogListAdapter.setLogListSubmitList(logs, mSymptoms);
                   //TODO this is where we should be checking ingredient and recipe adapters
                   // and adding the ingredient or recipe if it doesn't exist
 

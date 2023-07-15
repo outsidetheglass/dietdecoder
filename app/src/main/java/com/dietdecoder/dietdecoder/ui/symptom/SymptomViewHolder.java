@@ -2,6 +2,7 @@ package com.dietdecoder.dietdecoder.ui.symptom;
 
 import static com.dietdecoder.dietdecoder.R.*;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,28 +25,50 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
-public class SymptomViewHolder extends RecyclerView.ViewHolder {
+public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
   // to set the text for what shows up in the UI
-  public TextView symptomItemView;
-  public ImageButton symptomCheckButton;
-  private Context symptomViewHolderContext;
-  ColorStateList selectedColor;
-  ColorStateList unSelectedColor;
+  public TextView mSymptomItemView;
+  public ImageButton mSymptomCheckButton;
+  private Context mSymptomViewHolderContext;
+  private Resources.Theme mSymptomViewHolderTheme;
+  ColorStateList mSelectedColor;
+  int mUnSelectedColor;
+  Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable, mGreenRoundcornersDrawable, mEmptyCircleDrawable;
 
+  @SuppressLint("UseCompatLoadingForDrawables")
   private SymptomViewHolder(View itemView) {
     super(itemView);
-    symptomViewHolderContext = itemView.getContext();
-    symptomItemView = itemView.findViewById(id.textview_symptom_item);
-    symptomCheckButton = itemView.findViewById(id.imagebutton_symptom_option_circle);
-    selectedColor = itemView.getResources().getColorStateList(color.selected_text_color,
-            symptomViewHolderContext.getTheme());
-    unSelectedColor = itemView.getResources().getColorStateList(color.unselected_text_color,
-            symptomViewHolderContext.getTheme());
+    mSymptomViewHolderContext = itemView.getContext();
+    mSymptomViewHolderTheme = mSymptomViewHolderContext.getTheme();
+
+    mSymptomItemView = itemView.findViewById(id.textview_symptom_item);
+    mSymptomCheckButton = itemView.findViewById(id.imagebutton_symptom_option_circle);
+    mSelectedColor = itemView.getResources().getColorStateList(color.selected_text_color,
+            mSymptomViewHolderTheme);
+    // green color of titles, not the default text color I want but close enough
+    TypedValue typedValue = new TypedValue();
+    mSymptomViewHolderTheme.resolveAttribute(android.R.attr.colorSecondary, typedValue, true);
+    mUnSelectedColor = typedValue.data;
+//    mUnSelectedColor = itemView.getResources().getColorStateList(color.,
+//            mSymptomViewHolderTheme);
+
+    // drawables for the selected and unselected options and their backgrounds
+    mSickFaceDrawable = itemView.getResources().getDrawable(R.drawable.ic_baseline_sick,
+            mSymptomViewHolderTheme);
+    mRedRoundcornersBackgroundDrawable =
+            itemView.getResources().getDrawable(R.drawable.red_roundcorners,
+            mSymptomViewHolderTheme);
+    mGreenRoundcornersDrawable =
+            itemView.getResources().getDrawable(drawable.roundcorners,
+                    mSymptomViewHolderTheme);
+    mEmptyCircleDrawable =
+            itemView.getResources().getDrawable(drawable.ic_baseline_empty_circle,
+                    mSymptomViewHolderTheme);
   }
 
 
@@ -69,38 +93,18 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
 
 
     // set part of it bold and part of it not bold
-    symptomItemView.setText( printString );
+    mSymptomItemView.setText( printString );
 
-    symptomCheckButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
+    mSymptomCheckButton.setOnClickListener(this::onClick);
 
-        //change text color to show it was clicked, change to red
-        symptomItemView.setTextColor(selectedColor);
-
-        //TODO change pain face to question mark, when selected in here make it an icon for that
-        // pain suffer type or default sick face
-
-      }
-    });
-
-    symptomItemView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        //change text color to show it was unclicked, change back to unselected color
-        if (symptomItemView.getTextColors() == selectedColor ) {
-          symptomItemView.setTextColor(unSelectedColor);
-        }
-      }
-    });
 
   }
 
 
   static SymptomViewHolder create(ViewGroup symptomParent) {
 
-    Context symptomViewHolderContext = symptomParent.getContext();
-    LayoutInflater symptomInflater = LayoutInflater.from(symptomViewHolderContext);
+    Context mSymptomViewHolderContext = symptomParent.getContext();
+    LayoutInflater symptomInflater = LayoutInflater.from(mSymptomViewHolderContext);
     View symptomView = symptomInflater.inflate(
       layout.recyclerview_symptom_item,
       symptomParent,
@@ -110,5 +114,40 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder {
     return new SymptomViewHolder(symptomView);
   }
 
+  @Override
+  public void onClick(View v) {
+
+
+    // if the user wants to unselect the symptom, the color will be red
+    // selected color is red
+    boolean userWantsToUnSelect = mSymptomItemView.getTextColors() == mSelectedColor;
+
+    // user wants to select the symptom
+    // the color will be default or green
+    // unselected color is green
+    // if unselected color or default then change it to selected color
+    // if selected color we're unselecting it, so change to unselected color
+//        boolean userWantsToSelect =
+//                mSymptomItemView.getTextColors() == mUnSelectedColor
+//                        || mSymptomItemView.getTextColors() == getDefaultTextColor();
+
+    //change text color to show it was unclicked, change back to unselected color
+    if ( userWantsToUnSelect ) {
+      mSymptomItemView.setTextColor(mUnSelectedColor);
+      mSymptomCheckButton.setBackground(mGreenRoundcornersDrawable);
+      mSymptomCheckButton.setImageDrawable(mEmptyCircleDrawable);
+    }
+    else {
+      //change UI to show it was clicked
+      // text color change to red
+      mSymptomItemView.setTextColor(mSelectedColor);
+      // change the empty circle to the sick face
+      mSymptomCheckButton.setImageDrawable(mSickFaceDrawable);
+      // make the background of the sick face from a green circle to a red circle
+      mSymptomCheckButton.setBackground(null);
+    }
+
+
+  }
 
 }//end symptom view holder class

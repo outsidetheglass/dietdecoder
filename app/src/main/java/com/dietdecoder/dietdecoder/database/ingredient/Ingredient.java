@@ -78,6 +78,7 @@ public class Ingredient {
   @Override
   public String toString() {
     return "Ingredient{" +
+            "ingredientId='" + ingredientId + '\'' +
             "ingredientName='" + ingredientName + '\'' +
             "ingredientBrand='" + ingredientBrand + '\'' +
       ", ingredientChemicalName='" + ingredientChemicalName + '\'' +

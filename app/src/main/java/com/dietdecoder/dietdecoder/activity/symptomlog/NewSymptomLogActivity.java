@@ -2,22 +2,17 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
@@ -83,7 +78,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 mBundle = getIntent().getExtras();
 
                 // get the array of Id's of symptoms to add
-                String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_IDS_ARRAY_TO_ADD);
+                String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
                 // clean the array string
                 mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
                 //Log.d(TAG, mSymptomIdsToAddString);

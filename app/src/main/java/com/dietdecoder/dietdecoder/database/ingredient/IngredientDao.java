@@ -46,6 +46,7 @@ public interface IngredientDao {
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName")
   Ingredient daoGetIngredientFromName(String daoIngredientName);
 
+
   @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName AND ingredientChemicalName = :daoIngredientChemicalName")
   Ingredient daoGetIngredientFromNameChemicalName(String daoIngredientName, String daoIngredientChemicalName);
 
@@ -54,7 +55,7 @@ public interface IngredientDao {
   Ingredient daoGetIngredientFromSearchName(String searchIngredientName);
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientId LIKE :searchIngredientId")
-  Ingredient daoGetFoodLogIngredientFromId(UUID searchIngredientId);
+  Ingredient daoGetIngredientFromId(UUID searchIngredientId);
 
 
   /*

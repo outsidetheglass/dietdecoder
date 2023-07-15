@@ -21,4 +21,14 @@
   <dimen name="main_content_layout_width">280dp</dimen>
   <dimen name="half_main_content_layout_width">120dp</dimen>
 
+  <dimen name="width_icon_in_option_button">40dp</dimen>
+  <dimen name="height_icon_in_option_button">40dp</dimen>
+  <dimen name="viewportheight_icon_in_option_button">24</dimen>
+  <dimen name="viewportwidth_icon_in_option_button">24</dimen>
+  <dimen name="viewportHeight_sick_face">26</dimen>
+  <dimen name="viewportWidth_sick_face">26</dimen>
+  <dimen name="radius_option_button">24dp</dimen>
+
+
+
 </resources>

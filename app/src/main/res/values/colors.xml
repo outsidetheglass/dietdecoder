@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="green_200">#A9FC86</color>
-    <color name="green_500">#167700</color>
-    <color name="green_700">#039857</color>
     <color name="lightest_green">#E2FBE1</color>
-    <color name="orange_200">#DA7903</color>
-    <color name="orange_700">#873701</color>
-    <color name="red_200">#FC8686</color>
-    <color name="red_500">#770000</color>
-    <color name="red_700">#980303</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#A1A1A1</color>
+
     <color name="color_title">#003300</color>
     <color name="button_label">#FFFFFF</color>
     <color name="selected_text_color">@color/red_700</color>
     <color name="unselected_text_color">@color/green_700</color>
+    <color name="tint_sick_face">#FF0000</color>
+    <color name="tint_empty_circle">#333333</color>
+    <color name="red_background">#79FF0000</color>
+
+    <color name="red_200">#FFA3A3</color>
+    <color name="red_500">#770000</color>
+    <color name="red_700">#980303</color>
+    <color name="green_200">#A9FC86</color>
+    <color name="green_500">#167700</color>
+    <color name="green_700">#039857</color>
+    <color name="orange_200">#DA7903</color>
+    <color name="orange_700">#873701</color>
+
+    <color name="purple_blue_pale">#E8E1FD</color>
+    <color name="blue_pale">#DCE0FA</color>
+    <color name="blue_green_pale">#DAFFEC</color>
+    <color name="green_bright">#E6FBDE</color>
+    <color name="yellow_green_bright">#C2DCA8</color>
+    <color name="yellow_bright">#FBED8E</color>
+    <color name="yellow_orange_bright">#F3D792</color>
+    <color name="orange_bright">#F3BE96</color>
+    <color name="orange_red_bright">#F8A479</color>
+    <color name="red_bright">#FB8181</color>
 </resources>

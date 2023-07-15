@@ -18,8 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
@@ -223,7 +223,7 @@ public class EditFoodLogFragment extends Fragment implements View.OnClickListene
             // actually go to the next place now
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(Util.fragmentContainerViewEditFoodLog, logSpecificDateTimeFragment);
+            ft.replace(Util.fragmentContainerViewEdit, logSpecificDateTimeFragment);
             ft.commit();
         }
         // else it means go back to main activity

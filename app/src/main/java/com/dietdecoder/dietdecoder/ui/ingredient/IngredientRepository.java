@@ -9,6 +9,7 @@ import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 
 import java.util.List;
+import java.util.UUID;
 
 class IngredientRepository {
 
@@ -43,6 +44,11 @@ class IngredientRepository {
   public Ingredient repositoryGetIngredientFromName(String ingredientName) {
     return mIngredientDao.daoGetIngredientFromName(ingredientName);
   }
+  // get only given ingredient using name
+  public Ingredient repositoryGetIngredientFromId(UUID uuid) {
+    return mIngredientDao.daoGetIngredientFromId(uuid);
+  }
+
 
   public Ingredient repositoryGetIngredientFromSearchName(String searchIngredientName) {
     return mIngredientDao.daoGetIngredientFromSearchName(searchIngredientName);

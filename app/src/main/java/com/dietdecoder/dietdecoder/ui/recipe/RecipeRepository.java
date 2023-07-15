@@ -50,6 +50,10 @@ class RecipeRepository {
   public Recipe repositoryGetRecipeFromName(String recipeName) {
     return mRecipeDao.daoGetRecipeFromName(recipeName);
   }
+  public Recipe repositoryGetRecipeFromId(UUID recipeId) {
+    return mRecipeDao.daoGetRecipeFromId(recipeId);
+  }
+
 
   public Recipe repositoryGetRecipeFromRecipeNameAndIngredient(String recipeName, UUID recipeIngredient) {
     return mRecipeDao.daoGetRecipeFromRecipeNameAndIngredient(recipeName, recipeIngredient);

@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activity.foodlog;
+package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.foodlog.DeleteFoodLogFragment;
+import com.dietdecoder.dietdecoder.activity.foodlog.FoodLogActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -70,7 +72,7 @@ public class AreYouSureActivity extends AppCompatActivity  {
                     // no next fragment to go to was found
                     // so check if we're here to duplicate and do that if we are
                     if ( Objects.equals(mBundle.get(Util.ARGUMENT_ACTION),
-                            Util.ARGUMENT_DUPLICATE)) {
+                            Util.ARGUMENT_ACTION_DUPLICATE)) {
 
                         mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
 
@@ -115,7 +117,8 @@ public class AreYouSureActivity extends AppCompatActivity  {
             mNextFragment = new DeleteFoodLogFragment();
 
         } else if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT)) {
+                Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG)) {
+            //TODO fix this it'll break
             //update food log
 //            mNextFragment = new EditFoodLogActivity();
 

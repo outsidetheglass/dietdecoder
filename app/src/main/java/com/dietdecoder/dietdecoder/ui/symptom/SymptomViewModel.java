@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class SymptomViewModel extends AndroidViewModel {
   public SymptomViewModel(Application application) {
     super(application);
     mRepository = new SymptomRepository(application);
-    mViewModelAllSymptomsToTrack = mRepository.symptomRepositoryGetSymptomsToTrack();
+    mViewModelAllSymptomsToTrack = mRepository.repositoryGetSymptomsToTrack();
 
   }//end SymptomViewModel method
 
@@ -39,7 +40,7 @@ public class SymptomViewModel extends AndroidViewModel {
   }
 
   public LiveData<List<Symptom>> viewModelGetAllSymptoms() {
-    return mRepository.symptomRepositoryGetAllSymptoms();
+    return mRepository.repositoryGetAllSymptoms();
   }
 
   //get all symptoms with concern
@@ -53,27 +54,30 @@ public class SymptomViewModel extends AndroidViewModel {
 
   // get single symptom using the name
   public Symptom viewModelGetSymptomFromName(String paramSymptomName) {
-    return mRepository.symptomRepositoryGetSymptomFromName(paramSymptomName);
+    return mRepository.repositoryGetSymptomFromName(paramSymptomName);
   }
   //get single symptom from the UUID
   public Symptom viewModelGetSymptomFromId(UUID paramSymptomId) {
-    return mRepository.symptomRepositoryGetSymptomFromId(paramSymptomId);
+    return mRepository.repositoryGetSymptomFromId(paramSymptomId);
   }
 
   public List<Symptom> viewModelGetAllSymptomFromCategory(String symptomCategory){
-    return mRepository.symptomRepositoryGetSymptomInCategory(symptomCategory);
+    return mRepository.repositoryGetSymptomInCategory(symptomCategory);
+  }
+  public ArrayList<Symptom> viewModelGetAllSymptomArrayList(){
+    return mRepository.repositoryGetAllSymptomArrayList();
   }
 
 
   // add to database
-  public void viewModelInsert(Symptom symptom) { mRepository.symptomRepositoryInsert(symptom); }
+  public void viewModelInsert(Symptom symptom) { mRepository.repositoryInsert(symptom); }
   // edit symptom in database
   public void viewModelUpdate(Symptom symptom) {
-    mRepository.symptomRepositoryUpdate(symptom);
+    mRepository.repositoryUpdate(symptom);
   }
   // delete symptom in database
   public void viewModelDelete(Symptom symptom) {
-    mRepository.symptomRepositoryDelete(symptom);
+    mRepository.repositoryDelete(symptom);
   }
 
 

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.EditActivity;
 import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
@@ -117,10 +118,10 @@ public class NewFoodLogBrandFragment extends Fragment implements View.OnClickLis
                 mFoodLogIdString = mFoodLog.getFoodLogId().toString();
 
                 //TODO not done, go to cooked and acquired fragments and make them
-                Class<EditFoodLogActivity> mActivity = EditFoodLogActivity.class;
+                Class<EditActivity> mActivity = EditActivity.class;
                 Intent intent = new Intent(getContext(), mActivity);
                 intent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, mFoodLogIdString);
-                intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG_FRAGMENT);
+                intent.putExtra(Util.ARGUMENT_FRAGMENT_GO_TO, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG);
                 getContext().startActivity(intent);
                 break;
             default:
