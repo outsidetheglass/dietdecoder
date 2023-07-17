@@ -19,6 +19,8 @@
   <string name="textview_main_log_a_symptom">Log a Symptom</string>
   <string name="button_current_symptom">Current Symptom</string>
   <string name="textview_title_new_recipe_log">Log a Recipe</string>
+  <string name="textview_title_new_ingredient_log">Log Ingredient</string>
+
 
   <string name="button_food_log">Food Log</string>
   <string name="button_ingredient_log">Diet Log</string>
@@ -41,12 +43,21 @@
   <string name="title_log">Record Log</string>
   <string name="title_log_change">Record Log For End</string>
   <string name="title_log_begin">Record Log For Begin</string>
+  <string name="title_log_consumed">Record When Consumed</string>
+  <string name="title_log_cooked">Record When Cooked</string>
+  <string name="title_log_acquired">Record When Acquired</string>
+
 
   <string name="textview_24hr">(24 hour time)</string>
   <string name="pick_time">Pick Time</string>
 
+  <string name="question_textview_ingredient_amount_log">How much of the ingredient was it?</string>
   <string name="question_textview_new_symptom_intensity_log">How intense is the symptom?</string>
+  <string name="question_textview_new_ingredient_log_consumed_time">When did the ingredient get consumed/eaten/drank?</string>
   <string name="question_textview_new_symptom_intensity_log_changed_time">That set when the symptom started. Now, when did the symptom end?</string>
+  <string name="question_textview_new_ingredient_log_cooked_time">That set when the ingredient was consumed. Now, when did the ingredient get cooked/prepared/preserved?</string>
+  <string name="question_textview_new_ingredient_log_acquired_time">That set when the ingredient was cooked. Now, when did the ingredient get acquired/harvested/bought?</string>
+
 
 
   <string name="question_textview_new_log">What general time range are we concerned with?</string>
@@ -62,10 +73,10 @@
   <string name="adding">Adding... </string>
 
 
-  <string name="question_textview_new_food_log_name">What was the ingredient?</string>
-  <string name="question_textview_new_food_log_brand">What was the brand? (Homemade is an option)</string>
+  <string name="question_textview_new_ingredient_log_ingredient_name">What was the ingredient?</string>
+  <string name="question_textview_new_ingredient_log_ingredient_brand">What was the brand? (Homemade is an option)</string>
 
-  <string name="question_textview_new_food_log_add_another">Add another ingredient?</string>
+  <string name="question_textview_new_ingredient_log_add_another">Add another ingredient?</string>
   <string name="textview_question_log_part_of_day_specific_time_range">Estimated part of the day?</string>
 
   <string name="button_early">Early</string>
@@ -154,6 +165,7 @@
 
   <string name="title_symptom_detail_textview">Details of Symptom</string>
   <string name="symptom_detail_name_textview">Name</string>
+  <string name="ingredient_detail_name_textview">Name</string>
   <string name="symptom_detail_category_textview">Category</string>
   <string name="symptom_detail_description_textview">Description</string>
   <string name="symptom_detail_suffertype_textview">Type</string>

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
@@ -50,6 +51,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
     SymptomViewModel mSymptomViewModel;
     UUID mSymptomLogId;
     SymptomLog mSymptomLog;
+    Symptom mSymptom;
 
     Fragment mNextFragment = null;
 
@@ -101,11 +103,13 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             }
             // turn it into its UUID
             mSymptomLogId = UUID.fromString(mSymptomLogIdString);
-            // use that to get the food log itself
+            // use that to get the log itself
             mSymptomLog = mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mSymptomLogId);
+            mSymptom =
+                    mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getSymptomLogSymptomId());
 
             // then the name value
-            mSymptomLogSymptomName = mSymptomLog.getSymptomLogSymptomName();
+            mSymptomLogSymptomName = mSymptom.getSymptomName();
 
             // then use the log to set the text views
             // set the default text to the data
@@ -142,7 +146,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 // done with editing
                 // TODO pass in our id to make it briefly highlight in list log to show which
                 //  changed
-                Util.goToListSymptomLog(thisActivity);
+                Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdString, mBundle.getString(Util.ARGUMENT_ACTION));
                 break;
             case R.id.imagebutton_symptom_log_began_option:
                 // when symptom began option was clicked, so tell the user we'll go change that

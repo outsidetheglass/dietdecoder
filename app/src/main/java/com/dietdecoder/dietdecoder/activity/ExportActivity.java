@@ -25,8 +25,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
     Button csvButton, pdfButton;
 
-    FoodLogViewModel mFoodLogViewModel;
+    IngredientLogViewModel mIngredientLogViewModel;
 
     // variables for exporting pdf
     // declaring width and height
@@ -88,7 +88,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
         internalPath = context.getFilesDir();
         sdCardPath = context.getExternalFilesDir(null);
 
-        mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+        mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
 
         // Button to go to ingredient's list and edit and delete and add
         csvButton = findViewById(R.id.button_csv);
@@ -111,7 +111,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
     private void exportDatabaseToSdCard(View view, String fileType) {
         String mFileName = Util.setFileName(fileType);
-        Cursor cursor = mFoodLogViewModel.viewModelGetCursorAllFoodLog();
+        Cursor cursor = mIngredientLogViewModel.viewModelGetCursorAllIngredientLog();
         File file = null;
 
         // if the cursor found a database
@@ -129,7 +129,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
                     // CSV can do line by line so if the phone can't finish all in one go it's
                     // still there, PDF requires all data at once
                     if (fileType == Util.ARGUMENT_CSV) {
-                        stream = exportDatabaseToCsv(cursor, mFoodLogViewModel, stream);
+                        stream = exportDatabaseToCsv(cursor, mIngredientLogViewModel, stream);
                     }
                     else if (fileType == Util.ARGUMENT_PDF){
                         // have to get all the data and add it to PDF at once
@@ -138,11 +138,12 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
                         StringBuilder stringBuilder = new StringBuilder();
                         do {
                             // get the food log
-                            FoodLog mFoodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(
+                            IngredientLog mIngredientLog =
+                                    mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
                                     UUID.fromString(cursor.getString(0))
                             );
                             // get the info to put into the file
-                            String prettyStringForPdf = processedLine(mFoodLog);
+                            String prettyStringForPdf = processedLine(mIngredientLog);
                             stringBuilder.append(prettyStringForPdf);
                         }
                         while (
@@ -186,18 +187,20 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
     }
 
-    private FileOutputStream exportDatabaseToCsv(Cursor cursor, FoodLogViewModel foodLogViewModel,
+    private FileOutputStream exportDatabaseToCsv(Cursor cursor,
+                                                 IngredientLogViewModel ingredientLogViewModel,
                                   FileOutputStream stream) throws IOException {
 
         do {
             // get the food log
-            FoodLog mFoodLog = foodLogViewModel.viewModelGetFoodLogFromId(
+            IngredientLog mIngredientLog = ingredientLogViewModel
+                    .viewModelGetIngredientLogFromLogId(
                     UUID.fromString( cursor.getString(0) )
             );
             // get the info to put into the file
-            String mFoodLogString = processedLine(mFoodLog);
+            String mIngredientLogString = processedLine(mIngredientLog);
             // add it to our file to write
-            stream.write(mFoodLogString.getBytes());
+            stream.write(mIngredientLogString.getBytes());
         }
         while (
             // while there's still a database entry, go to next and repeat
@@ -266,8 +269,8 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
         return pdfDocument;
     }
 
-    private String processedLine(FoodLog foodLog){
-        StringBuilder info = new StringBuilder(foodLog.getIngredientId().toString());
+    private String processedLine(IngredientLog ingredientLog){
+        StringBuilder info = new StringBuilder(ingredientLog.getIngredientLogId().toString());
         info.append("\n");
 
         return info.toString();

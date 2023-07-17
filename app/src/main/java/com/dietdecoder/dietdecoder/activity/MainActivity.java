@@ -7,7 +7,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +20,7 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
+import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     // then food log, symptom log next to each other at the bottom
 
 
+    SymptomLogViewModel mSymptomLogViewModel =
+            new ViewModelProvider(this).get(SymptomLogViewModel.class);
+    Log.d(TAG, mSymptomLogViewModel.viewModelGetSomeSymptomLog(1).toString());
     // Button to go to food log page
     ingredientLogButton = findViewById(R.id.button_ingredient_log);
     ingredientLogButton.setOnClickListener(this::onClick);
@@ -92,11 +99,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 //TODO go to settings/preferences
         }
       else if (item.getItemId() == R.id.action_go_home) {
-        Util.goToMainActivity(thisActivity);
+        Util.goToMainActivity(null, thisActivity);
       }
       else if (item.getItemId() == R.id.action_more) {
         //TODO make this have a menu to select from instead of the other activity
-        Util.goToOtherActivity(thisActivity);
+        Util.goToOtherActivity(null, thisActivity);
       }
       else {
         // do something
@@ -119,12 +126,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     switch (view.getId()) {
       // save button was pressed
       case R.id.button_ingredient_log:
-        Util.goToListActivityTypeId(null, thisActivity, Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY,
-                null);
+        Util.goToListIngredientLogActivity(null, thisActivity, null);
         break;
 
       case R.id.button_symptom_log:
-        Util.goToListActivityTypeId(null, thisActivity, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, null);
+        Util.goToListSymptomLogActivity(null, thisActivity, null, null);
         break;
 
       default:

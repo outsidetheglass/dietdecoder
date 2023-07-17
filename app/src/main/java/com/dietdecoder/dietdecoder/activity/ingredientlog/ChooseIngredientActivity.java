@@ -1,8 +1,7 @@
-package com.dietdecoder.dietdecoder.activity.symptomlog;
+package com.dietdecoder.dietdecoder.activity.ingredientlog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,53 +23,52 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.MainActivity;
-import com.dietdecoder.dietdecoder.database.symptom.Symptom;
-import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
-import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
-import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
+import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
+public class ChooseIngredientActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
-    private final Activity thisActivity = ChooseSymptomActivity.this;
+    private final Activity thisActivity = ChooseIngredientActivity.this;
     private Context thisContext;
 
     //TODO fix names
-    int mFragmentContainerView = Util.fragmentContainerViewChooseSymptomLog;
+//    int mFragmentContainerView = Util.fragmentContainerViewChooseIngredientLog;
     Bundle mBundle;
 
     String mTooManyTryAgainString, mSaveString, mEmptyTryAgainString;
     Button mButtonSaveName;
 
-    ArrayList<String> mSymptomsSelectedIdsArrayListStrings = null;
+    ArrayList<String> mIngredientsSelectedIdsArrayListStrings = null;
 
     private Fragment nextFragment = null;
 
-    SymptomListAdapter mSymptomListAdapter;
-    SymptomViewModel mSymptomViewModel;
-    SymptomLogViewModel mSymptomLogViewModel;
-    RecyclerView recyclerViewSymptomNameChoices;
+    IngredientListAdapter mIngredientListAdapter;
+    IngredientViewModel mIngredientViewModel;
+    IngredientLogViewModel mIngredientLogViewModel;
+    RecyclerView recyclerViewIngredientNameChoices;
 
     ColorStateList selectedColor;
     ColorStateList unSelectedColor;
 
-    public ChooseSymptomActivity() {
-        super(R.layout.activity_choose_symptom);
+    public ChooseIngredientActivity() {
+        super(R.layout.activity_choose_ingredient);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_choose_symptom);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_choose_ingredient);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
@@ -80,7 +78,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
         if (savedInstanceState == null) {
 
             // basic variable setup
-            mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
+            mIngredientsSelectedIdsArrayListStrings = new ArrayList<>();
             if ( getIntent().getExtras() == null ) {
                 mBundle = new Bundle();
             } else {
@@ -88,30 +86,30 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
             }
 
             //save button
-            mButtonSaveName = findViewById(R.id.button_choose_symptom_save);
+            mButtonSaveName = findViewById(R.id.button_choose_ingredient_save);
             mButtonSaveName.setOnClickListener(this);
 
 
             // make the view for listing the items in the log
-            recyclerViewSymptomNameChoices =
-                    findViewById(R.id.recyclerview_symptom_name_choices);
+            recyclerViewIngredientNameChoices =
+                    findViewById(R.id.recyclerview_ingredient_name_choices);
             // add horizontal lines between each recyclerview item
-            recyclerViewSymptomNameChoices.addItemDecoration(new DividerItemDecoration(recyclerViewSymptomNameChoices.getContext(),
+            recyclerViewIngredientNameChoices.addItemDecoration(new DividerItemDecoration(recyclerViewIngredientNameChoices.getContext(),
                     DividerItemDecoration.VERTICAL));
 
 
-            mSymptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
-            recyclerViewSymptomNameChoices.setAdapter(mSymptomListAdapter);
-            recyclerViewSymptomNameChoices.setLayoutManager(new LinearLayoutManager(this));
-            mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+            mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
+            recyclerViewIngredientNameChoices.setAdapter(mIngredientListAdapter);
+            recyclerViewIngredientNameChoices.setLayoutManager(new LinearLayoutManager(this));
+            mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+            mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
 
-            mSymptomViewModel.viewModelGetSymptomsToTrack().observe(this,
-                    new Observer<List<Symptom>>() {
+            mIngredientViewModel.viewModelGetAllIngredients().observe(this,
+                    new Observer<List<Ingredient>>() {
                         @Override
-                        public void onChanged(List<Symptom> symptoms) {
+                        public void onChanged(List<Ingredient> ingredients) {
                             // Update the cached copy of the words in the adapter.
-                            mSymptomListAdapter.submitList(symptoms);
+                            mIngredientListAdapter.submitList(ingredients);
 
                         }
                     });
@@ -150,19 +148,19 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
         switch (view.getId()) {
             //do something when edittext is clicked
-//            case R.id.edittext_new_symptom_intensity:
+//            case R.id.edittext_new_ingredient_intensity:
 //
 //                break;
-            case R.id.button_choose_symptom_save:
+            case R.id.button_choose_ingredient_save:
                 // get int
 //
-                mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
-                for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
+                mIngredientsSelectedIdsArrayListStrings = new ArrayList<>();
+                for (int childCount = recyclerViewIngredientNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
 
                     final RecyclerView.ViewHolder holder =
-                            recyclerViewSymptomNameChoices.getChildViewHolder(recyclerViewSymptomNameChoices.getChildAt(i));
+                            recyclerViewIngredientNameChoices.getChildViewHolder(recyclerViewIngredientNameChoices.getChildAt(i));
                     TextView viewHolderTextView =
-                            holder.itemView.findViewById(R.id.textview_symptom_item);
+                            holder.itemView.findViewById(R.id.textview_ingredient_item);
                     int textViewColorInt =
                             viewHolderTextView.getTextColors().getDefaultColor();
 
@@ -174,19 +172,19 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                     // if the text color of the current item in the list is the color set when
                     // selected by the user
                     if (Objects.equals(selectInt, textViewColorInt) ){
-                        // get the ID of the symptom that has the selected color text
+                        // get the ID of the ingredient that has the selected color text
                         int position = holder.getBindingAdapterPosition();
-                        String currentSymptomSelectedIdString =
-                                mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
-                                        .getSymptomId().toString();
-                        // add that string ID to our array of selected symptoms
-                        mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedIdString);
+                        String currentIngredientSelectedIdString =
+                                mIngredientViewModel.viewModelGetAllIngredients().getValue().get(position)
+                                        .getIngredientId().toString();
+                        // add that string ID to our array of selected ingredients
+                        mIngredientsSelectedIdsArrayListStrings.add(currentIngredientSelectedIdString);
 
                     }
                 }
 
                 // after done with the for loop,
-                // all the symptoms to add have been put into the array
+                // all the ingredients to add have been put into the array
                 // check if we're here to edit a single log and therefore need only one selected
                 Boolean needsOnlyOneLog = Boolean.FALSE;
                 if ( mBundle.containsKey(Util.ARGUMENT_ACTION) ){
@@ -197,49 +195,50 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                         needsOnlyOneLog = Boolean.TRUE;
                     }
                 }
-                Integer howManySelected = mSymptomsSelectedIdsArrayListStrings.size();
+                Integer howManySelected = mIngredientsSelectedIdsArrayListStrings.size();
 
                 // so check how many have been selected and put in the array
-                // check if symptoms to add array is empty
-                if ( mSymptomsSelectedIdsArrayListStrings.isEmpty() ) {
+                // check if ingredients to add array is empty
+                if ( mIngredientsSelectedIdsArrayListStrings.isEmpty() ) {
                     // if empty, alert user none were selected and don't do anything else
                     Toast.makeText(thisContext, mEmptyTryAgainString,
                             Toast.LENGTH_SHORT).show();
                 } else if (  howManySelected > 1 && needsOnlyOneLog ) {
-                    // the user selected more than one symptom, but is here to only change one log
+                    // the user selected more than one ingredient, but is here to only change one
+                    // log
                     // tell them to try again and select only one
                     Toast.makeText(thisContext, mTooManyTryAgainString,
                             Toast.LENGTH_SHORT).show();
                 } else if (  howManySelected == 1 && needsOnlyOneLog ) {
-                    // the user selected only one symptom, and is here to only change one log
+                    // the user selected only one ingredient, and is here to only change one log
                     Toast.makeText(thisContext, mSaveString,
                             Toast.LENGTH_SHORT).show();
                     // which means success so we can go back to edit after saving it
-                    String symptomLogIdString =
+                    String ingredientLogIdString =
                             mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
-                    String symptomIdString = mSymptomsSelectedIdsArrayListStrings.get(0);
-                    SymptomLog symptomLog =
-                            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(symptomLogIdString));
-                    // get the symptom matching the symptom ID we got from the UI choice
-                    Symptom symptom =
-                            mSymptomViewModel.viewModelGetSymptomFromId(UUID.fromString(symptomIdString));
-                    // save our updated symptom log with the new symptom ID and name
+                    String ingredientIdString = mIngredientsSelectedIdsArrayListStrings.get(0);
+                    IngredientLog ingredientLog =
+                            mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(UUID.fromString(ingredientLogIdString));
+                    // get the ingredient matching the ingredient ID we got from the UI choice
+                    Ingredient ingredient =
+                            mIngredientViewModel.viewModelGetIngredientFromId(UUID.fromString(ingredientIdString));
+                    // save our updated ingredient log with the new ingredient ID and name
                     //TODO debug this it isn't saving
-                    symptomLog.setSymptomLogSymptomId(symptom.getSymptomId());
-                    mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomLog);
+                    ingredientLog.setIngredientLogIngredientId(ingredient.getIngredientId());
+                    mIngredientLogViewModel.viewModelUpdateIngredientLog(ingredientLog);
 
-                    // done with setting the symptom go back to editing this symptom log
+                    // done with setting the ingredient go back to editing this ingredient log
                     Util.goToEditActivityActionTypeId(null, thisActivity,
                             Util.ARGUMENT_ACTION_EDIT,
-                            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, symptomLogIdString);
+                            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, ingredientLogIdString);
 
                 } else {
-                    // if not empty, put the array into the intent to go add symptoms
+                    // if not empty, put the array into the intent to go add ingredients
                     mBundle =
-                            Util.setBundleNewSymptomLogIntensity(mSymptomsSelectedIdsArrayListStrings);
-                    // go to set the intensity of the symptom
-                    Log.d(TAG, "symptoms array " + mSymptomsSelectedIdsArrayListStrings);
-                    Util.goToAddSymptomLogWithBundle(thisActivity, mBundle);
+                            Util.setBundleNewIngredientLogAmount(mIngredientsSelectedIdsArrayListStrings);
+                    // go to set the intensity of the ingredient
+                    Log.d(TAG, "ingredients array " + mIngredientsSelectedIdsArrayListStrings);
+                    Util.goToAddIngredientLogWithBundle(thisActivity, mBundle);
 
                 }
 

@@ -6,15 +6,11 @@ import android.database.Cursor;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
-import com.dietdecoder.dietdecoder.database.symptom.Symptom;
-import com.dietdecoder.dietdecoder.database.symptom.SymptomDao;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLogDao;
-import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -74,6 +70,14 @@ class SymptomLogRepository {
 
 
 
+  // duplicate log that from a log and return our new log
+  public SymptomLog repositoryDuplicateSymptomLog(SymptomLog oldSymptomLog) {
+    SymptomLog newSymptomLog = new SymptomLog(oldSymptomLog.getSymptomLogSymptomId());
+    repositoryInsertSymptomLog(newSymptomLog);
+    return newSymptomLog;
+  }
+
+
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryInsertSymptomLog(SymptomLog symptomLog) {
@@ -102,22 +106,33 @@ class SymptomLogRepository {
 
   } // end update
 
+
+
   // get given number of symptom logs matching the given symptom's name
-  List<SymptomLog> repositoryGetSomeSymptomLogsByName(String symptomName, Integer howManyLogs){
+  List<SymptomLog> repositoryGetSomeSymptomLog(Integer howManyLogs){
     List<SymptomLog> someSymptomLogs = null;
-    if ( !Objects.isNull(mSymptomLogDao.daoGetAllSymptomLogByName(symptomName)) ) {
-      someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLogByName(symptomName, howManyLogs);
+
+    someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLog(howManyLogs);
+
+    return someSymptomLogs;
+  }//end get some logs
+
+  // get given number of symptom logs matching the given symptom's name
+  List<SymptomLog> repositoryGetSomeSymptomLogsFromId(UUID symptomId, Integer howManyLogs){
+    List<SymptomLog> someSymptomLogs = null;
+    if ( !Objects.isNull(mSymptomLogDao.daoGetAllSymptomLogFromSymptomId(symptomId)) ) {
+      someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLogFromSymptomId(symptomId, howManyLogs);
     }
     return someSymptomLogs;
   }//end get some logs
 
-  Duration repositoryGetAverageSymptomDuration(String symptomName){
+  Duration repositoryGetAverageSymptomDuration(UUID symptomId){
     // our eventual answer for how long the average duration of a recent list of symptom logs is
     Duration averageDuration = Duration.ZERO;
     //values to calculate as we go
     Instant instantBegan, instantChanged;
     //our list of logs if there is at least one
-    List<SymptomLog> someSymptomLogs = repositoryGetSomeSymptomLogsByName(symptomName, 10);
+    List<SymptomLog> someSymptomLogs = repositoryGetSomeSymptomLogsFromId(symptomId, 10);
 
     // for each symptom log in our list
     // calculate the duration from when it began to when it changed
@@ -134,10 +149,10 @@ class SymptomLogRepository {
   } // end average duration method
 
   // get most recent symptom log with symptom
-  SymptomLog repositoryGetMostRecentSymptomLogWithSymptom(String symptomName){
+  SymptomLog repositoryGetMostRecentSymptomLogWithSymptom(UUID symptomId){
 
     SymptomLog symptomLogWithSameSymptom =
-          mSymptomLogDao.daoGetSomeSymptomLogByName(symptomName, 1).get(0);
+          mSymptomLogDao.daoGetSomeSymptomLogFromSymptomId(symptomId, 1).get(0);
     return symptomLogWithSameSymptom;
   }
 

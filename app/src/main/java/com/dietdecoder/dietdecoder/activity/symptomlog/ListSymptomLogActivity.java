@@ -85,8 +85,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
 
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
       mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
-      Log.d(TAG,
-              "symptom in list symptom " + mSymptoms.get(0).toString());
+
       mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff()
               //, mSymptoms
               //, mSymptomViewModel, mSymptomLogViewModel
@@ -95,6 +94,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
+      Log.d(TAG, mSymptomLogViewModel.viewModelGetSomeSymptomLog(1).toString());
       mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
               new Observer<List<SymptomLog>>() {
                 @Override
@@ -121,7 +121,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
       case R.id.add_button_list_symptom_log:
         // go to the list of symptoms the user experiences to allow user to select which ones
         // they're having now and then make those symptom logs
-        Util.goToChooseSymptomLogActivity(thisActivity);
+        Util.goToChooseSymptomActivity(thisContext, thisActivity);
         break;
         // TODO add edit and delete buttons in here
       default:
@@ -138,7 +138,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
       // TODO go to preferences when those have been made
 
     } else if (item.getItemId() == R.id.action_go_home) {
-      Util.goToMainActivity(thisActivity);
+      Util.goToMainActivity(null, thisActivity);
     }
 
     return false;

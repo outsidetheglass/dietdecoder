@@ -43,6 +43,10 @@ public class SymptomLogViewModel extends AndroidViewModel {
     return mViewModelAllSymptomLogs;
   }
 
+  public List<SymptomLog> viewModelGetSomeSymptomLog(Integer numberOfSymptomLogsToGet){
+
+    return mRepository.repositoryGetSomeSymptomLog(numberOfSymptomLogsToGet);
+  }
   // TODO get experiment to cross reference daos working
 //  public Symptom viewModelGetSymptomFromSymptomLogId(UUID uuid){
 //    return mRepository.repositoryGetSymptomFromSymptomLogId(uuid);
@@ -54,6 +58,10 @@ public class SymptomLogViewModel extends AndroidViewModel {
 //    return mViewModelAllSymptomLogsOnDate;
 //  }
 
+
+  public SymptomLog viewModelDuplicateSymptomLog(SymptomLog symptomLog) {
+    return mRepository.repositoryDuplicateSymptomLog(symptomLog);
+  }
 
   // get single log using the instant
   public List<SymptomLog> viewModelGetSymptomLogFromSymptomId(UUID id) {
@@ -92,8 +100,8 @@ public class SymptomLogViewModel extends AndroidViewModel {
   }
 
   // get average duration of symptom from most recent symptoms of same type
-  public Duration viewModelGetAverageSymptomDuration(String symptomName){
-    Duration averageDuration = mRepository.repositoryGetAverageSymptomDuration(symptomName);
+  public Duration viewModelGetAverageSymptomDuration(UUID symptomId){
+    Duration averageDuration = mRepository.repositoryGetAverageSymptomDuration(symptomId);
 
     if ( averageDuration.isZero() ) {
       // TODO get default duration from symptom itself
@@ -103,9 +111,9 @@ public class SymptomLogViewModel extends AndroidViewModel {
   }
 
   // get most recent symptom log of symptom
-  public SymptomLog viewModelGetMostRecentSymptomLogWithSymptom(String symptomName){
+  public SymptomLog viewModelGetMostRecentSymptomLogWithSymptom(UUID symptomId){
     SymptomLog symptomLogWithSameSymptom =
-            mRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomName);
+            mRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomId);
     return symptomLogWithSameSymptom;
   }
 

@@ -40,19 +40,23 @@ public interface SymptomLogDao {
   @Query("SELECT * FROM symptom_log_table WHERE :matchThisUuid = symptomLogId")
   SymptomLog daoGetSymptomLogFromLogId(UUID matchThisUuid);
 
-  @Query("SELECT * FROM symptom_log_table WHERE :matchThisId = symptomLogSymptomId")
+  // get all symptom logs with a given symptom
+  @Query("SELECT * FROM symptom_log_table WHERE :matchThisId = symptomLogSymptomId  ORDER BY " +
+                    "instantBegan DESC")
   List<SymptomLog> daoGetAllSymptomLogFromSymptomId(UUID matchThisId);
 
-  // get a specified number of the last symptoms by symptom name
-  @Query("SELECT * FROM symptom_log_table WHERE :symptomNameToGet = symptomLogSymptomName ORDER BY " +
+  // get a specified number of the last symptoms by symptom id
+  @Query("SELECT * FROM symptom_log_table WHERE :symptomIdToGet = symptomLogSymptomId ORDER BY " +
           "instantBegan DESC " +
           "LIMIT :numberToGet")
-  List<SymptomLog> daoGetSomeSymptomLogByName(String symptomNameToGet, Integer numberToGet);
+  List<SymptomLog> daoGetSomeSymptomLogFromSymptomId(UUID symptomIdToGet, Integer numberToGet);
 
-  // get all symptom logs with a given symptom
-  @Query("SELECT * FROM symptom_log_table WHERE :symptomNameToGet = symptomLogSymptomName ORDER BY " +
-          "instantBegan DESC")
-  List<SymptomLog> daoGetAllSymptomLogByName(String symptomNameToGet);
+
+  @Query("SELECT * FROM symptom_log_table ORDER BY " +
+          "instantBegan DESC " +
+          "LIMIT :numberToGet")
+  List<SymptomLog> daoGetSomeSymptomLog(Integer numberToGet);
+
 
 
 }

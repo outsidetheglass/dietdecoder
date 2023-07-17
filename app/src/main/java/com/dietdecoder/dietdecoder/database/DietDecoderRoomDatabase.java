@@ -12,8 +12,6 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLogDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
@@ -30,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {FoodLog.class, Ingredient.class, IngredientLog.class, Recipe.class,
+@Database(entities = {Ingredient.class, IngredientLog.class, Recipe.class,
         Symptom.class,
         SymptomLog.class},
         version = 1, exportSchema = false)
@@ -40,7 +38,6 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
   private static final String TAG = "TAG: " + DietDecoderRoomDatabase.class.getSimpleName();
 
 
-  public abstract FoodLogDao foodLogDao();
   public abstract IngredientDao ingredientDao();
   public abstract IngredientLogDao ingredientLogDao();
   public abstract RecipeDao recipeDao();
@@ -67,7 +64,6 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
           // Populate the database in the background.
           // If you want to start with more words, just add them.
           Ingredient ingredient = ingredientDaoWriteExecute();
-          foodLogDaoWriteExecute(ingredient);
           recipeDaoWriteExecute(ingredient.getIngredientId());
           ingredientLogDaoWriteExecute(ingredient.getIngredientId());
 
@@ -135,15 +131,6 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
 
   }
 
-  static final void foodLogDaoWriteExecute(Ingredient ingredient){
-
-    //dao.deleteAll();
-    FoodLogDao foodLogDao = INSTANCE.foodLogDao();
-    //dao.deleteAll();
-
-    FoodLog foodLog = new FoodLog(ingredient.getIngredientId(), ingredient.getIngredientName());
-    foodLogDao.daoFoodLogInsert(foodLog);
-  }
   static final void ingredientLogDaoWriteExecute(UUID ingredientId){
 
     //dao.deleteAll();
@@ -704,7 +691,7 @@ static final void symptomLogDaoWriteExecute(UUID symptomLogSymptomId, String sym
   SymptomLogDao symptomLogDao = INSTANCE.symptomLogDao();
   //dao.deleteAll();
 
-  SymptomLog symptomLog = new SymptomLog(symptomLogSymptomId, symptomLogSymptomName);
+  SymptomLog symptomLog = new SymptomLog(symptomLogSymptomId);
   symptomLogDao.daoSymptomLogInsert(symptomLog);
 }
 } //end LogRoomDatabase

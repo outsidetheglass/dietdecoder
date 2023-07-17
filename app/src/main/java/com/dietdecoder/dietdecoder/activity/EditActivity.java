@@ -1,7 +1,6 @@
 package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.symptomlog.EditSymptomLogFragment;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -60,10 +57,10 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 // if coming from duplicate, copy it and put the new ID in the bundle
                 if ( isActionDuplicate ) {
                     // we want to duplicate so do that given our existing ID
-                    String duplicatedFoodLogIdString =
-                            duplicateFoodLog(mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY));
+                    //String duplicatedFoodLogIdString =
+                      //      duplicateFoodLog(mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY));
                     // then put our new duplicated food log in
-                    mBundle.putString(Util.ARGUMENT_FOOD_LOG_ID, duplicatedFoodLogIdString);
+                    //mBundle.putString(Util.ARGUMENT_FOOD_LOG_ID, duplicatedFoodLogIdString);
 
                     // start the next fragment
 //                    Util.startNextFragment(getSupportFragmentManager().beginTransaction(),
@@ -97,17 +94,14 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 //            Fragment mNextFragment = whichFragmentNext(mWhichFragmentGoTo);
 
             if ( mNextFragment != null ) {
-                // set the data to pass along info
-                // given from the previous fragment
-                // or the duplicated ID if we did that
-                mNextFragment.setArguments(mBundle);
 
                 // start the next fragment
-                Util.startNextFragment(getSupportFragmentManager().beginTransaction(),
-                        mFragmentContainerView, mNextFragment);
+                Util.startNextFragmentBundle(thisActivity,
+                        getSupportFragmentManager().beginTransaction(),
+                        mFragmentContainerView, mNextFragment, mBundle);
             } else {
                 // it was null so go back to the main activity
-                Util.goToMainActivity(thisActivity);
+                Util.goToMainActivity(null, thisActivity);
             }
         }
     }
@@ -120,7 +114,7 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             // do something
         } else if (item.getItemId() == R.id.action_go_home) {
             // do something
-            startActivity(new Intent(thisActivity, MainActivity.class));
+            Util.goToMainActivity(null, thisActivity);
         } else {
             // do something
         }
@@ -159,38 +153,38 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 //    }
 
 
-    //TODO move this to the DAO and do it with SQLite the right way
-    // duplicate a food log given an id string and return the newly created duplicated food log's id
-    private String duplicateFoodLog(String foodLogIdString){
-        FoodLogViewModel mFoodLogViewModel =
-                new ViewModelProvider(this).get(FoodLogViewModel.class);
-
-        // turn it into its UUID
-        UUID mFoodLogId = UUID.fromString(foodLogIdString);
-        // use that to get the food log itself
-        FoodLog foodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mFoodLogId);
-
-
-        // get the info to duplicate
-        UUID duplicatedFoodLogId = foodLog.getIngredientId();
-        String duplicatedFoodLogName = foodLog.getIngredientName();
-
-        // make the new food log from that name, it will set the date consumed to be now
-        FoodLog duplicatedFoodLog = new FoodLog(duplicatedFoodLogId, duplicatedFoodLogName);
-        mFoodLogViewModel.viewModelInsertFoodLog(duplicatedFoodLog);
-
-        // get the other info to copy over from the original food log
-        Instant duplicatedFoodLogAcquired = foodLog.getInstantAcquired();
-        Instant duplicatedFoodLogCooked = foodLog.getInstantCooked();
-//        String duplicatedFoodLogBrand = foodLog.getBrand();
-        // now update it with those values
-//        duplicatedFoodLog.setBrand(duplicatedFoodLogBrand);
-        duplicatedFoodLog.setInstantAcquired(duplicatedFoodLogAcquired);
-        duplicatedFoodLog.setInstantCooked(duplicatedFoodLogCooked);
-        mFoodLogViewModel.viewModelUpdateFoodLog(duplicatedFoodLog);
-
-        return duplicatedFoodLog.getFoodLogId().toString();
-    }
+//    //TODO move this to the DAO and do it with SQLite the right way
+//    // duplicate a food log given an id string and return the newly created duplicated food log's id
+//    private String duplicateFoodLog(String foodLogIdString){
+//        FoodLogViewModel mFoodLogViewModel =
+//                new ViewModelProvider(this).get(FoodLogViewModel.class);
+//
+//        // turn it into its UUID
+//        UUID mFoodLogId = UUID.fromString(foodLogIdString);
+//        // use that to get the food log itself
+//        FoodLog foodLog = mFoodLogViewModel.viewModelGetFoodLogFromId(mFoodLogId);
+//
+//
+//        // get the info to duplicate
+//        UUID duplicatedFoodLogId = foodLog.getIngredientId();
+//        String duplicatedFoodLogName = foodLog.getIngredientName();
+//
+//        // make the new food log from that name, it will set the date consumed to be now
+//        FoodLog duplicatedFoodLog = new FoodLog(duplicatedFoodLogId, duplicatedFoodLogName);
+//        mFoodLogViewModel.viewModelInsertFoodLog(duplicatedFoodLog);
+//
+//        // get the other info to copy over from the original food log
+//        Instant duplicatedFoodLogAcquired = foodLog.getInstantAcquired();
+//        Instant duplicatedFoodLogCooked = foodLog.getInstantCooked();
+////        String duplicatedFoodLogBrand = foodLog.getBrand();
+//        // now update it with those values
+////        duplicatedFoodLog.setBrand(duplicatedFoodLogBrand);
+//        duplicatedFoodLog.setInstantAcquired(duplicatedFoodLogAcquired);
+//        duplicatedFoodLog.setInstantCooked(duplicatedFoodLogCooked);
+//        mFoodLogViewModel.viewModelUpdateFoodLog(duplicatedFoodLog);
+//
+//        return duplicatedFoodLog.getFoodLogId().toString();
+//    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

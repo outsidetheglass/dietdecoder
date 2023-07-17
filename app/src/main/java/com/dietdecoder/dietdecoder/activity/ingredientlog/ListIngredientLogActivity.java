@@ -107,9 +107,8 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
       case R.id.add_button_list_ingredient_log:
         // go to the list of ingredients the user experiences to allow user to select which ones
         // they're having now and then make those ingredient logs
-        //Util.goToChooseIngredientLogActivity(thisActivity);
+        Util.goToChooseIngredientActivity(null, thisActivity);
         break;
-        // TODO add edit and delete buttons in here
       default:
         break;
     }//end switch case
@@ -124,7 +123,7 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
       // TODO go to preferences when those have been made
 
     } else if (item.getItemId() == R.id.action_go_home) {
-      Util.goToMainActivity(thisActivity);
+      Util.goToMainActivity(null, thisActivity);
     }
 
     return false;

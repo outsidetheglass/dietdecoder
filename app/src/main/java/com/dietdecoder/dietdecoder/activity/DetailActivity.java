@@ -19,15 +19,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.database.foodlog.FoodLog;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogListAdapter;
-import com.dietdecoder.dietdecoder.ui.foodlog.FoodLogViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
+import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogListAdapter;
+import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeListAdapter;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
@@ -64,13 +64,15 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
   SymptomViewModel mSymptomViewModel;
   SymptomListAdapter mSymptomListAdapter;
 
-  FoodLog mFoodLog;
-  FoodLogViewModel mFoodLogViewModel;
-  FoodLogListAdapter mFoodLogListAdapter;
 
   Ingredient mIngredient;
   IngredientViewModel mIngredientViewModel;
   IngredientListAdapter mIngredientListAdapter;
+
+  IngredientLog mIngredientLog;
+  IngredientLogViewModel mIngredientLogViewModel;
+  IngredientLogListAdapter mIngredientLogListAdapter;
+
 
   Recipe mRecipe;
   RecipeViewModel mRecipeViewModel;
@@ -95,21 +97,21 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
     if ( thisActivity.getIntent().getExtras() == null) {
       // go back if it was null
       Toast.makeText(this, "Can't view an invalid log", Toast.LENGTH_SHORT).show();
-      Util.goToMainActivity(thisActivity);
+      Util.goToMainActivity(null, thisActivity);
     } else {
       // intent worked, we have something to list details of
       mBundle = thisActivity.getIntent().getExtras();
 
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
-      mFoodLogViewModel = new ViewModelProvider(this).get(FoodLogViewModel.class);
+      mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
       mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
       mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
 
       // get values from the intent for symptom we're displaying details for
       // TODO remove duplication, it's checking twice for what we're modifying
-      mIdString = Util.setIdArrayFromBundle(mBundle).get(0);
+      mIdString = Util.setLogIdArrayFromBundle(mBundle).get(0);
       mDetailString = setDetailTypeString();
 
       mDetailView.setText(mDetailString);
@@ -145,7 +147,7 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
       Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
 
     } else if (item.getItemId() == R.id.action_go_home) {
-      Util.goToMainActivity(thisActivity);
+      Util.goToMainActivity(null, thisActivity);
     }
 
     return false;
@@ -164,7 +166,7 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
       detailString = mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(id).toString();
       mTypeString = Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
     } else if (mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
-      detailString = mFoodLogViewModel.viewModelGetFoodLogFromId(id).toString();
+      detailString = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(id).toString();
       mTypeString = Util.ARGUMENT_FOOD_LOG_ID_ARRAY;
     } else if (mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
       detailString = mIngredientViewModel.viewModelGetIngredientFromId(id).toString();
@@ -192,20 +194,26 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
     } else if (mBundle.getString(
             Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
-      mFoodLogViewModel.viewModelDeleteFoodLog(mFoodLogViewModel.viewModelGetFoodLogFromId(id));
+      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(id));
 
     } else if (mBundle.getString(
             Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
       //TODO fix these
-//      mFoodLogViewModel.viewModelDeleteFoodLog(mFoodLogViewModel.viewModelGetFoodLogFromId(id));
+//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
+//      .viewModelGetIngredientLogFromId
+//      (id));
 
     } else if (mBundle.getString(
             Util.ARGUMENT_RECIPE_ID_ARRAY) != null){
-//      mFoodLogViewModel.viewModelDeleteFoodLog(mFoodLogViewModel.viewModelGetFoodLogFromId(id));
+//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
+//      .viewModelGetIngredientLogFromId
+//      (id));
 
     } else if (mBundle.getString(
             Util.ARGUMENT_SYMPTOM_ID_ARRAY) != null){
-//      mFoodLogViewModel.viewModelDeleteFoodLog(mFoodLogViewModel.viewModelGetFoodLogFromId(id));
+//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
+//      .viewModelGetIngredientLogFromId
+//      (id));
 
     }
 

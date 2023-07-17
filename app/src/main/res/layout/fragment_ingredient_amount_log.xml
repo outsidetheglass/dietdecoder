@@ -2,12 +2,12 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/constraintLayout_new_food_log"
+  android:id="@+id/constraintLayout_ingredient_amount_log"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <TextView
-      android:id="@+id/textview_title_new_food_log_name_fragment"
+      android:id="@+id/textview_title_ingredient_amount_log_name_fragment"
       android:text="@string/title_textview_new_log"
       android:layout_width="match_parent"
       android:layout_height="100dp"
@@ -23,55 +23,55 @@
 
 
   <TextView
-      android:id="@+id/textview_question_new_food_log_name"
-      android:text="@string/question_textview_new_food_log_name"
+      android:id="@+id/textview_question_ingredient_amount_log"
+      android:text="@string/question_textview_ingredient_amount_log"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="10dp"
+      android:layout_marginTop="@dimen/small_padding"
       android:textAlignment="center"
       android:textAppearance="@style/textview_main_content"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_title_new_food_log_name_fragment"/>
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_ingredient_amount_log_name_fragment"/>
 
-  <EditText
-      android:id="@+id/edittext_new_food_log_name_ingredient_name"
+  <TextView
+      android:id="@+id/subsubtitle_textview_ingredient_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/edittext"
-      android:layout_margin="@dimen/tiny_padding"
-      android:textAlignment="center"
-      android:hint="@string/edittext_new_log_ingredient_name"
-      android:layout_marginRight="@dimen/tiny_padding"
-      app:layout_constraintHorizontal_bias="0.498"
+      android:text="@string/ingredient_detail_name_textview"
+      android:padding="@dimen/small_padding"
+      android:textStyle="bold|italic"
+      android:textAppearance="@style/textview_main_content"
+      android:layout_marginLeft="@dimen/big_padding"
+      android:layout_marginTop="@dimen/bigger_padding"
+      app:layout_constraintHorizontal_bias="0.45"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_question_new_food_log_name"
+      app:layout_constraintTop_toBottomOf="@+id/textview_question_ingredient_amount_log"
       />
-<!--  TODO get ingredient search as type working
-android:imeOptions="actionSearch"-->
-<!--  android:inputType="text"-->
 
-<!--  <ListView-->
-<!--      android:id="@+id/list_view_new_food_log_name"-->
-<!--      android:layout_width="match_parent"-->
-<!--      android:layout_height="match_parent"-->
-<!--      app:layout_constraintHorizontal_bias="0.498"-->
-<!--      app:layout_constraintStart_toStartOf="parent"-->
-<!--      app:layout_constraintEnd_toEndOf="parent"-->
-<!--      app:layout_constraintTop_toBottomOf="@+id/edittext_new_food_log_name_ingredient_name"-->
-<!--      />-->
+    <NumberPicker
+        android:id="@+id/numberpicker_ingredient_amount"
+        android:layout_marginTop="@dimen/small_padding"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subsubtitle_textview_ingredient_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
 
   <Button
-      android:id="@+id/button_new_food_log_name_save"
+      android:id="@+id/button_ingredient_amount_log_save"
       android:text="@string/button_save"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/small_padding"
       android:textAppearance="@style/button_save"
-      android:layout_margin="@dimen/small_padding"
-      app:layout_constraintTop_toBottomOf="@+id/edittext_new_food_log_name_ingredient_name"
+      app:layout_constraintTop_toBottomOf="@+id/numberpicker_ingredient_amount"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"/>
 

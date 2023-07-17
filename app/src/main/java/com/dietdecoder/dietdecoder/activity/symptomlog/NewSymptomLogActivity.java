@@ -69,6 +69,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
             mSymptomsToAddArrayListIdStrings = new ArrayList<>();
             mSymptomLogsToAddArrayListIdStrings = new ArrayList<>();
 
+
             // give the intensity fragment which symptom we're setting
 
             // get the info about which symptom we're logging
@@ -81,7 +82,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
                 // clean the array string
                 mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
-                //Log.d(TAG, mSymptomIdsToAddString);
+
                 // go through the string and at the comma's add that ID to the array
                 for (String mSymptomIdString : mSymptomIdsToAddString.split(",")) {
                     //Log.d(TAG, mSymptomIdString);
@@ -91,7 +92,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                     UUID symptomId = UUID.fromString(mSymptomIdString);
                     String symptomName = mSymptomViewModel.viewModelGetSymptomFromId(symptomId).getSymptomName();
                     // make the symptom log
-                    SymptomLog symptomLog = new SymptomLog(symptomId, symptomName);
+                    SymptomLog symptomLog = new SymptomLog(symptomId);
                     mSymptomLogViewModel.viewModelInsertSymptomLog(symptomLog);
                     // put its ID in array to send to fragment
                     mSymptomLogsToAddArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
@@ -112,7 +113,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                         getResources().getString(R.string.wrong_place_lets_go_home);
                 Toast.makeText(getApplicationContext(), mWrongPlaceLetsGoHome,
                         Toast.LENGTH_SHORT).show();
-                Util.goToMainActivity(thisActivity);
+                Util.goToMainActivity(null, thisActivity);
             }
 
         }
@@ -160,7 +161,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
             // do something
         } else if (item.getItemId() == R.id.action_go_home) {
             // do something
-            Util.goToMainActivity(thisActivity);
+            Util.goToMainActivity(null, thisActivity);
         } else {
             // do something
         }
