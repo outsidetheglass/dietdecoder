@@ -53,8 +53,9 @@
 
   <string name="question_textview_ingredient_amount_log">How much of the ingredient was it?</string>
   <string name="question_textview_new_symptom_intensity_log">How intense is the symptom?</string>
+  <string name="question_textview_new_symptom_log_begin_time">When did the symptom start?</string>
   <string name="question_textview_new_ingredient_log_consumed_time">When did the ingredient get consumed/eaten/drank?</string>
-  <string name="question_textview_new_symptom_intensity_log_changed_time">That set when the symptom started. Now, when did the symptom end?</string>
+  <string name="question_textview_new_symptom_log_changed_time">That set when the symptom started. Now, when did the symptom end?</string>
   <string name="question_textview_new_ingredient_log_cooked_time">That set when the ingredient was consumed. Now, when did the ingredient get cooked/prepared/preserved?</string>
   <string name="question_textview_new_ingredient_log_acquired_time">That set when the ingredient was cooked. Now, when did the ingredient get acquired/harvested/bought?</string>
 

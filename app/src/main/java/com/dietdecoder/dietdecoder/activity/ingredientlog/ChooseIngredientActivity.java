@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +42,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements Toolb
 
     //TODO fix names
 //    int mFragmentContainerView = Util.fragmentContainerViewChooseIngredientLog;
-    Bundle mBundle;
+    Bundle mBundle, mBundleNext;
 
     String mTooManyTryAgainString, mSaveString, mEmptyTryAgainString;
     Button mButtonSaveName;
@@ -84,6 +83,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements Toolb
             } else {
                 mBundle = getIntent().getExtras();
             }
+            mBundleNext = mBundle;
 
             //save button
             mButtonSaveName = findViewById(R.id.button_choose_ingredient_save);
@@ -234,11 +234,11 @@ public class ChooseIngredientActivity extends AppCompatActivity implements Toolb
 
                 } else {
                     // if not empty, put the array into the intent to go add ingredients
-                    mBundle =
-                            Util.setBundleNewIngredientLogAmount(mIngredientsSelectedIdsArrayListStrings);
+                    mBundleNext =
+                            Util.setNewIngredientLogBundle(mIngredientsSelectedIdsArrayListStrings);
                     // go to set the intensity of the ingredient
-                    Log.d(TAG, "ingredients array " + mIngredientsSelectedIdsArrayListStrings);
-                    Util.goToAddIngredientLogWithBundle(thisActivity, mBundle);
+                    Util.goToAddIngredientLog(thisActivity,
+                            String.valueOf(mIngredientsSelectedIdsArrayListStrings), mBundleNext);
 
                 }
 

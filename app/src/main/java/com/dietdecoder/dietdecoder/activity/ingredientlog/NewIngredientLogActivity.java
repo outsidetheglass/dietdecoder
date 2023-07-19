@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.ingredientlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -13,14 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.ingredientlog.NewIngredientAmountFragment;
-import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 public class NewIngredientLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -32,7 +30,7 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
     private Context thisContext;
 
 //    int mFragmentContainerView = ;
-    Bundle mBundle;
+    Bundle mBundle, mBundleNext;
 
     String mWhichFragmentGoTo;
     ArrayList<String> mIngredientsToAddArrayListIdStrings, mIngredientLogsToAddArrayListIdStrings;
@@ -62,7 +60,7 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
         if (savedInstanceState == null) {
 
             // declare and set variables
-            mNextFragment = new NewIngredientAmountFragment();
+            mNextFragment = new IngredientAmountFragment();
             thisContext = thisActivity.getApplicationContext();
             mIngredientLogViewModel =
                     new ViewModelProvider(this).get(IngredientLogViewModel.class);
@@ -78,10 +76,11 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
             if ( getIntent().getExtras() != null ) {
                 // get the info
                 mBundle = getIntent().getExtras();
+                mBundleNext = mBundle;
 
                 // get the array of Id's of ingredients to add
                 String mIngredientIdsToAddString =
-                        mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
+                        mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY);
                 // clean the array string
                 mIngredientIdsToAddString = Util.cleanArrayString(mIngredientIdsToAddString);
                 //Log.d(TAG, mIngredientIdsToAddString);
@@ -92,8 +91,6 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
 
                     //get info on the ingredient to make the log based on defaults
                     UUID ingredientId = UUID.fromString(mIngredientIdString);
-                    String ingredientName =
-                            mIngredientViewModel.viewModelGetIngredientFromId(ingredientId).getIngredientName();
                     // make the ingredient log
                     IngredientLog ingredientLog = new IngredientLog(ingredientId);
                     mIngredientLogViewModel.viewModelInsertIngredientLog(ingredientLog);
@@ -102,12 +99,13 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
                 }
                 // putting set bundle in Util so it's easier for me to see what exactly is in
                 // each bundle
-                mBundle = Util.setBundleNewIngredientLog(mIngredientLogsToAddArrayListIdStrings);
+                mBundleNext =
+                        Util.setNewIngredientLogBundleFromArray(mIngredientLogsToAddArrayListIdStrings);
 
                 // then go to the specific fragments to change away from the defaults
                 Util.startNextFragmentBundle(thisActivity, getSupportFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewAddIngredientLog,
-                        mNextFragment, mBundle);
+                        mNextFragment, mBundleNext);
 
             } else {
                 // there's no information about which ingredient to add, so

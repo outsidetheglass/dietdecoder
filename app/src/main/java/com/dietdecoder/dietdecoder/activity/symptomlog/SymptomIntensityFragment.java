@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-public class NewSymptomIntensityFragment extends Fragment implements View.OnClickListener,
+public class SymptomIntensityFragment extends Fragment implements View.OnClickListener,
         NumberPicker.OnValueChangeListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -75,7 +75,7 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
     Bundle mBundle, mBundleNext;
 
 
-    public NewSymptomIntensityFragment() {
+    public SymptomIntensityFragment() {
         super(R.layout.fragment_new_symptom_intensity_log);
     }
 
@@ -101,7 +101,7 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                     getResources().getString(R.string.wrong_place_lets_go_home);
             Toast.makeText(thisContext, mWrongPlaceLetsGoHome,
                     Toast.LENGTH_SHORT).show();
-            Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdsToAddString, mBundle.getString(Util.ARGUMENT_ACTION));
+            Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdsToAddString);
         } else {
             // get the info
             mBundle = getArguments();
@@ -123,10 +123,10 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
             // default next place to go should be the next fragment
             mNextFragment = mDefaultNextFragment;
             // repeating this fragment
-            mRepeatThisFragment = new NewSymptomIntensityFragment();
+            mRepeatThisFragment = new SymptomIntensityFragment();
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
-            mBundleNext.putString(Util.ARGUMENT_FRAGMENT_FROM,
+            mBundleNext.putString(Util.ARGUMENT_FROM,
                     Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
             mWhatToChangeNext = Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN;
 
@@ -143,7 +143,7 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                 mSymptomLogIdsToAddStringArrayOriginal =
                         mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL);
                 mHowManyIdsToAdd =
-                        Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY));
+                        Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
                 mCurrentIdIndex =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
             }
@@ -253,6 +253,9 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                     // update the log
                     mSymptomLogViewModel.viewModelUpdateSymptomLog(mCurrentSymptomLog);
 
+                // will set done or unfinished if action means we're from edit
+                    mBundleNext = Util.setDoneIfFromEdit(mBundle);
+
 
                 // if that was the last one to add
                     if ( mCurrentIdIndex == 0) {
@@ -275,16 +278,21 @@ public class NewSymptomIntensityFragment extends Fragment implements View.OnClic
                             Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
                         }
 
-                        Log.d(TAG, mDefaultNextFragment.toString()
-                                );
-                        Log.d(TAG, mBundleNext.toString()
-                                );
-                        Log.d(TAG,
-                                mWhatToChangeNext.toString());
-                        // go to date fragment to set when the symptom(s) happened
-                        Util.startNextFragmentBundleChange(thisActivity, getParentFragmentManager().beginTransaction(),
-                                Util.fragmentContainerViewAddSymptomLog,
-                                mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
+                        Log.d(TAG, mBundle.toString());
+
+                        // TODO move to util
+                        if ( TextUtils.equals(
+                                mBundle.getString(Util.ARGUMENT_ACTION), Util.ARGUMENT_ACTION_EDIT)
+                                && TextUtils.equals(Util.ARGUMENT_DONE_OR_UNFINISHED, Util.ARGUMENT_DONE)
+                        ) {
+                            Util.goToEditSymptomLogActivity(thisContext, null, mCurrentSymptomLogIdString);
+                        } else {
+                            // go to date fragment to set when the symptom(s) happened
+                            Util.startNextFragmentBundleChange(thisActivity,
+                                    getParentFragmentManager().beginTransaction(),
+                                    Util.fragmentContainerViewAddSymptomLog,
+                                    mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
+                        }
                     } else {
                         // not the last in the array, repeat this fragment
 

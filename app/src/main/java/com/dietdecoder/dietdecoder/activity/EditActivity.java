@@ -2,6 +2,7 @@ package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -53,7 +54,7 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                     Util.ARGUMENT_ACTION_DUPLICATE);
 
             // if it's a food log and we want to duplicate it
-            if ( mBundle.containsKey(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) ) {
+            if ( mBundle.containsKey(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY) ) {
                 // if coming from duplicate, copy it and put the new ID in the bundle
                 if ( isActionDuplicate ) {
                     // we want to duplicate so do that given our existing ID
@@ -83,6 +84,8 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
             } else  if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
                 // we're here with symptom log
+
+                Log.d(TAG, mBundle.toString());
                 mNextFragment = new EditSymptomLogFragment();
                 // TODO add a duplicate in here same as for food log, or figure out how to do it
                 //  with the dao the right way
@@ -95,6 +98,7 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
             if ( mNextFragment != null ) {
 
+                Log.d(TAG, mBundle.toString());
                 // start the next fragment
                 Util.startNextFragmentBundle(thisActivity,
                         getSupportFragmentManager().beginTransaction(),

@@ -144,20 +144,22 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             // save button was pressed
             case R.id.button_edit_symptom_log_done:
                 // done with editing
-                // TODO pass in our id to make it briefly highlight in list log to show which
-                //  changed
-                Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdString, mBundle.getString(Util.ARGUMENT_ACTION));
+                Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdString);
                 break;
             case R.id.imagebutton_symptom_log_began_option:
                 // when symptom began option was clicked, so tell the user we'll go change that
                 // date time
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
+
                 // set our relevant data to use in new location
-                // our action is edit which means come back to this fragment when done setting it
-                Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit,  new LogSpecificDateTimeFragment(), Util.ARGUMENT_ACTION_EDIT,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN,
-                        Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+                mBundleNext =
+                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                        Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+
+                // begin is a time, so go to the date time fragment to set it
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new LogSpecificDateTimeFragment(), mBundleNext);
 
                 break;
             case R.id.imagebutton_symptom_log_changed_option:
@@ -187,7 +189,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
 
                 Toast.makeText(getContext(), mChangeIntensity, Toast.LENGTH_SHORT).show();
                 Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit,  new NewSymptomIntensityFragment(), Util.ARGUMENT_ACTION_EDIT,
+                        Util.fragmentContainerViewEdit,  new SymptomIntensityFragment(), Util.ARGUMENT_ACTION_EDIT,
                         Util.ARGUMENT_CHANGE_SYMPTOM_INTENSITY,
                         Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
 

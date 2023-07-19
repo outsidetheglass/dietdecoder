@@ -2,11 +2,9 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
@@ -45,7 +42,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
     //TODO fix names
     int mFragmentContainerView = Util.fragmentContainerViewChooseSymptomLog;
-    Bundle mBundle;
+    Bundle mBundle, mBundleNext;
 
     String mTooManyTryAgainString, mSaveString, mEmptyTryAgainString;
     Button mButtonSaveName;
@@ -86,6 +83,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
             } else {
                 mBundle = getIntent().getExtras();
             }
+            mBundleNext = mBundle;
 
             //save button
             mButtonSaveName = findViewById(R.id.button_choose_symptom_save);
@@ -157,6 +155,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                 // get int
 //
                 mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
+                String currentSymptomSelectedIdString = null;
                 for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
 
                     final RecyclerView.ViewHolder holder =
@@ -176,7 +175,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                     if (Objects.equals(selectInt, textViewColorInt) ){
                         // get the ID of the symptom that has the selected color text
                         int position = holder.getBindingAdapterPosition();
-                        String currentSymptomSelectedIdString =
+                        currentSymptomSelectedIdString =
                                 mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
                                         .getSymptomId().toString();
                         // add that string ID to our array of selected symptoms
@@ -188,23 +187,31 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                 // after done with the for loop,
                 // all the symptoms to add have been put into the array
                 // check if we're here to edit a single log and therefore need only one selected
-                Boolean needsOnlyOneLog = Boolean.FALSE;
-                if ( mBundle.containsKey(Util.ARGUMENT_ACTION) ){
-                    // if the action to be taken is edit,
-                    // then we need to ensure we're only changing one
-                    if (TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION),
-                            Util.ARGUMENT_ACTION_EDIT )){
-                        needsOnlyOneLog = Boolean.TRUE;
-                    }
-                }
+                Boolean isFromEdit = TextUtils.equals( mBundle.getString(Util.ARGUMENT_ACTION),
+                        Util.ARGUMENT_ACTION_EDIT );
+                Boolean needsOnlyOneLog = isFromEdit;
+
                 Integer howManySelected = mSymptomsSelectedIdsArrayListStrings.size();
 
                 // so check how many have been selected and put in the array
                 // check if symptoms to add array is empty
-                if ( mSymptomsSelectedIdsArrayListStrings.isEmpty() ) {
-                    // if empty, alert user none were selected and don't do anything else
-                    Toast.makeText(thisContext, mEmptyTryAgainString,
-                            Toast.LENGTH_SHORT).show();
+                Boolean isSymptomSelectedEmpty = mSymptomsSelectedIdsArrayListStrings.isEmpty();
+
+                if ( isSymptomSelectedEmpty ) {
+                    // if it's empty and we're from edit, they changed their mind, just go back
+                    if ( isFromEdit ){
+                        Util.goToEditSymptomLogActivity(null, thisActivity,
+                                mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
+                    } else {
+                        // if empty and not from edit, we can't make a new log without them making a
+                        // choice, so alert user none
+                        // were selected and don't
+                        // do anything else
+                        // TODO change this to going back or make a go back button
+                        // TODO also add somewhere to tell them to click the empty circle to select one
+                        Toast.makeText(thisContext, mEmptyTryAgainString,
+                                Toast.LENGTH_SHORT).show();
+                    }
                 } else if (  howManySelected > 1 && needsOnlyOneLog ) {
                     // the user selected more than one symptom, but is here to only change one log
                     // tell them to try again and select only one
@@ -212,20 +219,23 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                             Toast.LENGTH_SHORT).show();
                 } else if (  howManySelected == 1 && needsOnlyOneLog ) {
                     // the user selected only one symptom, and is here to only change one log
+                    // which means success so we can go back to edit after saving it
                     Toast.makeText(thisContext, mSaveString,
                             Toast.LENGTH_SHORT).show();
-                    // which means success so we can go back to edit after saving it
+
                     String symptomLogIdString =
                             mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
-                    String symptomIdString = mSymptomsSelectedIdsArrayListStrings.get(0);
+                    UUID symptomLogId = UUID.fromString(symptomLogIdString);
+
+                    // get our symptom log based on its own id we have from edit activity bundle
                     SymptomLog symptomLog =
-                            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(symptomLogIdString));
-                    // get the symptom matching the symptom ID we got from the UI choice
-                    Symptom symptom =
-                            mSymptomViewModel.viewModelGetSymptomFromId(UUID.fromString(symptomIdString));
-                    // save our updated symptom log with the new symptom ID and name
+                            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(symptomLogId);
+
+                    // get our UUID directly from the string set in the for loop
+                    UUID symptomId = UUID.fromString(currentSymptomSelectedIdString);
+                    // save our updated symptom log with the new symptom ID
+                    symptomLog.setSymptomLogSymptomId(symptomId);
                     //TODO debug this it isn't saving
-                    symptomLog.setSymptomLogSymptomId(symptom.getSymptomId());
                     mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomLog);
 
                     // done with setting the symptom go back to editing this symptom log
@@ -235,12 +245,12 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                 } else {
                     // if not empty, put the array into the intent to go add symptoms
-                    mBundle =
-                            Util.setBundleNewSymptomLogIntensity(mSymptomsSelectedIdsArrayListStrings);
-                    // go to set the intensity of the symptom
-                    Log.d(TAG, "symptoms array " + mSymptomsSelectedIdsArrayListStrings);
-                    Util.goToAddSymptomLogWithBundle(thisActivity, mBundle);
+                    mBundleNext =
+                            Util.setNewSymptomLogBundle(Util.ARGUMENT_SYMPTOM_ID_ARRAY,
+                                    mSymptomsSelectedIdsArrayListStrings);
 
+                    // go to set the intensity of the symptom
+                    Util.goToAddSymptomLogActivity(null, thisActivity, mBundleNext);
                 }
 
                 break;

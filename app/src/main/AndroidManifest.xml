@@ -44,6 +44,10 @@
 
       <activity        android:name=".activity.ingredientlog.ListIngredientLogActivity"
           android:exported="false" />
+      <activity android:name=".activity.ingredientlog.ChooseIngredientActivity"
+          android:exported="false" />
+      <activity android:name=".activity.ingredientlog.NewIngredientLogActivity"
+          android:exported="false" />
       <activity        android:name=".activity.DetailActivity"
         android:exported="false" />
       <activity        android:name=".activity.EditActivity"

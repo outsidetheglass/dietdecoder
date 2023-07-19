@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         break;
 
       case R.id.button_symptom_log:
-        Util.goToListSymptomLogActivity(null, thisActivity, null, null);
+        Util.goToListSymptomLogActivity(null, thisActivity, null);
         break;
 
       default:

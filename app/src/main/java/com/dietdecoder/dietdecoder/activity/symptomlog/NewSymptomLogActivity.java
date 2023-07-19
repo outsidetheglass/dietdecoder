@@ -30,7 +30,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     private Context thisContext;
 
     int mFragmentContainerView = Util.fragmentContainerViewAddSymptomLog;
-    Bundle mBundle;
+    Bundle mBundle, mBundleNext;
 
     String mWhichFragmentGoTo;
     ArrayList<String> mSymptomsToAddArrayListIdStrings, mSymptomLogsToAddArrayListIdStrings;
@@ -60,7 +60,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
         if (savedInstanceState == null) {
 
             // declare and set variables
-            mNextFragment = new NewSymptomIntensityFragment();
+            mNextFragment = new SymptomIntensityFragment();
             thisContext = thisActivity.getApplicationContext();
             mSymptomLogViewModel =
                     new ViewModelProvider(this).get(SymptomLogViewModel.class);
@@ -77,6 +77,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
             if ( getIntent().getExtras() != null ) {
                 // get the info
                 mBundle = getIntent().getExtras();
+                mBundleNext = mBundle;
 
                 // get the array of Id's of symptoms to add
                 String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
@@ -90,7 +91,6 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
                     //get info on the symptom to make the log based on defaults
                     UUID symptomId = UUID.fromString(mSymptomIdString);
-                    String symptomName = mSymptomViewModel.viewModelGetSymptomFromId(symptomId).getSymptomName();
                     // make the symptom log
                     SymptomLog symptomLog = new SymptomLog(symptomId);
                     mSymptomLogViewModel.viewModelInsertSymptomLog(symptomLog);
@@ -99,11 +99,14 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 }
                 // putting set bundle in Util so it's easier for me to see what exactly is in
                 // each bundle
-                mBundle = Util.setBundleNewSymptomLog(mSymptomLogsToAddArrayListIdStrings);
-                mNextFragment.setArguments(mBundle);
+                mBundleNext = Util.setNewSymptomLogBundle(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
+                        mSymptomLogsToAddArrayListIdStrings);
+
                 // then go to the specific fragments to change away from the defaults
-                Util.startNextFragment(getSupportFragmentManager().beginTransaction(), mFragmentContainerView,
-                        mNextFragment);
+                Util.startNextFragmentBundle(thisActivity,
+                        getSupportFragmentManager().beginTransaction(),
+                        mFragmentContainerView,
+                        mNextFragment, mBundleNext);
 
             } else {
                 // there's no information about which symptom to add, so
@@ -180,7 +183,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY)) {
             // we know the day but not the time
             // ask that before we can move on
-            mNextFragment = new NewSymptomIntensityFragment();
+            mNextFragment = new SymptomIntensityFragment();
 
         }
         return mNextFragment;

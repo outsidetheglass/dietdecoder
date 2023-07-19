@@ -1,7 +1,6 @@
 package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,12 +17,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
-import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -38,16 +36,6 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
     int mFragmentContainer;
 
-    //TODO set this to be preferences a different time
-    Integer mEarlyHour = 8;
-    // personally 8am and 11pm work for me, but preferences should be set in case they want 1am
-    // or 9pm or something else
-    Integer mEarliestHour = mEarlyHour;
-    Integer mMiddayHour = 12;
-    Integer mAfternoonHour = 15;
-    Integer mEveningHour = 19;
-    Integer mMidnightHour = 23;
-    Integer mLatestHour = mMidnightHour;
     ArrayList<Integer> mHourChoicesArrayList;
 
 
@@ -55,7 +43,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             mButtonMidnight, mButtonSpecificTime, mButtonAllDay;
     TextView questionTextView;
 
-    Bundle mBundle, mButtonBundle;
+    Bundle mBundle, mButtonBundle, mBundleNext;
     Fragment mDefaultNextFragment, mNextFragment;
 
     Instant mInstantToChange, mInstantConsumed;
@@ -66,13 +54,16 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
     ArrayList<String> mSymptomLogIdsToAddStringArray, mIngredientLogIdsToAddStringArray, mLogIdToAddStringArray;
     ArrayList<Button> mButtonsArrayList;
     LocalDateTime mIngredientLogDateTime, mDateTime;
-    Integer mHourToSet;
+    Integer mHourToSet, mCurrentLogIdIndex;
     String mCurrentLogIdToAddString, ingredientLogIdString, mFragmentGoTo, mWhatToChange,
             mSymptomLogIdsToAddString
             , mIngredientLogIdsToAddString;
 
     IngredientLogViewModel mIngredientLogViewModel;
     SymptomLogViewModel mSymptomLogViewModel;
+    IngredientViewModel mIngredientViewModel;
+    SymptomViewModel mSymptomViewModel;
+
     IngredientLog mIngredientLog;
     SymptomLog mCurrentSymptomLog, mSymptomLog;
     ArrayList<IngredientLog> mIngredientLogArray;
@@ -98,12 +89,11 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
         thisActivity = getActivity();
         mBundle = getArguments();
+        mBundleNext = mBundle;
         mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
         mSymptomLogArray = new ArrayList<>();
         mIngredientLogArray = new ArrayList<>();
 
-        mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
-        mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
         questionTextView = view.findViewById(R.id.textview_question_log_part_of_day_specific_time_range);
         mButtonEarly = view.findViewById(R.id.button_log_part_of_day_early);
@@ -128,19 +118,19 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         mHourChoicesArrayList = new ArrayList<Integer>();
         mButtonsArrayList = new ArrayList<>();
 
-        mHourChoicesArrayList.add(mEarlyHour);
+        mHourChoicesArrayList.add(Util.early_hour);
         mButtonsArrayList.add(mButtonEarly);
 
-        mHourChoicesArrayList.add(mMiddayHour);
+        mHourChoicesArrayList.add(Util.midday_hour);
         mButtonsArrayList.add(mButtonMidday);
 
-        mHourChoicesArrayList.add(mAfternoonHour);
+        mHourChoicesArrayList.add(Util.afternoon_hour);
         mButtonsArrayList.add(mButtonAfternoon);
 
-        mHourChoicesArrayList.add(mEveningHour);
+        mHourChoicesArrayList.add(Util.evening_hour);
         mButtonsArrayList.add(mButtonEvening);
 
-        mHourChoicesArrayList.add(mMidnightHour);
+        mHourChoicesArrayList.add(Util.midnight_hour);
         mButtonsArrayList.add(mButtonMidnight);
 
 
@@ -179,13 +169,21 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         // parse the ids from the string into an array
         mLogIdToAddStringArray =
                 Util.cleanBundledStringIntoArrayList(logIdToAddString);
-        mCurrentLogIdToAddString = mLogIdToAddStringArray.get(0);
+        mCurrentLogIdIndex =
+                Integer.parseInt(mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+        mCurrentLogIdToAddString = mLogIdToAddStringArray.get(mCurrentLogIdIndex);
         mCurrentLogId = UUID.fromString(mCurrentLogIdToAddString);
         if ( mSettingIngredientLog ){
             // now get the info associated with that UUID
             mIngredientLog =
                     mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
             mSymptomLog = null;
+
+            mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
+            mSymptomLogViewModel = null;
+
+            mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+            mSymptomViewModel = null;
 
             // if consumed hasn't been set yet, then that's what we're changing
             if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_CONSUMED ){
@@ -211,7 +209,16 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
         } else if ( mSettingSymptomLog ){
             // now get the info associated with that UUID
             mSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdToAddString));
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(
+                            UUID.fromString(mCurrentLogIdToAddString)
+                    );
+
+
+            mIngredientLogViewModel = null;
+            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+
+            mIngredientViewModel = null;
+            mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
 
             // for each string in array update that log's instant began
             for (String logIdString: mLogIdToAddStringArray) {
@@ -320,8 +327,8 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                         getResources().getString(R.string.toast_part_of_day_all_day),
                         Toast.LENGTH_SHORT).show();
                 // set begin to be earliest and changed/ended to be latest times
-                mSetBoth = Boolean.TRUE;
-                setLogInstantsThenGoToNext(mEarliestHour, mWhatToChange);
+                mWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS_ALL_DAY;
+                setLogInstantsThenGoToNext(Util.earliest_hour, mWhatToChange);
 
                 break;
 
@@ -330,35 +337,35 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
                         getResources().getString(R.string.toast_part_of_day_early),
                         Toast.LENGTH_SHORT).show();
                 // set the early date time to current time but with early hour and minute to 0
-                setLogInstantsThenGoToNext(mEarlyHour, mWhatToChange);
+                setLogInstantsThenGoToNext(Util.early_hour, mWhatToChange);
                 break;
 
             case R.id.button_log_part_of_day_midday:
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_midday),
                         Toast.LENGTH_SHORT).show();
-                setLogInstantsThenGoToNext(mMiddayHour, mWhatToChange);
+                setLogInstantsThenGoToNext(Util.midday_hour, mWhatToChange);
                 break;
 
             case R.id.button_log_part_of_day_afternoon:
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_afternoon),
                         Toast.LENGTH_SHORT).show();
-                setLogInstantsThenGoToNext(mAfternoonHour, mWhatToChange);
+                setLogInstantsThenGoToNext(Util.afternoon_hour, mWhatToChange);
                 break;
 
             case R.id.button_log_part_of_day_evening:
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_evening),
                         Toast.LENGTH_SHORT).show();
-                setLogInstantsThenGoToNext(mEveningHour, mWhatToChange);
+                setLogInstantsThenGoToNext(Util.evening_hour, mWhatToChange);
                 break;
 
             case R.id.button_log_part_of_day_midnight:
                 Toast.makeText(getContext(),
                         getResources().getString(R.string.toast_part_of_day_midnight),
                         Toast.LENGTH_SHORT).show();
-                setLogInstantsThenGoToNext(mMidnightHour, mWhatToChange);
+                setLogInstantsThenGoToNext(Util.midnight_hour, mWhatToChange);
                 break;
 
             case R.id.button_log_part_of_day_more_specific_time:
@@ -387,7 +394,7 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
         if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
             // we're done
-            questionTextView.setText(getResources().getString(R.string.question_textview_new_symptom_intensity_log_changed_time));
+            questionTextView.setText(getResources().getString(R.string.question_textview_new_symptom_log_changed_time));
             // we have changed begin so now set changed/ended instead
             mWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED;
             // reset which buttons to be invisible
@@ -409,9 +416,23 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             // reset which buttons to be invisible
             setButtonVisibilityByInstantAlreadySet(Instant.now(),
                     firstInstant);
-        }  else {
-            // done so lets go home
-            Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdsToAddString, mBundle.getString(Util.ARGUMENT_ACTION));
+        } else if (mIngredientLogViewModel != null ){
+            // if we're any other flavor of ingredient log, go set next one
+
+            // set the ingredient log id we're changing in to be accessible in next fragment
+            Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
+                    mFragmentContainer,
+                    mDefaultNextFragment, mBundleNext);
+        } else {
+
+            // symptom log so done so lets go home
+            mBundleNext = Util.setDone(mBundleNext);
+
+            //  we're done with the times for log, which is the
+            // last thing to set for that, so now go back to either edit log or list logs
+            // depending on which we came from
+            Util.goToListOrEditActivity(null, thisActivity, mBundleNext);
+
         }
     }
 
@@ -420,87 +441,31 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
     private void setLogInstantsThenGoToNext(Integer hourToSet, String whatToChange){
 
-        Bundle bundleHourToSet = new Bundle();
-        bundleHourToSet.putInt(Util.ARGUMENT_HOUR, hourToSet);
-        Instant firstInstant = null;
-        Bundle mBundleNext = mBundle;
 
-        // we have the time to set now
-        if (mSettingSymptomLog){
-            //TODO fix, somewhere in here it's breaking on set changed
-            if ( mSetBoth ) {
-                // run it twice
-                Bundle mBundleFirst = mBundle;
-                // get the date and time user picked and put them in a bundle and set log with them
-                mBundleFirst = Util.setSymptomLogInstants(whatToChange, mSymptomLogArray,
-                        mSymptomLogViewModel,
-                        bundleHourToSet, mBundleNext);
+        // using the log that isn't null, figure out the instant from what to change and reset to
+        // that instant changing only the value given, hour here
+        // TODO consolidate this code, going back and forth from local date time to instant is
+        //  inefficient
+        Instant instantToSet = Util.setInstantFromLogAndIntegers(
+                mSymptomLogViewModel, mSymptomLog, mIngredientLogViewModel, mIngredientLog,
+                whatToChange, null, hourToSet, null, null, null);
 
-                // now run it again with latest hour to set as changed instant
-                Bundle bundleHourToSetSecond = new Bundle();
-                bundleHourToSetSecond.putInt(Util.ARGUMENT_HOUR, mLatestHour);
-
-                // get the date and time user picked and put them in a bundle and set log with them
-                mBundleNext = Util.setSymptomLogInstants(whatToChange, mSymptomLogArray,
-                        mSymptomLogViewModel,
-                        bundleHourToSetSecond, mBundleFirst);
-            } else {
-                // only setting one
-                // get the date and time user picked and put them in a bundle and set log with them
-                mBundleNext = Util.setSymptomLogInstants(whatToChange, mSymptomLogArray,
-                        mSymptomLogViewModel,
-                        bundleHourToSet, mBundleNext);
-
-                // return the began instant in order to reset the UI for changed
-                // get the new first instant corresponding to our newly set log instant
-                firstInstant =
-                        Util.getFirstInstant(null,
-                                mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(
-                                        UUID.fromString(Util.cleanBundledStringIntoArrayList(
-                                                mBundleNext.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY)).get(0)
-                                        )
-                                ));
-
-                // reset our UI with setting the buttons invisible based on what the first instant is
-                resetUIOrGoHome(firstInstant);
-            }
-        }
-        else if (mSettingIngredientLog) {
-
-            // get the date and time user picked and set the ingredient logs to that
-            mBundleNext = Util.setIngredientLogInstants(whatToChange, mIngredientLogArray,
-                    mIngredientLogViewModel, bundleHourToSet, mBundleNext
-            );
+        // get the date and time user picked and put them in a bundle and set log with them
+        mBundleNext = Util.setLogInstants(whatToChange,
+            mIngredientLogArray, mSymptomLogArray,
+                mIngredientLogViewModel, mSymptomLogViewModel,
+                mIngredientViewModel, mSymptomViewModel,
+            Util.localDateTimeFromInstant(instantToSet), mBundleNext);
 
 
-            // if we're at cooked then use that instant to set for acquired's UI view, else use
-            // consumed
-            if ( TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_COOKED) ) {
-                // get the new first instant corresponding to our newly set ingredient log instant
-                firstInstant = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
-                        UUID.fromString( Util.cleanBundledStringIntoArrayList(mBundleNext.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY)).get(0)
-                        )
-                ).getInstantCooked();
-            } else {
-                // get the new first instant corresponding to our newly set ingredient log instant
-                firstInstant =
-                        Util.getFirstInstant(mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
-                                UUID.fromString(Util.cleanBundledStringIntoArrayList(mBundleNext.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY)).get(0)
-                                )
-                        ), null);
-            }
+        // get the new first instant corresponding to our newly set log instant
+        Instant firstInstant = Util.setFirstLogInstant(whatToChange,
+                mIngredientLogViewModel,
+                mSymptomLogViewModel, mBundleNext );
 
-            // reset our UI with setting the buttons invisible based on what the first instant is
-            resetUIOrGoHome(firstInstant);
-
-
-
-            // set the food log id we're changing in to be accessible in next fragment
-            Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
-                    mFragmentContainer,
-                    mDefaultNextFragment, mBundle);
-        }
-
+        // reset our UI with setting the buttons invisible based on what the first instant is
+        // or go home or to next fragment
+        resetUIOrGoHome(firstInstant);
     }
 
 

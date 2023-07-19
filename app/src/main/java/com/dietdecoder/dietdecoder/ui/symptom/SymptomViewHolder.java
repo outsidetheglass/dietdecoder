@@ -44,10 +44,10 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
   private SymptomViewHolder(View itemView) {
     super(itemView);
     mSymptomViewHolderContext = itemView.getContext();
-    mSymptomViewHolderTheme = mSymptomViewHolderContext.getTheme();
 
     mSymptomItemView = itemView.findViewById(id.textview_symptom_item);
     mSymptomCheckButton = itemView.findViewById(id.imagebutton_symptom_option_circle);
+    mSymptomViewHolderTheme = mSymptomViewHolderContext.getTheme();
     mSelectedColor = itemView.getResources().getColorStateList(color.selected_text_color,
             mSymptomViewHolderTheme);
     // green color of titles, not the default text color I want but close enough

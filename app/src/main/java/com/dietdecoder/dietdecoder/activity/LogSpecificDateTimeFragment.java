@@ -368,14 +368,16 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
             // with our picked date
             if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED)) {
                 // done so lets go home
-                // TODO moke action argument into create view with if null
+                mBundleNext = Util.setDoneIfFromEdit(mBundleNext);
                 Util.goToListSymptomLogActivity(null, thisActivity,
-                        mLogIdToAddStringArray.toString(), mBundle.getString(Util.ARGUMENT_ACTION));
+                        mLogIdToAddStringArray.toString());
             } else {
                 // begin instant was set now go back to choices to select for changed instant
                 // set the ingredient log id we're changing in to be accessible in next fragment
                 // and go to the next info needed
                 //TODO this probably will break when needing multiple instants
+
+                // this does check if from edit and done, then will go to list or e
                 Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
                         mFragmentContainer,
                         mDefaultNextFragment, mBundleNext);

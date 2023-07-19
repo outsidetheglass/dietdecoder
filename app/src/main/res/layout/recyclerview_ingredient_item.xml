@@ -23,14 +23,14 @@
     android:gravity="start" />
 
   <ImageButton
-    android:id="@+id/imagebutton_ingredient_option"
+    android:id="@+id/imagebutton_ingredient_option_circle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       style="@style/textview_item_option"
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
       android:background="@drawable/roundcorners"
-      android:src="@drawable/ic_baseline_option"
+      android:src="@drawable/ic_baseline_empty_circle"
     />
   </RelativeLayout>
   </androidx.cardview.widget.CardView>

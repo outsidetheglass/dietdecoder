@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-public class NewIngredientAmountFragment extends Fragment implements View.OnClickListener,
+public class IngredientAmountFragment extends Fragment implements View.OnClickListener,
         NumberPicker.OnValueChangeListener {
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -78,7 +78,7 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
     Bundle mBundle, mBundleNext;
 
 
-    public NewIngredientAmountFragment() {
+    public IngredientAmountFragment() {
         super(R.layout.fragment_ingredient_amount_log);
     }
 
@@ -126,7 +126,7 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
             // default next place to go should be the next fragment
             mNextFragment = mDefaultNextFragment;
             // repeating this fragment
-            mRepeatThisFragment = new NewIngredientAmountFragment();
+            mRepeatThisFragment = new IngredientAmountFragment();
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
 
@@ -142,7 +142,7 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
                 mIngredientLogIdsToAddStringArrayOriginal =
                         mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL);
                 mHowManyIdsToAdd =
-                        Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_INGREDIENT_LOG_ID_IN_ARRAY));
+                        Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
             }
 
             // parse the name from the array of ids and put that in the textview
@@ -248,6 +248,9 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
                     // update the log
                     mIngredientLogViewModel.viewModelUpdateIngredientLog(mCurrentIngredientLog);
 
+                    // will set done or unfinished if action means we're from edit
+                    mBundleNext = Util.setDoneIfFromEdit(mBundle);
+
                     // we've added it in, so remove this ingredient from the ones to add
                     mIngredientLogIdsToAddStringArray.remove(mCurrentIngredientLog.
                             getIngredientLogId().toString());
@@ -300,7 +303,7 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
                 // and also add the original full array
                 mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL,
                         mIngredientLogIdsToAddStringArrayOriginal);
-                mBundleNext.putString(Util.ARGUMENT_HOW_MANY_SYMPTOM_LOG_ID_IN_ARRAY,
+                mBundleNext.putString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY,
                         mHowManyIdsToAdd.toString());
                 // we're still changing intensity
                 mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_INTENSITY);
@@ -323,7 +326,7 @@ public class NewIngredientAmountFragment extends Fragment implements View.OnClic
                 }
             }
 
-            mBundleNext.putString(Util.ARGUMENT_FRAGMENT_FROM,
+            mBundleNext.putString(Util.ARGUMENT_FROM,
                     Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
             // put which we're changing into the bundle
             nextFragment.setArguments(mBundleNext);

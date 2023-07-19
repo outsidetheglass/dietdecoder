@@ -22,6 +22,7 @@ import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -140,6 +141,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
             case R.id.edit_option:
               // tell the edit activity we want the full edit fragment
+
               Util.goToEditActivityActionTypeId(symptomLogContext, null,
                       Util.ARGUMENT_ACTION_EDIT, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
                       mSymptomLogIdString);
