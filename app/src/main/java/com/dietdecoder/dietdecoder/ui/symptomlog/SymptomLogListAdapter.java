@@ -50,7 +50,6 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
     SymptomLog currentSymptomLog = getItem(position);
     Symptom currentSymptomLogSymptom = null;
     UUID currentSymptomLogSymptomId = currentSymptomLog.getSymptomLogSymptomId();
-    Log.d(TAG, currentSymptomLog.toString());
 
     // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
     // find the symptom matching the id of the log we were given
@@ -115,7 +114,6 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
 
   public void setSymptomLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayListList){
 
-    Log.d(TAG, logs.toString());
     this.mSymptomArrayList = symptomArrayListList;
     this.submitList(logs);
   }

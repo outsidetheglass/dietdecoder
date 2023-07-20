@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dietdecoder.dietdecoder.activity.DetailActivity;
@@ -106,16 +105,8 @@ public class Util {
     public static final String ARGUMENT_SYMPTOM_ID_ARRAY = "symptom_id_array";
     public static final String ARGUMENT_CURRENT_INDEX_IN_ARRAY = "current_index_in_array";
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY = "symptom_log_id_array";
-    public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL =
-            "symptom_log_id_array_original";
-    public static final String ARGUMENT_SYMPTOM_ID_ARRAY_ORIGINAL =
-            "symptom_log_id_array_original";
 
-    public static final String ARGUMENT_INGREDIENT_LOG_ID_ARRAY_ORIGINAL =
-            "ingredient_log_id_array_original";
     public static final String ARGUMENT_FOOD_LOG_ID_ARRAY = "food_log_id_array";
-    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY_ORIGINAL =
-            "food_log_id_array_original";
     public static final String ARGUMENT_INGREDIENT_ID_ARRAY = "ingredient_id_array";
     public static final String ARGUMENT_RECIPE_ID_ARRAY = "recipe_id_array";
 
@@ -159,10 +150,8 @@ public class Util {
 
 
     // fragments to go to
-    public static final String ARGUMENT_GO_TO_NAME = "go_to_name";
     public static final String ARGUMENT_GO_TO_DATE_TIME_CHOICES = "go_to_date_time_choices";
     public static final String ARGUMENT_GO_TO_PART_OF_DAY = "go_to_part_of_day";
-    public static final String ARGUMENT_GO_TO_BRAND = "go_to_brand";
     public static final String ARGUMENT_GO_TO_SPECIFIC_DATE = "go_to_specific_date";
     public static final String ARGUMENT_GO_TO_SPECIFIC_TIME = "go_to_specific_time";
     public static final String ARGUMENT_GO_TO_LIST_SYMPTOM_LOG =
@@ -199,7 +188,7 @@ public class Util {
             "go_to_edit_ingredient";
     public static final String ARGUMENT_GO_TO_SYMPTOM_INTENSITY = "go_to_symptom_intensity";
     public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT = "go_to_ingredient_amount";
-    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND = "go_to_ingredient_amount";
+    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND = "go_to_ingredient_brand";
 
 
     // which fragment we're from, places we might be from options
@@ -214,27 +203,25 @@ public class Util {
 
 
 
-    // argument for what the UUID of the food log is
-    public static final String ARGUMENT_FOOD_LOG_ID = "food_log_id";
-
 
     // which value do we want to change
     public static final String ARGUMENT_CHANGE = "change";
     // values as options to change
-    public static final String ARGUMENT_CHANGE_INGREDIENT_CONSUMED = "change_ingredient_consumed";
-    public static final String ARGUMENT_CHANGE_INGREDIENT_COOKED = "change_ingredient_cooked";
-    public static final String ARGUMENT_CHANGE_INGREDIENT_ACQUIRED = "change_ingredient_acquired";
-    public static final String ARGUMENT_CHANGE_INGREDIENT_ALL_INSTANTS =
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED = "change_ingredient_log_consumed";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED = "change_ingredient_log_cooked";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED = "change_ingredient_log_acquired";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_ALL_INSTANTS =
             "change_ingredient_all_instants";
-    public static final String ARGUMENT_CHANGE_INGREDIENT_BRAND = "change_ingredient_brand";
-    public static final String ARGUMENT_CHANGE_INGREDIENT_AMOUNT = "change_ingredient_amount";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_BRAND = "change_ingredient_log_brand";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT = "change_ingredient_log_amount";
 
 
-    public static final String ARGUMENT_CHANGE_SYMPTOM_ALL_INSTANTS =
+    public static final String ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS =
             "change_symptom_all_instants";
-    public static final String ARGUMENT_CHANGE_SYMPTOM_BEGIN = "change_symptom_begin";
-    public static final String ARGUMENT_CHANGE_SYMPTOM_CHANGED = "change_symptom_changed";
-    public static final String ARGUMENT_CHANGE_SYMPTOM_INTENSITY = "change_symptom_intensity";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN = "change_symptom_log_begin";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED = "change_symptom_log_changed";
+    public static final String ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY =
+            "change_symptom_log_intensity";
 
 
     public static final String ARGUMENT_DONE_OR_UNFINISHED = "done_or_unfinished";
@@ -286,30 +273,23 @@ public class Util {
         }
 
         return mStringArray;
-
     }
 
     // set whether the bundle contains ingredient log id or symptom log id, etc
     public static String[] setLogIdArrayTypeAndStringFromBundle(Bundle paramBundle) {
+        String stringTypeFromBundle = setStringTypeBundle(paramBundle);
         String stringFromBundle = null;
-        String stringTypeFromBundle = null;
 
-        if ( paramBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) != null ) {
-            stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
-        } else if (paramBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
-            stringTypeFromBundle = Util.ARGUMENT_FOOD_LOG_ID_ARRAY;
-        } else if (paramBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
-            stringTypeFromBundle = Util.ARGUMENT_INGREDIENT_ID_ARRAY;
-        } else if (paramBundle.getString(Util.ARGUMENT_RECIPE_ID_ARRAY) != null){
-            stringTypeFromBundle = Util.ARGUMENT_RECIPE_ID_ARRAY;
-        } else if (paramBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY) != null){
-            stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_ID_ARRAY;
+        if ( paramBundle.containsKey(stringTypeFromBundle) ){
+            stringFromBundle = paramBundle.getString(stringTypeFromBundle);
+        } else if ( stringTypeFromBundle == null){
+            Log.d(TAG, "Error, failed to have valid type.");
+        } else {
+            Log.d(TAG, "Error, failed to call to get strings from type.");
         }
-        stringFromBundle = paramBundle.getString(stringTypeFromBundle);
 
-        String[] strings = new String[]{};
-        strings[0] = stringTypeFromBundle;
-        strings[1] = stringFromBundle;
+
+        String[] strings = new String[]{stringTypeFromBundle, stringFromBundle};
         return strings;
     }
     // clean the bundled string and return an Array List
@@ -731,8 +711,6 @@ public class Util {
             monthInt = 0;
         }
 
-        Log.d(TAG, "newFoodLogActivity monthString=" + monthString );
-        Log.d(TAG, "newFoodLogActivity monthInt=" + monthInt.toString() );
         return monthInt;
     }
     public static Calendar calendarFromInstant(Instant instant){
@@ -762,34 +740,34 @@ public class Util {
     ////////////////////////////////////////////////////////
     // start the intent to pass data along
     // and set which fragment we came from and where we want to go next
-    public static Intent intentChoicesButton(Activity activity, String whereGoTo,
-                                             String whereFrom) {
-        // start the intent to pass data along
-        Intent mIntent = null;
-        // if it doesn't exist, make it
-        if ( activity.getIntent() == null ) {
-            // if we want to go to edit or add
-            if ( TextUtils.equals(whereGoTo, Util.ARGUMENT_GO_TO_EDIT_FOOD_LOG)) {
-                mIntent = new Intent(activity, EditActivity.class);
-                // where we want to go next
-                mIntent.putExtra(Util.ARGUMENT_GO_TO, whereGoTo);
-                // which fragment we came from
-                mIntent.putExtra(Util.ARGUMENT_FROM, whereFrom);
-            } else {
-                // default to guessing we're making a new food log
-               // mIntent = new Intent(activity, NewFoodLogActivity.class);
-                // where we want to go next
-                mIntent.putExtra(Util.ARGUMENT_GO_TO, whereGoTo);
-                // which fragment we came from
-                mIntent.putExtra(Util.ARGUMENT_FROM, whereFrom);
-            }
-        } else {
-            // activity already has an intent so use that one
-            mIntent = activity.getIntent();
-        }
-
-        return mIntent;
-    }
+//    public static Intent intentChoicesButton(Activity activity, String whereGoTo,
+//                                             String whereFrom) {
+//        // start the intent to pass data along
+//        Intent mIntent = null;
+//        // if it doesn't exist, make it
+//        if ( activity.getIntent() == null ) {
+//            // if we want to go to edit or add
+//            if ( isEditGoTo(whereGoTo) ) {
+//                mIntent = new Intent(activity, EditActivity.class);
+//                // where we want to go next
+//                mIntent.putExtra(Util.ARGUMENT_GO_TO, whereGoTo);
+//                // which fragment we came from
+//                mIntent.putExtra(Util.ARGUMENT_FROM, whereFrom);
+//            } else {
+//                // default to guessing we're making a new food log
+//               // mIntent = new Intent(activity, NewFoodLogActivity.class);
+//                // where we want to go next
+//                mIntent.putExtra(Util.ARGUMENT_GO_TO, whereGoTo);
+//                // which fragment we came from
+//                mIntent.putExtra(Util.ARGUMENT_FROM, whereFrom);
+//            }
+//        } else {
+//            // activity already has an intent so use that one
+//            mIntent = activity.getIntent();
+//        }
+//
+//        return mIntent;
+//    }
 
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -849,111 +827,118 @@ public class Util {
     // with the ID of foodlog set
     // and the fact we came from this fragment
     // and which fragment to go to next
-    public static Intent intentWithFoodLogIdStringButton(FragmentActivity activity,
-                                                         String foodLogIdString,
-                                                         String fragmentGoTo, String fragmentFrom) {
-        // start the intent to pass data along
-        // and set which fragment we came from and where we want to go next
-        Intent mIntent = intentChoicesButton(activity, fragmentGoTo, fragmentFrom);
-
-        // set the id of the food log
-        // and put it in the intent so we can access it from future fragments
-        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
-
-        // now we're ready to go back to activity this fragment is in
-        return mIntent;
-    }
+//    public static Intent intentWithFoodLogIdStringButton(FragmentActivity activity,
+//                                                         String foodLogIdString,
+//                                                         String fragmentGoTo, String fragmentFrom) {
+//        // start the intent to pass data along
+//        // and set which fragment we came from and where we want to go next
+//        Intent mIntent = intentChoicesButton(activity, fragmentGoTo, fragmentFrom);
+//
+//        // set the id of the food log
+//        // and put it in the intent so we can access it from future fragments
+//        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+//
+//        // now we're ready to go back to activity this fragment is in
+//        return mIntent;
+//    }
 
     // same as above but for activities
-
-    public static Intent intentWithFoodLogIdStringButtonActivity(Activity activity,
-                                                         String foodLogIdString,
-                                                         String whereGoTo, String whereFrom) {
-        // start the intent to pass data along
-        // and set which fragment we came from and where we want to go next
-        Intent mIntent = intentChoicesButton(activity, whereGoTo, whereFrom);
-
-        // set the id of the food log
-        // and put it in the intent so we can access it from future fragments
-        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
-
-        // now we're ready to go back to activity this fragment is in
-        return mIntent;
-    }
-
-
+//
+//    public static Intent intentWithFoodLogIdStringButtonActivity(Activity activity,
+//                                                         String foodLogIdString,
+//                                                         String whereGoTo, String whereFrom) {
+//        // start the intent to pass data along
+//        // and set which fragment we came from and where we want to go next
+//        Intent mIntent = intentChoicesButton(activity, whereGoTo, whereFrom);
+//
+//        // set the id of the food log
+//        // and put it in the intent so we can access it from future fragments
+//        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+//
+//        // now we're ready to go back to activity this fragment is in
+//        return mIntent;
+//    }
+//
+//
 
     // takes in food id, fragment from, fragment to go to, and what we want to change
-    public static Intent intentChangeWithFoodLogIdStringButton(FragmentActivity activity,
-                                                         String foodLogIdString,
-                                                         String fragmentGoTo,
-                                                               String fragmentFrom,
-                                                               String whatToChange) {
-        // start the intent to pass data along
-        // and set which fragment we came from and where we want to go next
-        Intent mIntent = intentChoicesButton(activity, fragmentGoTo, fragmentFrom);
+//    public static Intent intentChangeWithFoodLogIdStringButton(FragmentActivity activity,
+//                                                         String foodLogIdString,
+//                                                         String fragmentGoTo,
+//                                                               String fragmentFrom,
+//                                                               String whatToChange) {
+//        // start the intent to pass data along
+//        // and set which fragment we came from and where we want to go next
+//        Intent mIntent = intentChoicesButton(activity, fragmentGoTo, fragmentFrom);
+//
+//        // set the id of the food log
+//        // and put it in the intent so we can access it from future fragments
+//        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
+//        mIntent.putExtra(Util.ARGUMENT_CHANGE, whatToChange);
+//
+//        // now we're ready to go back to activity this fragment is in
+//        return mIntent;
+//    }
 
-        // set the id of the food log
-        // and put it in the intent so we can access it from future fragments
-        mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, foodLogIdString);
-        mIntent.putExtra(Util.ARGUMENT_CHANGE, whatToChange);
-
-        // now we're ready to go back to activity this fragment is in
-        return mIntent;
-    }
-
-    public static Bundle setBundleFromArrayInfo(ArrayList<String> array, String stringType,
-                                                String originalStringType){
+    public static Bundle setBundleFromArrayInfo(ArrayList<String> array, String stringType){
         Bundle bundle = new Bundle();
 
         // put info about the array to add
         String arrayString = array.toString();
         bundle.putString(stringType, arrayString);
 
-        // also how big the array is for ease of coding,
-        // TODO remove this and replace with .size
-        //  () in the activity or something more efficient
+        // how big the array is for ease of coding
         Integer arraySize = array.size();
         String stringArraySize = String.valueOf(arraySize);
         bundle.putString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY, stringArraySize);
+
         // to calculate when we've done all the elements in the array
         String arrayIndexString = String.valueOf(arraySize - 1);
         bundle.putString(ARGUMENT_CURRENT_INDEX_IN_ARRAY, arrayIndexString);
 
-        // original array, TODO also replace this inefficiency with better array usage or something
-        bundle.putString(originalStringType, arrayString);
 
         return bundle;
     }
 
     public static Bundle setNewIngredientLogBundle(ArrayList<String> newLogIdStringArray){
 
-        Bundle bundle = new Bundle();
-
         // set our new bundle to be an ingredient log
-        bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT,
-                ARGUMENT_INGREDIENT_LOG_ID_ARRAY, ARGUMENT_INGREDIENT_LOG_ID_ARRAY_ORIGINAL);
+        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT,
+                ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
 
         return bundle;
     }
 
 
     // bundle the relevant information between fragments for adding new symptom log
-    public static Bundle setNewSymptomLogBundle(String idTypeString,
+    public static Bundle setNewSymptomLogFromSymptomIdBundle(
                                                 ArrayList<String> newLogIdStringArray){
 
         // set our new bundle to be a symptom log
         Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY,
-                idTypeString, ARGUMENT_SYMPTOM_ID_ARRAY_ORIGINAL);
+                ARGUMENT_SYMPTOM_ID_ARRAY);
+
+        return bundle;
+    }
+
+    // bundle the relevant information between fragments for adding new symptom log
+    public static Bundle setNewSymptomLogFromSymptomLogIdBundle(
+                                                ArrayList<String> newLogIdStringArray){
+
+        // set our new bundle to be a symptom log
+        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY,
+                ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
 
         return bundle;
     }
 
     // bundle the relevant information between fragments for adding something new
     public static Bundle setNewBundle(ArrayList<String> newStringArray, String whereToGo,
-                                      String arrayType, String arrayTypeOriginal){
+                                      String arrayType){
 
-        Bundle bundle = new Bundle();
+        // set information about the array into the bundle
+        Bundle bundle = setBundleFromArrayInfo(newStringArray,
+                arrayType);
 
         // set that we still have things to set
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_UNFINISHED);
@@ -961,20 +946,19 @@ public class Util {
         // where we want to go next
         bundle.putString(Util.ARGUMENT_GO_TO, whereToGo);
 
-        // set information about the array into the bundle
-        bundle = setBundleFromArrayInfo(newStringArray,
-                arrayType, arrayTypeOriginal);
 
         return bundle;
     }
 
     // bundle the relevant information between fragments for editing something already existing
     public static Bundle setEditBundle(ArrayList<String> array, String whereToGo,
-                                      String arrayType, String arrayTypeOriginal){
+                                      String arrayType, String whatToEdit){
 
-        Bundle bundle = new Bundle();
+        // set information about the array into the bundle
+        Bundle bundle = setBundleFromArrayInfo(array, arrayType);
 
         // set the basics
+        bundle.putString(ARGUMENT_CHANGE, whatToEdit);
         bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT);
         bundle.putString(ARGUMENT_ACTION, ARGUMENT_ACTION_EDIT);
         // where we want to go next
@@ -982,8 +966,6 @@ public class Util {
         // set that we still have things to set
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_UNFINISHED);
 
-        // set information about the array into the bundle
-        bundle = setBundleFromArrayInfo(array, arrayType, arrayTypeOriginal);
 
         return bundle;
     }
@@ -999,7 +981,7 @@ public class Util {
         // if it's from edit then we also only had one to set so it's fine this is before
         // current id
 
-        if ( TextUtils.equals(bundle.getString(ARGUMENT_FROM), ARGUMENT_FROM_EDIT ) ) {
+        if ( isFromEdit(bundle.getString(ARGUMENT_FROM)) ) {
 
             // can consume something that has only just now been cooked or acquired
             //TODO make logic for invalid edit if the instant is a wrong time
@@ -1030,16 +1012,13 @@ public class Util {
     public static Bundle setEditSymptomLogBundle(String logIdString,
                                                  String whatToEdit){
 
-        Bundle bundle = new Bundle();
 
         // where we want to go next
         String whereNext = null;
-        bundle.putString(ARGUMENT_CHANGE, whatToEdit);
         // if we're changing one of the time based parameters
-        if ( TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_SYMPTOM_BEGIN)
-                || TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_SYMPTOM_CHANGED) ){
+        if ( isSymptomLogTimeChange(whatToEdit) ){
             whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES;
-        } else if ( TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_SYMPTOM_INTENSITY)) {
+        } else if ( isSymptomLogIntensity(whatToEdit) ) {
             // we're changing intensity or symptom if it's not a time
             whereNext = ARGUMENT_GO_TO_SYMPTOM_INTENSITY;
         } else {
@@ -1050,9 +1029,8 @@ public class Util {
         // in edit we only have one id in our array, so make it now and pass it in
         ArrayList<String> array = new ArrayList<>();
         array.add(logIdString);
-        bundle = setEditBundle(array, whereNext,
-                ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
-                ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL);
+        Bundle bundle = setEditBundle(array, whereNext,
+                ARGUMENT_SYMPTOM_LOG_ID_ARRAY, whatToEdit);
 
 
         return bundle;
@@ -1062,23 +1040,17 @@ public class Util {
     public static Bundle setEditIngredientLogBundle(String logIdString,
                                                  String whatToEdit){
 
-        Bundle bundle = new Bundle();
-
         // where we want to go next
         String whereNext = null;
-        bundle.putString(ARGUMENT_CHANGE, whatToEdit);
         // if we're changing one of the time based parameters
-        if ( TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_INGREDIENT_CONSUMED)
-                || TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_INGREDIENT_COOKED)
-                || TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_INGREDIENT_ACQUIRED)
-        ){
+        if ( isIngredientLogTimeChange(whatToEdit) ){
             whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES;
         }
-        else if ( TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_INGREDIENT_AMOUNT)) {
+        else if ( isIngredientLogAmount(whatToEdit) ) {
             // we're changing amount or brand or ingredient if it's not a time
             whereNext = ARGUMENT_GO_TO_INGREDIENT_AMOUNT;
         }
-        else if ( TextUtils.equals(whatToEdit, ARGUMENT_CHANGE_INGREDIENT_BRAND)) {
+        else if ( isIngredientLogBrand(whatToEdit) ) {
             // we're changing brand if it's not a time or amount
             whereNext = ARGUMENT_GO_TO_INGREDIENT_BRAND;
         }
@@ -1090,9 +1062,9 @@ public class Util {
         // in edit we only have one id in our array, so make it now and pass it in
         ArrayList<String> array = new ArrayList<>();
         array.add(logIdString);
-        bundle = setEditBundle(array, whereNext,
+        Bundle bundle = setEditBundle(array, whereNext,
                 ARGUMENT_INGREDIENT_LOG_ID_ARRAY,
-                ARGUMENT_INGREDIENT_LOG_ID_ARRAY_ORIGINAL);
+                whatToEdit);
 
 
         return bundle;
@@ -1110,16 +1082,15 @@ public class Util {
         String newLogIdString = newLogIdStringArray.toString();
         bundle.putString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, newLogIdString );
 
-        // also how big the array is for ease of coding, TODO remove this and replace with .size
-        //  () in the activity or something more efficient
+        // also how big the array is for ease of coding
         Integer logIdStringArraySize = newLogIdStringArray.size();
         String logIdStringArraySizeIndexString = String.valueOf(logIdStringArraySize - 1);
         String newLogIdStringArraySize = String.valueOf(logIdStringArraySize);
         bundle.putString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY,
                 newLogIdStringArraySize);
+        bundle.putString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY,
+                logIdStringArraySizeIndexString);
 
-        // original array, TODO also replace this inefficiency with better array usage or something
-        bundle.putString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY_ORIGINAL, newLogIdString);
 
         return bundle;
     }
@@ -1261,13 +1232,165 @@ or at least achieves the same effect.
     // start commonly used functions //////////
     ////////////////////////////////////////////////////////
 
+    public static Boolean isSymptomLogTimeChange(String whatToChange){
+        Boolean isTimeChange = Boolean.FALSE;
+
+        if ( isSymptomLogBegin(whatToChange)
+                || isSymptomLogWhatToChangeSetToChanged(whatToChange)
+                || isSymptomLogAllInstants(whatToChange)
+                || isSymptomLogAllInstantsAllDay(whatToChange)
+        ) {
+            isTimeChange = Boolean.TRUE;
+        }
+        return isTimeChange;
+    }
+
+    public static Boolean isIngredientLogTimeChange(String whatToChange){
+        Boolean isTimeChange = Boolean.FALSE;
+
+        if ( isIngredientLogAllInstants(whatToChange)
+                || isIngredientLogConsumed(whatToChange)
+                || isIngredientLogCooked(whatToChange)
+                || isIngredientLogAcquired(whatToChange)
+        ) {
+            isTimeChange = Boolean.TRUE;
+        }
+        return isTimeChange;
+    }
+
+    public static Boolean isLogTimeChange(String whatToChange){
+        Boolean isTimeChange = Boolean.FALSE;
+
+        if ( isSymptomLogTimeChange(whatToChange)
+                || isIngredientLogTimeChange(whatToChange)
+        ) {
+            isTimeChange = Boolean.TRUE;
+        }
+        return isTimeChange;
+    }
+    public static Boolean isFromEdit(String whatToChange){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (TextUtils.equals(
+                whatToChange,
+                ARGUMENT_FROM_EDIT
+        )) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+    public static Boolean isIngredientLogBrand(String whatToChange){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (TextUtils.equals(
+                whatToChange,
+                ARGUMENT_CHANGE_INGREDIENT_LOG_BRAND
+        )) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+    public static Boolean isIngredientLogAmount(String whatToChange){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (TextUtils.equals(
+                whatToChange,
+                ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT)
+        ) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+    public static Boolean isSymptomLogIntensity(String whatToChange){
+        Boolean isIntensity = Boolean.FALSE;
+
+        if (TextUtils.equals(
+                        whatToChange,
+                        ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY)
+        ) {
+            isIntensity = Boolean.TRUE;
+        }
+        return isIntensity;
+    }
+
+    public static Boolean isActionEditBundle(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (
+                TextUtils.equals(
+                        bundle.getString(ARGUMENT_ACTION),
+                        ARGUMENT_ACTION_EDIT
+                )
+        ) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+    public static Boolean isEditAndDone(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (
+                TextUtils.equals(
+                        bundle.getString(ARGUMENT_ACTION),
+                        ARGUMENT_ACTION_EDIT
+                )
+                        &&
+                        TextUtils.equals(
+                                bundle.getString(ARGUMENT_DONE_OR_UNFINISHED),
+                                ARGUMENT_DONE
+                        )
+        ) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isDone(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (TextUtils.equals(
+                bundle.getString(ARGUMENT_DONE_OR_UNFINISHED),
+                ARGUMENT_DONE
+        )) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+
+    public static Bundle setBundleChangeGoTo(Bundle bundle, String whatToChange){
+
+        bundle.putString(Util.ARGUMENT_CHANGE, whatToChange);
+
+        if ( isLogTimeChange(whatToChange) ){
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_DATE_TIME_CHOICES);
+        } else if ( isSymptomLogIntensity(whatToChange) ){
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+
+        } else if ( isIngredientLogBrand(whatToChange) ){
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_INGREDIENT_BRAND);
+
+        }
+        return bundle;
+    }
+
     public static void startNextFragmentBundleChange(Activity paramThisActivity,
                                                      FragmentTransaction paramFragmentTransaction,
                                                int paramFragmentContainerView,
                                                Fragment paramNextFragment, Bundle paramBundle,
                                                String whatToChange ) {
 
+        paramBundle = setBundleChangeGoTo(paramBundle, whatToChange);
         paramBundle.putString(Util.ARGUMENT_CHANGE, whatToChange);
+        int howManyInArray = 0;
+        for ( String hasComma:
+                paramBundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY).split(",") ){
+            howManyInArray++;
+        }
+        paramBundle.putString(ARGUMENT_HOW_MANY_ID_IN_ARRAY, String.valueOf(howManyInArray));
+        paramBundle.putString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY,
+                String.valueOf(howManyInArray-1));
+        Log.d(TAG, paramBundle.toString());
 
         startNextFragmentBundle(paramThisActivity, paramFragmentTransaction,
                 paramFragmentContainerView,
@@ -1286,10 +1409,7 @@ or at least achieves the same effect.
 
         // actually go to the next place now
         // based on from edit or not and if we're done
-        if ( TextUtils.equals(
-                    bundle.getString(ARGUMENT_ACTION), ARGUMENT_ACTION_EDIT)
-                    && TextUtils.equals(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_DONE)
-            ) {
+        if ( isEditAndDone(bundle)  ) {
                 String[] logIdArrayStringAndType = setLogIdArrayTypeAndStringFromBundle(bundle);
                 String logIdArrayType = logIdArrayStringAndType[0];
                 String logIdArrayString = logIdArrayStringAndType[1];
@@ -1299,7 +1419,7 @@ or at least achieves the same effect.
                         logIdArrayType, logIdArrayString);
 
         }
-        else if ( TextUtils.equals(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_DONE) ){
+        else if ( isDone(bundle) ){
             // we're done and not from edit, so go to list
             String[] logIdArrayStringAndType = setLogIdArrayTypeAndStringFromBundle(bundle);
             String logIdArrayType = logIdArrayStringAndType[0];
@@ -1371,26 +1491,15 @@ or at least achieves the same effect.
     // check if we were from edit or not, go back to edit screen or to list activity
     public static void goToListOrEditActivity(Context context, Activity activity, Bundle bundle){
 
-        // if there is an action in the bundle
-        if ( bundle.containsKey(ARGUMENT_ACTION)){
-            String whatAction = bundle.getString(ARGUMENT_ACTION);
-            // check if that action is edit
-            if ( TextUtils.equals(whatAction, ARGUMENT_ACTION_EDIT ) ) {
-                // check if we're done
-                if ( TextUtils.equals(bundle.getString(ARGUMENT_DONE_OR_UNFINISHED),
-                        ARGUMENT_DONE ) ) {
+        // if it's edit and done has been set, or if the bundle does not have an action set
+        // not having an action set means it's from main activity
+         if ( isEditAndDone(bundle) || !bundle.containsKey(ARGUMENT_ACTION)  ) {
+             // if from edit and we're done setting the value we'd clicked go to that screen
                     goToEditSymptomLogOrIngredientLogActivity(context, activity, bundle);
-                } else {
-                    // we're not finished yet, so go to the next activity or fragment
-                }
             } else {
-
+                // if no it can't be edit, so go to list
+                goToListSymptomLogOrIngredientLogActivity(context, activity, bundle);
             }
-        } else {
-            // if no action was given it can't be edit, so go to list
-            goToListSymptomLogOrIngredientLogActivity(context, activity, bundle);
-        }
-
     }
 
     // check the bundle to get the log id array key and then go to the right list activity
@@ -1398,7 +1507,7 @@ or at least achieves the same effect.
                                                                  activity, Bundle bundle){
 
         //if it's symptom log go to that
-        if ( bundle.containsKey(bundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY))) {
+        if ( isSymptomLogBundle(bundle) ) {
             goToListSymptomLogActivity(context, activity, bundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
         } else {
             // ingredient log then
@@ -1406,11 +1515,167 @@ or at least achieves the same effect.
         }
     }
 
+    public static Boolean isSymptomLogBundle(Bundle bundle){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( bundle.containsKey(ARGUMENT_SYMPTOM_LOG_ID_ARRAY)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+
+    public static Boolean isRecipeBundle(Bundle bundle){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( bundle.containsKey(ARGUMENT_RECIPE_ID_ARRAY)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+
+    public static Boolean isSymptomBundle(Bundle bundle){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( bundle.containsKey(ARGUMENT_SYMPTOM_ID_ARRAY)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+
+    public static Boolean isSymptomLogTypeString(String typeString){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_SYMPTOM_LOG_ID_ARRAY, typeString)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+    public static Boolean isSymptomLogBegin(String typeString){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN, typeString)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+    public static Boolean isSymptomLogAllInstants(String typeString){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS, typeString)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+    public static Boolean isSymptomLogAllInstantsAllDay(String typeString){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS_ALL_DAY, typeString)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+    public static Boolean isSymptomLogWhatToChangeSetToChanged(String typeString){
+
+        Boolean isSymptomLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED, typeString)
+        ) {
+            isSymptomLogOrNot = Boolean.TRUE;
+        }
+        return isSymptomLogOrNot;
+    }
+    public static Boolean isIngredientLogTypeString(String typeString){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_INGREDIENT_LOG_ID_ARRAY, typeString)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+
+
+    public static Boolean isIngredientLogAllInstants(String string){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_INGREDIENT_LOG_ALL_INSTANTS, string)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+    public static Boolean isIngredientLogConsumed(String string){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED, string)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+    public static Boolean isIngredientLogCooked(String string){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED, string)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+    public static Boolean isIngredientLogAcquired(String string){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( TextUtils.equals(ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED, string)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+    public static Boolean isIngredientLogBundle(Bundle bundle){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( bundle.containsKey(ARGUMENT_INGREDIENT_LOG_ID_ARRAY)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+    public static Boolean isIngredientBundle(Bundle bundle){
+
+        Boolean isIngredientLogOrNot = Boolean.FALSE;
+
+        if ( bundle.containsKey(ARGUMENT_INGREDIENT_ID_ARRAY)
+        ) {
+            isIngredientLogOrNot = Boolean.TRUE;
+        }
+        return isIngredientLogOrNot;
+    }
+
     // check the bundle to get the log id array key and then go to the right list activity
     public static void goToEditSymptomLogOrIngredientLogActivity(Context context, Activity
             activity, Bundle bundle){
         //if it's symptom log go to that
-        if ( bundle.containsKey(bundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY))) {
+        if ( isSymptomLogBundle(bundle) ) {
             goToEditSymptomLogActivity(context, activity,
                     bundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
         } else {
@@ -1437,10 +1702,10 @@ or at least achieves the same effect.
                                               String idString){
         Class whereGoTo = null;
 
-        if ( TextUtils.equals(idStringType, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
+        if ( isSymptomLogTypeString(idStringType) ) {
             whereGoTo = ListSymptomLogActivity.class;
         }
-        else if ( TextUtils.equals(idStringType, Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY) ) {
+        else if ( isIngredientLogTypeString(idStringType) ) {
             whereGoTo = ListIngredientLogActivity.class;
         }
 
@@ -1467,12 +1732,129 @@ or at least achieves the same effect.
         return whatToChange;
     }
 
+    // if what to change is this or that, then return our value defaults for that
+    // basically if then else if etc
+    public static Fragment setIngredientLogFragmentFromChangeInstant(String whatToChange,
+                                                                     Fragment setIfConsumed,
+                                                                     Fragment setIfCooked,
+                                                                     Fragment setIfAcquired){
+        Fragment setToThis = null;
+
+        if ( isIngredientLogConsumed(whatToChange) ){
+            setToThis = setIfConsumed;
+        } else if ( isIngredientLogCooked(whatToChange) ){
+            setToThis = setIfCooked;
+        } else if ( isIngredientLogAcquired(whatToChange) ){
+            setToThis = setIfAcquired;
+        }
+
+        return setToThis;
+    }
+
+
+
+    // given a string arraylist of the UUID of ingredient logs,
+    // return the ingredient logs in an array
+    public static ArrayList<SymptomLog> setSymptomLogArrayFromStringArray(ArrayList<String> logIdStringArray,
+                                                                          SymptomLogViewModel symptomLogViewModel){
+        ArrayList<SymptomLog> symptomLogArray = new ArrayList<>();
+
+        // for each string in array update that log's instant began
+        for (String logIdString: logIdStringArray) {
+            // now get the log associated with each UUID
+            symptomLogArray.add(
+                    symptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(logIdString))
+                );
+        }
+        return symptomLogArray;
+    }
+
+    public static String[] setSymptomLogStringFromChangeInstant(String whatToChange,
+            String firstStringIfBegin, String firstStringIfChanged,
+    String secondStringIfBegin, String secondStringIfChanged){
+
+        String[] bothStrings = new String[]{setSymptomLogStringFromChangeInstant(whatToChange, firstStringIfBegin,
+                firstStringIfChanged), setSymptomLogStringFromChangeInstant(whatToChange, secondStringIfBegin,
+                secondStringIfChanged)};
+
+        return bothStrings;
+    }
+
+    public static String setStringTypeBundle(Bundle bundle){
+
+        String stringTypeFromBundle = null;
+
+        if ( isSymptomLogBundle(bundle) ) {
+            stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
+
+        } else if ( isIngredientLogBundle(bundle) ){
+            stringTypeFromBundle = Util.ARGUMENT_FOOD_LOG_ID_ARRAY;
+
+        } else if ( isIngredientBundle(bundle) ){
+            stringTypeFromBundle = Util.ARGUMENT_INGREDIENT_ID_ARRAY;
+
+        } else if ( isRecipeBundle(bundle) ){
+            stringTypeFromBundle = Util.ARGUMENT_RECIPE_ID_ARRAY;
+
+        } else if ( isSymptomBundle(bundle) ){
+            stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_ID_ARRAY;
+        }
+
+        return stringTypeFromBundle;
+    }
+    // given a string arraylist of the UUID of ingredient logs,
+    // return the ingredient logs in an array
+    public static ArrayList<IngredientLog> setIngredientLogArrayFromStringArray(ArrayList<String> logIdStringArray,
+                                                                                IngredientLogViewModel ingredientLogViewModel){
+        ArrayList<IngredientLog> ingredientLogArray = new ArrayList<>();
+        // for each string in array update that log's instant began
+        for (String ingredientLogIdString: logIdStringArray) {
+            // now get the food log associated with each UUID
+            ingredientLogArray.add(
+                    ingredientLogViewModel.viewModelGetIngredientLogFromLogId(
+                            UUID.fromString(ingredientLogIdString)
+                    ));
+        }
+        return ingredientLogArray;
+    }
+
+    public static String setIngredientLogStringFromChangeInstant(String whatToChange,
+                                                                 String setIfConsumed,
+                                                                 String setIfCooked,
+                                                                 String setIfAcquired){
+        String setToThis = null;
+
+        if ( isIngredientLogConsumed(whatToChange) ){
+            setToThis = setIfConsumed;
+        } else if ( isIngredientLogCooked(whatToChange) ){
+            setToThis = setIfCooked;
+        } else if ( isIngredientLogAcquired(whatToChange) ){
+            setToThis = setIfAcquired;
+        }
+
+        return setToThis;
+    }
+    public static String setSymptomLogStringFromChangeInstant(String whatToChange,
+                                                                 String setIfBegin,
+                                                                 String setIfChanged){
+        String setToThis = null;
+
+        if ( isSymptomLogBegin(whatToChange) ){
+            setToThis = setIfBegin;
+        } else if ( isSymptomLogWhatToChangeSetToChanged(whatToChange) ){
+            setToThis = setIfChanged;
+        }
+
+        return setToThis;
+    }
+
+
     public static Boolean setGoToEditFromBundle(Bundle bundle){
         Boolean goBackToEdit = Boolean.FALSE;
         // if there was an action given in the bundle
         if ( bundle.containsKey(ARGUMENT_ACTION) ) {
             // and if that action was edit
-            if ( TextUtils.equals(bundle.getString(Util.ARGUMENT_ACTION), ARGUMENT_ACTION_EDIT)){
+            if ( isActionEditBundle(bundle) ){
                 // then we were from edit, so we'll check this to only set one value and go back
                 // to edit
                 goBackToEdit = Boolean.TRUE;
@@ -1673,13 +2055,11 @@ or at least achieves the same effect.
         Instant mInstant = null;
 
         if ( ingredientLog != null ) {
-            if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_CONSUMED)) {
+            if (  isIngredientLogConsumed(whatToChange) ) {
                 mInstant = ingredientLog.getInstantConsumed();
-            } else if (TextUtils.equals(whatToChange,
-                    Util.ARGUMENT_CHANGE_INGREDIENT_COOKED)) {
+            } else if ( isIngredientLogCooked(whatToChange) ) {
                 mInstant = ingredientLog.getInstantCooked();
-            } else if (TextUtils.equals(whatToChange,
-                    Util.ARGUMENT_CHANGE_INGREDIENT_ACQUIRED)) {
+            } else if (isIngredientLogAcquired(whatToChange) ) {
                 mInstant = ingredientLog.getInstantAcquired();
             } else {
                 // this is for all the changed instants, leaving as an else in case I add more
@@ -1689,10 +2069,10 @@ or at least achieves the same effect.
         }
         else if ( symptomLog != null ) {
             if (TextUtils.equals(whatToChange,
-                    Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
+                    Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN)) {
                 mInstant = symptomLog.getInstantBegan();
             } else if (TextUtils.equals(whatToChange,
-                    Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED)) {
+                    Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED)) {
                 mInstant = symptomLog.getInstantChanged();
             } else {
                 mInstant = symptomLog.getInstantBegan();
@@ -1719,7 +2099,7 @@ or at least achieves the same effect.
                                              SymptomLogViewModel SymptomLogViewModel,
                                              Bundle bundle ){
         Instant firstInstant = null;
-        if ( TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN) ) {
+        if ( TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN) ) {
 
             firstInstant =
                     Util.getFirstInstant(null,
@@ -1728,7 +2108,7 @@ or at least achieves the same effect.
                                             bundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY)).get(0)
                                     )
                             ));
-        } else if ( TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_COOKED) ) {
+        } else if ( TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED) ) {
             // get the new first instant corresponding to our newly set ingredient log instant
             firstInstant = ingredientLogViewModel.viewModelGetIngredientLogFromLogId(
                     UUID.fromString( Util.cleanBundledStringIntoArrayList(bundle.getString(
@@ -1760,19 +2140,19 @@ or at least achieves the same effect.
 
         Instant instant = null;
         if (symptomLog != null) {
-            if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_SYMPTOM_BEGIN) ) {
+            if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN) ) {
                 instant = symptomLog.getInstantBegan();
-            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_SYMPTOM_CHANGED)){
+            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED)){
                 instant = symptomLog.getInstantChanged();
             } else {
                 instant = symptomLog.getInstantBegan();
             }
         } else if ( ingredientLog != null ){
-            if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_CONSUMED) ) {
+            if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED) ) {
                 instant = ingredientLog.getInstantConsumed();
-            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_COOKED)){
+            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED)){
                 instant = ingredientLog.getInstantCooked();
-            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_ACQUIRED)){
+            } else if ( TextUtils.equals(whatToChange, ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED)){
                 instant = ingredientLog.getInstantAcquired();
             } else {
                 instant = ingredientLog.getInstantConsumed();
@@ -1857,38 +2237,38 @@ or at least achieves the same effect.
             whatToChange = bundle.getString(ARGUMENT_CHANGE);
         } else {
             // if no key was given, set to the first thing to change for that object
-            if ( bundle.containsKey(ARGUMENT_INGREDIENT_LOG_ID_ARRAY)){
-                whatToChange = ARGUMENT_CHANGE_INGREDIENT_CONSUMED;
+            if ( isIngredientLogBundle(bundle) ){
+                whatToChange = ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED;
             } else {
-                whatToChange = ARGUMENT_CHANGE_SYMPTOM_BEGIN;
+                whatToChange = ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN;
             }
         }
 
         // start with consumed, then ask for cooked, then ask for acquired for ingredient log
         // or start with begin and then changed for symptom log
-        if (whatToChange == ARGUMENT_CHANGE_INGREDIENT_CONSUMED) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_COOKED);
+        if ( isIngredientLogConsumed(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED);
         }
-        else if (whatToChange == ARGUMENT_CHANGE_INGREDIENT_COOKED) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_ACQUIRED);
+        else if (isIngredientLogCooked(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED);
         }
-        else if (whatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_ACQUIRED) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_BRAND);
+        else if (isIngredientLogAcquired(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_LOG_BRAND);
         }
-        else if (whatToChange == ARGUMENT_CHANGE_INGREDIENT_BRAND) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_AMOUNT);
+        else if ( isIngredientLogBrand(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT);
         }
-        else if (whatToChange == ARGUMENT_CHANGE_INGREDIENT_AMOUNT) {
+        else if ( isIngredientLogAmount(whatToChange) ) {
             bundle.remove(ARGUMENT_CHANGE);
 
         }
-        else if (whatToChange == ARGUMENT_CHANGE_SYMPTOM_INTENSITY) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+        else if (isSymptomLogIntensity(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN);
         }
-        else if (whatToChange == ARGUMENT_CHANGE_SYMPTOM_BEGIN) {
-            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_SYMPTOM_CHANGED);
+        else if (isSymptomLogBegin(whatToChange) ) {
+            bundle.putString(ARGUMENT_CHANGE, ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED);
         }
-        else if (whatToChange == ARGUMENT_CHANGE_SYMPTOM_CHANGED) {
+        else if ( isSymptomLogWhatToChangeSetToChanged(whatToChange) ) {
             bundle.remove(ARGUMENT_CHANGE);
         }
 
@@ -1900,7 +2280,7 @@ or at least achieves the same effect.
                                                        SymptomLog symptomLog,
                                                        Bundle integerBundleToSetDateTime){
 
-        if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_ALL_INSTANTS)) {
+        if (isSymptomLogAllInstants(whatToChange)) {
             // get the instant we have already so we have correct date
             // change began at time
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
@@ -1910,12 +2290,12 @@ or at least achieves the same effect.
             instantToSet = Util.setInstantFromBundle(symptomLog.getInstantChanged(),
                     integerBundleToSetDateTime);
             symptomLog.setInstantChanged(instantToSet);
-        } else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
+        } else if (isSymptomLogBegin(whatToChange)) {
             // get the instant we have already so we have correct date
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
                     integerBundleToSetDateTime);
             symptomLog.setInstantBegan(instantToSet);
-        }else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS_ALL_DAY)) {
+        } else if (isSymptomLogAllInstantsAllDay(whatToChange)) {
             // get the instant we have already so we have correct date
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
                     integerBundleToSetDateTime);
@@ -1943,7 +2323,7 @@ or at least achieves the same effect.
 
         Instant instant;
 
-        if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_ALL_INSTANTS)) {
+        if (isIngredientLogAllInstants(whatToChange)) {
 
             // using the bundle and instant we want to change, set the localdatetime to that
             instant = Util.setInstantFromBundle(ingredientLog.getInstantConsumed(),
@@ -1960,7 +2340,7 @@ or at least achieves the same effect.
                     integerBundleToSetDateTime);
             ingredientLog.setInstantAcquired(instant);
         }
-        else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_CONSUMED)) {
+        else if (isIngredientLogConsumed(whatToChange)) {
 
             // using the bundle and instant we want to change, set the localdatetime to that
             instant = Util.setInstantFromBundle(ingredientLog.getInstantConsumed(),
@@ -1969,12 +2349,12 @@ or at least achieves the same effect.
             // and set that fixed value back in the food log
             ingredientLog.setInstantConsumed(instant);
         }
-        else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_COOKED)) {
+        else if (isIngredientLogCooked(whatToChange)) {
             instant = Util.setInstantFromBundle(ingredientLog.getInstantCooked(),
                     integerBundleToSetDateTime);
             ingredientLog.setInstantCooked(instant);
         }
-        else if (TextUtils.equals(whatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_ACQUIRED)) {
+        else if (isIngredientLogAcquired(whatToChange)) {
             instant = Util.setInstantFromBundle(ingredientLog.getInstantAcquired(),
                     integerBundleToSetDateTime);
             ingredientLog.setInstantAcquired(instant);
@@ -2051,6 +2431,13 @@ or at least achieves the same effect.
                                                            IngredientLogViewModel ingredientLogViewModel,
                                                            Bundle integerBundleToSetDateTime,
                                                    Bundle bundleNext){
+
+
+        // TODO add check for if acquired and cooked are same as an existing food log
+        // TODO then use whatToChange or a new argument
+        //  that's for set them all the same as another food log
+
+
         // for each string in array update that log's instant began
         for (IngredientLog ingredientLog: ingredientLogArray){
             //then set the values from the food log

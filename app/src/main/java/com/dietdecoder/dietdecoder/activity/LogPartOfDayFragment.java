@@ -186,13 +186,13 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             mSymptomViewModel = null;
 
             // if consumed hasn't been set yet, then that's what we're changing
-            if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_CONSUMED ){
+            if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED){
 //                questionTextView.setText(R.string.question_textview_new_ingredient_log_consumed_time);
                 mDefaultNextFragment = new LogDateTimeChoicesFragment();
-            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_COOKED) {
+            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED) {
                 questionTextView.setText(R.string.question_textview_new_ingredient_log_cooked_time);
                 mDefaultNextFragment = new LogDateTimeChoicesFragment();
-            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_ACQUIRED) {
+            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED) {
                 questionTextView.setText(R.string.question_textview_new_ingredient_log_acquired_time);
 //                mDefaultNextFragment = new IngredientLogBrandFragment();
             }
@@ -231,10 +231,10 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
             mIngredientLog = null;
 
             // if begin hasn't been set yet, then that's what we're changing
-            if ( mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN ){
+            if ( mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN){
 
 //                mTitleString = getResources().getString(R.string.title_log_begin);
-            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED) {
+            } else if ( mWhatToChange == Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED) {
 //                mTitleString = getResources().getString(R.string.title_log_change);
             }
 
@@ -392,27 +392,27 @@ public class LogPartOfDayFragment extends Fragment implements View.OnClickListen
 
     private void resetUIOrGoHome(Instant firstInstant){
 
-        if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN)) {
+        if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN)) {
             // we're done
             questionTextView.setText(getResources().getString(R.string.question_textview_new_symptom_log_changed_time));
             // we have changed begin so now set changed/ended instead
-            mWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED;
+            mWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED;
             // reset which buttons to be invisible
             setButtonVisibilityByInstantAlreadySet(Instant.now(),
                     firstInstant);
-        }else  if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_CONSUMED)) {
+        }else  if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED)) {
             // we're done
             questionTextView.setText(getResources().getString(R.string.question_textview_new_ingredient_log_cooked_time));
             // we have changed begin so now set changed/ended instead
-            mWhatToChange = Util.ARGUMENT_CHANGE_INGREDIENT_COOKED;
+            mWhatToChange = Util.ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED;
             // reset which buttons to be invisible
             setButtonVisibilityByInstantAlreadySet(Instant.now(),
                     firstInstant);
-        } else  if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_COOKED)) {
+        } else  if (TextUtils.equals(mWhatToChange, Util.ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED)) {
             // we're done
             questionTextView.setText(getResources().getString(R.string.question_textview_new_ingredient_log_acquired_time));
             // we have changed begin so now set changed/ended instead
-            mWhatToChange = Util.ARGUMENT_CHANGE_INGREDIENT_ACQUIRED;
+            mWhatToChange = Util.ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED;
             // reset which buttons to be invisible
             setButtonVisibilityByInstantAlreadySet(Instant.now(),
                     firstInstant);

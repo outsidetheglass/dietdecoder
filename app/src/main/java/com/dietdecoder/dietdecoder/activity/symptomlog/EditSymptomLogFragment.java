@@ -154,7 +154,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 // set our relevant data to use in new location
                 mBundleNext =
                         Util.setEditSymptomLogBundle(mSymptomLogIdString,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN);
 
                 // begin is a time, so go to the date time fragment to set it
                 Util.startNextFragmentBundle(thisActivity,
@@ -167,7 +167,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
                 Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewEdit,  new LogSpecificDateTimeFragment(), Util.ARGUMENT_ACTION_EDIT,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED,
+                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED,
                         Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
                 break;
             case R.id.imagebutton_symptom_log_name_option:
@@ -178,7 +178,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                     Util.startNextActivityActionChangeIdArray(thisActivity,
                             mNextActivityClass,
                             Util.ARGUMENT_ACTION_EDIT,
-                            Util.ARGUMENT_CHANGE_SYMPTOM_CHANGED,
+                            Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED,
                             Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -190,7 +190,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 Toast.makeText(getContext(), mChangeIntensity, Toast.LENGTH_SHORT).show();
                 Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewEdit,  new SymptomIntensityFragment(), Util.ARGUMENT_ACTION_EDIT,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_INTENSITY,
+                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY,
                         Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
 
                 break;

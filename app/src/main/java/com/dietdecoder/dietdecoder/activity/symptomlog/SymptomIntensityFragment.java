@@ -128,7 +128,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
             mBundleNext = mBundle;
             mBundleNext.putString(Util.ARGUMENT_FROM,
                     Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
-            mWhatToChangeNext = Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN;
+            mWhatToChangeNext = Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN;
 
             // to pass on to the time and date fragments, save the original untouched array string
             mSymptomLogIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
@@ -138,10 +138,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                     Util.ARGUMENT_ACTION_EDIT) ) {
                 mHowManyIdsToAdd = 1;
                 mCurrentIdIndex = 0;
-                mSymptomLogIdsToAddStringArrayOriginal = mSymptomLogIdsToAddString;
             } else {
-                mSymptomLogIdsToAddStringArrayOriginal =
-                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL);
                 mHowManyIdsToAdd =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
                 mCurrentIdIndex =
@@ -256,48 +253,46 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 // will set done or unfinished if action means we're from edit
                     mBundleNext = Util.setDoneIfFromEdit(mBundle);
 
+                String howManyInArrayString =
+                        mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY);
+                Integer howManyInArrayInteger = Integer.parseInt(howManyInArrayString);
+                String currentIndexInArrayString =
+                        mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY);
+                Integer currentIndexInArrayInteger = Integer.parseInt(currentIndexInArrayString);
 
+                Log.d(TAG,currentIndexInArrayString + "currentIndexInArrayString " + currentIndexInArrayInteger);
+                Log.d(TAG,mBundleNext.toString());
+                Log.d(TAG,Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY);
                 // if that was the last one to add
-                    if ( mCurrentIdIndex == 0) {
+                    if ( currentIndexInArrayInteger == 0) {
                         //TODO make times show up and modifiable back in add new logs if I want,
                         // probably don't need all these fragments, or make it a preference when
                         // they want to be asked when the symptom happened
 
-                        // there are no intensities left to set
-                        // add the original array as our array
-                        // the rest are all set together so it doesn't need to be a changing array, so we
-                        // don't need original and mutable array both, just need one
-                        mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
-                                mSymptomLogIdsToAddStringArrayOriginal);
-
-                        // if there's more than one symptom,
-                        // checked by if original string has a comma,
-                        if ( mSymptomLogIdsToAddStringArrayOriginal.contains(",")) {
+                        // if there was more than one symptom,
+                        if ( howManyInArrayInteger > 1) {
                             // alert user that all symptoms will have the same time and date,
                             // they can be individually edited from the symptom log menu
                             Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
+                            //if the current index is zero we've gone through them all
+                            // and if the number in array was more than one
+                            // then we're done
+                            Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
+                                    Util.fragmentContainerViewAddSymptomLog,
+                                    mDefaultNextFragment, mBundleNext);
                         }
 
-                        Log.d(TAG, mBundle.toString());
 
-                        // TODO move to util
-                        if ( TextUtils.equals(
-                                mBundle.getString(Util.ARGUMENT_ACTION), Util.ARGUMENT_ACTION_EDIT)
-                                && TextUtils.equals(Util.ARGUMENT_DONE_OR_UNFINISHED, Util.ARGUMENT_DONE)
-                        ) {
-                            Util.goToEditSymptomLogActivity(thisContext, null, mCurrentSymptomLogIdString);
-                        } else {
+                        Log.d(TAG, "made it here");
                             // go to date fragment to set when the symptom(s) happened
                             Util.startNextFragmentBundleChange(thisActivity,
                                     getParentFragmentManager().beginTransaction(),
                                     Util.fragmentContainerViewAddSymptomLog,
                                     mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
-                        }
-                    } else {
+
+                    }  else {
                         // not the last in the array, repeat this fragment
 
-                        // we've added it in, so remove this symptom from the ones to add
-                        mSymptomLogIdsToAddStringArray.remove(mCurrentSymptomLog.getSymptomLogId().toString());
                         // and lower our count for how many left to add
                         mCurrentIdIndex = mCurrentIdIndex - 1;
                         mBundleNext.putString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY, String.valueOf(mCurrentIdIndex));

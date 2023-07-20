@@ -86,15 +86,11 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
       mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
 
-      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff()
-              //, mSymptoms
-              //, mSymptomViewModel, mSymptomLogViewModel
-              );
+      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff() );
       recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-      Log.d(TAG, mSymptomLogViewModel.viewModelGetSomeSymptomLog(1).toString());
       mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
               new Observer<List<SymptomLog>>() {
                 @Override

@@ -139,8 +139,6 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
                 mHowManyIdsToAdd = 1;
                 mIngredientLogIdsToAddStringArrayOriginal = mIngredientLogIdsToAddString;
             } else {
-                mIngredientLogIdsToAddStringArrayOriginal =
-                        mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL);
                 mHowManyIdsToAdd =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
             }
@@ -300,13 +298,10 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
                 // add the current log IDs left to add into the bundle
                 mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
                         mIngredientLogIdsToAddStringArray.toString());
-                // and also add the original full array
-                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY_ORIGINAL,
-                        mIngredientLogIdsToAddStringArrayOriginal);
                 mBundleNext.putString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY,
                         mHowManyIdsToAdd.toString());
                 // we're still changing intensity
-                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_INTENSITY);
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
             } else {
                 // there are no intensities left to set
                 // add the original array as our array
@@ -315,7 +310,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
                 mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
                     mIngredientLogIdsToAddStringArrayOriginal);
                 // reset to setting begin time date for the next fragment
-                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_BEGIN);
+                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN);
 
                 // if there's more than one ingredient,
                 // checked by if original string has a comma,

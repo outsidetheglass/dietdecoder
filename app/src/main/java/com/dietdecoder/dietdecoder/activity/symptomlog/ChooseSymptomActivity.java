@@ -246,7 +246,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                 } else {
                     // if not empty, put the array into the intent to go add symptoms
                     mBundleNext =
-                            Util.setNewSymptomLogBundle(Util.ARGUMENT_SYMPTOM_ID_ARRAY,
+                            Util.setNewSymptomLogFromSymptomIdBundle(
                                     mSymptomsSelectedIdsArrayListStrings);
 
                     // go to set the intensity of the symptom

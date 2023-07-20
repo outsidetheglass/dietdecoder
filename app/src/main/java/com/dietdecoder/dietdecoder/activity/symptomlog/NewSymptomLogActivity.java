@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -99,9 +100,15 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
                 }
                 // putting set bundle in Util so it's easier for me to see what exactly is in
                 // each bundle
-                mBundleNext = Util.setNewSymptomLogBundle(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
+                mBundleNext = Util.setNewSymptomLogFromSymptomLogIdBundle(
                         mSymptomLogsToAddArrayListIdStrings);
 
+                int howManyInArray = 0;
+                for ( String hasComma:
+                        mBundleNext.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY).split(",") ){
+                    howManyInArray++;
+                }
+                Log.d(TAG, "howManyInArray " + howManyInArray);
                 // then go to the specific fragments to change away from the defaults
                 Util.startNextFragmentBundle(thisActivity,
                         getSupportFragmentManager().beginTransaction(),
