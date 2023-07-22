@@ -260,9 +260,6 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                         mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY);
                 Integer currentIndexInArrayInteger = Integer.parseInt(currentIndexInArrayString);
 
-                Log.d(TAG,currentIndexInArrayString + "currentIndexInArrayString " + currentIndexInArrayInteger);
-                Log.d(TAG,mBundleNext.toString());
-                Log.d(TAG,Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY);
                 // if that was the last one to add
                     if ( currentIndexInArrayInteger == 0) {
                         //TODO make times show up and modifiable back in add new logs if I want,
@@ -283,7 +280,6 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                         }
 
 
-                        Log.d(TAG, "made it here");
                             // go to date fragment to set when the symptom(s) happened
                             Util.startNextFragmentBundleChange(thisActivity,
                                     getParentFragmentManager().beginTransaction(),

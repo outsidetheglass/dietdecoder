@@ -4,10 +4,8 @@ import static com.dietdecoder.dietdecoder.R.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -22,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.symptomlog.NewSymptomLogActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

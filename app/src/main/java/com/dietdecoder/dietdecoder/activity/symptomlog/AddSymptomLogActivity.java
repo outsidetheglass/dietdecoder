@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
-    private final Activity thisActivity = NewSymptomLogActivity.this;
+    private final Activity thisActivity = AddSymptomLogActivity.this;
     private Context thisContext;
 
     int mFragmentContainerView = Util.fragmentContainerViewAddSymptomLog;
@@ -43,7 +43,7 @@ public class NewSymptomLogActivity extends AppCompatActivity implements Toolbar.
     SymptomViewModel mSymptomViewModel;
 
 
-    public NewSymptomLogActivity() {
+    public AddSymptomLogActivity() {
         super(R.layout.activity_new_symptom_log);
     }
 

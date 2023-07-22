@@ -3,7 +3,6 @@ package com.dietdecoder.dietdecoder.activity.ingredientlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -21,12 +20,12 @@ import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class NewIngredientLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class AddIngredientLogActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
 
     private final String TAG = "TAG: " + getClass().getSimpleName();
     //Log.d(TAG, " whichFragmentNext, mJustNowString: " + mJustNowString);
-    private final Activity thisActivity = NewIngredientLogActivity.this;
+    private final Activity thisActivity = AddIngredientLogActivity.this;
     private Context thisContext;
 
 //    int mFragmentContainerView = ;
@@ -42,7 +41,7 @@ public class NewIngredientLogActivity extends AppCompatActivity implements Toolb
     IngredientViewModel mIngredientViewModel;
 
 
-    public NewIngredientLogActivity() {
+    public AddIngredientLogActivity() {
         super(R.layout.activity_new_ingredient_log);
     }
 

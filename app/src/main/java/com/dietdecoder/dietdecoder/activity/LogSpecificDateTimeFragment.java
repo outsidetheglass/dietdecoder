@@ -170,14 +170,14 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
         mCurrentLogIdToAddString = mLogIdToAddStringArray.get(0);
         mCurrentLogId = UUID.fromString(mCurrentLogIdToAddString);
         if ( mSettingIngredientLog ){
+            mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
+            mSymptomLogViewModel = null;
+
             mIngredientLogArray = new ArrayList<>();
             // now get the info associated with that UUID
             mIngredientLog =
                     mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
             mSymptomLog = null;
-
-            mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
-            mSymptomLogViewModel = null;
 
             mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
             mSymptomViewModel = null;
@@ -205,12 +205,12 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
         } else if ( mSettingSymptomLog ){
             mSymptomLogArray = new ArrayList<>();
+            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
             // now get the info associated with that UUID
             mSymptomLog =
                     mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdToAddString));
 
             mIngredientLogViewModel = null;
-            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
             mIngredientViewModel = null;
             mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
@@ -339,12 +339,16 @@ public class LogSpecificDateTimeFragment extends Fragment implements View.OnClic
 
                 // set our bundle to what should happen when it's saved
                 mBundleNext = mBundleNextSave;
+                // if we're saving and it's a valid value, we're done so lets set to move to next
+                Boolean moveToNextWhatToChange = Boolean.TRUE;
                 // get the date and time user picked and put them in a bundle and set log with them
                 mBundleNext = Util.setLogInstants(mWhatToChange,
                         mIngredientLogArray, mSymptomLogArray,
                         mIngredientLogViewModel, mSymptomLogViewModel,
                         mIngredientViewModel, mSymptomViewModel,
-                        Util.localDateTimeFromInstant(Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear)), mBundleNext);
+                        Util.localDateTimeFromInstant(
+                                Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ),
+                        mBundleNext, moveToNextWhatToChange);
 
                 // this does check if from edit and done, then will go to list or e
                 Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),

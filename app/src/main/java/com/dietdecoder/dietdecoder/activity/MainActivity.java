@@ -46,16 +46,21 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
+    // I set the context and activity this way because it's different between activities and
+    // fragments and I want my code to be able to use the same thisContext and thisActivity sort
+    // of variables
     thisContext = thisActivity.getApplicationContext();
+
+    // I use mBundle to get the current values and set new values to bundle next, so I
+    // know if I'm checking mBundle I'm never getting next fragment values, like what we
+    // came in to this needing to change versus what to change next fragment
+    //mBundle = getArguments();
+    //mBundleNext = mBundle;
 
     //TODO
     // make symptoms to track at top of main activity,
     // then food log, symptom log next to each other at the bottom
 
-
-    SymptomLogViewModel mSymptomLogViewModel =
-            new ViewModelProvider(this).get(SymptomLogViewModel.class);
-    Log.d(TAG, mSymptomLogViewModel.viewModelGetSomeSymptomLog(1).toString());
     // Button to go to food log page
     ingredientLogButton = findViewById(R.id.button_ingredient_log);
     ingredientLogButton.setOnClickListener(this::onClick);

@@ -39,27 +39,30 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     // TODO set this to be a preference
     Integer hoursEarlierInt = 4;
 
-    Bundle mBundle, mBundleNext, mBundleNextJustNow;
+    Bundle mBundle, mBundleNext, mBundleNextJustNow, mBundleNextJustNowSymptomLog;
     int mFragmentContainer;
 
-    IngredientLogViewModel mIngredientLogViewModel;
-    SymptomLogViewModel mSymptomLogViewModel;
-    IngredientViewModel mIngredientViewModel;
-    SymptomViewModel mSymptomViewModel;
-    IngredientLog mIngredientLog;
-    SymptomLog mSymptomLog;
+    IngredientLogViewModel mIngredientLogViewModel = null;
+    SymptomLogViewModel mSymptomLogViewModel = null;
+    IngredientViewModel mIngredientViewModel = null;
+    SymptomViewModel mSymptomViewModel = null;
+    IngredientLog mIngredientLog = null;
+    SymptomLog mSymptomLog = null;
 
-    String mCurrentLogIdString, mWhatToChange, mWhatToChangeJustNow, mEarlierTodayWhatToChange;
+    String mCurrentLogIdString, mWhatToChange, mWhatToChangeJustNow, mWhatToChangeEarlierToday;
     UUID mCurrentLogId;
 
-    Fragment mDefaultNextFragment, mDefaultNextFragmentJustNow;
+    Fragment mNextFragmentJustNow, mNextFragmentEarlierToday, mNextFragment = null,
+            mRepeatThisFragment, mNextFragmentAnotherDate, mNextFragmentYesterday;
     Class mDefaultNextActivityJustNow, mDefaultNextActivity;
 
-    Boolean mSettingSymptomLog, mSettingIngredientLog;
+    Boolean mSettingSymptomLog, mSettingIngredientLog, mMoveToNextWhatToChange = Boolean.FALSE,
+            mMoveToNextWhatToChangeAnotherDate = Boolean.FALSE, mMoveToNextWhatToChangeEarlierToday =
+            Boolean.FALSE, mMoveToNextWhatToChangeJustNow = Boolean.FALSE,
+            mMoveToNextWhatToChangeYesterday = Boolean.FALSE;
     Instant mInstantConsumed, mInstant;
     Integer mCurrentLogIndex;
-    LocalDateTime mNowDateTime = LocalDateTime.now(), mEarlierTodayDateTime, mYesterdayDateTime,
-            mDayBeforeYesterdayDateTime;
+    LocalDateTime mDateTimeNow, mDateTimeEarlierToday, mDateTimeYesterday;
     ArrayList<String> mSymptomLogIdsToAddStringArray, mIngredientLogIdStringArray, mLogIdStringArray;
     ArrayList<IngredientLog> mIngredientLogArray;
     ArrayList<SymptomLog> mSymptomLogArray;
@@ -82,148 +85,177 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         thisActivity = this.getActivity();
-        if ( getArguments()==null ){
-            Util.goToMainActivity(null, thisActivity);
-        } else {
-            mBundle = getArguments();
-            mBundleNext = mBundle;
-            mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+        // check this fragment has all that it needs and go back to list or edit if we don't
+        Util.checkValidFragment(getArguments(), thisActivity);
 
-            questionTextView = view.findViewById(R.id.textview_question_log_date_time_choices_time);
+        // if we got past the valid fragment check then we can grab our values
+        mBundle = getArguments();
+        mBundleNext = mBundle;
+        // we do have a specific time date to change so let's set what we do next
+        mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
+        mWhatToChangeJustNow = mWhatToChange;
 
-            // one of these will be false and the other true
-            mSettingIngredientLog = Util.isIngredientLogBundle(mBundle);
-            mSettingSymptomLog = Util.isSymptomLogBundle(mBundle);
+        questionTextView = view.findViewById(R.id.textview_question_log_date_time_choices_time);
 
-            // find out if we have a food log or symptom log to set the date time of
-            // if food log ID was given then set that
-            if (mSettingIngredientLog) {
-                setDependentValues(mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY),
-                         Util.fragmentContainerViewAddIngredientLog);
+        // could set this to next fragment but no matter what the default next one is, repeat
+        // should be this fragment only
+        mRepeatThisFragment = new LogDateTimeChoicesFragment();
+        // set the default next fragment to be repeating this fragment
+        // since next is usually a start time to an end time or other time values
+        mNextFragment = mRepeatThisFragment;
 
-            } else if (mSettingSymptomLog) {
-                setDependentValues(mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY),
-                        Util.fragmentContainerViewAddSymptomLog);
-            }
+        // set just now's what to change and bundle to same as default
+        // set datetime to now
+        // next fragment is null because symptom log if either is clicked we're going home
+        // if it's ingredient log then it's go to word input/brand but that isn't made yet
+        mBundleNextJustNow = mBundle;
+        // one of these will be false and the other true
+        mSettingIngredientLog = Util.isIngredientLogBundle(mBundle);
+        mSettingSymptomLog = Util.isSymptomLogBundle(mBundle);
 
-            // set the listeners on the buttons
-            // to run onClick method when they are clicked
-            mButtonJustNow = (Button) view.findViewById(R.id.button_log_date_time_choices_just_now);
-            mButtonJustNow.setOnClickListener(this);
+        // find out if we have a food log or symptom log to set the date time of
+        // if food log ID was given then set that
+        if (mSettingIngredientLog) {
+            setDependentValues(mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY),
+                     Util.fragmentContainerViewAddIngredientLog, IngredientLogViewModel.class);
 
-            mButtonYesterday = (Button) view.findViewById(R.id.button_log_date_time_choices_yesterday);
-            mButtonYesterday.setOnClickListener(this);
-
-            mButtonAnotherDate =
-                    (Button) view.findViewById(R.id.button_log_date_time_choices_another_date);
-            mButtonAnotherDate.setOnClickListener(this);
-
-            mButtonEarlierToday = (Button) view.findViewById(R.id.button_log_date_time_choices_earlier_today);
-            mButtonEarlierToday.setOnClickListener(this);
-
+        } else if (mSettingSymptomLog) {
+            setDependentValues(mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY),
+                    Util.fragmentContainerViewAddSymptomLog, SymptomLogViewModel.class);
         }
+
+        // set the listeners on the buttons
+        // to run onClick method when they are clicked
+        mButtonJustNow = (Button) view.findViewById(R.id.button_log_date_time_choices_just_now);
+        mButtonJustNow.setOnClickListener(this);
+
+        mButtonYesterday = (Button) view.findViewById(R.id.button_log_date_time_choices_yesterday);
+        mButtonYesterday.setOnClickListener(this);
+
+        mButtonAnotherDate =
+                (Button) view.findViewById(R.id.button_log_date_time_choices_another_date);
+        mButtonAnotherDate.setOnClickListener(this);
+
+        mButtonEarlierToday = (Button) view.findViewById(R.id.button_log_date_time_choices_earlier_today);
+        mButtonEarlierToday.setOnClickListener(this);
+
+        Log.d(TAG, " \nmBundleNext at end of create view \n" + mBundleNext.toString());
+
     }//end onViewCreated
 
-    private void setDependentValues(String logIdToAddString, int fragmentContainer){
-
+    private void setDependentValues(String logIdToAddString, int fragmentContainer,
+                                    Class logViewModelClass){
         // when we have to replace the fragment container, replace the right one
         mFragmentContainer = fragmentContainer;
 
         // parse the ids from the string into an array
         mLogIdStringArray =
                 Util.cleanBundledStringIntoArrayList(logIdToAddString);
+        // get the index of the id string we're setting in the array
         mCurrentLogIndex =
                 Integer.parseInt(mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+        // turn that index into the string of the actual log id to get
         mCurrentLogIdString = mLogIdStringArray.get(mCurrentLogIndex);
+        // convert the string id into the usable UUID
         mCurrentLogId = UUID.fromString(mCurrentLogIdString);
+
+        // set all the basic values from the given ones
+        setViewModelObjectArray(logViewModelClass);
+        String questionTextViewString = null;
+
         if ( mSettingIngredientLog ){
-            mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
-            mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
-            mIngredientLogArray = new ArrayList<>();
 
-            mSymptomLogViewModel = null;
-            mSymptomLogArray = null;
-            mSymptomLog = null;
-
-            // now get the info associated with that UUID
-            mIngredientLog =
-                    mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
-
-            // set the fragment to each of the instant options
-            mDefaultNextFragment = new LogDateTimeChoicesFragment();
-            mIngredientLogArray = Util.setIngredientLogArrayFromStringArray(mLogIdStringArray,
-                    mIngredientLogViewModel);
-
-            // if just now is picked then we're still only modifying one at a time
-            mWhatToChangeJustNow = mWhatToChange;
-            // default what to change won't change for ingredient if earlier today is chosen
-            mEarlierTodayWhatToChange = mWhatToChange;
-
-
-            questionTextView.setText(Util.setIngredientLogStringFromChangeInstant(mWhatToChange,
-                    String.valueOf(questionTextView.getText()),
-                    String.valueOf(R.string.question_textview_new_ingredient_log_cooked_time),
-                    String.valueOf(R.string.question_textview_new_ingredient_log_acquired_time)
-            ) );
+            // change the question that's set to ask the user based on which instant we're changing
+            String questionStringIfConsumed =
+                    getResources().getString(R.string.question_textview_new_log);
+            String questionStringIfCooked =
+                    getResources().getString(R.string.question_textview_new_ingredient_log_cooked_time);
+            String questionStringIfAcquired =
+                    getResources().getString(R.string.question_textview_new_ingredient_log_acquired_time);
+            // no bundle needed since it's just one string answer
+            questionTextViewString = Util.setIngredientLogStringFromChangeInstant(mWhatToChange,
+                    questionStringIfConsumed, questionStringIfCooked, questionStringIfAcquired
+            );
 
             //TODO get brand working
-//            mDefaultNextFragmentJustNow = Util.setFragmentFromChangeInstant(mWhatToChange,
+//            mNextFragmentJustNow = Util.setFragmentFromChangeInstant(mWhatToChange,
 //                    null, null, new IngredientLogBrandFragment()
 //            );
 
         } else if ( mSettingSymptomLog ){
-            mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
-            mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-            mSymptomLogArray = new ArrayList<>();
-            mIngredientLogViewModel = null;
-            mIngredientLog = null;
-            mIngredientLogArray = null;
 
-            // now get the info associated with that UUID
-            mSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdString));
-
-
-            mDefaultNextFragment = new LogDateTimeChoicesFragment();
-
-
-            mSymptomLogArray = Util.setSymptomLogArrayFromStringArray(mLogIdStringArray,
-                    mSymptomLogViewModel);
-
-            // if just now is clicked,
-            // for symptom log we're done so then return to list or edit
-            mDefaultNextFragmentJustNow = null;
-            mBundleNextJustNow = Util.setDone(mBundle);
-
-            // if earlier today for symptom begin
-            // then we need part of day is fragment for changed
-            // and update what to change is symptom changed/ended now
-            // it doesn't hurt to set symptom changed to itself again
-            mEarlierTodayWhatToChange = Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED;
-
-
+            Log.d(TAG,
+                    " \nmBundleNext set dependent values symptom log: \n" + mBundleNext.toString());
 
             // if just now is picked then symptom begin and changed/ended can all be set to now
             // but if it was changed and clicked on just now, that doesn't mean set begin, so
             // it's only if it was originally begin to make it all instants
-            String[] symptomLogStringsFromChangeInstant = Util.setSymptomLogStringFromChangeInstant(mWhatToChange,
-                    String.valueOf(R.string.question_textview_new_symptom_log_begin_time),
-                    String.valueOf(R.string.question_textview_new_symptom_log_changed_time),
-                    Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS,
-                    Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED
-            );
-            String questionText = symptomLogStringsFromChangeInstant[0];
-            // set the fragment to each of the instant options
-            mWhatToChangeJustNow = symptomLogStringsFromChangeInstant[1];
+            String questionStringIfBegin = getResources().getString(R.string.question_textview_new_symptom_log_begin_time);
+            String questionStringIfChanged = getResources().getString(R.string.question_textview_new_symptom_log_changed_time);
 
-            questionTextView.setText(questionText);
+            // along with our question string defaults
+            // for just now, if begin was clicked then set both it and changed/ended: ALL_INSTANTS
+            // if changed/ended was clicked then set only it and leave begin alone
+            Bundle questionJustNowBundle =
+                    Util.setQuestionStringWhatToChangeJustNow( mWhatToChange,
+                            questionStringIfBegin, questionStringIfChanged,
+                            Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS,
+                            Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED );
+            // set the question and what to change based on which of the instant options
+            questionTextViewString = questionJustNowBundle.getString(Util.ARGUMENT_QUESTION);
 
+            // set that we'll be done if just now is clicked, since for both begin and changed
+            // they'd set their time to be now and be done
+            mWhatToChangeJustNow = questionJustNowBundle.getString(Util.ARGUMENT_CHANGE_JUST_NOW);
+            // we need what to change just now because if it was clicked, then we can't ask for a
+            // future time when it changed/ended, so we'll just set that to now too and be done
+
+
+            Log.d(TAG,
+                    " \nmBundleNext after set just now in symptom set dependent: \n" +
+                            mBundleNext.toString());
         }
 
         // get the date time of current log so we can set the default view with it
         mDateTime = Util.getDateTimeFromChange(mWhatToChange, mIngredientLog, mSymptomLog);
 
+        questionTextView.setText( questionTextViewString);
 
+    }
+
+
+    private void setViewModelObjectArray(Class logViewModelClass){
+        // if ingredient log view model was given then set those values
+        if ( logViewModelClass == IngredientLogViewModel.class ) {
+            mIngredientLogViewModel = (IngredientLogViewModel) new ViewModelProvider(this).get(logViewModelClass);
+            mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
+            mIngredientLogArray = new ArrayList<>();
+
+            // now get the info associated with that UUID
+            mIngredientLog =
+                    mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
+
+
+            mIngredientLogArray = Util.setIngredientLogArrayFromStringArray(mLogIdStringArray,
+                    mIngredientLogViewModel);
+        }
+        // we were given symptom log to use so set those values
+        else if ( logViewModelClass == SymptomLogViewModel.class){
+            mSymptomLogViewModel = (SymptomLogViewModel) new ViewModelProvider(this).get(logViewModelClass);
+            mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
+            mSymptomLogArray = new ArrayList<>();
+
+            // now get the info associated with that UUID
+            mSymptomLog =
+                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdString));
+
+            mSymptomLogArray = Util.setSymptomLogArrayFromStringArray(mLogIdStringArray,
+                    mSymptomLogViewModel);
+        }
+        else {
+            Log.d(TAG, "Neither symptom log nor ingredient log were given for the object to set a" +
+                    " date time to.");
+        }
     }
 
     @Override
@@ -232,7 +264,6 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
         //TODO add logic for if the time selected is valid based on from edit and other relevant
         // values
 
-        Bundle mBundleNext = mBundle;
         switch (view.getId()) {
             // which button was clicked
             case R.id.button_log_date_time_choices_just_now:
@@ -241,51 +272,79 @@ public class LogDateTimeChoicesFragment extends Fragment implements View.OnClick
 
                 // just now means now date and time and the what to change that varies for which
                 // object
+                mDateTime = LocalDateTime.now();
+//                mBundleNext = mBundleNextJustNow;
+//                mBundleNext.putString(Util.ARGUMENT_DONE_OR_UNFINISHED, Util.ARGUMENT_DONE);
+                mBundleNext = Util.setDone(mBundleNext);
+                mNextFragment = null;
                 mWhatToChange = mWhatToChangeJustNow;
-                mDateTime = mNowDateTime;
-                mDefaultNextActivity = mDefaultNextActivityJustNow;
-                mBundleNext = mBundleNextJustNow;
+                mMoveToNextWhatToChange =  Boolean.TRUE;
                 break;
 
             case R.id.button_log_date_time_choices_earlier_today:
                 Toast.makeText(getContext(), getResources().getString(R.string.toast_earlier_today),
                         Toast.LENGTH_SHORT).show();
                 // set times to be earlier today, time set automatically
-                mEarlierTodayDateTime = LocalDateTime.now().minusHours(hoursEarlierInt);
-                mDateTime = mEarlierTodayDateTime;
-                mWhatToChange = mEarlierTodayWhatToChange;
-
+                mDateTime = LocalDateTime.now().minusHours(hoursEarlierInt);
+                mNextFragment = new LogPartOfDayFragment();
+                mMoveToNextWhatToChange = Boolean.FALSE;
                 break;
 
             case R.id.button_log_date_time_choices_yesterday:
                 // if they clicked yesterday
                 Toast.makeText(getContext(), getResources().getString(R.string.toast_yesterday), Toast.LENGTH_SHORT).show();
                 // then it should set defaults to yesterday at same time as now
-                mYesterdayDateTime = LocalDateTime.now().minusDays(1);
-                mDateTime = mYesterdayDateTime;
+                mDateTime = LocalDateTime.now().minusDays(1);
+                // part of day yesterday
+                mNextFragment = new LogPartOfDayFragment();
+                mMoveToNextWhatToChange = Boolean.FALSE;
 
                 break;
 
             case R.id.button_log_date_time_choices_another_date:
                 Toast.makeText(getContext(), getResources().getString(R.string.toast_another_date),
                         Toast.LENGTH_SHORT).show();
-                mDefaultNextFragment = new LogSpecificDateTimeFragment();
+                // given no specific info yet we can't set anything, so just go there
+                mNextFragment = new LogSpecificDateTimeFragment();
+                mMoveToNextWhatToChange = Boolean.FALSE;
                 break;
 
             default:
                 break;
         }//end switch case
 
+        Log.d(TAG, " \n\nmBundleNext before set:\n " + mBundleNext.toString());
         // we're setting log
+        // mWhatToChange is what's being set right now, so if it's consumed, then consumed time
+        // date is what gets set
+        // mBundleNext is what gets changed to the next one, so if it's begin symptom time, it
+        // changes to changed/ended symptom time
         mBundleNext = Util.setLogInstants(mWhatToChange,
                 mIngredientLogArray, mSymptomLogArray,
                 mIngredientLogViewModel, mSymptomLogViewModel,
-                mIngredientViewModel, mSymptomViewModel, mDateTime, mBundleNext);
+                mIngredientViewModel, mSymptomViewModel, mDateTime, mBundleNext,
+                mMoveToNextWhatToChange);
 
+        Log.d(TAG, " \nmBundleNext after set: \n" + mBundleNext.toString());
+
+        // set our bundle to say it's going to the fragment we're about to go to
+//        mBundleNext = Util.setGoToFromNextFragment(mBundleNext, mNextFragment);
+//
+//        Log.d(TAG, " \nafter set next fragment \n" + mBundleNext.toString());
+        // set the data to pass along info
+        // given from the previous fragment
+        // or the duplicated ID if we did that
+//        mNextFragment.setArguments(mBundleNext);
+//        getParentFragmentManager().beginTransaction()
+//                .replace(Util.fragmentContainerViewAddSymptomLog,
+//                        mNextFragment)
+//                .setReorderingAllowed(true)
+//                .addToBackStack(null)
+//                .commit();
         // and which fragment to go to next
         Util.startNextFragmentBundle(thisActivity,
                 getParentFragmentManager().beginTransaction(),
-                mFragmentContainer, mDefaultNextFragment, mBundleNext);
+                mFragmentContainer, mNextFragment, mBundleNext);
 
     }//end onClick
 
