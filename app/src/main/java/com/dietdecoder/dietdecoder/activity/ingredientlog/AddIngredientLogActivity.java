@@ -54,6 +54,9 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
+        //TODO Ingredient log will need to search ingredients for the ingredient being added,
+        // and if it doesn’t already exist add it in,
+        // if it does then use existing ingredient ID.
 
         // if we had no view made, go straight to asking user for intensity
         if (savedInstanceState == null) {

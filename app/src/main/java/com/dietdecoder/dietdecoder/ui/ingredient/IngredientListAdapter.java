@@ -35,6 +35,14 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
   @Override
   public void onBindViewHolder(IngredientViewHolder holder, int position) {
     Ingredient currentIngredient = getItem(position);
+
+
+    //TODO Ingredient log will need to search ingredients for the ingredient being added,
+    // and if it doesn’t already exist add it in,
+    // if it does then use existing ingredient ID.
+    //TODO add search bar in top with add button next to it
+    //TODO make it case insensitive
+
     holder.bind(currentIngredient);
   }//end onBindViewHolder
 

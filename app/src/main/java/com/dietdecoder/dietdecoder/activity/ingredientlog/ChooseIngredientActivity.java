@@ -90,6 +90,12 @@ public class ChooseIngredientActivity extends AppCompatActivity implements Toolb
             mButtonSaveName.setOnClickListener(this);
 
 
+            //TODO Ingredient log will need to search ingredients for the ingredient being added,
+            // and if it doesn’t already exist add it in,
+            // if it does then use existing ingredient ID.
+            //TODO add search bar in top with add button next to it OR make an add button at bottom
+            //TODO make it case insensitive
+
             // make the view for listing the items in the log
             recyclerViewIngredientNameChoices =
                     findViewById(R.id.recyclerview_ingredient_name_choices);

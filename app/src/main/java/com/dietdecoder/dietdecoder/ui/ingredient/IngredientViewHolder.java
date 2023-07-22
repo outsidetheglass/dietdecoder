@@ -48,6 +48,9 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 
   private IngredientViewHolder(View itemView) {
     super(itemView);
+
+    // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
+    //  its name doesn't match what's typed in the search bar
     mIngredientViewHolderContext = itemView.getContext();
     mIngredientItemView = itemView.findViewById(R.id.textview_ingredient_item);
     mIngredientItemButton = itemView.findViewById(R.id.imagebutton_ingredient_option_circle);
@@ -79,6 +82,8 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 
   public void bind(Ingredient ingredient) {
 
+    // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
+    //  its name doesn't match what's typed in the search bar
     String ingredientName = ingredient.getIngredientName();
     String ingredientIdString = ingredient.getIngredientId().toString();
     // if the other values exist, list them
