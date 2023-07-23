@@ -19,6 +19,34 @@
         app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
         app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
+    <EditText
+        android:id="@+id/edittext_choose_ingredient_search"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:hint="@string/search_here"
+        android:textAppearance="@style/edittext"
+        app:layout_constraintEnd_toStartOf="@+id/imagebutton_ingredient_search"
+        app:layout_constraintRight_toLeftOf="@+id/imagebutton_ingredient_search"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_choose_ingredient"
+        android:layout_gravity="right"
+        />
+
+    <ImageButton
+        android:id="@+id/imagebutton_ingredient_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/textview_item_option"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_choose_ingredient"
+        app:layout_constraintLeft_toRightOf="@+id/edittext_choose_ingredient_search"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/ic_baseline_search_24"
+        android:src="@drawable/ic_baseline_option"
+        />
     <TextView
         android:id="@+id/textview_title_new_ingredient_log_name_choices"
         android:layout_width="wrap_content"
@@ -31,8 +59,8 @@
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_choose_ingredient"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toBottomOf="@+id/edittext_choose_ingredient_search"
+        app:layout_constraintVertical_bias="0.1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_ingredient_name_choices"
@@ -65,5 +93,17 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerview_ingredient_name_choices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_choose_ingredient_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_add_24"
+        android:textAppearance="@style/button_save"
+        android:layout_margin="@dimen/big_padding"
+        app:layout_constraintVertical_bias="0.90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.80"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

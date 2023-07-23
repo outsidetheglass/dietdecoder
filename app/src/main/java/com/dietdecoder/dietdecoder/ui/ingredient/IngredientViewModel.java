@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,8 +38,18 @@ public class IngredientViewModel extends AndroidViewModel {
 
 
   //get all ingredients to list them
-  public LiveData<List<Ingredient>> viewModelGetAllIngredients() {
-    return mViewModelAllIngredients;
+  public LiveData<List<Ingredient>> viewModelGetAllIngredients(String filterString) {
+    // if we aren't given a filter, return all ingredients
+    LiveData<List<Ingredient>> ingredients = mViewModelAllIngredients;
+    // if there is a filter
+    if (filterString != null){
+      // return ingredients that match the filter string
+      ingredients = viewModelGetAllIngredientsMatchingSearchName(filterString);
+    }
+    return ingredients;
+  }
+  public LiveData<List<Ingredient>> viewModelGetAllIngredientsMatchingSearchName(String searchIngredientName) {
+    return (LiveData<List<Ingredient>>) mRepository.repositoryGetAllIngredientsMatchingSearchName(searchIngredientName);
   }
 
   //get all ingredients with concern

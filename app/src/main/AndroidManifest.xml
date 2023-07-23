@@ -60,7 +60,7 @@
         android:exported="false" />
       <activity        android:name=".activity.ingredient.DetailIngredientActivity"
         android:exported="false" />
-      <activity        android:name=".activity.ingredient.NewIngredientActivity"
+      <activity        android:name=".activity.ingredient.AddIngredientActivity"
         android:exported="false" />
       <activity        android:name=".activity.ingredient.EditIngredientActivity"
         android:exported="false" />

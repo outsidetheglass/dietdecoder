@@ -60,10 +60,8 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
     String[] mDisplayedStringList;
     int[] mAmountColorList;
     Boolean isAmountViewEmpty;
-    Integer mAmountSelectedIndex;
-    Integer mHowManyIdsToAdd;
-    Double mAmountSelected;
-    Double mAmountOfMostRecentIngredientLogWithSameIngredientName;
+    Integer mAmountSelectedIndex, mHowManyIdsToAdd, mCurrentLogIndex;
+    Double mAmountSelected, mAmountOfMostRecentIngredientLogWithSameIngredientName;
     UUID mIngredientLogId, mCurrentIngredientId;
     Color mCurrentAmountColor, mPreviousAmountColor, mNextAmountColor;
 
@@ -137,27 +135,33 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
             if (TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION),
                     Util.ARGUMENT_ACTION_EDIT) ) {
                 mHowManyIdsToAdd = 1;
-                mIngredientLogIdsToAddStringArrayOriginal = mIngredientLogIdsToAddString;
+                mCurrentLogIndex = 0;
+                mCurrentIngredientLogIdString = mIngredientLogIdsToAddString;
             } else {
                 mHowManyIdsToAdd =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
+                mCurrentLogIndex =
+                        Integer.parseInt(mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+                // parse the name from the array of ids and put that in the textview
+                // clean the string of its brackets and spaces
+                // turn into array list
+                mIngredientLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
+                        mIngredientLogIdsToAddString
+                );
+                // set the current ingredient to be the first
+                mCurrentIngredientLogIdString =
+                        mIngredientLogIdsToAddStringArray.get(mCurrentLogIndex);
             }
 
-            // parse the name from the array of ids and put that in the textview
-            // clean the string of its brackets and spaces
-            // turn into array list
-            mIngredientLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
-                    mIngredientLogIdsToAddString
-            );
+            // set that in the number picker and the textview for the user interface
+            setCurrentIngredientUI(mCurrentIngredientLogIdString);
 
-            // set the current ingredient to be the first
-            mCurrentIngredientLogIdString = mIngredientLogIdsToAddStringArray.get(0);
-            setCurrentIngredientTextViewNumberPicker(mCurrentIngredientLogIdString);
-
-            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
-                    UUID.fromString(mCurrentIngredientLogIdString) );
+            // get current log info
+            UUID currentLogId = UUID.fromString(mCurrentIngredientLogIdString);
+            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(currentLogId );
+            // get the ingredient info from the log
             mCurrentIngredient =
-                    mIngredientViewModel.viewModelGetIngredientFromId(mCurrentIngredientLog.getIngredientLogId());
+                    mIngredientViewModel.viewModelGetIngredientFromId(currentLogId);
             mCurrentIngredientName = mCurrentIngredient.getIngredientName();
             mCurrentIngredientId = mCurrentIngredient.getIngredientId();
 
@@ -203,7 +207,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 
     // change the name on the text view to new current ingredient and the new default intensity
     // value
-    private void setCurrentIngredientTextViewNumberPicker(String paramIngredientLogIdToAddString){
+    private void setCurrentIngredientUI(String paramIngredientLogIdToAddString){
 
         // get first log in the list array
         UUID uuid = UUID.fromString(paramIngredientLogIdToAddString);

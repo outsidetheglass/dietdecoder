@@ -60,6 +60,11 @@ class IngredientRepository {
 
 
 
+  public LiveData<List<Ingredient>> repositoryGetAllIngredientsMatchingSearchName(String searchIngredientName) {
+    // percent sign is the SQL wildcard
+    String searchableSqlString = "%" + searchIngredientName + "%";
+    return mIngredientDao.daoGetAllIngredientsMatchingSearchName(searchableSqlString);
+  }
   public Ingredient repositoryGetIngredientFromSearchName(String searchIngredientName) {
     return mIngredientDao.daoGetIngredientFromSearchName(searchIngredientName);
   }

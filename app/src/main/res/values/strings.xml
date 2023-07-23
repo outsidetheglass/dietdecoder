@@ -59,6 +59,9 @@
   <string name="question_textview_new_ingredient_log_cooked_time">That set when the ingredient was consumed. Now, when did the ingredient get cooked/prepared/preserved?</string>
   <string name="question_textview_new_ingredient_log_acquired_time">That set when the ingredient was cooked. Now, when did the ingredient get acquired/harvested/bought?</string>
 
+  <string name="search_here">Search here...</string>
+
+
 
 
   <string name="question_textview_new_log">What general time range are we concerned with?</string>

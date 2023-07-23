@@ -11,6 +11,7 @@
     <color name="unselected_text_color">@color/green_700</color>
     <color name="tint_sick_face">#FF0000</color>
     <color name="tint_empty_circle">#333333</color>
+    <color name="tint_search_bar_clicked">#000000</color>
     <color name="red_background">#79FF0000</color>
 
     <color name="red_200">#FFA3A3</color>

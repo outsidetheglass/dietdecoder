@@ -56,8 +56,15 @@ public interface IngredientDao {
   Ingredient daoGetIngredientFromNameChemicalName(String daoIngredientName, String daoIngredientChemicalName);
 
 
-  @Query("SELECT * FROM ingredient_table WHERE ingredientName LIKE :searchIngredientName")
+  @Query("SELECT * FROM ingredient_table WHERE ingredientName LIKE :searchIngredientName ORDER BY" +
+          " ingredientName ASC LIMIT 1")
   Ingredient daoGetIngredientFromSearchName(String searchIngredientName);
+
+  @Query("SELECT * FROM ingredient_table " +
+          "WHERE ingredientName " +
+          "LIKE :searchIngredientName " +
+          "ORDER BY ingredientName ASC")
+  LiveData<List<Ingredient>> daoGetAllIngredientsMatchingSearchName(String searchIngredientName);
 
   @Query("SELECT * FROM ingredient_table WHERE ingredientId LIKE :searchIngredientId")
   Ingredient daoGetIngredientFromId(UUID searchIngredientId);

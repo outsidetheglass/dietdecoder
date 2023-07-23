@@ -3,7 +3,6 @@ package com.dietdecoder.dietdecoder.activity.ingredient;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
@@ -72,7 +70,7 @@ public class IngredientActivity extends AppCompatActivity implements Toolbar.OnM
     mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
     // if not null, then set list of ingredients
-    mActivityAllIngredients = mIngredientViewModel.viewModelGetAllIngredients();
+    mActivityAllIngredients = mIngredientViewModel.viewModelGetAllIngredients(null);
 
     // turn LiveData into list and set that in Adapter so we can get positions
     mIngredientListAdapter.setIngredientList(mActivityAllIngredients.getValue());
@@ -86,7 +84,7 @@ public class IngredientActivity extends AppCompatActivity implements Toolbar.OnM
     // FAB to add new ingredient
     addIngredientButton = findViewById(R.id.add_button_ingredient);
     addIngredientButton.setOnClickListener( view -> {
-      addIngredientIntent = new Intent(thisActivity, NewIngredientActivity.class);
+      addIngredientIntent = new Intent(thisActivity, AddIngredientActivity.class);
       startActivity(addIngredientIntent);
     });
 

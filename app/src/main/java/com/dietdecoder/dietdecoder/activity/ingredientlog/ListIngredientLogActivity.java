@@ -107,17 +107,8 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
       case R.id.add_button_list_ingredient_log:
         // go to the list of ingredients the user experiences to allow user to select which ones
         // they're having now and then make those ingredient logs
-        //Util.goToChooseIngredientActivity(null, thisActivity);
+        Util.goToChooseIngredientActivity(thisContext, thisActivity);
 
-        Intent intent = new Intent(thisContext, ChooseIngredientActivity.class);
-        // if any of our given values aren't null, set them in the intent
-        // if there's a fragment to go to, like we're going to edit and then on to edit symptom
-
-          intent.putExtra(Util.ARGUMENT_GO_TO,
-                  Util.ARGUMENT_GO_TO_CHOOSE_INGREDIENT);
-
-          intent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_ACTION_ADD);
-        startActivity(intent);
         break;
       default:
         break;

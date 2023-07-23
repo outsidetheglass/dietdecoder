@@ -15,7 +15,7 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
-public class NewIngredientActivity extends AppCompatActivity {
+public class AddIngredientActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();

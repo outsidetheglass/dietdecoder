@@ -24,6 +24,7 @@ import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
 import com.dietdecoder.dietdecoder.activity.EditActivity;
+import com.dietdecoder.dietdecoder.activity.ingredient.AddIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ChooseIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.IngredientAmountFragment;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ListIngredientLogActivity;
@@ -121,6 +122,7 @@ public class Util {
     public static final String ARGUMENT_QUESTION = "question";
     public static final String ARGUMENT_CHANGE_JUST_NOW = "change_just_now";
 
+    public static final String ARGUMENT_FILTER = "filter";
 
     public static final String ARGUMENT_NEXT = "next";
 
@@ -277,7 +279,7 @@ public class Util {
 
         // remove brackets and spaces
         String mCleanedSplitString =
-                Util.cleanArrayString(paramStringToCleanIntoArrayList);
+                cleanArrayString(paramStringToCleanIntoArrayList);
 
         // make it into an array for each ID
         // double checked, this works fine even if there is only one value and no comma
@@ -948,10 +950,14 @@ public class Util {
     // bundle the relevant information between fragments for adding something new
     public static Bundle setNewBundle(ArrayList<String> newStringArray, String whereToGo,
                                       String arrayType){
+        Bundle bundle = new Bundle();
 
-        // set information about the array into the bundle
-        Bundle bundle = setBundleFromArrayInfo(newStringArray,
-                arrayType);
+        // if we were given an array add it to bundle
+        if ( newStringArray != null ) {
+            // set information about the array into the bundle
+            bundle = setBundleFromArrayInfo(newStringArray,
+                    arrayType);
+        }
 
         // set that we still have things to set
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_UNFINISHED);
@@ -961,6 +967,13 @@ public class Util {
 
 
         return bundle;
+    }
+    public static Bundle setSearchBundle(String searchString){
+
+        Bundle searchBundle = new Bundle();
+        searchBundle.putString(Util.ARGUMENT_FILTER, searchString);
+
+        return searchBundle;
     }
 
     // bundle the relevant information between fragments for editing something already existing
@@ -1805,6 +1818,11 @@ or at least achieves the same effect.
         goToActivityTypeIdClass(context, activity, null, null, MainActivity.class, null, null, null);
     }
 
+    public static void searchThisActivity(Context context, Activity activity, String filterString){
+
+        Bundle searchBundle = Util.setSearchBundle(filterString);
+        goToActivityTypeIdClass(context, activity, null, null, activity.getClass(), null, null, searchBundle);
+    }
     // go to the list activity given the type (symptom, etc) to deal with and its id string
     public static void goToListActivityTypeId(Context context, Activity activity,
                                               String idStringType,
@@ -1829,6 +1847,13 @@ or at least achieves the same effect.
         goToActivityTypeIdClass(context, activity, null, null, ChooseIngredientActivity.class,
                 null, null, null);
 
+//        Intent intent = new Intent(thisContext, ChooseIngredientActivity.class);
+//        // if any of our given values aren't null, set them in the intent
+//        // if there's a fragment to go to, like we're going to edit and then on to edit symptom
+//          intent.putExtra(Util.ARGUMENT_GO_TO,
+//                  Util.ARGUMENT_GO_TO_CHOOSE_INGREDIENT);
+//          intent.putExtra(Util.ARGUMENT_ACTION, Util.ARGUMENT_ACTION_ADD);
+//        startActivity(intent);
     }
 
     public static String setWhatToChangeFromBundle(Bundle bundle){
@@ -2136,9 +2161,17 @@ or at least achieves the same effect.
                 AddSymptomLogActivity.class, null, null, bundle);
 
     }
+    public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){
+        Bundle bundle = setNewBundle(null, ARGUMENT_GO_TO_ADD_INGREDIENT,
+                ARGUMENT_INGREDIENT_ID_ARRAY);
+        goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, null,
+                AddIngredientActivity.class, null, null, bundle);
 
-    public static void goToAddIngredientLog(Activity paramActivity,
-                                            String idString, Bundle bundle){
+    }
+
+
+    public static void goToAddIngredientLogActivity(Activity paramActivity,
+                                                    String idString, Bundle bundle){
 
         goToActivityTypeIdClass(null, paramActivity, ARGUMENT_INGREDIENT_ID_ARRAY,
                 idString, AddIngredientLogActivity.class,
@@ -2209,37 +2242,72 @@ or at least achieves the same effect.
         return bundle;
     }
 
-    public static Instant setFirstLogInstant(String whatToChange,
+    // return the instants that came before and after the one we're changing
+    public static ArrayList<Instant> setOrderOfLogInstants(String whatToChange,
                                              IngredientLogViewModel ingredientLogViewModel,
                                              SymptomLogViewModel SymptomLogViewModel,
                                              Bundle bundle ){
-        Instant firstInstant = null;
-        if ( Util.isSymptomLogTimeChange(whatToChange) ) {
+        ArrayList<Instant> arrayListInstants = new ArrayList<>();
+        //TODO all this logic should also return the second instant so it can calculate if it's
+        // the correct date or not
+        Instant mostRecentInstant = null;
+        Instant middleInstant = null;
+        Instant longestAgoInstant = null;
+        // if it's an ingredient log
+        if ( isIngredientLogBundle(bundle) ){
+            // then get the ingredient log from the bundle
+            String ingredientLogIdString =
+                    cleanArrayString(bundle.getString(
+                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY));
+            UUID uuid = UUID.fromString(ingredientLogIdString);
+            IngredientLog ingredientLog = ingredientLogViewModel.viewModelGetIngredientLogFromLogId(uuid);
 
-            firstInstant =
-                    Util.getFirstInstant(null,
-                            SymptomLogViewModel.viewModelGetSymptomLogFromLogId(
-                                    UUID.fromString(Util.cleanBundledStringIntoArrayList(
-                                            bundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY)).get(0)
-                                    )
-                            ));
-        } else if ( Util.isIngredientLogCooked(whatToChange) ) {
-            // get the new first instant corresponding to our newly set ingredient log instant
-            firstInstant = ingredientLogViewModel.viewModelGetIngredientLogFromLogId(
-                    UUID.fromString( Util.cleanBundledStringIntoArrayList(bundle.getString(
-                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY)).get(0)
-                    )
-            ).getInstantCooked();
-        } else {
-            // get the new first instant corresponding to our newly set ingredient log instant
-            firstInstant =
-                    Util.getFirstInstant(ingredientLogViewModel.viewModelGetIngredientLogFromLogId(
-                            UUID.fromString(Util.cleanBundledStringIntoArrayList(
-                                    bundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY)).get(0)
-                            )
-                    ), null);
+            // get the instant that comes before the one we're setting
+            // if it's consumed, then it had to have been acquired and cooked before that
+            // so if it's consumed, then any time after cooked is invalid
+            // if it's cooked, anything after acquired is invalid
+            if ( Util.isIngredientLogCooked(whatToChange) ) {
+                // get the new first instant corresponding to our newly set ingredient log instant
+                mostRecentInstant = ingredientLog.getInstantCooked();
+                longestAgoInstant = ingredientLog.getInstantAcquired();
+            }
+            else if ( Util.isIngredientLogConsumed(whatToChange) ) {
+                // get the new first instant corresponding to our newly set ingredient log instant
+                mostRecentInstant = ingredientLog.getInstantConsumed();
+                middleInstant = ingredientLog.getInstantCooked();
+                longestAgoInstant = ingredientLog.getInstantAcquired();
+
+                // is longestAgoInstant and not today, then valid
+
+                // if is mostRecentInstant, then mostRecentInstant after longestAgoInstant, and make
+                // specific date button visible
+
+                // if it's middleInstant, after longestAgoInstant and before mostRecentInstant
+            }
+            else {
+                // get the new first instant corresponding to our newly set ingredient log instant
+                // if we're setting acquired, it can't be done in the future, so set it to the
+                // default date
+                mostRecentInstant = ingredientLog.getInstantAcquired();
+            }
         }
-        return firstInstant;
+        else if (isSymptomLogBundle(bundle)) {
+            //if (Util.isSymptomLogTimeChange(whatToChange)) {
+
+            String symptomLogIdString =
+                    cleanArrayString(bundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
+            UUID uuid = UUID.fromString(symptomLogIdString);
+            SymptomLog symptomLog = SymptomLogViewModel.viewModelGetSymptomLogFromLogId(uuid);
+            // if it's begin we want to use the default time set
+            // if it's changed we want to use begin to set what times are valid, after that instant
+            mostRecentInstant = symptomLog.getInstantChanged();
+            longestAgoInstant = symptomLog.getInstantBegan();
+        }
+
+        arrayListInstants.add(mostRecentInstant);
+        arrayListInstants.add(middleInstant);
+        arrayListInstants.add(longestAgoInstant);
+        return arrayListInstants;
     }
 
     // pass in null for values you want to keep same as instant
@@ -2515,16 +2583,6 @@ or at least achieves the same effect.
 
     }
 
-    public static Instant getFirstInstant(IngredientLog ingredientLog, SymptomLog symptomLog){
-        Instant firstInstant = null;
-        if ( ingredientLog != null ){
-            firstInstant = ingredientLog.getInstantConsumed();
-        }
-        else {
-            firstInstant = symptomLog.getInstantBegan();
-        }
-        return firstInstant;
-    }
 
     public static Bundle setLogInstants(String whatToChange,
                                         ArrayList<IngredientLog> ingredientLogArray,
