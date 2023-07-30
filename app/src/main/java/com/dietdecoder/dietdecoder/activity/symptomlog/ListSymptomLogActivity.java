@@ -29,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ListSymptomLogActivity extends AppCompatActivity implements View.OnClickListener,
         Toolbar.OnMenuItemClickListener {
@@ -85,7 +86,6 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
 
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
       mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
-
       mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff() );
       recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));

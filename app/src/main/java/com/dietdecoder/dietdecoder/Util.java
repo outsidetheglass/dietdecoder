@@ -13,14 +13,15 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dietdecoder.dietdecoder.activity.DetailActivity;
-import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
-import com.dietdecoder.dietdecoder.activity.LogPartOfDayFragment;
-import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
+import com.dietdecoder.dietdecoder.activity.DateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.PartOfDayFragment;
+import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
 import com.dietdecoder.dietdecoder.activity.EditActivity;
@@ -46,7 +47,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -100,6 +100,9 @@ public class Util {
     // also confirmed if an argument is given twice it replaces the first one, it won't hold on
     // to both. i.e. if ARGUMENT_CHANGE goes from CHANGE_BEGIN to CHANGE_END it won't have it
     // twice for both options, it'll only say CHANGE_END.
+    public static final String ARGUMENT_BEFORE = "before";
+    public static final String ARGUMENT_AFTER = "after";
+
     public static final String ARGUMENT_INGREDIENT_ID = "ingredient_id";
     public static final String ARGUMENT_INGREDIENT_NAME = "ingredient_name";
     public static final String ARGUMENT_SYMPTOM_ID = "symptom_id";
@@ -113,7 +116,6 @@ public class Util {
     public static final String ARGUMENT_CURRENT_INDEX_IN_ARRAY = "current_index_in_array";
     public static final String ARGUMENT_SYMPTOM_LOG_ID_ARRAY = "symptom_log_id_array";
 
-    public static final String ARGUMENT_FOOD_LOG_ID_ARRAY = "food_log_id_array";
     public static final String ARGUMENT_INGREDIENT_ID_ARRAY = "ingredient_id_array";
     public static final String ARGUMENT_RECIPE_ID_ARRAY = "recipe_id_array";
 
@@ -148,73 +150,127 @@ public class Util {
     // fragment or activity to go to given this argument
     public static final String ARGUMENT_GO_TO = "go_to";
 
-    // which activity we are from
-    public static final String ARGUMENT_ACTIVITY_FROM = "activity_from";
-    // activities we might be from
-    public static final String ARGUMENT_ACTIVITY_FROM_EDIT_FOOD_LOG = "activity_from_edit_food_log";
-    public static final String ARGUMENT_ACTIVITY_FROM_NEW_FOOD_LOG = "activity_from_new_food_log";
-    public static final String ARGUMENT_ACTIVITY_FROM_ARE_YOU_SURE = "from_are_you_sure";
-    public static final String ARGUMENT_ACTIVITY_FROM_NEW_SYMPTOM_LOG = "from_new_symptom_log";
+    public static final String ARGUMENT_FROM_ADD_INGREDIENT_ACTIVITY =
+            "from_add_ingredient_activity";
+    public static final String ARGUMENT_FROM_DELETE_INGREDIENT_ACTIVITY =
+            "from_delete_ingredient_activity";
+    public static final String ARGUMENT_FROM_DETAIL_INGREDIENT_ACTIVITY =
+            "from_detail_ingredient_activity";
+    public static final String ARGUMENT_FROM_EDIT_INGREDIENT_ACTIVITY =
+            "from_edit_ingredient_activity";
+    public static final String ARGUMENT_FROM_INGREDIENT_ACTIVITY = "from_ingredient_activity";
+
+    public static final String ARGUMENT_FROM_ADD_INGREDIENT_LOG_ACTIVITY =
+            "from_add_ingredient_log_activity";
+    public static final String ARGUMENT_FROM_CHOOSE_INGREDIENT_ACTIVITY =
+            "from_choose_ingredient_activity";
+    public static final String ARGUMENT_FROM_INGREDIENT_AMOUNT_FRAGMENT = "from_ingredient_amount_fragment";
+    public static final String ARGUMENT_FROM_EDIT_INGREDIENT_LOG_ACTIVITY =
+            "from_edit_ingredient_log_activity";
+
+    public static final String ARGUMENT_FROM_ADD_RECIPE_ACTIVITY = "from_add_recipe_activity";
+    public static final String ARGUMENT_FROM_EDIT_RECIPE_ACTIVITY = "from_new_recipe_activity";
+    public static final String ARGUMENT_FROM_RECIPE_ACTIVITY = "from_recipe_activity";
 
 
+    public static final String ARGUMENT_FROM_DETAIL_SYMPTOM_ACTIVITY =
+            "from_detail_symptom_activity";
+    public static final String ARGUMENT_FROM_SYMPTOM_ACTIVITY =
+            "from_symptom_activity";
 
 
-
-    // fragments to go to
-    public static final String ARGUMENT_GO_TO_DATE_TIME_CHOICES = "go_to_date_time_choices";
-    public static final String ARGUMENT_GO_TO_PART_OF_DAY = "go_to_part_of_day";
-    public static final String ARGUMENT_GO_TO_SPECIFIC_DATE = "go_to_specific_date";
-    public static final String ARGUMENT_GO_TO_SPECIFIC_DATE_TIME = "go_to_specific_date_time";
-    public static final String ARGUMENT_GO_TO_SPECIFIC_TIME = "go_to_specific_time";
-    public static final String ARGUMENT_GO_TO_LIST_SYMPTOM_LOG =
-            "go_to_list_symptom_log";
-    public static final String ARGUMENT_GO_TO_LIST_INGREDIENT_LOG =
-            "go_to_list_ingredient_log";
-    public static final String ARGUMENT_GO_TO_CHOOSE_SYMPTOM =
-            "go_to_choose_symptom";
-    public static final String ARGUMENT_GO_TO_CHOOSE_INGREDIENT =
-            "go_to_choose_ingredient";
-    public static final String ARGUMENT_GO_TO_ADD_SYMPTOM =
-            "go_to_add_symptom";
-    public static final String ARGUMENT_GO_TO_ADD_INGREDIENT =
-            "go_to_add_ingredient";
-    public static final String ARGUMENT_GO_TO_ADD_SYMPTOM_LOG =
-            "go_to_add_symptom_log";
-    public static final String ARGUMENT_GO_TO_ADD_INGREDIENT_LOG =
-            "go_to_add_ingredient_log";
-    public static final String ARGUMENT_GO_TO_MAIN_ACTIVITY =
-            "go_to_main_activity";
+    public static final String ARGUMENT_FROM_ADD_SYMPTOM_LOG_ACTIVITY =
+ "from_add_symptom_log_activity";
+    public static final String ARGUMENT_FROM_CHOOSE_SYMPTOM_ACTIVITY =
+            "from_choose_symptom_activity";
+    public static final String ARGUMENT_FROM_EDIT_SYMPTOM_LOG_ACTIVITY =
+            "from_edit_symptom_log_activity";
+    public static final String ARGUMENT_FROM_LIST_SYMPTOM_LOG_ACTIVITY =
+            "from_list_symptom_log_activity";
+    public static final String ARGUMENT_FROM_SYMPTOM_INTENSITY_FRAGMENT = "from_intensity_symptom";
 
 
+    public static final String ARGUMENT_FROM_DATE_TIME_CHOICES_FRAGMENT =
+            "from_date_time_choices_fragment";
+    public static final String ARGUMENT_FROM_DETAIL_ACTIVITY = "from_detail_activity";
+    public static final String ARGUMENT_FROM_EDIT_ACTIVITY = "from_edit_activity";
+    public static final String ARGUMENT_FROM_EXPORT_ACTIVITY = "from_export_activity";
+    public static final String ARGUMENT_FROM_FIRST_START_WIZARD_ACTIVITY =
+            "from_first_start_wizard_activity";
+    public static final String ARGUMENT_FROM_MAIN_ACTIVITY = "from_main_activity";
+    public static final String ARGUMENT_FROM_OTHER_ACTIVITY = "from_other_activity";
+    public static final String ARGUMENT_FROM_PART_OF_DAY_FRAGMENT = "from_part_of_day";
+    public static final String ARGUMENT_FROM_RESOURCES_ACTIVITY = "from_resources_activity";
+    public static final String ARGUMENT_FROM_SPECIFIC_DATE_TIME_FRAGMENT =
+            "from_specific_date_time_fragment";
 
-
-    public static final String ARGUMENT_GO_TO_DELETE_FOOD_LOG = "go_to_delete_food_log";
-    public static final String ARGUMENT_GO_TO_DETAIL_FOOD_LOG = "go_to_delete_food_log";
-
-    public static final String ARGUMENT_GO_TO_EDIT_FOOD_LOG =
-            "go_to_edit_food_log";
-    public static final String ARGUMENT_GO_TO_EDIT_SYMPTOM_LOG =
-            "go_to_edit_symptom_log";
-    public static final String ARGUMENT_GO_TO_EDIT_SYMPTOM =
-            "go_to_edit_symptom";
-    public static final String ARGUMENT_GO_TO_EDIT_RECIPE =
-            "go_to_edit_recipe";
-    public static final String ARGUMENT_GO_TO_EDIT_INGREDIENT =
-            "go_to_edit_ingredient";
-    public static final String ARGUMENT_GO_TO_SYMPTOM_INTENSITY = "go_to_symptom_intensity";
-    public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT = "go_to_ingredient_amount";
-    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND = "go_to_ingredient_brand";
-
-
-    // which fragment we're from, places we might be from options
-    public static final String ARGUMENT_FROM_INGREDIENT_NAME = "from_ingredient_name";
     public static final String ARGUMENT_FROM_SPECIFIC_TIME = "from_specific_time";
     public static final String ARGUMENT_FROM_SPECIFIC_DATE = "from_specific_date";
-    public static final String ARGUMENT_FROM_DATE_TIME_CHOICES = "from_date_time_choices";
     public static final String ARGUMENT_FROM_INGREDIENT_BRAND = "from_ingredient_brand";
-    public static final String ARGUMENT_FROM_PART_OF_DAY = "from_part_of_day";
     public static final String ARGUMENT_FROM_EDIT = "from_edit";
-    public static final String ARGUMENT_FROM_INTENSITY_SYMPTOM = "from_intensity_symptom";
+
+
+
+
+    public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY = "go_to_ingredient_amount_activity";
+    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY = "go_to_ingredient_brand_activity";
+    public static final String ARGUMENT_GO_TO_ADD_INGREDIENT_ACTIVITY =
+            "go_to_add_ingredient_activity";
+    public static final String ARGUMENT_GO_TO_DELETE_INGREDIENT_ACTIVITY =
+            "go_to_delete_ingredient_activity";
+    public static final String ARGUMENT_GO_TO_DETAIL_INGREDIENT_ACTIVITY =
+            "go_to_detail_ingredient_activity";
+    public static final String ARGUMENT_GO_TO_EDIT_INGREDIENT_ACTIVITY =
+            "go_to_edit_ingredient_activity";
+    public static final String ARGUMENT_GO_TO_INGREDIENT_ACTIVITY = "go_to_ingredient_activity";
+
+    public static final String ARGUMENT_GO_TO_ADD_INGREDIENT_LOG_ACTIVITY =
+            "go_to_add_ingredient_log_activity";
+    public static final String ARGUMENT_GO_TO_CHOOSE_INGREDIENT_ACTIVITY =
+            "go_to_choose_ingredient_activity";
+    public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT_FRAGMENT = "go_to_ingredient_amount_fragment";
+    public static final String ARGUMENT_GO_TO_EDIT_INGREDIENT_LOG_ACTIVITY =
+            "go_to_edit_ingredient_log_activity";
+
+
+    public static final String ARGUMENT_GO_TO_ADD_RECIPE_ACTIVITY = "go_to_add_recipe_activity";
+    public static final String ARGUMENT_GO_TO_EDIT_RECIPE_ACTIVITY = "go_to_ew_recipe_activity";
+    public static final String ARGUMENT_GO_TO_RECIPE_ACTIVITY = "go_to_recipe_activity";
+
+
+    public static final String ARGUMENT_GO_TO_DETAIL_SYMPTOM_ACTIVITY =
+            "go_to_detail_symptom_activity";
+    public static final String ARGUMENT_GO_TO_SYMPTOM_ACTIVITY =
+            "go_to_symptom_activity";
+
+
+    public static final String ARGUMENT_GO_TO_ADD_SYMPTOM_LOG_ACTIVITY =
+            "go_to_add_symptom_log_activity";
+    public static final String ARGUMENT_GO_TO_CHOOSE_SYMPTOM_ACTIVITY =
+            "go_to_choose_symptom_activity";
+    public static final String ARGUMENT_GO_TO_EDIT_SYMPTOM_LOG_ACTIVITY =
+            "go_to_edit_symptom_log_activity";
+    public static final String ARGUMENT_GO_TO_LIST_SYMPTOM_LOG_ACTIVITY =
+            "go_to_list_symptom_log_activity";
+    public static final String ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT =
+            "go_to_symptom_intensity_fragment";
+
+
+    public static final String ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT =
+            "go_to_date_time_choices_fragment";
+    public static final String ARGUMENT_GO_TO_DETAIL_ACTIVITY = "go_to_detail_activity";
+    public static final String ARGUMENT_GO_TO_EDIT_ACTIVITY = "go_to_edit_activity";
+    public static final String ARGUMENT_GO_TO_EXPORT_ACTIVITY = "go_to_export_activity";
+    public static final String ARGUMENT_GO_TO_FIRST_START_WIZARD_ACTIVITY =
+            "go_to_first_start_wizard_activity";
+    public static final String ARGUMENT_GO_TO_MAIN_ACTIVITY =
+            "go_to_main_activity";
+    public static final String ARGUMENT_GO_TO_OTHER_ACTIVITY = "go_to_other_activity";
+    public static final String ARGUMENT_GO_TO_PART_OF_DAY_FRAGMENT = "go_to_part_of_day";
+    public static final String ARGUMENT_GO_TO_RESOURCES_ACTIVITY = "go_to_resources_activity";
+    public static final String ARGUMENT_GO_TO_SPECIFIC_DATE_TIME_FRAGMENT =
+            "go_to_specific_date_time_fragment";
+
 
 
 
@@ -281,10 +337,12 @@ public class Util {
         String mCleanedSplitString =
                 cleanArrayString(paramStringToCleanIntoArrayList);
 
-        // make it into an array for each ID
-        // double checked, this works fine even if there is only one value and no comma
-        for (String cleanString : mCleanedSplitString.split(",")) {
-            mStringArray.add(cleanString);
+        if ( paramStringToCleanIntoArrayList.contains(",")) {
+            // make it into an array for each ID
+            // double checked, this works fine even if there is only one value and no comma
+            for (String cleanString : mCleanedSplitString.split(",")) {
+                mStringArray.add(cleanString);
+            }
         }
 
         return mStringArray;
@@ -317,6 +375,18 @@ public class Util {
                 Util.cleanBundledStringIntoArrayList(stringFromBundle);
 
         return mIdStringArray;
+
+    }
+
+    public static String setBeforeOrAfterFromArgument(String argument){
+
+        String beforeOrAfterString = null;
+
+        if (TextUtils.equals(Util.ARGUMENT_BEFORE, argument) ){
+            beforeOrAfterString = Util.ARGUMENT_BEFORE;
+        }
+
+        return beforeOrAfterString;
 
     }
 
@@ -746,6 +816,15 @@ public class Util {
         return instantStart.plus(duration);
     }
 
+    public static Integer hourFromInstant(Instant instant){
+        return localDateTimeFromInstant(instant).getHour();
+    }
+    public static Integer yearFromInstant(Instant instant){
+        return localDateTimeFromInstant(instant).getYear();
+    }
+    public static Integer dayOfYearFromInstant(Instant instant){
+        return localDateTimeFromInstant(instant).getDayOfYear();
+    }
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
 
@@ -895,6 +974,67 @@ public class Util {
 //        return mIntent;
 //    }
 
+    //set a string and the id type string
+    // given a bundle and the strings to set to based on which id type
+    public static String[] setStringAndTypeByIdArrayFromBundleElseIfStrings(Bundle bundle, String ifSymptomLogString,
+                                                                            String ifIngredientLogString, String ifSymptomString,
+                                                                            String ifIngredientString, String ifRecipeString){
+
+        String stringTypeFromBundle = null;
+        String ifString = null;
+        String[] typeAndIfString = null;
+
+        if ( isSymptomLogBundle(bundle) ) {
+            ifString = ifSymptomLogString;
+            stringTypeFromBundle = ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
+        } else if ( isIngredientLogBundle(bundle) ){
+            stringTypeFromBundle = ifIngredientLogString;
+            ifString = ifSymptomLogString;
+            stringTypeFromBundle = ARGUMENT_INGREDIENT_LOG_ID_ARRAY;
+
+        } else if ( isIngredientBundle(bundle) ){
+            ifString = ifIngredientString;
+            stringTypeFromBundle = ARGUMENT_INGREDIENT_ID_ARRAY;
+
+        } else if ( isRecipeBundle(bundle) ){
+            ifString = ifRecipeString;
+            stringTypeFromBundle = ARGUMENT_RECIPE_ID_ARRAY;
+
+        } else if ( isSymptomBundle(bundle) ){
+            ifString = ifSymptomString;
+            stringTypeFromBundle = ARGUMENT_SYMPTOM_ID_ARRAY;
+        }
+
+        typeAndIfString[0] = stringTypeFromBundle;
+        typeAndIfString[1] = ifString;
+        return typeAndIfString;
+    }
+
+    public static String setStringByIdArrayFromBundleElseIfStrings(Bundle bundle, String ifSymptomLogString,
+                                                                   String ifIngredientLogString, String ifSymptomString,
+                                                                   String ifIngredientString, String ifRecipeString){
+        setLogIdArrayFromBundle(bundle);
+
+        String stringTypeFromBundle = null;
+
+        if ( isSymptomLogBundle(bundle) ) {
+            stringTypeFromBundle = ifSymptomLogString;
+
+        } else if ( isIngredientLogBundle(bundle) ){
+            stringTypeFromBundle = ifIngredientLogString;
+
+        } else if ( isIngredientBundle(bundle) ){
+            stringTypeFromBundle = ifIngredientString;
+
+        } else if ( isRecipeBundle(bundle) ){
+            stringTypeFromBundle = ifRecipeString;
+
+        } else if ( isSymptomBundle(bundle) ){
+            stringTypeFromBundle = ifSymptomString;
+        }
+
+        return stringTypeFromBundle;
+    }
     public static Bundle setBundleFromArrayInfo(ArrayList<String> array, String stringType){
         Bundle bundle = new Bundle();
 
@@ -918,7 +1058,7 @@ public class Util {
     public static Bundle setNewIngredientLogBundle(ArrayList<String> newLogIdStringArray){
 
         // set our new bundle to be an ingredient log
-        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT,
+        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY,
                 ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
 
         return bundle;
@@ -930,7 +1070,7 @@ public class Util {
                                                 ArrayList<String> newLogIdStringArray){
 
         // set our new bundle to be a symptom log
-        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY,
+        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT,
                 ARGUMENT_SYMPTOM_ID_ARRAY);
 
         return bundle;
@@ -941,7 +1081,7 @@ public class Util {
                                                 ArrayList<String> newLogIdStringArray){
 
         // set our new bundle to be a symptom log
-        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY,
+        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT,
                 ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
 
         return bundle;
@@ -1044,13 +1184,13 @@ public class Util {
         String whereNext = null;
         // if we're changing one of the time based parameters
         if ( isSymptomLogTimeChange(whatToEdit) ){
-            whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES;
+            whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
         } else if ( isSymptomLogIntensity(whatToEdit) ) {
             // we're changing intensity or symptom if it's not a time
-            whereNext = ARGUMENT_GO_TO_SYMPTOM_INTENSITY;
+            whereNext = ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT;
         } else {
             // only symptom is left
-            whereNext = ARGUMENT_GO_TO_CHOOSE_SYMPTOM;
+            whereNext = ARGUMENT_GO_TO_CHOOSE_SYMPTOM_ACTIVITY;
         }
 
         // in edit we only have one id in our array, so make it now and pass it in
@@ -1071,19 +1211,19 @@ public class Util {
         String whereNext = null;
         // if we're changing one of the time based parameters
         if ( isIngredientLogTimeChange(whatToEdit) ){
-            whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES;
+            whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
         }
         else if ( isIngredientLogAmount(whatToEdit) ) {
             // we're changing amount or brand or ingredient if it's not a time
-            whereNext = ARGUMENT_GO_TO_INGREDIENT_AMOUNT;
+            whereNext = ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY;
         }
         else if ( isIngredientLogBrand(whatToEdit) ) {
             // we're changing brand if it's not a time or amount
-            whereNext = ARGUMENT_GO_TO_INGREDIENT_BRAND;
+            whereNext = ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY;
         }
         else {
             // only ingredient is left
-            whereNext = ARGUMENT_GO_TO_CHOOSE_INGREDIENT;
+            whereNext = ARGUMENT_GO_TO_CHOOSE_INGREDIENT_ACTIVITY;
         }
 
         // in edit we only have one id in our array, so make it now and pass it in
@@ -1101,7 +1241,7 @@ public class Util {
 
         Bundle bundle = new Bundle();
         // where we want to go next
-        bundle.putString(Util.ARGUMENT_GO_TO, Util.ARGUMENT_GO_TO_INGREDIENT_AMOUNT);
+        bundle.putString(Util.ARGUMENT_GO_TO, Util.ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY);
         // set that we still have things to set
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_UNFINISHED);
 
@@ -1141,7 +1281,147 @@ public class Util {
         return integerBundleToSetDateTime;
     }
 
+    public static void toastInvalidBeforeAfter(String firstTypeString,String secondTypeString,
+                                                                   String beforeOrAfterString,
+                                                                   Activity thisActivity ){
+        String invalidString = "Invalid date/times. It can't have been " +
+                firstTypeString +
+                beforeOrAfterString + " it was " +
+                secondTypeString +
+                ". Reset one of the two.";
+        Toast.makeText(thisActivity,
+                invalidString,
+                Toast.LENGTH_SHORT).show();
+    }
+    public static void toastInvalidBeforeAfterGoToSpecificDateTime(String firstTypeString,
+                                                                   String secondTypeString,  String beforeOrAfterString,
+                                                                   Activity thisActivity,
+                                                                   FragmentTransaction fragmentTransaction,
+                                                                   int fragmentContainer, Bundle bundle){
+        String invalidString = "Invalid date/times. An ingredient can't have been " +
+                        secondTypeString +
+                        beforeOrAfterString + " it was " +
+                        firstTypeString +
+                        ". Reset one of the two.";
 
+        //TODO go to list or edit or more specific datetime, make more buttons that
+        // only become visible now, or a popup and make the user pick where to go
+        //for now just go to specific datetime
+        toastInvalidGoToSpecificDateTime(invalidString, thisActivity,
+                fragmentTransaction,
+                fragmentContainer, bundle);
+    }
+
+    public static void toastInvalidGoToSpecificDateTime(String invalidString,  Activity thisActivity,
+                                                        FragmentTransaction fragmentTransaction,
+                                                        int fragmentContainer, Bundle bundle){
+
+        Toast.makeText(thisActivity,
+                invalidString,
+                Toast.LENGTH_SHORT).show();
+
+        Util.goToLogSpecificDateTimeFragment(thisActivity,
+                fragmentTransaction,
+                fragmentContainer, bundle);
+    }
+
+    // update the "from this fragment/activity" using the "go to" from the bundle
+    public static Bundle updateBundleToBundleNext(Bundle bundle){
+
+        if ( bundle.containsKey(ARGUMENT_GO_TO)){
+            // if we meant to go to this fragment
+            if ( isGoToAddIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_ADD_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToDeleteIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_DELETE_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToDetailIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_DETAIL_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToEditIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToAddIngredientLogActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_ADD_INGREDIENT_LOG_ACTIVITY);
+            }
+            else if ( isGoToChooseIngredientActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_CHOOSE_INGREDIENT_ACTIVITY);
+            }
+            else if ( isGoToIngredientAmountFragment(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_INGREDIENT_AMOUNT_FRAGMENT);
+            }
+            else if ( isGoToEditIngredientLogActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT_INGREDIENT_LOG_ACTIVITY);
+            }
+            else if ( isGoToAddRecipeActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_ADD_RECIPE_ACTIVITY);
+            }
+            else if ( isGoToEditRecipeActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT_RECIPE_ACTIVITY);
+            }
+            else if ( isGoToRecipeActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_RECIPE_ACTIVITY);
+            }
+            else if ( isGoToDetailSymptomActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_DETAIL_SYMPTOM_ACTIVITY);
+            }
+            else if ( isGoToSymptomActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_SYMPTOM_ACTIVITY);
+            }
+            else if ( isGoToAddSymptomLogActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_ADD_SYMPTOM_LOG_ACTIVITY);
+            }
+            else if ( isGoToChooseSymptomActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_CHOOSE_SYMPTOM_ACTIVITY);
+            }
+            else if ( isGoToEditSymptomLogActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT_SYMPTOM_LOG_ACTIVITY);
+            }
+            else if ( isGoToListSymptomLogActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_LIST_SYMPTOM_LOG_ACTIVITY);
+            }
+            else if ( isGoToSymptomIntensityActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_SYMPTOM_INTENSITY_FRAGMENT);
+            }
+            else if ( isGoToDateTimeChoicesFragment(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_DATE_TIME_CHOICES_FRAGMENT);
+            }
+            else if ( isGoToDetailActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_DETAIL_ACTIVITY);
+            }
+            else if ( isGoToEditActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT_ACTIVITY);
+            }
+            else if ( isGoToExportActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EXPORT_ACTIVITY);
+            }
+            else if ( isGoToFirstStartWizardActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_FIRST_START_WIZARD_ACTIVITY);
+            }
+            else if ( isGoToMainActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_MAIN_ACTIVITY);
+            }
+            else if ( isGoToOtherActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_OTHER_ACTIVITY);
+            }
+            else if ( isGoToPartOfDayFragment(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_PART_OF_DAY_FRAGMENT);
+            }
+            else if ( isGoToResourcesActivity(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_RESOURCES_ACTIVITY);
+            }
+            else if ( isGoToSpecificDateTimeFragment(bundle) ){
+                bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_SPECIFIC_DATE_TIME_FRAGMENT);
+            }
+        }
+
+        return bundle;
+
+    }
 
     ////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -1171,9 +1451,9 @@ or at least achieves the same effect.
     }
 
     // set numberpicker values
-    public static NumberPicker setNumberPicker(NumberPicker numberPicker,
-                                               String[] displayStringList, Integer defaultValue,
-                                               Color defaultValueColor){
+    public static NumberPicker setNumberPickerIntegers(NumberPicker numberPicker,
+                                                       String[] displayStringList, Integer defaultValue,
+                                                       Color defaultValueColor){
         // the lowest number in the list, then minus one
         // to give us the index to set the numberpicker with
         Integer minimumIntegerIndex = Integer.parseInt(displayStringList[0]) - 1;
@@ -1193,6 +1473,29 @@ or at least achieves the same effect.
         // TODO this is a lot of parsing and converting, is colorstatelist really better than color?
         //numberPicker.setBackgroundColor(Color.parseColor(String.valueOf(defaultValueColor)));
         return numberPicker;
+    }
+    public static NumberPicker setNumberPickerStrings(NumberPicker picker,
+                                               String[] displayStringList, Integer defaultValueIndex,
+                                               Color defaultValueColor){
+        // the lowest number in the list, then minus one
+        // to give us the index to set the numberpicker with
+        String minimumIndexString = displayStringList[0];
+        // get the last in the list by getting the length, minus one to make an index
+        Integer indexForLastValueInStringList = displayStringList.length - 1;
+        // parse the last number in the list, then minus one to give an index
+//        Integer maximumIntegerIndex =
+//                Integer.parseInt(displayStringList[indexForLastValueInStringList]) - 1;
+
+        // make a number picker for the intensity of the symptom
+        picker.setDisplayedValues(displayStringList);
+        picker.scrollBy(0,indexForLastValueInStringList);
+        picker.setMinValue(0);
+        picker.setMaxValue(indexForLastValueInStringList);
+        picker.setValue(defaultValueIndex);
+        picker.setWrapSelectorWheel(false);
+        // TODO this is a lot of parsing and converting, is colorstatelist really better than color?
+        //numberPicker.setBackgroundColor(Color.parseColor(String.valueOf(defaultValueColor)));
+        return picker;
     }
 
     ////////////////////////////////////////////////////////
@@ -1237,10 +1540,51 @@ or at least achieves the same effect.
         return answer;
     }
 
+    public static Boolean isSameDayYear(Instant longestAgoInstant, Instant mostRecentInstant){
+        Boolean isTrueOrNot = Boolean.FALSE;
+
+        // if either value is null, obviously they can't be the same day and year
+        // only compute same day year calculation if neither is null
+        if ( longestAgoInstant != null || mostRecentInstant != null){
+            Integer longestAgoDay = Util.dayOfYearFromInstant(longestAgoInstant);
+            Integer longestAgoYear = Util.yearFromInstant(longestAgoInstant);
+
+            Integer mostRecentYear = Util.yearFromInstant(mostRecentInstant);
+            Integer mostRecentDay = Util.dayOfYearFromInstant(mostRecentInstant);
+
+            if (longestAgoDay == mostRecentDay && longestAgoYear == mostRecentYear) {
+                isTrueOrNot = Boolean.TRUE;
+            }
+        }
+
+        return isTrueOrNot;
+    }
 
 
 
+    // boolean for if the first given instant should happen earlier in time than the second instant
+    public static Boolean isEarlierDayYear(Instant shouldBeEarlierInstant,
+                                           Instant shouldHappenLaterInstant){
+        Boolean happenedBeforeItShouldHave = Boolean.FALSE;
 
+        // only compute day year calculation if neither is null
+        if ( shouldBeEarlierInstant != null || shouldHappenLaterInstant != null){
+            Integer shouldBeEarlierDay = Util.dayOfYearFromInstant(shouldBeEarlierInstant);
+            Integer shouldBeEarlierYear = Util.yearFromInstant(shouldBeEarlierInstant);
+
+            Integer shouldHappenLaterYear = Util.yearFromInstant(shouldHappenLaterInstant);
+            Integer shouldHappenLaterDay = Util.dayOfYearFromInstant(shouldHappenLaterInstant);
+
+            // if what's supposed to be more recent is actually before what's supposed to be
+            // longer ago
+            if (shouldHappenLaterDay < shouldBeEarlierDay &&
+                    shouldHappenLaterYear <= shouldBeEarlierYear ) {
+                happenedBeforeItShouldHave = Boolean.TRUE;
+            }
+        }
+
+        return happenedBeforeItShouldHave;
+    }
 
 
 
@@ -1271,6 +1615,249 @@ or at least achieves the same effect.
         }
         return isTimeChange;
     }
+
+    public static Boolean isGoToMainActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_PART_OF_DAY_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToIngredientBrandActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToAddIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_ADD_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToDeleteIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_DELETE_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToDetailIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_DETAIL_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToEditIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EDIT_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToAddIngredientLogActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_ADD_INGREDIENT_LOG_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToChooseIngredientActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_CHOOSE_INGREDIENT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToIngredientAmountFragment(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_INGREDIENT_AMOUNT_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToEditIngredientLogActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EDIT_INGREDIENT_LOG_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToAddRecipeActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_ADD_RECIPE_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToEditRecipeActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EDIT_RECIPE_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToRecipeActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_RECIPE_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToDetailSymptomActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_DETAIL_SYMPTOM_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToSymptomActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_SYMPTOM_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToAddSymptomLogActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_ADD_SYMPTOM_LOG_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToChooseSymptomActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_CHOOSE_SYMPTOM_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToEditSymptomLogActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EDIT_SYMPTOM_LOG_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToListSymptomLogActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_LIST_SYMPTOM_LOG_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToSymptomIntensityActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToDateTimeChoicesFragment(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToDetailActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_DETAIL_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToEditActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EDIT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToExportActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_EXPORT_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToFirstStartWizardActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_FIRST_START_WIZARD_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToOtherActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_OTHER_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToResourcesActivity(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_RESOURCES_ACTIVITY)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToSpecificDateTimeFragment(Bundle bundle) {
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_SPECIFIC_DATE_TIME_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+    public static Boolean isGoToPartOfDayFragment(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+        if (TextUtils.equals(bundle.getString(ARGUMENT_GO_TO), ARGUMENT_GO_TO_PART_OF_DAY_FRAGMENT)) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
+
+
 
     public static Boolean isIngredientLogTimeChange(String whatToChange){
         Boolean isTimeChange = Boolean.FALSE;
@@ -1384,6 +1971,19 @@ or at least achieves the same effect.
         }
         return isTrueOrFalse;
     }
+    public static Boolean isActionAddBundle(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (
+                TextUtils.equals(
+                        bundle.getString(ARGUMENT_ACTION),
+                        ARGUMENT_ACTION_ADD
+                )
+        ) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
     public static Boolean isEditAndDone(Bundle bundle){
         Boolean isTrueOrFalse = Boolean.FALSE;
 
@@ -1421,15 +2021,24 @@ or at least achieves the same effect.
         bundle.putString(Util.ARGUMENT_CHANGE, whatToChange);
 
         if ( isLogTimeChange(whatToChange) ){
-            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_DATE_TIME_CHOICES);
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT);
         } else if ( isSymptomLogIntensity(whatToChange) ){
-            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_SYMPTOM_INTENSITY);
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT);
 
         } else if ( isIngredientLogBrand(whatToChange) ){
-            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_INGREDIENT_BRAND);
+            bundle.putString(ARGUMENT_GO_TO, ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY);
 
         }
         return bundle;
+    }
+
+    public static void goToLogSpecificDateTimeFragment(Activity paramThisActivity,
+                                               FragmentTransaction paramFragmentTransaction,
+                                               int paramFragmentContainerView, Bundle bundle) {
+
+        // go to the next place now
+        Util.startNextFragmentBundle(paramThisActivity, paramFragmentTransaction,
+                paramFragmentContainerView, new SpecificDateTimeFragment(), bundle);
     }
 
     public static void startNextFragmentBundleChange(Activity paramThisActivity,
@@ -1441,8 +2050,11 @@ or at least achieves the same effect.
         paramBundle = setBundleChangeGoTo(paramBundle, whatToChange);
         paramBundle.putString(Util.ARGUMENT_CHANGE, whatToChange);
         int howManyInArray = 0;
+        String idArrayString = setStringTypeBundle(paramBundle);
+        Log.d(TAG, paramBundle.toString());
+        Log.d(TAG, idArrayString);
         for ( String hasComma:
-                paramBundle.getString(ARGUMENT_SYMPTOM_LOG_ID_ARRAY).split(",") ){
+                paramBundle.getString(idArrayString).split(",") ){
             howManyInArray++;
         }
         paramBundle.putString(ARGUMENT_HOW_MANY_ID_IN_ARRAY, String.valueOf(howManyInArray));
@@ -1481,11 +2093,9 @@ or at least achieves the same effect.
                     logIdArrayType, logIdArrayString);
 
         } else {
-            Log.d(TAG, " \n\ninstarlt next fragment \n" + bundle.toString());
             // set our bundle to say it's going to the fragment we're about to go to
             bundle = setGoToFromNextFragment(bundle, paramNextFragment);
 
-            Log.d(TAG, " \nafter set next fragment \n" + bundle.toString());
             // set the data to pass along info
             // given from the previous fragment
             // or the duplicated ID if we did that
@@ -1496,18 +2106,19 @@ or at least achieves the same effect.
         }
     }
     public static Bundle setGoToFromNextFragment(Bundle bundle, Fragment nextFragment){
+        //TODO make this also set where from
         Class nextFragmentClass = nextFragment.getClass();
         String goToString = null;
-        if (LogDateTimeChoicesFragment.class == nextFragmentClass){
-            goToString = ARGUMENT_GO_TO_DATE_TIME_CHOICES;
-        } else if ( LogPartOfDayFragment.class == nextFragmentClass ){
-            goToString = ARGUMENT_GO_TO_PART_OF_DAY;
-        } else if ( LogSpecificDateTimeFragment.class == nextFragmentClass ){
-            goToString = ARGUMENT_GO_TO_SPECIFIC_DATE_TIME;
+        if (DateTimeChoicesFragment.class == nextFragmentClass){
+            goToString = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
+        } else if ( PartOfDayFragment.class == nextFragmentClass ){
+            goToString = ARGUMENT_GO_TO_PART_OF_DAY_FRAGMENT;
+        } else if ( SpecificDateTimeFragment.class == nextFragmentClass ){
+            goToString = ARGUMENT_GO_TO_SPECIFIC_DATE_TIME_FRAGMENT;
         } else if ( SymptomIntensityFragment.class == nextFragmentClass ){
-            goToString = ARGUMENT_GO_TO_SYMPTOM_INTENSITY;
+            goToString = ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT;
         } else if (IngredientAmountFragment.class == nextFragmentClass ){
-            goToString = ARGUMENT_GO_TO_INGREDIENT_AMOUNT;
+            goToString = ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY;
         } else if ( nextFragmentClass == null ){
             goToString = ARGUMENT_GO_TO_MAIN_ACTIVITY;
         }
@@ -1569,7 +2180,7 @@ or at least achieves the same effect.
 
     // check the arguments for if we have a bundle and if we do, check it for valid values
     // go back to list or edit if anything required is invalid
-    public static void checkValidFragment(Bundle bundle, Activity activity){
+    public static Bundle checkValidFragment(Bundle bundle, Activity activity){
 
         // if we have no bundle at all
         if ( bundle == null ){
@@ -1577,13 +2188,14 @@ or at least achieves the same effect.
             Util.goToMainActivity(null, activity);
         } else {
             // check the bundle has required values
-            if ( hasValidWhatToChange(bundle) && hasValidId(bundle) ){
-                Log.d(TAG, "Valid bundle here: " + bundle.toString());
-            } else {
+            if ( !hasValidWhatToChange(bundle) && !hasValidId(bundle) ){
                 // one of the required values was invalid so go to list or edit
                 Util.goToListOrEditActivity(null, activity, bundle);
             }
         }
+        // got here because valid bundle
+        Log.d(TAG, "Valid bundle here: " + bundle.toString());
+        return bundle;
     }
 
 
@@ -1604,6 +2216,7 @@ or at least achieves the same effect.
         // does it contain any of the id arrays
         if ( isIngredientLogBundle(bundle) || isSymptomLogBundle(bundle)
                 || isSymptomBundle(bundle) || isIngredientBundle(bundle)
+                //TODO add recipe id here or remove it if stop using recipe
         ){
             isValidValue = Boolean.TRUE;
         }
@@ -1930,7 +2543,7 @@ or at least achieves the same effect.
             stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
 
         } else if ( isIngredientLogBundle(bundle) ){
-            stringTypeFromBundle = Util.ARGUMENT_FOOD_LOG_ID_ARRAY;
+            stringTypeFromBundle = Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY;
 
         } else if ( isIngredientBundle(bundle) ){
             stringTypeFromBundle = Util.ARGUMENT_INGREDIENT_ID_ARRAY;
@@ -1950,6 +2563,7 @@ or at least achieves the same effect.
                                                                                 IngredientLogViewModel ingredientLogViewModel){
         ArrayList<IngredientLog> ingredientLogArray = new ArrayList<>();
         // for each string in array update that log's instant began
+
         for (String ingredientLogIdString: logIdStringArray) {
             // now get the food log associated with each UUID
             ingredientLogArray.add(
@@ -2162,8 +2776,9 @@ or at least achieves the same effect.
 
     }
     public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){
-        Bundle bundle = setNewBundle(null, ARGUMENT_GO_TO_ADD_INGREDIENT,
+        Bundle bundle = setNewBundle(null, ARGUMENT_GO_TO_ADD_INGREDIENT_ACTIVITY,
                 ARGUMENT_INGREDIENT_ID_ARRAY);
+        Log.d(TAG, bundle.toString());
         goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, null,
                 AddIngredientActivity.class, null, null, bundle);
 
@@ -2175,7 +2790,7 @@ or at least achieves the same effect.
 
         goToActivityTypeIdClass(null, paramActivity, ARGUMENT_INGREDIENT_ID_ARRAY,
                 idString, AddIngredientLogActivity.class,
-                ARGUMENT_GO_TO_ADD_INGREDIENT_LOG, ARGUMENT_ACTION_ADD, bundle);
+                ARGUMENT_GO_TO_ADD_INGREDIENT_LOG_ACTIVITY, ARGUMENT_ACTION_ADD, bundle);
     }
 
 
@@ -2242,6 +2857,18 @@ or at least achieves the same effect.
         return bundle;
     }
 
+    public static Integer setIntegerCurrentIndexFromBundle(Bundle bundle){
+
+        // default index is first in the array
+        Integer currentLogIdIndex = 0;
+        //TODO put this in startnextfragmentbundle properly set finished previous fragment
+        if (!Objects.isNull(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY))) {
+            // if there is an index in the bundle, set to that
+            currentLogIdIndex =
+                    Integer.parseInt(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+        }
+        return currentLogIdIndex;
+    }
     // return the instants that came before and after the one we're changing
     public static ArrayList<Instant> setOrderOfLogInstants(String whatToChange,
                                              IngredientLogViewModel ingredientLogViewModel,

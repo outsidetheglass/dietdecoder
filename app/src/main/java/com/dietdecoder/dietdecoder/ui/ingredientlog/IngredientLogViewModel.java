@@ -23,15 +23,15 @@ import java.util.UUID;
 public class IngredientLogViewModel extends AndroidViewModel {
 
 
-  private IngredientLogRepository mRepository;
+  private IngredientLogRepository mIngredientLogRepository;
   private List<IngredientLog> mViewModelAllIngredientLogsOnDate;
   private LiveData<List<IngredientLog>> mViewModelAllIngredientLogs;
 
 
   public IngredientLogViewModel(Application application) {
     super(application);
-    mRepository = new IngredientLogRepository(application);
-    mViewModelAllIngredientLogs = mRepository.repositoryGetAllIngredientLogs();
+    mIngredientLogRepository = new IngredientLogRepository(application);
+    mViewModelAllIngredientLogs = mIngredientLogRepository.repositoryGetAllIngredientLogs();
 
   }//end LogViewModel method
 
@@ -44,11 +44,11 @@ public class IngredientLogViewModel extends AndroidViewModel {
 
   // get single log using the instant
   public List<IngredientLog> viewModelGetAllIngredientLogByIngredientId(UUID id) {
-    return mRepository.repositoryGetAllIngredientLogByIngredientId(id);
+    return mIngredientLogRepository.repositoryGetAllIngredientLogByIngredientId(id);
   }
   // get single log using the uuid
   public IngredientLog viewModelGetIngredientLogFromLogId(UUID uuid) {
-    return mRepository.repositoryGetIngredientLogFromLogId(uuid);
+    return mIngredientLogRepository.repositoryGetIngredientLogFromLogId(uuid);
   }
   //TODO add other properties of log type here
   //get all logs on date TODO make work
@@ -60,28 +60,28 @@ public class IngredientLogViewModel extends AndroidViewModel {
 
   // cursor for exporting
   public Cursor viewModelGetCursorAllIngredientLog() {
-    return mRepository.repositoryGetCursorAllIngredientLog();
+    return mIngredientLogRepository.repositoryGetCursorAllIngredientLog();
   }
 
 
   // add to database
   public void viewModelInsertIngredientLog(IngredientLog ingredientLog) {
-    mRepository.repositoryInsertIngredientLog(ingredientLog);
+    mIngredientLogRepository.repositoryInsertIngredientLog(ingredientLog);
   }
 
   // edit log in database
   public void viewModelUpdateIngredientLog(IngredientLog ingredientLog) {
-    mRepository.repositoryUpdateIngredientLog(ingredientLog);
+    mIngredientLogRepository.repositoryUpdateIngredientLog(ingredientLog);
   }
 
   // delete log in database
   public void viewModelDeleteIngredientLog(IngredientLog ingredientLog) {
-    mRepository.repositoryDeleteIngredientLog(ingredientLog);
+    mIngredientLogRepository.repositoryDeleteIngredientLog(ingredientLog);
   }
 
   // get average duration of symptom from most recent symptoms of same type
   public Integer viewModelGetAverageAmountAllLogsByIngredientId(UUID ingredientId){
-    Integer averageAmount = mRepository.repositoryGetAverageIngredientAmount(ingredientId);
+    Integer averageAmount = mIngredientLogRepository.repositoryGetAverageIngredientAmount(ingredientId);
 
     if ( averageAmount == null ) {
       // TODO get default amount from an ingredient itself, or other users
@@ -93,7 +93,7 @@ public class IngredientLogViewModel extends AndroidViewModel {
   // get most recent symptom log of symptom
   public IngredientLog viewModelGetMostRecentIngredientLogWithIngredient(UUID ingredientId){
     IngredientLog ingredientLogWithSameIngredient =
-            mRepository.repositoryGetMostRecentIngredientLogWithIngredient(ingredientId);
+            mIngredientLogRepository.repositoryGetMostRecentIngredientLogWithIngredient(ingredientId);
     return ingredientLogWithSameIngredient;
   }
 

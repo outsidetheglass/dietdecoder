@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
-import com.dietdecoder.dietdecoder.database.recipe.Recipe;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeListAdapter;
 import com.dietdecoder.dietdecoder.ui.recipe.RecipeViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -77,7 +76,7 @@ public class RecipeActivity extends AppCompatActivity implements Toolbar.OnMenuI
     // FAB to add new recipe
     addButton = findViewById(R.id.add_button_recipe);
     addButton.setOnClickListener( view -> {
-      addIntent = new Intent(thisActivity, NewRecipeActivity.class);
+      addIntent = new Intent(thisActivity, AddRecipeActivity.class);
       //TODO fix this
 //      addIntent.putExtra();
       startActivity(addIntent);

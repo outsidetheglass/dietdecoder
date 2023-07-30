@@ -2,6 +2,7 @@ package com.dietdecoder.dietdecoder.ui.symptomlog;
 
 import android.app.Application;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -23,18 +24,20 @@ import java.util.UUID;
 // running out of resources,
 // you can use the Saved State module for ViewModels.
 public class SymptomLogViewModel extends AndroidViewModel {
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
 
-  private SymptomLogRepository mRepository;
+  private SymptomLogRepository mSymptomLogRepository;
   private List<SymptomLog> mViewModelAllSymptomLogsOnDate;
   private LiveData<List<SymptomLog>> mViewModelAllSymptomLogs;
 
 
   public SymptomLogViewModel(Application application) {
     super(application);
-    mRepository = new SymptomLogRepository(application);
-    mViewModelAllSymptomLogs = mRepository.repositoryGetAllSymptomLogs();
+    mSymptomLogRepository = new SymptomLogRepository(application);
+    mViewModelAllSymptomLogs = mSymptomLogRepository.repositoryGetAllSymptomLogs();
 
+//    Log.d(TAG, mSymptomLogRepository.repositoryGetSomeSymptomLog(1).toString());
   }//end LogViewModel method
 
 
@@ -45,7 +48,7 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
   public List<SymptomLog> viewModelGetSomeSymptomLog(Integer numberOfSymptomLogsToGet){
 
-    return mRepository.repositoryGetSomeSymptomLog(numberOfSymptomLogsToGet);
+    return mSymptomLogRepository.repositoryGetSomeSymptomLog(numberOfSymptomLogsToGet);
   }
   // TODO get experiment to cross reference daos working
 //  public Symptom viewModelGetSymptomFromSymptomLogId(UUID uuid){
@@ -60,21 +63,21 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
 
   public SymptomLog viewModelDuplicateSymptomLog(SymptomLog symptomLog) {
-    return mRepository.repositoryDuplicateSymptomLog(symptomLog);
+    return mSymptomLogRepository.repositoryDuplicateSymptomLog(symptomLog);
   }
 
   // get single log using the instant
   public List<SymptomLog> viewModelGetSymptomLogFromSymptomId(UUID id) {
-    return mRepository.repositoryGetAllSymptomLogFromSymptomId(id);
+    return mSymptomLogRepository.repositoryGetAllSymptomLogFromSymptomId(id);
   }
   // get single log using the uuid
   public SymptomLog viewModelGetSymptomLogFromLogId(UUID uuid) {
-    return mRepository.repositoryGetSymptomLogFromLogId(uuid);
+    return mSymptomLogRepository.repositoryGetSymptomLogFromLogId(uuid);
   }
 
   // cursor for exporting
   public Cursor viewModelGetCursorAllSymptomLog() {
-    return mRepository.repositoryGetCursorAllSymptomLog();
+    return mSymptomLogRepository.repositoryGetCursorAllSymptomLog();
   }
 
 
@@ -86,22 +89,22 @@ public class SymptomLogViewModel extends AndroidViewModel {
 
   // add to database
   public void viewModelInsertSymptomLog(SymptomLog symptomLog) {
-    mRepository.repositoryInsertSymptomLog(symptomLog);
+    mSymptomLogRepository.repositoryInsertSymptomLog(symptomLog);
   }
 
   // edit log in database
   public void viewModelUpdateSymptomLog(SymptomLog symptomLog) {
-    mRepository.repositoryUpdateSymptomLog(symptomLog);
+    mSymptomLogRepository.repositoryUpdateSymptomLog(symptomLog);
   }
 
   // delete log in database
   public void viewModelDeleteSymptomLog(SymptomLog symptomLog) {
-    mRepository.repositoryDeleteSymptomLog(symptomLog);
+    mSymptomLogRepository.repositoryDeleteSymptomLog(symptomLog);
   }
 
   // get average duration of symptom from most recent symptoms of same type
   public Duration viewModelGetAverageSymptomDuration(UUID symptomId){
-    Duration averageDuration = mRepository.repositoryGetAverageSymptomDuration(symptomId);
+    Duration averageDuration = mSymptomLogRepository.repositoryGetAverageSymptomDuration(symptomId);
 
     if ( averageDuration.isZero() ) {
       // TODO get default duration from symptom itself
@@ -113,7 +116,7 @@ public class SymptomLogViewModel extends AndroidViewModel {
   // get most recent symptom log of symptom
   public SymptomLog viewModelGetMostRecentSymptomLogWithSymptom(UUID symptomId){
     SymptomLog symptomLogWithSameSymptom =
-            mRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomId);
+            mSymptomLogRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomId);
     return symptomLogWithSameSymptom;
   }
 

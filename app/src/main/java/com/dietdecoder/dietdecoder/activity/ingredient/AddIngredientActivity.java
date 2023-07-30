@@ -24,16 +24,24 @@ public class AddIngredientActivity extends AppCompatActivity {
 
   private EditText mEditIngredientNameView, mEditIngredientChemicalView;
 
+  Bundle mBundle;
+
   private Boolean isNameViewEmpty, isChemicalViewEmpty;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_new_ingredient);
+    if ( getIntent().getExtras() != null ){
+      mBundle = getIntent().getExtras();
+      Log.d(TAG, mBundle.toString());
+    } else {
+      mBundle = new Bundle();
+    }
+    setContentView(R.layout.activity_add_ingredient);
     mEditIngredientNameView = findViewById(R.id.edittext_ingredient_name);
 //    mEditIngredientChemicalView = findViewById(R.id.edittext_ingredient_chemical);
 
-    final Button button = findViewById(R.id.button_save_new_ingredient);
+    final Button button = findViewById(R.id.button_save_add_ingredient);
     button.setOnClickListener(view -> {
       Intent replyIntent = new Intent();
 

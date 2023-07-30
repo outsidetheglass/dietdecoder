@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.DateTimeChoicesFragment;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -119,7 +119,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
             // this is our holder string, remove from this arraylist as we go
             mSymptomLogIdsToAddStringArray = new ArrayList<String>();
             // after intensity is done being set the next default place is date times
-            mDefaultNextFragment = new LogDateTimeChoicesFragment();
+            mDefaultNextFragment = new DateTimeChoicesFragment();
             // default next place to go should be the next fragment
             mNextFragment = mDefaultNextFragment;
             // repeating this fragment
@@ -127,7 +127,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
             mBundleNext.putString(Util.ARGUMENT_FROM,
-                    Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
+                    Util.ARGUMENT_FROM_SYMPTOM_INTENSITY_FRAGMENT);
             mWhatToChangeNext = Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN;
 
             // to pass on to the time and date fragments, save the original untouched array string
@@ -181,15 +181,17 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
 
             // set our numberpicker with our string of 1 to 10 and with default value of the same
             // as most recent symptom log with the same symptom
-            mNumberPicker = Util.setNumberPicker(mNumberPicker, mDisplayedStringList,
+            mNumberPicker = Util.setNumberPickerIntegers(mNumberPicker, mDisplayedStringList,
                     mIntensitySelected, mCurrentIntensityColor);
             mNumberPicker.setOnValueChangedListener(this);
 
             //mNumberPicker.setBackgroundColor(mIntensityColorList[0]);
-            GradientDrawable gradient = (GradientDrawable) getResources().getDrawable(R.drawable.gradient);
+            GradientDrawable gradient =
+                    (GradientDrawable) getResources().getDrawable(R.drawable.gradient, thisActivity.getTheme());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 gradient = setGradient(gradient, mIntensitySelected, mIntensityColorList);
             }
+            Log.d(TAG, " gradient " + gradient.toString());
             mNumberPicker.setBackground(gradient);
 
             // TODO have delete this symptom button
@@ -312,7 +314,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         // get the index of the spot in the array chosen
         int valuePicker = picker.getValue();
         // get the string value of the chosen intensity
-        mIntensitySelected =  Integer.parseInt(mDisplayedStringList[valuePicker]);
+        mIntensitySelected =  valuePicker+1;
 
         // set background color to change with new value
         GradientDrawable gradient = (GradientDrawable) getResources().getDrawable(R.drawable.gradient);
@@ -329,8 +331,8 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
                 symptomId ) )) {
             // set our integer to first in the list
-            mIntensitySelected =
-                    Integer.parseInt(mDisplayedStringList[0]);
+            mIntensitySelected = 1;
+            Log.d(TAG,mSymptomLogViewModel.toString());
         } else {
             // get the most recent intensity from most recent log and
             // set the default intensity to that
@@ -341,6 +343,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
 
             // set our default choice to save intensity of to be the most recent value
             mIntensitySelected = mIntensityOfMostRecentSymptomLogWithSameSymptomName;
+            Log.d(TAG,mIntensitySelected.toString());
         }
         return mIntensitySelected;
     }
@@ -351,12 +354,15 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         //TODO make this the default background color, white for now is fine
         int white = getResources().getColor(R.color.white, thisActivity.getTheme());
         int maxIndex = colorList.length-1;
-        int selectedIndex = selectedInteger - 1;
+        int selectedIndex = selectedInteger-1;
         int previousIntensityColorInt = white, nextIntensityColorInt = white,
                 currentIntensityColorInt = colorList[selectedIndex];
-        Log.d(TAG, "maxIndex " + maxIndex);
-        Log.d(TAG, "colorList[0] " + colorList[0]);
-        Log.d(TAG, "colorList[1] " + colorList[1]);
+//        Log.d(TAG, "maxIndex should be 9: " + maxIndex);
+//        Log.d(TAG, "selectedInteger should start at 1: " + selectedInteger);
+
+//        for (int str : colorList){
+//            Log.d(TAG, "colorList " + str);
+//        }
 
         // set which color we're using
         if ( selectedIndex == 0 ) {
@@ -370,6 +376,10 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
             previousIntensityColorInt = colorList[selectedIndex - 1];
             nextIntensityColorInt = colorList[selectedIndex + 1];
         }
+//        Log.d(TAG, "previousIntensityColorInt " + previousIntensityColorInt);
+//        Log.d(TAG, "currentIntensityColorInt " + currentIntensityColorInt);
+//        Log.d(TAG, "nextIntensityColorInt " + nextIntensityColorInt);
+
 //        colorsToSet[0] = previousIntensityColorInt;
 //        colorsToSet[1] = nextIntensityColorInt;
         int[] colorsToSet = new int[]{previousIntensityColorInt,currentIntensityColorInt,

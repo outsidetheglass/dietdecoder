@@ -80,11 +80,11 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     Instant mIngredientLogConsumedInstant = ingredientLog.getInstantConsumed();
     Instant mIngredientLogCookedInstant = ingredientLog.getInstantCooked();
     Instant mIngredientLogAcquiredInstant = ingredientLog.getInstantAcquired();
-    Double mIngredientLogAmountNumber = ingredientLog.getIngredientLogIngredientAmountNumber();
-    String mIngredientLogAmountUnit = ingredientLog.getIngredientLogIngredientAmountUnit();
+//    Double mIngredientLogAmountNumber = ingredientLog.getIngredientLogIngredientAmountNumber();
+    String mIngredientLogAmount = ingredientLog.getIngredientLogIngredientSubjectiveAmount();
     // TODO add conversions here for units other than the default set
-    String mIngredientLogAmount =
-            mIngredientLogAmountNumber.toString().concat(ingredientLog.getIngredientLogIngredientAmountUnit());
+//    String  =
+//            mIngredientLogAmountNumber.toString().concat(ingredientLog.getIngredientLogIngredientAmountUnit());
     //String mIngredientLogString = ingredientLog.toString();
 
 

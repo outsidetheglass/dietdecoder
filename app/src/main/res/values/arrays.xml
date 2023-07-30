@@ -28,6 +28,15 @@
         <item>@string/nine</item>
         <item>@string/ten</item>
     </array>
+    <array name="strings_amounts">
+        <item>@string/almost_nothing</item>
+        <item>@string/tiny</item>
+        <item>@string/a_bit</item>
+        <item>@string/a_good_bit</item>
+        <item>@string/quite_a_bit</item>
+        <item>@string/a_lot</item>
+        <item>@string/tons</item>
+    </array>
     <integer-array name="colors_intensity_scale_one_to_ten">
         <item>@color/purple_blue_pale</item>
         <item>@color/blue_pale</item>

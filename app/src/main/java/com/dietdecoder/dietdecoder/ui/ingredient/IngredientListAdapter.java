@@ -52,7 +52,6 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
     // filter out the current is set to false by default
 //    Boolean filterThisIngredientOut = Boolean.FALSE;
 
-    Log.d(TAG, "in bind, ing: " + currentIngredient.getIngredientName().toLowerCase());
 //    Log.d(TAG, "in bind, filterBoolean: " + filterThisIngredientOut.toString());
 //    // if we have a filter
 //    if (!Objects.isNull(mFilterString)){
@@ -115,7 +114,6 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
 
   public void setFilterIngredientList(List logs, String filterString){
 
-    Log.d(TAG, "in setFilterIngredientList, mFilterString: " + filterString);
     this.mFilterString = filterString;
     this.submitList(logs);
   }

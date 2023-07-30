@@ -68,7 +68,7 @@
 
       <activity android:name=".activity.recipe.RecipeActivity"
         android:exported="false"/>
-      <activity        android:name=".activity.recipe.NewRecipeActivity"
+      <activity        android:name=".activity.recipe.AddRecipeActivity"
         android:exported="false" />
       <activity        android:name=".activity.recipe.EditRecipeActivity"
         android:exported="false" />

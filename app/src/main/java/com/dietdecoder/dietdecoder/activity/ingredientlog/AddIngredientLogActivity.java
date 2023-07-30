@@ -3,6 +3,7 @@ package com.dietdecoder.dietdecoder.activity.ingredientlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -104,6 +105,7 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
                 mBundleNext =
                         Util.setNewIngredientLogBundleFromArray(mIngredientLogsToAddArrayListIdStrings);
 
+                Log.d(TAG, mBundleNext.toString());
                 // then go to the specific fragments to change away from the defaults
                 Util.startNextFragmentBundle(thisActivity, getSupportFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewAddIngredientLog,

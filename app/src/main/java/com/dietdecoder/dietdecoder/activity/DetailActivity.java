@@ -51,6 +51,7 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
   private Intent returnIntent;
 
   public static String mDetailString, mTypeString, mIdString;
+  UUID mId;
   Boolean mIsHereToDelete;
   private TextView mDetailView;
   Bundle mBundle;
@@ -102,6 +103,7 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
       // intent worked, we have something to list details of
       mBundle = thisActivity.getIntent().getExtras();
 
+      Log.d(TAG, mBundle.toString());
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
       mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
@@ -112,6 +114,7 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
       // get values from the intent for symptom we're displaying details for
       // TODO remove duplication, it's checking twice for what we're modifying
       mIdString = Util.setLogIdArrayFromBundle(mBundle).get(0);
+      mId = UUID.fromString(mIdString);
       mDetailString = setDetailTypeString();
 
       mDetailView.setText(mDetailString);
@@ -135,7 +138,6 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
       returnButton.setOnClickListener(this::onClick);
       actionButton.setOnClickListener(this::onClick);
 
-      Log.d(TAG, "onCreate: tags work");
 
     }
   }
@@ -160,25 +162,19 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
   private String setDetailTypeString() {
     String detailString = null;
-    UUID id = UUID.fromString(mIdString);
 
-    if ( mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) != null ) {
-      detailString = mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(id).toString();
-      mTypeString = Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
-    } else if (mBundle.getString(Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
-      detailString = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(id).toString();
-      mTypeString = Util.ARGUMENT_FOOD_LOG_ID_ARRAY;
-    } else if (mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
-      detailString = mIngredientViewModel.viewModelGetIngredientFromId(id).toString();
-      mTypeString = Util.ARGUMENT_INGREDIENT_ID_ARRAY;
-    } else if (mBundle.getString(Util.ARGUMENT_RECIPE_ID_ARRAY) != null){
-      detailString = mRecipeViewModel.viewModelGetRecipeFromId(id).toString();
-      mTypeString = Util.ARGUMENT_RECIPE_ID_ARRAY;
-    } else if (mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY) != null){
-      detailString = mSymptomViewModel.viewModelGetSymptomFromId(id).toString();
-      mTypeString = Util.ARGUMENT_SYMPTOM_ID_ARRAY;
-    }
-
+    // using the view model for each object, symptom, ingredient log, etc
+    // get the detailed string if the bundle contains that object type id
+    String[] detailTypeString = Util.setStringAndTypeByIdArrayFromBundleElseIfStrings(
+            mBundle,
+            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mId).toString(),
+            mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mId).toString(),
+            mIngredientViewModel.viewModelGetIngredientFromId(mId).toString(),
+            mSymptomViewModel.viewModelGetSymptomFromId(mId).toString(),
+            mRecipeViewModel.viewModelGetRecipeFromId(mId).toString()
+    );
+    detailString = detailTypeString[0];
+    mTypeString = detailTypeString[1];
 
     return detailString;
 
@@ -186,36 +182,29 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
 
   private void deleteThis() {
-    UUID id = UUID.fromString(mIdString);
 
-    if ( mBundle.getString(
-            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) != null ) {
-      mSymptomLogViewModel.viewModelDeleteSymptomLog(mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(id));
+    if ( Util.isSymptomLogBundle(mBundle) ) {
+      mSymptomLogViewModel.viewModelDeleteSymptomLog(
+              mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mId));
 
-    } else if (mBundle.getString(
-            Util.ARGUMENT_FOOD_LOG_ID_ARRAY) != null){
-      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(id));
+    } else if (Util.isIngredientLogBundle(mBundle)){
+      mIngredientLogViewModel.viewModelDeleteIngredientLog(
+              mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mId));
 
-    } else if (mBundle.getString(
-            Util.ARGUMENT_INGREDIENT_ID_ARRAY) != null){
+    } else if (Util.isIngredientBundle(mBundle)){
       //TODO fix these
-//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
-//      .viewModelGetIngredientLogFromId
-//      (id));
-
-    } else if (mBundle.getString(
-            Util.ARGUMENT_RECIPE_ID_ARRAY) != null){
-//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
-//      .viewModelGetIngredientLogFromId
-//      (id));
-
-    } else if (mBundle.getString(
-            Util.ARGUMENT_SYMPTOM_ID_ARRAY) != null){
-//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
-//      .viewModelGetIngredientLogFromId
-//      (id));
+      mIngredientViewModel.viewModelDelete(mIngredientViewModel.viewModelGetIngredientFromId(mId));
 
     }
+    else if (Util.isSymptomBundle(mBundle)){
+      mSymptomViewModel.viewModelDelete(mSymptomViewModel.viewModelGetSymptomFromId(mId));
+
+    }
+//    else if (Util.isSymptomLogBundle(mBundle)){
+//      mIngredientLogViewModel.viewModelDeleteIngredientLog(mIngredientLogViewModel
+//      .viewModelGetIngredientLogFromId
+//      (mId));
+//    }
 
   }
 

@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.LogDateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.DateTimeChoicesFragment;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
@@ -54,23 +54,24 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 
     String mSaveString, mEmptyTryAgainString, mName, ingredientAmountLogIdString,
             mCurrentIngredientLogIdToAddString,
-    mCurrentIngredientName, mIngredientLogIdsToAddStringArrayOriginal,
-            mCurrentIngredientLogIdString, mInvalidTryAgainString, mIngredientLogIdsToAddString,
-            mIngredientLogIdsToAddOriginalString, mAllTimesAreSame;
+            mCurrentIngredientName, mIngredientLogIdsStringArrayOriginal,
+            mCurrentIngredientLogIdString, mInvalidTryAgainString, mIngredientLogIdsString,
+            mIngredientLogIdsOriginalString, mAllTimesAreSame, mWhatToChangeNext,
+ mAmountSelected, mAmountOfMostRecentIngredientLogWithSameIngredientName;
     String[] mDisplayedStringList;
     int[] mAmountColorList;
     Boolean isAmountViewEmpty;
-    Integer mAmountSelectedIndex, mHowManyIdsToAdd, mCurrentLogIndex;
-    Double mAmountSelected, mAmountOfMostRecentIngredientLogWithSameIngredientName;
+    Integer mAmountSelectedIndex, mHowManyIds
+            , mCurrentIdIndex;
     UUID mIngredientLogId, mCurrentIngredientId;
     Color mCurrentAmountColor, mPreviousAmountColor, mNextAmountColor;
 
     IngredientLog mCurrentIngredientLog;
     IngredientLogViewModel mIngredientLogViewModel;
-    Ingredient mCurrentIngredient;
-    IngredientViewModel mIngredientViewModel;
     IngredientLogListAdapter mIngredientLogListAdapter;
-    ArrayList<String> mIngredientLogIdsToAddStringArray;
+    Ingredient mIngredient;
+    IngredientViewModel mIngredientViewModel;
+    ArrayList<String> mIngredientLogIdsStringArray;
 
     Fragment mNextFragment, mRepeatThisFragment, mDefaultNextFragment;
     Bundle mBundle, mBundleNext;
@@ -83,7 +84,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                         Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredient_amount_log, container,
                 false);
         ConstraintLayout constraintLayout =
@@ -102,11 +103,12 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
                     getResources().getString(R.string.wrong_place_lets_go_home);
             Toast.makeText(thisContext, mWrongPlaceLetsGoHome,
                     Toast.LENGTH_SHORT).show();
-            Util.goToListIngredientLogActivity(null, thisActivity, null);
+            Util.goToListIngredientLogActivity(null, thisActivity, mIngredientLogIdsString);
         } else {
             // get the info
             mBundle = getArguments();
 
+            Log.d(TAG, mBundle.toString());
             //set UI variables
             mTextViewIngredientName = view.findViewById(R.id.subsubtitle_textview_ingredient_name);
             mButtonSaveName = view.findViewById(R.id.button_ingredient_amount_log_save);
@@ -118,78 +120,87 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
             mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
             mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
             // this is our holder string, remove from this arraylist as we go
-            mIngredientLogIdsToAddStringArray = new ArrayList<String>();
-            // after intensity is done being set the next default place is date times
-            mDefaultNextFragment = new LogDateTimeChoicesFragment();
+            mIngredientLogIdsStringArray = new ArrayList<String>();
+            // after amount is done being set the next default place is date times
+            mDefaultNextFragment = new DateTimeChoicesFragment();
             // default next place to go should be the next fragment
             mNextFragment = mDefaultNextFragment;
             // repeating this fragment
-            mRepeatThisFragment = new IngredientAmountFragment();
+            mRepeatThisFragment =
+                    new IngredientAmountFragment();
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
+            mBundle = Util.checkValidFragment(getArguments(), thisActivity);
+            mBundleNext = Util.updateBundleToBundleNext(mBundle);
+            mBundleNext.putString(Util.ARGUMENT_FROM,
+                    Util.ARGUMENT_FROM_INGREDIENT_AMOUNT_FRAGMENT);
+            mWhatToChangeNext = Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED;
 
             // to pass on to the time and date fragments, save the original untouched array string
-            mIngredientLogIdsToAddString = mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
+            mIngredientLogIdsString = mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
             //how many ids to add
             //TODO fix this lazy code
             if (TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION),
                     Util.ARGUMENT_ACTION_EDIT) ) {
-                mHowManyIdsToAdd = 1;
-                mCurrentLogIndex = 0;
-                mCurrentIngredientLogIdString = mIngredientLogIdsToAddString;
+                mHowManyIds = 1;
+                mCurrentIdIndex = 0;
+                mIngredientLogIdsString = Util.cleanArrayString(mIngredientLogIdsString);
+                mIngredientLogIdsStringArray.add(mIngredientLogIdsString);
             } else {
-                mHowManyIdsToAdd =
+                mHowManyIds =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY));
-                mCurrentLogIndex =
+                mCurrentIdIndex =
                         Integer.parseInt(mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
                 // parse the name from the array of ids and put that in the textview
                 // clean the string of its brackets and spaces
                 // turn into array list
-                mIngredientLogIdsToAddStringArray = Util.cleanBundledStringIntoArrayList(
-                        mIngredientLogIdsToAddString
+                mIngredientLogIdsStringArray = Util.cleanBundledStringIntoArrayList(
+                        mIngredientLogIdsString
                 );
-                // set the current ingredient to be the first
-                mCurrentIngredientLogIdString =
-                        mIngredientLogIdsToAddStringArray.get(mCurrentLogIndex);
             }
 
-            // set that in the number picker and the textview for the user interface
-            setCurrentIngredientUI(mCurrentIngredientLogIdString);
+            Log.d(TAG, "mCurrentIdIndex " + mCurrentIdIndex);
+            Log.d(TAG, "mIngredientLogIdsString " + mIngredientLogIdsString.toString());
 
-            // get current log info
-            UUID currentLogId = UUID.fromString(mCurrentIngredientLogIdString);
-            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(currentLogId );
-            // get the ingredient info from the log
-            mCurrentIngredient =
-                    mIngredientViewModel.viewModelGetIngredientFromId(currentLogId);
-            mCurrentIngredientName = mCurrentIngredient.getIngredientName();
-            mCurrentIngredientId = mCurrentIngredient.getIngredientId();
+
+            Log.d(TAG, "mIngredientLogIdsStringArray " + mIngredientLogIdsStringArray.toString());
+            // set the current ingredient
+            mCurrentIngredientLogIdString = mIngredientLogIdsStringArray.get(mCurrentIdIndex);
+            setCurrentIngredientTextViewNumberPicker(mCurrentIngredientLogIdString);
+
+            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
+                    UUID.fromString(mCurrentIngredientLogIdString) );
+            mCurrentIngredientId = mCurrentIngredientLog.getIngredientLogIngredientId();
+            mIngredient =
+                    mIngredientViewModel.viewModelGetIngredientFromId(mCurrentIngredientId);
+
+            // then the name value
+            mCurrentIngredientName = mIngredient.getIngredientName();
 
             // numbers to put in the number picker for how intense the ingredient is
-            mDisplayedStringList =
-                    getResources().getStringArray(R.array.strings_one_to_ten);
             // colors for the backgrounds to differentiate the numbers easily
+            mDisplayedStringList =
+                    getResources().getStringArray(R.array.strings_amounts);
             mAmountColorList =
                     getResources().getIntArray(R.array.colors_intensity_scale_one_to_ten);
 
-            // set our default intensity to first in list if no ingredient has been logged yet, and
+            // set our default amount to first in list if no ingredient has been logged yet, and
             // set to most recent log with same ingredient name if it exists
-            mAmountSelected = Double.parseDouble(setAmountDefault(mCurrentIngredientName));
-            mAmountSelectedIndex = Integer.parseInt(String.valueOf(mAmountSelected))-1;
+            //TODO fix default set to figure out what the index of the other log's value is
+//            mAmountSelected = setAmountDefaultIndex(mCurrentIngredientId);
+            mAmountSelectedIndex = 0;
 
 
             // set our numberpicker with our string of 1 to 10 and with default value of the same
             // as most recent ingredient log with the same ingredient
-            mNumberPicker = Util.setNumberPicker(mNumberPicker, mDisplayedStringList,
-                    Integer.parseInt(String.valueOf(mAmountSelected)), mCurrentAmountColor);
+            mNumberPicker = Util.setNumberPickerStrings(mNumberPicker, mDisplayedStringList,
+                    mAmountSelectedIndex, mCurrentAmountColor);
             mNumberPicker.setOnValueChangedListener(this);
 
             //mNumberPicker.setBackgroundColor(mAmountColorList[0]);
             GradientDrawable gradient = (GradientDrawable) getResources().getDrawable(R.drawable.gradient);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                gradient = setGradient(gradient, Integer.parseInt(String.valueOf(
-                        mAmountSelected)),
-                        mAmountColorList);
+                gradient = setGradient(gradient, mAmountSelectedIndex, mAmountColorList);
             }
             mNumberPicker.setBackground(gradient);
 
@@ -200,28 +211,33 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 
         }
 
-    // Inflate the layout for this fragment
-    return view;
+        // Inflate the layout for this fragment
+        return view;
     }
 
 
-    // change the name on the text view to new current ingredient and the new default intensity
+    // change the name on the text view to new current ingredient and the new default amount
     // value
-    private void setCurrentIngredientUI(String paramIngredientLogIdToAddString){
+    private void setCurrentIngredientTextViewNumberPicker(String paramIngredientLogIdToAddString){
 
         // get first log in the list array
-        UUID uuid = UUID.fromString(paramIngredientLogIdToAddString);
-        mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(uuid);
-        mCurrentIngredientName = mIngredientViewModel.viewModelGetIngredientFromId(
-                mCurrentIngredientLog.getIngredientLogIngredientId()
-        ).getIngredientName();
+        mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
+                UUID.fromString(paramIngredientLogIdToAddString) );
+
+        // get the name and Id of the ingredient in this ingredient log
+        mCurrentIngredientId = mCurrentIngredientLog.getIngredientLogIngredientId();
+        Ingredient mCurrentIngredient =
+                mIngredientViewModel.viewModelGetIngredientFromId(mCurrentIngredientId);
+        mCurrentIngredientName = mCurrentIngredient.getIngredientName();
 
         // put in the UI what ingredient we're changing now
         mTextViewIngredientName.setText(mCurrentIngredientName);
 
         // also reset the default value on the number picker
-        mAmountSelected = Double.valueOf(setAmountDefault(mCurrentIngredientName));
-        mNumberPicker.setValue(Integer.parseInt(String.valueOf(mAmountSelected)));
+        //TODO fix default
+//        mAmountSelected = setAmountDefaultIndex(mCurrentIngredientId);
+        mAmountSelectedIndex = setAmountDefaultIndex(mCurrentIngredientId);
+        mNumberPicker.setValue(mAmountSelectedIndex);
     }
 
     @Override
@@ -241,40 +257,62 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 //                break;
             case R.id.button_ingredient_amount_log_save:
 
-                    // tell user we're saving it
-                    Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
+                // tell user we're saving it
+                Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
 
-                    // then set the intensity
-                    mCurrentIngredientLog.setIngredientLogIngredientAmount(
-                            Double.valueOf(mAmountSelected));
-                    // update the log
-                    mIngredientLogViewModel.viewModelUpdateIngredientLog(mCurrentIngredientLog);
+                // then set the amount
+//                mAmountSelected = mDisplayedStringList[mAmountSelectedIndex+1];
+                mCurrentIngredientLog.setIngredientLogIngredientSubjectiveAmount(mAmountSelected);
+                // update the log
+                mIngredientLogViewModel.viewModelUpdateIngredientLog(mCurrentIngredientLog);
 
-                    // will set done or unfinished if action means we're from edit
-                    mBundleNext = Util.setDoneIfFromEdit(mBundle);
+                // will set done or unfinished if action means we're from edit
+                mBundleNext = Util.setDoneIfFromEdit(mBundle);
 
-                    // we've added it in, so remove this ingredient from the ones to add
-                    mIngredientLogIdsToAddStringArray.remove(mCurrentIngredientLog.
-                            getIngredientLogId().toString());
-                    // and lower our count for how many left to add
-                    mHowManyIdsToAdd = mHowManyIdsToAdd - 1;
+                String howManyInArrayString =
+                        mBundle.getString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY);
+                Integer howManyInArrayInteger = Integer.parseInt(howManyInArrayString);
+                String currentIndexInArrayString =
+                        mBundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY);
+                Integer currentIndexInArrayInteger = Integer.parseInt(currentIndexInArrayString);
 
-                    // if this is the last intensity to check,
-                    // checked by if the number of Ids left to add logs of is bigger than 0
-                    if ( mHowManyIdsToAdd == 0 ) {
-                        //TODO make times show up and modifiable back in add new logs if I want,
-                        // probably don't need all these fragments, or make it a preference when
-                        // they want to be asked when the ingredient happened
+                // if that was the last one to add
+                if ( currentIndexInArrayInteger == 0) {
+                    //TODO make times show up and modifiable back in add new logs if I want,
+                    // probably don't need all these fragments, or make it a preference when
+                    // they want to be asked when the ingredient happened
 
-                        // go to date fragment to set when the ingredient(s) happened
-                        mNextFragment = mDefaultNextFragment;
-                    } else {
-                        // not the last in the array, repeat this fragment
-
-                        mNextFragment = mRepeatThisFragment;
-                        // actually go to the next place now
+                    // if there was more than one ingredient,
+                    if ( howManyInArrayInteger > 1) {
+                        // alert user that all ingredients will have the same time and date,
+                        // they can be individually edited from the ingredient log menu
+                        Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
+                        //if the current index is zero we've gone through them all
+                        // and if the number in array was more than one
+                        // then we're done
+                        Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
+                                Util.fragmentContainerViewAddIngredientLog,
+                                mDefaultNextFragment, mBundleNext);
                     }
-                    goToNextFragment(mNextFragment);
+
+
+                    // go to date fragment to set when the ingredient(s) happened
+                    Util.startNextFragmentBundleChange(thisActivity,
+                            getParentFragmentManager().beginTransaction(),
+                            Util.fragmentContainerViewAddIngredientLog,
+                            mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
+
+                }  else {
+                    // not the last in the array, repeat this fragment
+
+                    // and lower our count for how many left to add
+                    mCurrentIdIndex = mCurrentIdIndex - 1;
+                    mBundleNext.putString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY, String.valueOf(mCurrentIdIndex));
+
+                    Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
+                            Util.fragmentContainerViewAddIngredientLog,
+                            mRepeatThisFragment, mBundleNext);
+                }
 
 
                 break;
@@ -285,101 +323,44 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
     }//end onClick
 
 
-    private void goToNextFragment(Fragment nextFragment){
-        // and now which fragment to go to next
-
-        // if nothing given use the default fragment
-        if ( Objects.isNull(nextFragment)) {
-            // so just go home
-            nextFragment = mDefaultNextFragment;
-        } else {
-            // we were given a fragment to use
-            // let's set all the info the next fragment will need
-
-            // if this is not the last intensity to check
-            if ( mHowManyIdsToAdd > 0 ) {
-                // if there's still logs left to change intensity of
-                // add the current log IDs left to add into the bundle
-                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
-                        mIngredientLogIdsToAddStringArray.toString());
-                mBundleNext.putString(Util.ARGUMENT_HOW_MANY_ID_IN_ARRAY,
-                        mHowManyIdsToAdd.toString());
-                // we're still changing intensity
-                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
-            } else {
-                // there are no intensities left to set
-                // add the original array as our array
-                // the rest are all set together so it doesn't need to be a changing array, so we
-                // don't need original and mutable array both, just need one
-                mBundleNext.putString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
-                    mIngredientLogIdsToAddStringArrayOriginal);
-                // reset to setting begin time date for the next fragment
-                mBundleNext.putString(Util.ARGUMENT_CHANGE, Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN);
-
-                // if there's more than one ingredient,
-                // checked by if original string has a comma,
-                // alert user that all ingredients will have the same time and date,
-                // they can be individually edited from the ingredient log menu
-                if ( mIngredientLogIdsToAddStringArrayOriginal.contains(",")) {
-                    Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            mBundleNext.putString(Util.ARGUMENT_FROM,
-                    Util.ARGUMENT_FROM_INTENSITY_SYMPTOM);
-            // put which we're changing into the bundle
-            nextFragment.setArguments(mBundleNext);
-        }
-
-        // actually go to the next place now
-        //TODO move this into Util
-        if ( TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION), Util.ARGUMENT_ACTION_EDIT)){
-            Util.goToEditActivityActionTypeId(null, thisActivity, Util.ARGUMENT_ACTION_EDIT,
-                    Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mCurrentIngredientLogIdString);
-        } else {
-//            Util.startNextFragment(getParentFragmentManager().beginTransaction(),
-//                    Util.fragmentContainerViewAddIngredientLog, nextFragment);
-        }
-    }
-
-
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         // get the index of the spot in the array chosen
         int valuePicker = picker.getValue();
-        // get the string value of the chosen intensity
-        mAmountSelected =  Double.parseDouble(mDisplayedStringList[valuePicker]);
+        // get the string value of the chosen amount
+//        mAmountSelected =  Integer.parseInt(mDisplayedStringList[valuePicker]);
+        mAmountSelected =  mDisplayedStringList[valuePicker];
 
         // set background color to change with new value
         GradientDrawable gradient = (GradientDrawable) getResources().getDrawable(R.drawable.gradient);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            gradient = setGradient(gradient, Integer.valueOf(String.valueOf(mAmountSelected)), mAmountColorList);
+            gradient = setGradient(gradient, valuePicker,
+                    mAmountColorList);
         }
         picker.setBackground(gradient);
     }
 
-    private String setAmountDefault(String mCurrentIngredientName){
-        //TODO fix intensity color gradient, it breaks with default is 10 I think
+    private Integer setAmountDefaultIndex(UUID ingredientId){
+        //TODO fix amount color gradient, it breaks with default is 10 I think
 
+        mAmountSelectedIndex = 0;
         // if there is no ingredient log with same ingredient name
-        if ( Objects.isNull(
-                mIngredientLogViewModel.viewModelGetMostRecentIngredientLogWithIngredient(
-                mCurrentIngredientId ) )) {
+        if ( Objects.isNull(mIngredientLogViewModel.viewModelGetMostRecentIngredientLogWithIngredient(
+                ingredientId ) )) {
             // set our integer to first in the list
-            mAmountSelected =
-                    Double.parseDouble(mDisplayedStringList[0]);
+//            mAmountSelected = mDisplayedStringList[0];
         } else {
-            // get the most recent intensity from most recent log and
-            // set the default intensity to that
-            mAmountOfMostRecentIngredientLogWithSameIngredientName =
-                    mIngredientLogViewModel.viewModelGetMostRecentIngredientLogWithIngredient(
-                                    mCurrentIngredientId )
-                            .getIngredientLogIngredientAmountNumber();
-
-            // set our default choice to save intensity of to be the most recent value
-            mAmountSelected = mAmountOfMostRecentIngredientLogWithSameIngredientName;
+            // get the most recent amount from most recent log and
+            // set the default amount to that
+//            mAmountOfMostRecentIngredientLogWithSameIngredientName =
+//                    mIngredientLogViewModel.viewModelGetMostRecentIngredientLogWithIngredient(
+//                                    ingredientId )
+//                            .getIngredientLogIngredientSubjectiveAmount();
+//
+//            // set our default choice to save amount of to be the most recent value
+//            mAmountSelectedIndex = mAmountOfMostRecentIngredientLogWithSameIngredientName;
         }
-        return String.valueOf(Integer.parseInt(String.valueOf(mAmountSelected)));
+        return mAmountSelectedIndex;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -388,7 +369,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
         //TODO make this the default background color, white for now is fine
         int white = getResources().getColor(R.color.white, thisActivity.getTheme());
         int maxIndex = colorList.length-1;
-        int selectedIndex = selectedInteger - 1;
+        int selectedIndex = selectedInteger;
         int previousAmountColorInt = white, nextAmountColorInt = white,
                 currentAmountColorInt = colorList[selectedIndex];
         Log.d(TAG, "maxIndex " + maxIndex);
@@ -417,3 +398,4 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
         return gradient;
     }
 }
+

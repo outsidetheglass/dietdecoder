@@ -1,14 +1,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/constraintLayout_ingredient_amount_log"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout_ingredient_amount_log"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
   <TextView
       android:id="@+id/textview_title_ingredient_amount_log_name_fragment"
-      android:text="@string/title_textview_new_log"
+      android:text="@string/title_textview_ingredient_amount_log"
       android:layout_width="match_parent"
       android:layout_height="100dp"
       android:layout_marginTop="10dp"
@@ -52,15 +52,15 @@
       app:layout_constraintTop_toBottomOf="@+id/textview_question_ingredient_amount_log"
       />
 
-    <NumberPicker
-        android:id="@+id/numberpicker_ingredient_amount"
-        android:layout_marginTop="@dimen/small_padding"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subsubtitle_textview_ingredient_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+  <NumberPicker
+      android:id="@+id/numberpicker_ingredient_amount"
+      android:layout_marginTop="@dimen/small_padding"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/subsubtitle_textview_ingredient_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
 
 
 

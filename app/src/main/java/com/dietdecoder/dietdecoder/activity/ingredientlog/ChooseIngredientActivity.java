@@ -148,8 +148,6 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
                     new Observer<List<Ingredient>>() {
                         @Override
                         public void onChanged(List<Ingredient> ingredients) {
-                            Log.d(TAG, "in viewModelGetAllIngredients, mGivenFilterString: "
-                                    + mGivenFilterString);
                             // Update the cached copy of the words in the adapter.
                             mIngredientListAdapter.setFilterIngredientList(
                                     ingredients, mGivenFilterString);
@@ -197,6 +195,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
 //                break;
             case R.id.button_choose_ingredient_save:
                 // get int
+                Log.d(TAG, "in save bundle: " + mBundle.toString());
 //
                 mIngredientsSelectedIdsArrayListStrings = new ArrayList<>();
                 for (int childCount = recyclerViewIngredientNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
@@ -271,6 +270,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
                     ingredientLog.setIngredientLogIngredientId(ingredient.getIngredientId());
                     mIngredientLogViewModel.viewModelUpdateIngredientLog(ingredientLog);
 
+                    Log.d(TAG, "in howManySelected edit bundle: " + mBundleNext.toString());
                     // done with setting the ingredient go back to editing this ingredient log
                     Util.goToEditActivityActionTypeId(null, thisActivity,
                             Util.ARGUMENT_ACTION_EDIT,
@@ -281,13 +281,14 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
                     mBundleNext =
                             Util.setNewIngredientLogBundle(mIngredientsSelectedIdsArrayListStrings);
                     // go to set the intensity of the ingredient
+                    Log.d(TAG, "in howManySelected bundle: " + mBundleNext.toString());
                     Util.goToAddIngredientLogActivity(thisActivity,
                             String.valueOf(mIngredientsSelectedIdsArrayListStrings), mBundleNext);
 
                 }
 
                 break;
-            case R.id.add_button_ingredient:
+            case R.id.button_choose_ingredient_add:
                 // add new ingredient button
                 Util.goToAddIngredientActivityMakeAddBundle(null, thisActivity);
                 break;

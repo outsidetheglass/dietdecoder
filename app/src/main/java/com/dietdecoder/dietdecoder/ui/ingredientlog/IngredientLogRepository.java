@@ -112,9 +112,9 @@ class IngredientLogRepository {
     // for each ingredient log in our list
     // calculate the duration from when it began to when it changed
     // and add those durations to our list of all durations
-    for (IngredientLog ingredientLog : someIngredientLogs) {
-      someIngredientLogsAmounts.add(ingredientLog.getIngredientLogIngredientAmountNumber());
-    }
+//    for (IngredientLog ingredientLog : someIngredientLogs) {
+//      someIngredientLogsAmounts.add(ingredientLog.getIngredientLogIngredientAmountNumber());
+//    }
 
     // calculate the average
     Double average =

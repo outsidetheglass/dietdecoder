@@ -187,7 +187,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
         // change which fragment starts based on which button was pressed
         if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY)) {
+                Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT)) {
             // we know the day but not the time
             // ask that before we can move on
             mNextFragment = new SymptomIntensityFragment();

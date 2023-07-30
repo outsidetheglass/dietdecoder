@@ -51,6 +51,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
     Symptom currentSymptomLogSymptom = null;
     UUID currentSymptomLogSymptomId = currentSymptomLog.getSymptomLogSymptomId();
 
+//    Log.d(TAG,currentSymptomLog.toString());
     // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
     // find the symptom matching the id of the log we were given
     int i = 0;
@@ -77,6 +78,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
               " and find out how this symptom log got added without a valid symptom.");
     }
 
+//    Log.d(TAG, currentSymptomLogSymptom.toString());
     holder.bind(currentSymptomLog, currentSymptomLogSymptom);
   }//end onBindViewHolder
 
@@ -112,9 +114,10 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
     }
   }
 
-  public void setSymptomLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayListList){
+  public void setSymptomLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayList){
 
-    this.mSymptomArrayList = symptomArrayListList;
+    Log.d(TAG, symptomArrayList.toString());
+    this.mSymptomArrayList = symptomArrayList;
     this.submitList(logs);
   }
 } //end class LogListAdapter

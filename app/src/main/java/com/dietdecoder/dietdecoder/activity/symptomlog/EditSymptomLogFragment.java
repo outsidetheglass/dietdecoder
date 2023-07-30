@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.LogSpecificDateTimeFragment;
+import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -159,14 +159,14 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 // begin is a time, so go to the date time fragment to set it
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit, new LogSpecificDateTimeFragment(), mBundleNext);
+                        Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
 
                 break;
             case R.id.imagebutton_symptom_log_changed_option:
                 // changed date time was clicked, so tell the user we'll go change that date time
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
                 Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit,  new LogSpecificDateTimeFragment(), Util.ARGUMENT_ACTION_EDIT,
+                        Util.fragmentContainerViewEdit,  new SpecificDateTimeFragment(), Util.ARGUMENT_ACTION_EDIT,
                         Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED,
                         Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
                 break;

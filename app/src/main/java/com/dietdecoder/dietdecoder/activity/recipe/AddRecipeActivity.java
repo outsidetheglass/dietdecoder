@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dietdecoder.dietdecoder.R;
 
-public class NewRecipeActivity extends AppCompatActivity {
+public class AddRecipeActivity extends AppCompatActivity {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
