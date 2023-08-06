@@ -90,7 +90,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
         // if we got past the valid fragment check then we can grab our values
         mBundle = Util.checkValidFragment(getArguments(), thisActivity);
         // update our from to be this fragment
-        mBundleNext = Util.updateBundleToBundleNext(mBundle);
+        mBundleNext = Util.updateBundleGoToNext(mBundle);
         // we do have a specific time date to change so let's set what we do next
         mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
         mWhatToChangeJustNow = mWhatToChange;
@@ -129,7 +129,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
         mButtonEarlierToday.setOnClickListener(this);
 
     }//end onViewCreated
-    
+
 
     // set the index, string, array, and UUID for the current log
     private void setObjectArrayValues(String logIdsString){

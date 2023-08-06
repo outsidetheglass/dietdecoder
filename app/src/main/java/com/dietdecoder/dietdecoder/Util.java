@@ -57,9 +57,9 @@ public class Util {
 
     private final static String TAG = "TAG: " + Util.class.getSimpleName();
 
-    public static String[] months = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+    public static String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
             "Aug",
-            "Sept", "Oct", "Nov", "Dec" };
+            "Sept", "Oct", "Nov", "Dec"};
 
 
     public static final ZoneId defaultZoneId = ZoneId.systemDefault();
@@ -144,7 +144,6 @@ public class Util {
     public static final String ARGUMENT_ACTION_DETAIL = "action_detail";
 
 
-
     // which activity or fragment we are from
     public static final String ARGUMENT_FROM = "from";
     // fragment or activity to go to given this argument
@@ -180,7 +179,7 @@ public class Util {
 
 
     public static final String ARGUMENT_FROM_ADD_SYMPTOM_LOG_ACTIVITY =
- "from_add_symptom_log_activity";
+            "from_add_symptom_log_activity";
     public static final String ARGUMENT_FROM_CHOOSE_SYMPTOM_ACTIVITY =
             "from_choose_symptom_activity";
     public static final String ARGUMENT_FROM_EDIT_SYMPTOM_LOG_ACTIVITY =
@@ -208,8 +207,6 @@ public class Util {
     public static final String ARGUMENT_FROM_SPECIFIC_DATE = "from_specific_date";
     public static final String ARGUMENT_FROM_INGREDIENT_BRAND = "from_ingredient_brand";
     public static final String ARGUMENT_FROM_EDIT = "from_edit";
-
-
 
 
     public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY = "go_to_ingredient_amount_activity";
@@ -272,9 +269,6 @@ public class Util {
             "go_to_specific_date_time_fragment";
 
 
-
-
-
     // which value do we want to change
     public static final String ARGUMENT_CHANGE = "change";
     // values as options to change
@@ -318,7 +312,7 @@ public class Util {
 
     // clean a string that was turned from an ArrayList into a string
     // for bundling between activities
-    public static String cleanArrayString(String paramString){
+    public static String cleanArrayString(String paramString) {
         String mString = paramString;
         // remove first and last brackets if it has them
         mString = mString.replaceAll("\\[", "");
@@ -329,7 +323,7 @@ public class Util {
     }
 
     // clean the bundled string and return an Array List
-    public static ArrayList<String> cleanBundledStringIntoArrayList(String paramStringToCleanIntoArrayList){
+    public static ArrayList<String> cleanBundledStringIntoArrayList(String paramStringToCleanIntoArrayList) {
 
         ArrayList<String> mStringArray = new ArrayList<String>();
 
@@ -337,12 +331,14 @@ public class Util {
         String mCleanedSplitString =
                 cleanArrayString(paramStringToCleanIntoArrayList);
 
-        if ( paramStringToCleanIntoArrayList.contains(",")) {
+        if (paramStringToCleanIntoArrayList.contains(",")) {
             // make it into an array for each ID
             // double checked, this works fine even if there is only one value and no comma
             for (String cleanString : mCleanedSplitString.split(",")) {
                 mStringArray.add(cleanString);
             }
+        } else {
+            mStringArray.add(mCleanedSplitString);
         }
 
         return mStringArray;
@@ -353,9 +349,9 @@ public class Util {
         String stringTypeFromBundle = setStringTypeBundle(paramBundle);
         String stringFromBundle = null;
 
-        if ( paramBundle.containsKey(stringTypeFromBundle) ){
+        if (paramBundle.containsKey(stringTypeFromBundle)) {
             stringFromBundle = paramBundle.getString(stringTypeFromBundle);
-        } else if ( stringTypeFromBundle == null){
+        } else if (stringTypeFromBundle == null) {
             Log.d(TAG, "Error, failed to have valid type.");
         } else {
             Log.d(TAG, "Error, failed to call to get strings from type.");
@@ -365,8 +361,9 @@ public class Util {
         String[] strings = new String[]{stringTypeFromBundle, stringFromBundle};
         return strings;
     }
+
     // clean the bundled string and return an Array List
-    public static ArrayList<String> setLogIdArrayFromBundle(Bundle paramBundle){
+    public static ArrayList<String> setLogIdArrayFromBundle(Bundle paramBundle) {
 
         ArrayList<String> mIdStringArray = new ArrayList<String>();
         String stringFromBundle = setLogIdArrayTypeAndStringFromBundle(paramBundle)[1];
@@ -378,11 +375,11 @@ public class Util {
 
     }
 
-    public static String setBeforeOrAfterFromArgument(String argument){
+    public static String setBeforeOrAfterFromArgument(String argument) {
 
         String beforeOrAfterString = null;
 
-        if (TextUtils.equals(Util.ARGUMENT_BEFORE, argument) ){
+        if (TextUtils.equals(Util.ARGUMENT_BEFORE, argument)) {
             beforeOrAfterString = Util.ARGUMENT_BEFORE;
         }
 
@@ -391,11 +388,10 @@ public class Util {
     }
 
 
-
     // make substring bold and italic and regular font
     public static SpannableStringBuilder setBoldItalicPlainSpan(String boldString,
-                                                             String notBoldString,
-                                                           String italicString, String notItalicString) {
+                                                                String notBoldString,
+                                                                String italicString, String notItalicString) {
 
         // first string is bold
         // so its length must be its own length
@@ -418,13 +414,13 @@ public class Util {
         spannableStringBuilder.append(notBoldString);
 
         // if we have more strings to use, add them
-        if ( !TextUtils.isEmpty(italicString) ) {
+        if (!TextUtils.isEmpty(italicString)) {
 
             int italicStart = firstStringLength + secondStringLength;
-            int italicEnd = italicStart + italicString.length()-1;
+            int italicEnd = italicStart + italicString.length() - 1;
             spannableStringBuilder.append(italicString,
                     Util.italicStyle, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            if (!TextUtils.isEmpty(notItalicString)){
+            if (!TextUtils.isEmpty(notItalicString)) {
                 spannableStringBuilder.append(notItalicString);
             }
         }
@@ -462,7 +458,7 @@ public class Util {
         spannableStringBuilder.append(notBoldString);
 
         // if we have more strings to use, add them
-        if ( !TextUtils.isEmpty(italicString) ) {
+        if (!TextUtils.isEmpty(italicString)) {
             spannableStringBuilder.append(italicString,
                     Util.italicStyle, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -475,11 +471,11 @@ public class Util {
     // given an integer of minute of datetime
     // return a string to set for displaying
     // with a 0 in front if the minute is less than 10
-    public static String setMinutesString(Integer minute){
+    public static String setMinutesString(Integer minute) {
 
         String mMinutesString;
 
-        if ( minute < 10 ) {
+        if (minute < 10) {
             mMinutesString = "0" + minute.toString();
         } else {
             mMinutesString = minute.toString();
@@ -487,28 +483,31 @@ public class Util {
 
         return mMinutesString;
     }//end setMinutesString function
+
     // given integers of hours and minutes return string pretty
     public static String setTimeString(int hour, int min) {
         // Append in a StringBuilder
         String aTime = new StringBuilder()
                 .append(hour)
                 .append(':')
-                .append( Util.setMinutesString(
-                        min ) )
+                .append(Util.setMinutesString(
+                        min))
                 .toString();
         return aTime;
     }
+
     // given integers of hours and minutes return string pretty
     public static String setTimeStringWithUnderscore(int hour, int min) {
         // Append in a StringBuilder
         String aTime = new StringBuilder()
                 .append(hour)
                 .append('_')
-                .append( Util.setMinutesString(
-                        min ) )
+                .append(Util.setMinutesString(
+                        min))
                 .toString();
         return aTime;
     }
+
     public static String setDateString(int day, int month, int year) {
 
         // turn a zero indexed number for month into the name of that month
@@ -524,6 +523,7 @@ public class Util {
                 .toString();
         return aDate;
     }
+
     public static String setDateStringWithUnderscore(int day, int month, int year) {
 
         // turn a zero indexed number for month into the name of that month
@@ -541,26 +541,26 @@ public class Util {
     }
 
     // set month from zero indexed value to a string of the month name
-    public static String setMonthString(Integer monthIndex){
+    public static String setMonthString(Integer monthIndex) {
 
         // if they're invalid values less than Jan or more than Dec, set to those
         if (monthIndex < 0) {
             monthIndex = 0;
-        }
-        else if (monthIndex > 11) {
+        } else if (monthIndex > 11) {
             monthIndex = 11;
         }
         String month = months[monthIndex];
 
         return month;
     }
-    //given an instant in time, display it pretty
-    public static String stringFromInstant(Instant instant){
 
-        Calendar mCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
+    //given an instant in time, display it pretty
+    public static String stringFromInstant(Instant instant) {
+
+        Calendar mCalendar = GregorianCalendar.from(instant.atZone(defaultZoneId));
 
         // the day of the week for readability
-        String[] days = new String[] { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
+        String[] days = new String[]{"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
         String mDayOfWeekString = days[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
 
         // set the date to be with a space and a comma and with the short month name
@@ -570,13 +570,13 @@ public class Util {
         String mTimeString = stringTimeFromCalendar(mCalendar);
 
 
-        return(mTimeString + " " + mDayOfWeekString + ", " + mDateString);
+        return (mTimeString + " " + mDayOfWeekString + ", " + mDateString);
     }
 
     //given an instant in time, display it pretty
-    public static String stringForFileNameFromInstant(Instant instant){
+    public static String stringForFileNameFromInstant(Instant instant) {
 
-        Calendar mCalendar = GregorianCalendar.from(instant.atZone( defaultZoneId )) ;
+        Calendar mCalendar = GregorianCalendar.from(instant.atZone(defaultZoneId));
 
         // set the date to be with a space and a comma and with the short month name
         String mDateString = stringDateFromCalendarWithUnderscore(mCalendar);
@@ -584,11 +584,11 @@ public class Util {
         // set time to have a colon and a zero if the minute is < 10
         String mTimeString = stringTimeFromCalendarWithUnderscore(mCalendar);
 
-        return(mTimeString + "_" + mDateString);
+        return (mTimeString + "_" + mDateString);
     }
 
     //given calendar return a string with only the date and time set
-    public static String stringDateFromCalendar(Calendar calendar){
+    public static String stringDateFromCalendar(Calendar calendar) {
 
         // date related
         int mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -599,8 +599,9 @@ public class Util {
 
         return mDateString;
     }
+
     //given calendar return a string with only the date and time set
-    public static String stringDateFromCalendarWithUnderscore(Calendar calendar){
+    public static String stringDateFromCalendarWithUnderscore(Calendar calendar) {
 
         // date related
         int mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -611,7 +612,8 @@ public class Util {
 
         return mDateString;
     }
-    public static String stringTimeFromCalendar(Calendar calendar){
+
+    public static String stringTimeFromCalendar(Calendar calendar) {
         // get the hour and minute
         Integer mHour = calendar.get(Calendar.HOUR_OF_DAY);
         Integer mMinute = calendar.get(Calendar.MINUTE);
@@ -620,7 +622,8 @@ public class Util {
 
         return mTimeString;
     }
-    public static String stringTimeFromCalendarWithUnderscore(Calendar calendar){
+
+    public static String stringTimeFromCalendarWithUnderscore(Calendar calendar) {
         // get the hour and minute
         Integer mHour = calendar.get(Calendar.HOUR_OF_DAY);
         Integer mMinute = calendar.get(Calendar.MINUTE);
@@ -633,7 +636,7 @@ public class Util {
     // calculate how recently the parameter instant was from the second instant parameter
     // and make it a pretty string
     public static String stringRelativeTimeFromInstant(Instant printThisInstant,
-                                                       Instant printRelativeToThisInstant){
+                                                       Instant printRelativeToThisInstant) {
 
         // the answer string for displaying the difference pretty
         String relativityToInstant;
@@ -651,38 +654,38 @@ public class Util {
         // then it's day before yesterday
         // then it's by number of days before yesterday
         // TODO fix this to get printed dates from strings, not here, can't get translated
-        if ( totalDaysApart == 0 ){
+        if (totalDaysApart == 0) {
             relativityToInstant = "Same day";
-            if (Math.abs(totalHoursApart) == 1){
+            if (Math.abs(totalHoursApart) == 1) {
                 relativityToInstant = "Lasted " + Math.abs(totalHoursApart) + " hour";
-            } else if (totalHoursApart != 0){
+            } else if (totalHoursApart != 0) {
                 relativityToInstant = "Lasted " + Math.abs(totalHoursApart) + " hours";
             }
-        } else if ( totalDaysApart == 1 ){
+        } else if (totalDaysApart == 1) {
             relativityToInstant = "Day before";
-        } else if ( totalDaysApart == -1 )  {
+        } else if (totalDaysApart == -1) {
             relativityToInstant = "Predicted tomorrow";
-        } else if ( totalDaysApart < 0 ) {
+        } else if (totalDaysApart < 0) {
             relativityToInstant =
-                        "Predicted " + Math.abs(totalDaysApart) + " days from now";
-        }
-        else {
+                    "Predicted " + Math.abs(totalDaysApart) + " days from now";
+        } else {
             relativityToInstant = totalDaysApart + " days before";
         }
 
         return relativityToInstant;
     }
+
     public static Integer integerRelativeDateFromInstant(Instant printThisInstant,
-                                                         Instant printRelativeToThisInstant){
+                                                         Instant printRelativeToThisInstant) {
 
         Integer relativityToInstant;
 
         Calendar printThisCalendar = GregorianCalendar.from(
-                printThisInstant.atZone( defaultZoneId )
-        ) ;
+                printThisInstant.atZone(defaultZoneId)
+        );
         Calendar printRelativeToThisCalendar = GregorianCalendar.from(
-                printRelativeToThisInstant.atZone( defaultZoneId )
-        ) ;
+                printRelativeToThisInstant.atZone(defaultZoneId)
+        );
 
 
         // calculate number of days before
@@ -697,14 +700,14 @@ public class Util {
 
         int daysInYearApart = newerDayOfYear - olderDayOfYear;
         // if its the same year, newer's day of year minus older's day of year
-        if ( olderYear == newerYear ) {
+        if (olderYear == newerYear) {
             totalDaysApart = daysInYearApart;
         }
         // else add 365 times number of years difference, minus day of years
         else {
             yearsApart = newerYear - olderYear;
             // forget leap year for now TODO make work for leap years
-            totalDaysApart = yearsApart*365 + daysInYearApart;
+            totalDaysApart = yearsApart * 365 + daysInYearApart;
         }
 
 
@@ -712,16 +715,16 @@ public class Util {
     }
 
     public static Integer integerRelativeTimeFromInstant(Instant printThisInstant,
-                                                         Instant printRelativeToThisInstant){
+                                                         Instant printRelativeToThisInstant) {
 
         Integer totalHoursApart = 0;
 
         Calendar printThisCalendar = GregorianCalendar.from(
-                printThisInstant.atZone( defaultZoneId )
-        ) ;
+                printThisInstant.atZone(defaultZoneId)
+        );
         Calendar printRelativeToThisCalendar = GregorianCalendar.from(
-                printRelativeToThisInstant.atZone( defaultZoneId )
-        ) ;
+                printRelativeToThisInstant.atZone(defaultZoneId)
+        );
 
         Integer totalDaysApart = Util.integerRelativeDateFromInstant(printThisInstant,
                 printRelativeToThisInstant);
@@ -731,13 +734,13 @@ public class Util {
         int newerHour = printThisCalendar.get(Calendar.HOUR_OF_DAY);
 
         // if it happened only on day of
-        if (totalDaysApart==0){
+        if (totalDaysApart == 0) {
             // get the later in day time minus earlier in day hour
             totalHoursApart = newerHour - olderHour;
         } else {
             // it lasted longer than a day, so add the hours for number of days minus what time
             // of day
-            totalHoursApart = totalDaysApart*24 + newerHour - olderHour;
+            totalHoursApart = totalDaysApart * 24 + newerHour - olderHour;
         }
 
         return totalHoursApart;
@@ -763,9 +766,10 @@ public class Util {
 
         return logInstant;
     }
+
     // get the integer zero indexed from a three char string of the month
     // if it's anything but the given three char strings, return 0 for January
-    public static Integer getMonthInteger(String monthString){
+    public static Integer getMonthInteger(String monthString) {
         Integer monthInt;
 
         if (Objects.equals(monthString, "Jan")) {
@@ -798,31 +802,38 @@ public class Util {
 
         return monthInt;
     }
-    public static Calendar calendarFromInstant(Instant instant){
-        return GregorianCalendar.from( zonedDateTimeFromInstant( instant ) );
+
+    public static Calendar calendarFromInstant(Instant instant) {
+        return GregorianCalendar.from(zonedDateTimeFromInstant(instant));
     }
-    public static ZonedDateTime zonedDateTimeFromInstant(Instant instant){
-        return instant.atZone( defaultZoneId );
+
+    public static ZonedDateTime zonedDateTimeFromInstant(Instant instant) {
+        return instant.atZone(defaultZoneId);
     }
-    public static LocalDateTime localDateTimeFromInstant(Instant instant){
+
+    public static LocalDateTime localDateTimeFromInstant(Instant instant) {
         return LocalDateTime.ofInstant(instant, defaultZoneId);
     }
-    public static Instant instantFromLocalDateTime(LocalDateTime localDateTime){
-        return localDateTime.toInstant( defaultZoneId.getRules().getOffset(localDateTime) );
+
+    public static Instant instantFromLocalDateTime(LocalDateTime localDateTime) {
+        return localDateTime.toInstant(defaultZoneId.getRules().getOffset(localDateTime));
     }
+
     public static Instant instantFromDurationAndStartInstant(Instant instantStart,
-                                                             Duration duration){
+                                                             Duration duration) {
 
         return instantStart.plus(duration);
     }
 
-    public static Integer hourFromInstant(Instant instant){
+    public static Integer hourFromInstant(Instant instant) {
         return localDateTimeFromInstant(instant).getHour();
     }
-    public static Integer yearFromInstant(Instant instant){
+
+    public static Integer yearFromInstant(Instant instant) {
         return localDateTimeFromInstant(instant).getYear();
     }
-    public static Integer dayOfYearFromInstant(Instant instant){
+
+    public static Integer dayOfYearFromInstant(Instant instant) {
         return localDateTimeFromInstant(instant).getDayOfYear();
     }
     ////////////////////////////////////////////////////////
@@ -876,7 +887,7 @@ public class Util {
         // LocalDateTime saves it not zero indexed
         // and I'm using Calendar which is zero indexed
         // to save to database minus one
-        Integer mMonth = localDateTime.getMonthValue()-1;
+        Integer mMonth = localDateTime.getMonthValue() - 1;
         Integer mYear = localDateTime.getYear();
 
         // put the ints into the intent
@@ -886,7 +897,7 @@ public class Util {
     }
 
     public static Intent intentPutDateFromValues(Intent intent, Integer day, Integer month,
-                                                       Integer year) {
+                                                 Integer year) {
 
         intent.putExtra(Util.ARGUMENT_DAY, day);
         intent.putExtra(Util.ARGUMENT_MONTH, month);
@@ -914,7 +925,6 @@ public class Util {
     ////////////////////////////////////////////////////////
     // Buttons to be used from different fragments or activities//////////
     ////////////////////////////////////////////////////////
-
 
 
     // go back to new food log activity
@@ -978,29 +988,29 @@ public class Util {
     // given a bundle and the strings to set to based on which id type
     public static String[] setStringAndTypeByIdArrayFromBundleElseIfStrings(Bundle bundle, String ifSymptomLogString,
                                                                             String ifIngredientLogString, String ifSymptomString,
-                                                                            String ifIngredientString, String ifRecipeString){
+                                                                            String ifIngredientString, String ifRecipeString) {
 
         String stringTypeFromBundle = null;
         String ifString = null;
         String[] typeAndIfString = null;
 
-        if ( isSymptomLogBundle(bundle) ) {
+        if (isSymptomLogBundle(bundle)) {
             ifString = ifSymptomLogString;
             stringTypeFromBundle = ARGUMENT_SYMPTOM_LOG_ID_ARRAY;
-        } else if ( isIngredientLogBundle(bundle) ){
+        } else if (isIngredientLogBundle(bundle)) {
             stringTypeFromBundle = ifIngredientLogString;
             ifString = ifSymptomLogString;
             stringTypeFromBundle = ARGUMENT_INGREDIENT_LOG_ID_ARRAY;
 
-        } else if ( isIngredientBundle(bundle) ){
+        } else if (isIngredientBundle(bundle)) {
             ifString = ifIngredientString;
             stringTypeFromBundle = ARGUMENT_INGREDIENT_ID_ARRAY;
 
-        } else if ( isRecipeBundle(bundle) ){
+        } else if (isRecipeBundle(bundle)) {
             ifString = ifRecipeString;
             stringTypeFromBundle = ARGUMENT_RECIPE_ID_ARRAY;
 
-        } else if ( isSymptomBundle(bundle) ){
+        } else if (isSymptomBundle(bundle)) {
             ifString = ifSymptomString;
             stringTypeFromBundle = ARGUMENT_SYMPTOM_ID_ARRAY;
         }
@@ -1012,30 +1022,31 @@ public class Util {
 
     public static String setStringByIdArrayFromBundleElseIfStrings(Bundle bundle, String ifSymptomLogString,
                                                                    String ifIngredientLogString, String ifSymptomString,
-                                                                   String ifIngredientString, String ifRecipeString){
+                                                                   String ifIngredientString, String ifRecipeString) {
         setLogIdArrayFromBundle(bundle);
 
         String stringTypeFromBundle = null;
 
-        if ( isSymptomLogBundle(bundle) ) {
+        if (isSymptomLogBundle(bundle)) {
             stringTypeFromBundle = ifSymptomLogString;
 
-        } else if ( isIngredientLogBundle(bundle) ){
+        } else if (isIngredientLogBundle(bundle)) {
             stringTypeFromBundle = ifIngredientLogString;
 
-        } else if ( isIngredientBundle(bundle) ){
+        } else if (isIngredientBundle(bundle)) {
             stringTypeFromBundle = ifIngredientString;
 
-        } else if ( isRecipeBundle(bundle) ){
+        } else if (isRecipeBundle(bundle)) {
             stringTypeFromBundle = ifRecipeString;
 
-        } else if ( isSymptomBundle(bundle) ){
+        } else if (isSymptomBundle(bundle)) {
             stringTypeFromBundle = ifSymptomString;
         }
 
         return stringTypeFromBundle;
     }
-    public static Bundle setBundleFromArrayInfo(ArrayList<String> array, String stringType){
+
+    public static Bundle setBundleFromArrayInfo(ArrayList<String> array, String stringType) {
         Bundle bundle = new Bundle();
 
         // put info about the array to add
@@ -1055,7 +1066,7 @@ public class Util {
         return bundle;
     }
 
-    public static Bundle setNewIngredientLogBundle(ArrayList<String> newLogIdStringArray){
+    public static Bundle setNewIngredientLogBundle(ArrayList<String> newLogIdStringArray) {
 
         // set our new bundle to be an ingredient log
         Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY,
@@ -1067,7 +1078,7 @@ public class Util {
 
     // bundle the relevant information between fragments for adding new symptom log
     public static Bundle setNewSymptomLogFromSymptomIdBundle(
-                                                ArrayList<String> newLogIdStringArray){
+            ArrayList<String> newLogIdStringArray) {
 
         // set our new bundle to be a symptom log
         Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT,
@@ -1078,7 +1089,7 @@ public class Util {
 
     // bundle the relevant information between fragments for adding new symptom log
     public static Bundle setNewSymptomLogFromSymptomLogIdBundle(
-                                                ArrayList<String> newLogIdStringArray){
+            ArrayList<String> newLogIdStringArray) {
 
         // set our new bundle to be a symptom log
         Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT,
@@ -1089,11 +1100,11 @@ public class Util {
 
     // bundle the relevant information between fragments for adding something new
     public static Bundle setNewBundle(ArrayList<String> newStringArray, String whereToGo,
-                                      String arrayType){
+                                      String arrayType) {
         Bundle bundle = new Bundle();
 
         // if we were given an array add it to bundle
-        if ( newStringArray != null ) {
+        if (newStringArray != null) {
             // set information about the array into the bundle
             bundle = setBundleFromArrayInfo(newStringArray,
                     arrayType);
@@ -1108,7 +1119,8 @@ public class Util {
 
         return bundle;
     }
-    public static Bundle setSearchBundle(String searchString){
+
+    public static Bundle setSearchBundle(String searchString) {
 
         Bundle searchBundle = new Bundle();
         searchBundle.putString(Util.ARGUMENT_FILTER, searchString);
@@ -1118,7 +1130,7 @@ public class Util {
 
     // bundle the relevant information between fragments for editing something already existing
     public static Bundle setEditBundle(ArrayList<String> array, String whereToGo,
-                                      String arrayType, String whatToEdit){
+                                       String arrayType, String whatToEdit) {
 
         // set information about the array into the bundle
         Bundle bundle = setBundleFromArrayInfo(array, arrayType);
@@ -1127,6 +1139,8 @@ public class Util {
         bundle.putString(ARGUMENT_CHANGE, whatToEdit);
         bundle.putString(ARGUMENT_FROM, ARGUMENT_FROM_EDIT);
         bundle.putString(ARGUMENT_ACTION, ARGUMENT_ACTION_EDIT);
+        bundle.putString(ARGUMENT_HOW_MANY_ID_IN_ARRAY, "1");
+        bundle.putString(ARGUMENT_CURRENT_INDEX_IN_ARRAY, "0");
         // where we want to go next
         bundle.putString(Util.ARGUMENT_GO_TO, whereToGo);
         // set that we still have things to set
@@ -1137,7 +1151,7 @@ public class Util {
     }
 
     // if we're from edit, then set to done, else we're not done yet so change nothing
-    public static Bundle setDoneIfFromEdit( Bundle bundle ){
+    public static Bundle setDoneIfFromEdit(Bundle bundle) {
 
         // we've only changed the intensity or amount or one of the middle (not last) of
         // ingredient log or symptom log etc, so if we're adding a new object, we
@@ -1147,7 +1161,7 @@ public class Util {
         // if it's from edit then we also only had one to set so it's fine this is before
         // current id
 
-        if ( isFromEdit(bundle.getString(ARGUMENT_FROM)) ) {
+        if (isFromEdit(bundle)) {
 
             // can consume something that has only just now been cooked or acquired
             //TODO make logic for invalid edit if the instant is a wrong time
@@ -1166,7 +1180,7 @@ public class Util {
     }
 
     // set to done
-    public static Bundle setDone( Bundle bundle ){
+    public static Bundle setDone(Bundle bundle) {
 
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_DONE);
         bundle.remove(ARGUMENT_CHANGE);
@@ -1177,15 +1191,15 @@ public class Util {
 
     // bundle the relevant information between fragments for adding new symptom log
     public static Bundle setEditSymptomLogBundle(String logIdString,
-                                                 String whatToEdit){
+                                                 String whatToEdit) {
 
 
         // where we want to go next
         String whereNext = null;
         // if we're changing one of the time based parameters
-        if ( isSymptomLogTimeChange(whatToEdit) ){
+        if (isSymptomLogTimeChange(whatToEdit)) {
             whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
-        } else if ( isSymptomLogIntensity(whatToEdit) ) {
+        } else if (isSymptomLogIntensity(whatToEdit)) {
             // we're changing intensity or symptom if it's not a time
             whereNext = ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT;
         } else {
@@ -1205,23 +1219,20 @@ public class Util {
 
     // bundle the relevant information between fragments for editing an ingredient log
     public static Bundle setEditIngredientLogBundle(String logIdString,
-                                                 String whatToEdit){
+                                                    String whatToEdit) {
 
         // where we want to go next
         String whereNext = null;
         // if we're changing one of the time based parameters
-        if ( isIngredientLogTimeChange(whatToEdit) ){
+        if (isIngredientLogTimeChange(whatToEdit)) {
             whereNext = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
-        }
-        else if ( isIngredientLogAmount(whatToEdit) ) {
+        } else if (isIngredientLogAmount(whatToEdit)) {
             // we're changing amount or brand or ingredient if it's not a time
             whereNext = ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY;
-        }
-        else if ( isIngredientLogBrand(whatToEdit) ) {
+        } else if (isIngredientLogBrand(whatToEdit)) {
             // we're changing brand if it's not a time or amount
             whereNext = ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY;
-        }
-        else {
+        } else {
             // only ingredient is left
             whereNext = ARGUMENT_GO_TO_CHOOSE_INGREDIENT_ACTIVITY;
         }
@@ -1236,8 +1247,9 @@ public class Util {
 
         return bundle;
     }
+
     // bundle the relevant information between fragments for adding new symptom log
-    public static Bundle setNewIngredientLogBundleFromArray(ArrayList<String> newLogIdStringArray){
+    public static Bundle setNewIngredientLogBundleFromArray(ArrayList<String> newLogIdStringArray) {
 
         Bundle bundle = new Bundle();
         // where we want to go next
@@ -1247,7 +1259,7 @@ public class Util {
 
         //set the array string of symptom log Ids to the bundle
         String newLogIdString = newLogIdStringArray.toString();
-        bundle.putString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, newLogIdString );
+        bundle.putString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, newLogIdString);
 
         // also how big the array is for ease of coding
         Integer logIdStringArraySize = newLogIdStringArray.size();
@@ -1263,11 +1275,10 @@ public class Util {
     }
 
 
-
     // bundle the relevant information between fragments for log instant
-    public static Bundle setBundleGivenIntegersOfDateTime ( Integer minute, Integer hour,
-                                                            Integer day, Integer month,
-                                                            Integer year){
+    public static Bundle setBundleGivenIntegersOfDateTime(Integer minute, Integer hour,
+                                                          Integer day, Integer month,
+                                                          Integer year) {
         // get the instant of the log
         // which here should be the instant the name was saved
         // or a specific time if they chose that first and then came here
@@ -1281,9 +1292,9 @@ public class Util {
         return integerBundleToSetDateTime;
     }
 
-    public static void toastInvalidBeforeAfter(String firstTypeString,String secondTypeString,
-                                                                   String beforeOrAfterString,
-                                                                   Activity thisActivity ){
+    public static void toastInvalidBeforeAfter(String firstTypeString, String secondTypeString,
+                                               String beforeOrAfterString,
+                                               Activity thisActivity) {
         String invalidString = "Invalid date/times. It can't have been " +
                 firstTypeString +
                 beforeOrAfterString + " it was " +
@@ -1293,16 +1304,17 @@ public class Util {
                 invalidString,
                 Toast.LENGTH_SHORT).show();
     }
+
     public static void toastInvalidBeforeAfterGoToSpecificDateTime(String firstTypeString,
-                                                                   String secondTypeString,  String beforeOrAfterString,
+                                                                   String secondTypeString, String beforeOrAfterString,
                                                                    Activity thisActivity,
                                                                    FragmentTransaction fragmentTransaction,
-                                                                   int fragmentContainer, Bundle bundle){
+                                                                   int fragmentContainer, Bundle bundle) {
         String invalidString = "Invalid date/times. An ingredient can't have been " +
-                        secondTypeString +
-                        beforeOrAfterString + " it was " +
-                        firstTypeString +
-                        ". Reset one of the two.";
+                secondTypeString +
+                beforeOrAfterString + " it was " +
+                firstTypeString +
+                ". Reset one of the two.";
 
         //TODO go to list or edit or more specific datetime, make more buttons that
         // only become visible now, or a popup and make the user pick where to go
@@ -1312,9 +1324,9 @@ public class Util {
                 fragmentContainer, bundle);
     }
 
-    public static void toastInvalidGoToSpecificDateTime(String invalidString,  Activity thisActivity,
+    public static void toastInvalidGoToSpecificDateTime(String invalidString, Activity thisActivity,
                                                         FragmentTransaction fragmentTransaction,
-                                                        int fragmentContainer, Bundle bundle){
+                                                        int fragmentContainer, Bundle bundle) {
 
         Toast.makeText(thisActivity,
                 invalidString,
@@ -1325,8 +1337,20 @@ public class Util {
                 fragmentContainer, bundle);
     }
 
+    public static Bundle setBundleWhatToChangeNext(Bundle bundleNext,
+                                                   String ifEditString, String ifNotEditString) {
+
+        if ( !Util.isActionEditBundle(bundleNext) ) {
+                bundleNext.putString(ARGUMENT_CHANGE, ifNotEditString);
+        } else {
+             bundleNext.putString(ARGUMENT_CHANGE, ifEditString);
+        }
+
+        return bundleNext;
+    }
+
     // update the "from this fragment/activity" using the "go to" from the bundle
-    public static Bundle updateBundleToBundleNext(Bundle bundle){
+    public static Bundle updateBundleGoToNext(Bundle bundle){
 
         if ( bundle.containsKey(ARGUMENT_GO_TO)){
             // if we meant to go to this fragment
@@ -1882,14 +1906,17 @@ or at least achieves the same effect.
         }
         return isTimeChange;
     }
-    public static Boolean isFromEdit(String whatToChange){
+    public static Boolean isFromEdit(Bundle bundle){
         Boolean isTrueOrFalse = Boolean.FALSE;
 
-        if (TextUtils.equals(
-                whatToChange,
-                ARGUMENT_FROM_EDIT
-        )) {
-            isTrueOrFalse = Boolean.TRUE;
+        if ( bundle.containsKey(ARGUMENT_FROM) )  {
+                String whatToChange = bundle.getString(ARGUMENT_FROM);
+            if (TextUtils.equals(
+                    whatToChange,
+                    ARGUMENT_FROM_EDIT
+            )) {
+                isTrueOrFalse = Boolean.TRUE;
+            }
         }
         return isTrueOrFalse;
     }
@@ -2184,6 +2211,12 @@ or at least achieves the same effect.
 
         // if we have no bundle at all
         if ( bundle == null ){
+            // there's no information about which symptom to add, so
+            // tell the user that they got here by mistake, it's a bug
+//            String mWrongPlaceLetsGoHome =
+//                    getResources().getString(R.string.wrong_place_lets_go_home);
+//            Toast.makeText(activity.getApplicationContext(), mWrongPlaceLetsGoHome,
+//                    Toast.LENGTH_SHORT).show();
             // go back to home screen
             Util.goToMainActivity(null, activity);
         } else {
@@ -2449,7 +2482,8 @@ or at least achieves the same effect.
             whereGoTo = ListIngredientLogActivity.class;
         }
 
-        goToActivityTypeIdClass(context, activity, idStringType, idString, whereGoTo, null, null, null);
+        goToActivityTypeIdClass(null, activity, idStringType, idString, whereGoTo, null, null,
+                null);
 
     }
 
@@ -2658,30 +2692,24 @@ or at least achieves the same effect.
 
         if ( activity != null ) {
 
-            context = activity.getApplicationContext();
-            Activity useForIntent = activity;
-            Activity useForStartActivity = activity;
-
-            Intent intent = new Intent(useForIntent, activityClassToGoTo);
+            Intent intent = new Intent(activity, activityClassToGoTo);
+            //activity.startActivity(new Intent(activity, ListSymptomLogActivity.class));
             // if any of our given values aren't null, set them in the intent
             intent = setIntent(intent, fragmentGoToString, idStringType, idString, actionString,
                     bundle);
+            activity.startActivity(intent);
 
-            useForStartActivity.startActivity(intent);
         } else {
             // this half appears to work between:
             // MainActivity to List Ing or List Sym
 
            // Class activityClassToGoTo = setClassActivity(idStringType, whereTo);
-            Context useForIntent = context;
-            Context useForStartActivity = context;
 
-            Intent intent = new Intent(useForIntent, activityClassToGoTo);
+            Intent intent = new Intent(context, activityClassToGoTo);
             // if any of our given values aren't null, set them in the intent
             intent = setIntent(intent, fragmentGoToString, idStringType, idString, actionString,
                     bundle);
-
-            useForStartActivity.startActivity(intent);
+            context.startActivity(intent);
         }
 
 
@@ -2858,15 +2886,20 @@ or at least achieves the same effect.
     }
 
     public static Integer setIntegerCurrentIndexFromBundle(Bundle bundle){
+        //TODO put this in startnextfragmentbundle properly set finished previous fragment
 
         // default index is first in the array
         Integer currentLogIdIndex = 0;
-        //TODO put this in startnextfragmentbundle properly set finished previous fragment
-        if (!Objects.isNull(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY))) {
-            // if there is an index in the bundle, set to that
-            currentLogIdIndex =
-                    Integer.parseInt(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+        if ( Util.isActionEditBundle(bundle) ) {
+            currentLogIdIndex = 0;
+        } else {
+            if ( !Objects.isNull(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY)) ) {
+                // if there is an index in the bundle, set to that
+                currentLogIdIndex =
+                        Integer.parseInt(bundle.getString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY));
+            }
         }
+
         return currentLogIdIndex;
     }
     // return the instants that came before and after the one we're changing

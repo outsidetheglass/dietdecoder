@@ -21,10 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
+  private static ArrayList<Symptom> mSelectedSymptomLogArrayList;
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
@@ -36,6 +42,8 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
   ColorStateList mSelectedColor;
   int mUnSelectedColor;
   Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable, mGreenRoundcornersDrawable, mEmptyCircleDrawable;
+
+  public Symptom mSymptom;
 
   @SuppressLint("UseCompatLoadingForDrawables")
   private SymptomViewHolder(View itemView) {
@@ -66,11 +74,13 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
     mEmptyCircleDrawable =
             itemView.getResources().getDrawable(drawable.ic_baseline_empty_circle,
                     mSymptomViewHolderTheme);
+
   }
 
 
   public void bind(Symptom symptom) {
 
+    mSymptom = symptom;
     String symptomName = symptom.getSymptomName();
     String symptomId = symptom.getSymptomId().toString();
     String symptomCategory = symptom.getSymptomCategory();
@@ -95,6 +105,10 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
     mSymptomCheckButton.setOnClickListener(this::onClick);
 
 
+  }
+
+  public static ArrayList<Symptom> viewHolderGetSelectedSymptomList(){
+    return mSelectedSymptomLogArrayList;
   }
 
 
@@ -142,6 +156,11 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
       mSymptomCheckButton.setImageDrawable(mSickFaceDrawable);
       // make the background of the sick face from a green circle to a red circle
       mSymptomCheckButton.setBackground(null);
+
+      if (mSelectedSymptomLogArrayList == null) {
+        mSelectedSymptomLogArrayList = new ArrayList<>();
+      }
+      mSelectedSymptomLogArrayList.add(mSymptom);
     }
 
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> {
@@ -38,6 +39,9 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
     holder.bind(currentSymptom);
   }//end onBindViewHolder
 
+  public ArrayList<Symptom> getSelectedSymptomList(){
+    return SymptomViewHolder.viewHolderGetSelectedSymptomList();
+  }
 
   public static class SymptomDiff extends DiffUtil.ItemCallback<Symptom> {
 

@@ -41,7 +41,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
 
 
     String mSaveString, mNothingChangedString, mSymptomLogIdString,
-            mSymptomLogSymptomName, mChangeDateTime, mChangeSymptom, mChangeIntensity;
+            mSymptomLogSymptomName, mChangeDateTime, mChangeSymptom, mChangeIntensityToastString;
     Boolean isNameEdited;
 
     Bundle mBundle, mBundleNext;
@@ -138,7 +138,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
         mNothingChangedString = getResources().getString(R.string.nothing_changed_not_saved);
         mChangeDateTime = getResources().getString(R.string.change_date_time);
         mChangeSymptom = getResources().getString(R.string.change_symptom);
-        mChangeIntensity = getResources().getString(R.string.change_intensity);
+        mChangeIntensityToastString = getResources().getString(R.string.change_intensity);
 
         switch (view.getId()) {
             // save button was pressed
@@ -165,10 +165,14 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             case R.id.imagebutton_symptom_log_changed_option:
                 // changed date time was clicked, so tell the user we'll go change that date time
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
-                Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit,  new SpecificDateTimeFragment(), Util.ARGUMENT_ACTION_EDIT,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED,
-                        Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+
+                mBundleNext =
+                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED);
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
+
                 break;
             case R.id.imagebutton_symptom_log_name_option:
 
@@ -187,11 +191,13 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.imagebutton_symptom_log_intensity_option:
 
-                Toast.makeText(getContext(), mChangeIntensity, Toast.LENGTH_SHORT).show();
-                Util.startNextFragmentActionChangeIdArray(getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit,  new SymptomIntensityFragment(), Util.ARGUMENT_ACTION_EDIT,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY,
-                        Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+                Toast.makeText(getContext(), mChangeIntensityToastString, Toast.LENGTH_SHORT).show();
+                mBundleNext =
+                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new SymptomIntensityFragment(), mBundleNext);
 
                 break;
             default:

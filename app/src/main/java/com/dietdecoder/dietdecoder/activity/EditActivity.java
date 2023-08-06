@@ -1,6 +1,7 @@
 package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -85,7 +86,6 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             } else  if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
                 // we're here with symptom log
 
-                Log.d(TAG, mBundle.toString());
                 mNextFragment = new EditSymptomLogFragment();
                 // TODO add a duplicate in here same as for food log, or figure out how to do it
                 //  with the dao the right way
@@ -109,6 +109,8 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             }
         }
     }
+
+
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {

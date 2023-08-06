@@ -46,6 +46,7 @@ public class SymptomLogViewModel extends AndroidViewModel {
     return mViewModelAllSymptomLogs;
   }
 
+  // give null number to get all
   public List<SymptomLog> viewModelGetSomeSymptomLog(Integer numberOfSymptomLogsToGet){
 
     return mSymptomLogRepository.repositoryGetSomeSymptomLog(numberOfSymptomLogsToGet);

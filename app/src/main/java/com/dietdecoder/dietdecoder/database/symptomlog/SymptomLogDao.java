@@ -36,6 +36,10 @@ public interface SymptomLogDao {
   @Query("SELECT * FROM symptom_log_table ORDER BY instantBegan DESC")
   LiveData<List<SymptomLog>> daoGetAllSymptomLog();
 
+  // this needs to have same order by as livedata
+  @Query("SELECT * FROM symptom_log_table ORDER BY instantBegan DESC")
+  List<SymptomLog> daoGetArrayListAllSymptomLog();
+
   // get symptomlog from ID
   @Query("SELECT * FROM symptom_log_table WHERE :matchThisUuid = symptomLogId")
   SymptomLog daoGetSymptomLogFromLogId(UUID matchThisUuid);

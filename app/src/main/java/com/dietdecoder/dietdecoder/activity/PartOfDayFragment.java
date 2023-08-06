@@ -2,7 +2,6 @@ package com.dietdecoder.dietdecoder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -103,7 +101,7 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
         Util.checkValidFragment(getArguments(), thisActivity);
         // set variables from bundle
         mBundle = getArguments();
-        mBundleNext = Util.updateBundleToBundleNext(mBundle);
+        mBundleNext = Util.updateBundleGoToNext(mBundle);
         mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
         mSymptomLogArray = new ArrayList<>();
         mIngredientLogArray = new ArrayList<>();

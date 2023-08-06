@@ -34,7 +34,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
     Bundle mBundle, mBundleNext;
 
     String mWhichFragmentGoTo;
-    ArrayList<String> mSymptomsToAddArrayListIdStrings, mSymptomLogsToAddArrayListIdStrings;
+    ArrayList<String> mSymptomsToAddArrayListIdStrings, mSymptomLogsArrayListIdStrings;
 
     private Fragment mNextFragment = null;
 
@@ -68,7 +68,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
             mSymptomViewModel =
                     new ViewModelProvider(this).get(SymptomViewModel.class);
             mSymptomsToAddArrayListIdStrings = new ArrayList<>();
-            mSymptomLogsToAddArrayListIdStrings = new ArrayList<>();
+            mSymptomLogsArrayListIdStrings = new ArrayList<>();
 
 
             // give the intensity fragment which symptom we're setting
@@ -91,17 +91,16 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
                     mSymptomsToAddArrayListIdStrings.add(mSymptomIdString);
 
                     //get info on the symptom to make the log based on defaults
-                    UUID symptomId = UUID.fromString(mSymptomIdString);
+                    SymptomLog symptomLog = new SymptomLog(UUID.fromString(mSymptomIdString));
                     // make the symptom log
-                    SymptomLog symptomLog = new SymptomLog(symptomId);
                     mSymptomLogViewModel.viewModelInsertSymptomLog(symptomLog);
                     // put its ID in array to send to fragment
-                    mSymptomLogsToAddArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
+                    mSymptomLogsArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
                 }
                 // putting set bundle in Util so it's easier for me to see what exactly is in
                 // each bundle
                 mBundleNext = Util.setNewSymptomLogFromSymptomLogIdBundle(
-                        mSymptomLogsToAddArrayListIdStrings);
+                        mSymptomLogsArrayListIdStrings);
 
                 int howManyInArray = 0;
                 for ( String hasComma:

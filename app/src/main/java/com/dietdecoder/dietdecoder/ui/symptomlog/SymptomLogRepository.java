@@ -112,7 +112,12 @@ class SymptomLogRepository {
   List<SymptomLog> repositoryGetSomeSymptomLog(Integer howManyLogs){
     List<SymptomLog> someSymptomLogs = null;
 
-    someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLog(howManyLogs);
+    if ( howManyLogs == null ){
+      someSymptomLogs = mSymptomLogDao.daoGetArrayListAllSymptomLog();
+    }
+    {
+      someSymptomLogs = mSymptomLogDao.daoGetSomeSymptomLog(howManyLogs);
+    }
 
     return someSymptomLogs;
   }//end get some logs

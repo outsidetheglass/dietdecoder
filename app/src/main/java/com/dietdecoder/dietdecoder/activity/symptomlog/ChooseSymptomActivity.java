@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
     Button mButtonSaveName;
 
     ArrayList<String> mSymptomsSelectedIdsArrayListStrings = null;
+    ArrayList<Symptom> mSymptomsSelectedArrayList = null;
 
     private Fragment nextFragment = null;
 
@@ -72,7 +74,6 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
         toolbar.setOnMenuItemClickListener(this);
 
         thisContext = thisActivity.getApplicationContext();
-
 
         if (savedInstanceState == null) {
 
@@ -110,6 +111,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                         public void onChanged(List<Symptom> symptoms) {
                             // Update the cached copy of the words in the adapter.
                             mSymptomListAdapter.submitList(symptoms);
+                            //checkRecylcerviewForChosenObject();
 
                         }
                     });
@@ -117,6 +119,37 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
         }
 
+    }
+
+    private void checkRecylcerviewForChosenObject(){
+
+        for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
+
+            final RecyclerView.ViewHolder holder =
+                    recyclerViewSymptomNameChoices.getChildViewHolder(recyclerViewSymptomNameChoices.getChildAt(i));
+            TextView viewHolderTextView =
+                    holder.itemView.findViewById(R.id.textview_symptom_item);
+            int textViewColorInt =
+                    viewHolderTextView.getTextColors().getDefaultColor();
+
+            selectedColor =
+                    holder.itemView.getResources().getColorStateList(R.color.selected_text_color,
+                            getTheme());
+            int selectInt = selectedColor.getDefaultColor();
+
+            // if the text color of the current item in the list is the color set when
+            // selected by the user
+            if (Objects.equals(selectInt, textViewColorInt) ){
+                // get the ID of the symptom that has the selected color text
+                int position = holder.getBindingAdapterPosition();
+                String currentSymptomSelectedIdString =
+                        mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
+                                .getSymptomId().toString();
+                // add that string ID to our array of selected symptoms
+                mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedIdString);
+
+            }
+        }
     }
 
     @Override
@@ -153,36 +186,10 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 //                break;
             case R.id.button_choose_symptom_save:
                 // get int
+
+                mSymptomsSelectedArrayList = mSymptomListAdapter.getSelectedSymptomList();
 //
-                mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
-                String currentSymptomSelectedIdString = null;
-                for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
-
-                    final RecyclerView.ViewHolder holder =
-                            recyclerViewSymptomNameChoices.getChildViewHolder(recyclerViewSymptomNameChoices.getChildAt(i));
-                    TextView viewHolderTextView =
-                            holder.itemView.findViewById(R.id.textview_symptom_item);
-                    int textViewColorInt =
-                            viewHolderTextView.getTextColors().getDefaultColor();
-
-                    selectedColor =
-                            holder.itemView.getResources().getColorStateList(R.color.selected_text_color,
-                            getTheme());
-                    int selectInt = selectedColor.getDefaultColor();
-
-                    // if the text color of the current item in the list is the color set when
-                    // selected by the user
-                    if (Objects.equals(selectInt, textViewColorInt) ){
-                        // get the ID of the symptom that has the selected color text
-                        int position = holder.getBindingAdapterPosition();
-                        currentSymptomSelectedIdString =
-                                mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
-                                        .getSymptomId().toString();
-                        // add that string ID to our array of selected symptoms
-                        mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedIdString);
-
-                    }
-                }
+                //checkRecylcerviewForChosenObject();
 
                 // after done with the for loop,
                 // all the symptoms to add have been put into the array
@@ -191,11 +198,11 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                         Util.ARGUMENT_ACTION_EDIT );
                 Boolean needsOnlyOneLog = isFromEdit;
 
-                Integer howManySelected = mSymptomsSelectedIdsArrayListStrings.size();
+                Integer howManySelected = mSymptomsSelectedArrayList.size();
 
                 // so check how many have been selected and put in the array
                 // check if symptoms to add array is empty
-                Boolean isSymptomSelectedEmpty = mSymptomsSelectedIdsArrayListStrings.isEmpty();
+                Boolean isSymptomSelectedEmpty = mSymptomsSelectedArrayList.isEmpty();
 
                 if ( isSymptomSelectedEmpty ) {
                     // if it's empty and we're from edit, they changed their mind, just go back
@@ -232,7 +239,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
                             mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(symptomLogId);
 
                     // get our UUID directly from the string set in the for loop
-                    UUID symptomId = UUID.fromString(currentSymptomSelectedIdString);
+                    UUID symptomId = mSymptomsSelectedArrayList.get(0).getSymptomId();
                     // save our updated symptom log with the new symptom ID
                     symptomLog.setSymptomLogSymptomId(symptomId);
                     //TODO debug this it isn't saving
@@ -245,6 +252,11 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                 } else {
                     // if not empty, put the array into the intent to go add symptoms
+                    for (Symptom symptom: mSymptomsSelectedArrayList
+                         ) {
+                        mSymptomsSelectedIdsArrayListStrings.add(symptom.getSymptomId().toString());
+                    }
+
                     mBundleNext =
                             Util.setNewSymptomLogFromSymptomIdBundle(
                                     mSymptomsSelectedIdsArrayListStrings);

@@ -32,7 +32,6 @@ import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 public class SpecificDateTimeFragment extends Fragment implements View.OnClickListener {
@@ -94,7 +93,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         // if there was data passed use that to get date time to change, else use current or go
         // back to list log activity
         mBundle = Util.checkValidFragment(getArguments(), thisActivity);
-        mBundleNextSave = Util.updateBundleToBundleNext(mBundle);
+        mBundleNextSave = Util.updateBundleGoToNext(mBundle);
 
         //TODO finish setting this up for food vs symptom
         titleTextView = view.findViewById(R.id.textview_title_log_specific_date);

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.symptomlog.SymptomLogClickListener;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
@@ -30,21 +31,26 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
   private final String TAG = "TAG: " + getClass().getSimpleName();
   Class mActivityClass;
 
+  private static SymptomLogClickListener mListener;
   // to set the text for what shows up in the UI
   public TextView symptomLogItemView;
   private Context symptomLogContext;
   private SymptomLog mSymptomLog;
   ImageButton mSymptomLogCheckButton;
+  public ArrayList<SymptomLog> mSelectedSymptomLogArrayList;
 
   String mSymptomLogIdString;
 
-  private SymptomLogViewHolder(View itemView) {
+  private SymptomLogViewHolder(View itemView,
+                               SymptomLogClickListener listener) {
     super(itemView);
+    this.mListener = listener;
     symptomLogContext = itemView.getContext();
     mActivityClass = itemView.getClass();
     symptomLogItemView = itemView.findViewById(R.id.textview_symptom_log_item);
     mSymptomLogCheckButton = itemView.findViewById(R.id.imagebutton_symptom_log_option);
 
+    itemView.setOnClickListener(this);
   }
 
 
@@ -59,7 +65,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
             false
     );
 
-    return new SymptomLogViewHolder(logView);
+    return new SymptomLogViewHolder(logView, mListener);
   }
 
 
@@ -114,7 +120,9 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
   @Override
   public void onClick(View view) {
-
+    if (mListener != null) {
+      mListener.onSymptomLogClick(getAdapterPosition());
+    }
     switch (view.getId()) {
       // when the options button next to the symptom log is chosen
       case R.id.imagebutton_symptom_log_option:

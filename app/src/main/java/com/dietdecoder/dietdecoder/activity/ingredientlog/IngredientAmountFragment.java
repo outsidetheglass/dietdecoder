@@ -131,7 +131,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
             // make our next bundle have the same info that came in
             mBundleNext = mBundle;
             mBundle = Util.checkValidFragment(getArguments(), thisActivity);
-            mBundleNext = Util.updateBundleToBundleNext(mBundle);
+            mBundleNext = Util.updateBundleGoToNext(mBundle);
             mBundleNext.putString(Util.ARGUMENT_FROM,
                     Util.ARGUMENT_FROM_INGREDIENT_AMOUNT_FRAGMENT);
             mWhatToChangeNext = Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED;

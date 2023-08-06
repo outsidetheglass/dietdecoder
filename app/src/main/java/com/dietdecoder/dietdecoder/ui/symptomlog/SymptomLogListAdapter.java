@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.dietdecoder.dietdecoder.activity.symptomlog.SymptomLogClickListener;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -25,6 +26,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
   public SymptomViewModel mSymptomViewModel;
   public ArrayList<SymptomLog> mSymptomLogArrayList;
   public ArrayList<Symptom> mSymptomArrayList;
+
 
 
   public SymptomLogListAdapter(@NonNull DiffUtil.ItemCallback<SymptomLog> diffCallback
@@ -116,7 +118,6 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
 
   public void setSymptomLogListSubmitList(List logs, ArrayList<Symptom> symptomArrayList){
 
-    Log.d(TAG, symptomArrayList.toString());
     this.mSymptomArrayList = symptomArrayList;
     this.submitList(logs);
   }
