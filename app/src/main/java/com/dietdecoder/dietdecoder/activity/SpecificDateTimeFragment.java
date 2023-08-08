@@ -160,7 +160,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
         // now get the info associated with that UUID
         mIngredientLog =
-                mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
+                mIngredientLogViewModel.viewModelGetLogFromLogId(mCurrentLogId);
 
         // set our array of ID's, even if it's just one
         mIngredientLogArray = Util.setIngredientLogArrayFromStringArray(mLogIdStringArray,
@@ -177,7 +177,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
 
         // now get the info associated with that UUID
         mSymptomLog =
-                mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdString));
+                mSymptomLogViewModel.viewModelGetLogFromLogId(UUID.fromString(mCurrentLogIdString));
 
         // for each string in array update that log's instant began
         // get the log associated with each UUID
@@ -298,7 +298,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
 
             // now get the info associated with that UUID
             mIngredientLog =
-                    mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
+                    mIngredientLogViewModel.viewModelGetLogFromLogId(mCurrentLogId);
 
 
             mIngredientLogArray = Util.setIngredientLogArrayFromStringArray(mLogIdStringArray,
@@ -312,7 +312,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
 
             // now get the info associated with that UUID
             mSymptomLog =
-                    mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdString));
+                    mSymptomLogViewModel.viewModelGetLogFromLogId(UUID.fromString(mCurrentLogIdString));
 
             mSymptomLogArray = Util.setSymptomLogArrayFromStringArray(mLogIdStringArray,
                     mSymptomLogViewModel);

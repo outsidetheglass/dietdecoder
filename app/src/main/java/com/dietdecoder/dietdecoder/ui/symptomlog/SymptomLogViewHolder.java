@@ -1,18 +1,14 @@
 package com.dietdecoder.dietdecoder.ui.symptomlog;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,15 +78,15 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     // in order to bind it to the recyclerview
     String mSymptomLogName = symptom.getSymptomName();
 //    String mSymptomLogName = symptomLog.getSymptomLogSymptomName();
-     mSymptomLogIdString = symptomLog.getSymptomLogId().toString();
-    String mSymptomLogDescription = symptomLog.getSymptomLogSymptomDescription();
+     mSymptomLogIdString = symptomLog.getLogId().toString();
+    String mSymptomLogDescription = symptomLog.getLogSymptomDescription();
     Instant mSymptomLogBeganInstant = symptomLog.getInstantBegan();
     Instant mSymptomLogChangedInstant = symptomLog.getInstantChanged();
 //    Integer mSymptomIntensityInteger = symptomLog.getIntensityScale();
     String mSymptomIntensityString = "Intensity N/A";
 //    String mSymptomIntensityString = Util.setIntensityString(mSymptomIntensityInteger.toString());
-    if ( symptomLog.getSymptomLogSymptomIntensity() != null) {
-      mSymptomIntensityString = symptomLog.getSymptomLogSymptomIntensity().toString();
+    if ( symptomLog.getLogSymptomIntensity() != null) {
+      mSymptomIntensityString = symptomLog.getLogSymptomIntensity().toString();
     }
     //String mSymptomLogString = symptomLog.toString();
 

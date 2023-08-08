@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.ArrayList;
@@ -77,16 +78,20 @@ class IngredientRepository {
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
   void repositoryInsertIngredient(Ingredient ingredient) {
-
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoInsertIngredient(ingredient);
     });
 
   } // end insert
 
+  void repositoryUpdateIngredient(Ingredient ingredient) {
+    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
+      mIngredientDao.daoUpdateIngredient(ingredient);
+    });
+  }
+
   // You must call this on a non-UI thread
   void repositoryDeleteIngredient(Ingredient ingredient) {
-
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoDeleteIngredient(ingredient);
     });

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,10 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
     return IngredientViewHolder.create(parent);
   }// end IngredientViewHolder
 
+
+  public ArrayList<Ingredient> getSelectedList(){
+    return IngredientViewHolder.viewHolderGetSelectedArrayList();
+  }
 
   @Override
   public void onBindViewHolder(IngredientViewHolder holder, int position) {

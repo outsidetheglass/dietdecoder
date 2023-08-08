@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
@@ -20,6 +19,7 @@ import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -31,18 +31,25 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
   public TextView ingredientLogItemView;
   private Context ingredientLogContext;
   private IngredientLog mIngredientLog;
-  ImageButton mIngredientLogCheckButton;
+  ImageButton mIngredientLogOptionButton;
 
-  String mIngredientLogIdString;
+  UUID mIngredientLogIngredientId;
+  String mIngredientLogIdString, mIngredientLogIngredientName, mIngredientLogAmount,
+          mIngredientLogString,
+          mIngredientLogCookedString, unImportantString, mIngredientLogConsumedString,
+          mIngredientLogAcquiredString;
+  Instant mIngredientLogConsumedInstant, mIngredientLogCookedInstant,
+          mIngredientLogAcquiredInstant;
 
   IngredientViewModel mIngredientViewModel;
+  Ingredient mIngredientLogIngredient;
 
   private IngredientLogViewHolder(View itemView) {
     super(itemView);
     ingredientLogContext = itemView.getContext();
     mActivityClass = itemView.getClass();
     ingredientLogItemView = itemView.findViewById(R.id.textview_ingredient_log_item);
-    mIngredientLogCheckButton = itemView.findViewById(R.id.imagebutton_ingredient_log_option);
+    mIngredientLogOptionButton = itemView.findViewById(R.id.imagebutton_ingredient_log_option);
 
   }
 
@@ -70,43 +77,49 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     // edit, duplicate, delete, or detail clicked
 
     this.mIngredientLog = ingredientLog;
+    // set all the parts of ingredient log to variables
+    setVariables();
 
     // info on the ingredientlog
     // in order to bind it to the recyclerview
-    mIngredientLogIdString = ingredientLog.getIngredientLogId().toString();
-    String mIngredientLogIngredientName = ingredient.getIngredientName();
-    String mIngredientLogIdString = ingredientLog.getIngredientLogId().toString();
-    String mIngredientLogIngredientIdString = ingredientLog.getIngredientLogIngredientId().toString();
-    Instant mIngredientLogConsumedInstant = ingredientLog.getInstantConsumed();
-    Instant mIngredientLogCookedInstant = ingredientLog.getInstantCooked();
-    Instant mIngredientLogAcquiredInstant = ingredientLog.getInstantAcquired();
-//    Double mIngredientLogAmountNumber = ingredientLog.getIngredientLogIngredientAmountNumber();
-    String mIngredientLogAmount = ingredientLog.getIngredientLogIngredientSubjectiveAmount();
-    // TODO add conversions here for units other than the default set
-//    String  =
-//            mIngredientLogAmountNumber.toString().concat(ingredientLog.getIngredientLogIngredientAmountUnit());
-    //String mIngredientLogString = ingredientLog.toString();
-
-
-    // how many days ago, if any, between when it was cooked and consumed
-    String mIngredientLogCookedString =
-            Util.stringFromInstant(mIngredientLogCookedInstant);
-
-    String unImportantString =
-            Util.setDescriptionString(mIngredientLogAmount + ", " + Util.stringFromInstant(mIngredientLogAcquiredInstant));
-
-    String mIngredientLogConsumedString = Util.stringFromInstant(mIngredientLogConsumedInstant);
-
     SpannableStringBuilder printString =
-            Util.setViewHolderRecyclerViewString(mIngredientLogIngredientName,
-                    "", mIngredientLogConsumedString, "");
+            Util.setViewHolderRecyclerViewString(
+                    mIngredientLogIngredientName, "", mIngredientLogConsumedString, "");
 
+    // what gets put in the UI that isn't bold
+    unImportantString =
+            Util.setDescriptionString(
+                    mIngredientLogAmount + ", " + mIngredientLogAcquiredString);
 
     // set part of it bold and part of it not bold
     ingredientLogItemView.setText(printString);
 
     // if the item options is clicked, open the menu for options on that item
-    mIngredientLogCheckButton.setOnClickListener(this);
+    mIngredientLogOptionButton.setOnClickListener(this);
+
+  }
+
+  private void setVariables(){
+    mIngredientLogIdString = mIngredientLog.getLogId().toString();
+    mIngredientLogAmount = mIngredientLog.getIngredientLogIngredientSubjectiveAmount();
+
+    // get the ingredient in the log
+    mIngredientLogIngredientId = mIngredientLog.getLogIngredientId();
+    mIngredientLogIngredient =
+            mIngredientViewModel.viewModelGetFromId(mIngredientLogIngredientId);
+    mIngredientLogIngredientName = mIngredientLogIngredient.getIngredientName();
+
+    // times between consumed and the others
+    mIngredientLogConsumedInstant = mIngredientLog.getInstantConsumed();
+    mIngredientLogConsumedString = Util.stringFromInstant(mIngredientLogConsumedInstant);
+    // how many days ago, if any, between when it was cooked and consumed
+    mIngredientLogCookedInstant = mIngredientLog.getInstantCooked();
+    mIngredientLogCookedString =
+            Util.stringFromInstant(mIngredientLogCookedInstant);
+    // how many days separate when it was acquired/bought/harvested from when it was consumed
+    mIngredientLogAcquiredInstant = mIngredientLog.getInstantAcquired();
+    mIngredientLogAcquiredString =
+            Util.stringFromInstant(mIngredientLogCookedInstant);
 
   }
 
@@ -118,7 +131,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
       case R.id.imagebutton_ingredient_log_option:
         
         // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(ingredientLogContext, mIngredientLogCheckButton);
+        PopupMenu popupMenu = new PopupMenu(ingredientLogContext, mIngredientLogOptionButton);
         // Inflating popup menu from popup_menu.xml file
         popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
         popupMenu.setGravity(Gravity.END);

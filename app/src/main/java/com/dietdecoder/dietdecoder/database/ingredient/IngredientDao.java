@@ -6,7 +6,9 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public interface IngredientDao {
 
   @Delete
   void daoDeleteIngredient(Ingredient ingredient);
+
+  @Update
+  void daoUpdateIngredient(Ingredient ingredient);
 
   @Query("UPDATE ingredient_table SET ingredientChemicalName = :newIngredientChemicalName WHERE ingredientChemicalName = :oldIngredientChemicalName AND ingredientName = :oldIngredientName")
   void daoUpdateIngredientChemicalName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientChemicalName);

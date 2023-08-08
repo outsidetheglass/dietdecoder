@@ -21,16 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
-import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-  private static ArrayList<Symptom> mSelectedSymptomLogArrayList;
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
 
@@ -44,6 +40,10 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
   Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable, mGreenRoundcornersDrawable, mEmptyCircleDrawable;
 
   public Symptom mSymptom;
+
+  // allow activities to access existing arraylist in the view holder
+  private static ArrayList<Symptom> mSelectedArrayList;
+
 
   @SuppressLint("UseCompatLoadingForDrawables")
   private SymptomViewHolder(View itemView) {
@@ -107,8 +107,10 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
 
   }
 
-  public static ArrayList<Symptom> viewHolderGetSelectedSymptomList(){
-    return mSelectedSymptomLogArrayList;
+
+  // allow activities to access existing arraylist in the view holder
+  public static ArrayList<Symptom> viewHolderGetSelectedArrayList(){
+    return mSelectedArrayList;
   }
 
 
@@ -124,6 +126,7 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
 
     return new SymptomViewHolder(symptomView);
   }
+
 
   @Override
   public void onClick(View v) {
@@ -147,6 +150,9 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
       mSymptomItemView.setTextColor(mUnSelectedColor);
       mSymptomCheckButton.setBackground(mGreenRoundcornersDrawable);
       mSymptomCheckButton.setImageDrawable(mEmptyCircleDrawable);
+
+      // the symptom was selected before this, so the array list has it and needs it removed
+      mSelectedArrayList.remove(mSymptom);
     }
     else {
       //change UI to show it was clicked
@@ -157,13 +163,17 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
       // make the background of the sick face from a green circle to a red circle
       mSymptomCheckButton.setBackground(null);
 
-      if (mSelectedSymptomLogArrayList == null) {
-        mSelectedSymptomLogArrayList = new ArrayList<>();
+      // allow activities to access existing arraylist in the view holder
+      // on click and the user is selecting it
+      if (mSelectedArrayList == null) {
+        mSelectedArrayList = new ArrayList<>();
       }
-      mSelectedSymptomLogArrayList.add(mSymptom);
+      mSelectedArrayList.add(mSymptom);
     }
 
 
   }
+
+
 
 }//end symptom view holder class

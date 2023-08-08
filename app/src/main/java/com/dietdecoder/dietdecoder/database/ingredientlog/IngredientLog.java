@@ -21,8 +21,8 @@ public class IngredientLog {
 
   @PrimaryKey
   @NonNull
-  @ColumnInfo(name = "ingredientLogId")
-  private UUID ingredientLogId;
+  @ColumnInfo(name = "logId")
+  private UUID logId;
 
   // when the log was made
   @ColumnInfo(name = "instantLogged")
@@ -31,16 +31,16 @@ public class IngredientLog {
   // I hate how long it is but changing it is my theory, maybe it's messing with the id in
   // ingredient itself
   @NonNull
-  @ColumnInfo(name = "ingredientLogIngredientId")
-  private UUID ingredientLogIngredientId;
+  @ColumnInfo(name = "logIngredientId")
+  private UUID logIngredientId;
 
   // how much of it there was
 //  @ColumnInfo(name = "ingredientLogIngredientAmountNumber")
 //  private Double ingredientLogIngredientAmountNumber;
 
   // the unit for how much of it there was
-  @ColumnInfo(name = "ingredientLogIngredientSubjectiveAmount")
-  private String ingredientLogIngredientSubjectiveAmount;
+  @ColumnInfo(name = "logIngredientSubjectiveAmount")
+  private String logIngredientSubjectiveAmount;
 
   // when it began
   @ColumnInfo(name = "instantConsumed")
@@ -57,12 +57,12 @@ public class IngredientLog {
 
 // use Ignore for which parameters are optional
   @Ignore
-  public IngredientLog(UUID ingredientLogIngredientId) {
+  public IngredientLog(UUID logIngredientId) {
     // if only ingredient was given
     // empty for description
     // changed default is an hour from now
     // default amount is lowest
-    this(ingredientLogIngredientId,
+    this(logIngredientId,
             Instant.now(),
             Instant.now().plus(1, ChronoUnit.HOURS),
             Instant.now().minus(1, ChronoUnit.DAYS),
@@ -71,36 +71,36 @@ public class IngredientLog {
     //  setting that ingredient
   }
 
-  public IngredientLog(@NonNull UUID ingredientLogIngredientId,
+  public IngredientLog(@NonNull UUID logIngredientId,
                        Instant instantConsumed,
                        Instant instantCooked,
                        Instant instantAcquired,
-                       String ingredientLogIngredientSubjectiveAmount) {
-    this.ingredientLogId = UUID.randomUUID();
+                       String logIngredientSubjectiveAmount) {
+    this.logId = UUID.randomUUID();
     this.instantLogged = Instant.now();
     this.instantConsumed = instantConsumed;
     this.instantCooked = instantCooked;
     this.instantAcquired = instantAcquired;
-    this.ingredientLogIngredientId = ingredientLogIngredientId;
-    this.ingredientLogIngredientSubjectiveAmount = ingredientLogIngredientSubjectiveAmount;
+    this.logIngredientId = logIngredientId;
+    this.logIngredientSubjectiveAmount = logIngredientSubjectiveAmount;
   }
 
   // basic getters for the parameters
   // setters
   // and toString
-  public UUID getIngredientLogId() {
-    return(this.ingredientLogId);
+  public UUID getLogId() {
+    return(this.logId);
   }
 
-  public UUID getIngredientLogIngredientId() {
-    return(this.ingredientLogIngredientId);
+  public UUID getLogIngredientId() {
+    return(this.logIngredientId);
   }
 
 //  public Double getIngredientLogIngredientAmountNumber() {
 //    return(this.ingredientLogIngredientAmountNumber);
  // }
   public String getIngredientLogIngredientSubjectiveAmount() {
-    return(this.ingredientLogIngredientSubjectiveAmount);
+    return(this.logIngredientSubjectiveAmount);
   }
 
   public Instant getInstantLogged() {
@@ -117,9 +117,9 @@ public class IngredientLog {
   }
 
   public String toString() {
-      return ( "\n Amount: "+this.ingredientLogIngredientSubjectiveAmount + "\n"+"ID:" + this.ingredientLogId.toString() + "\n"+
+      return ( "\n Amount: "+this.logIngredientSubjectiveAmount + "\n"+"ID:" + this.logId.toString() + "\n"+
               "Logged at: " + Util.localDateTimeFromInstant(this.instantLogged).toString() + "\n"
-              + "\nIngredient log's ingredient ID: " + this.ingredientLogIngredientId + "\n"
+              + "\nIngredient log's ingredient ID: " + this.logIngredientId + "\n"
               + "\nWhen Consumed: " + Util.localDateTimeFromInstant(this.instantConsumed).toString() + "\n"
         + "\nWhen Cooked/Ended: " + Util.localDateTimeFromInstant(this.instantCooked).toString() + "\n"
         + "\nIngredient Acquired: " + Util.localDateTimeFromInstant(this.instantAcquired).toString() + "\n"
@@ -127,8 +127,8 @@ public class IngredientLog {
   }//end toString
 
 
-  public void setIngredientLogId(UUID ingredientLogId) {
-    this.ingredientLogId = ingredientLogId;
+  public void setIngredientLogId(UUID logId) {
+    this.logId = logId;
   }
 
   public void setInstantLogged(Instant instantLogged) {
@@ -144,13 +144,13 @@ public class IngredientLog {
     this.instantAcquired = instantAcquired;
   }
 
-  public void setIngredientLogIngredientId(UUID ingredientLogIngredientId) {
-    this.ingredientLogIngredientId = ingredientLogIngredientId;
+  public void setLogIngredientId(UUID logIngredientId) {
+    this.logIngredientId = logIngredientId;
   }
 
 
-  public void setIngredientLogIngredientSubjectiveAmount(String ingredientLogIngredientAmountUnit) {
-    this.ingredientLogIngredientSubjectiveAmount = ingredientLogIngredientAmountUnit;
+  public void setLogIngredientSubjectiveAmount(String ingredientLogIngredientAmount) {
+    this.logIngredientSubjectiveAmount = ingredientLogIngredientAmount;
   }
 
 

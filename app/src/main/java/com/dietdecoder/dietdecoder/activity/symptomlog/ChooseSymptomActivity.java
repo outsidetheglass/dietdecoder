@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,10 +45,13 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
     Bundle mBundle, mBundleNext;
 
     String mTooManyTryAgainString, mSaveString, mEmptyTryAgainString;
+    UUID mSymptomLogId, mSymptomId;
+
+    SymptomLog mSymptomLog;
     Button mButtonSaveName;
 
     ArrayList<String> mSymptomsSelectedIdsArrayListStrings = null;
-    ArrayList<Symptom> mSymptomsSelectedArrayList = null;
+    ArrayList<Symptom> mSymptomSelectedArrayList = null;
 
     private Fragment nextFragment = null;
 
@@ -75,16 +77,15 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
         thisContext = thisActivity.getApplicationContext();
 
+        // if they haven't started this activity yet
         if (savedInstanceState == null) {
+            // check valid
+            Util.checkValidFragment(getIntent().getExtras(), thisActivity);
 
             // basic variable setup
-            mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
-            if ( getIntent().getExtras() == null ) {
-                mBundle = new Bundle();
-            } else {
-                mBundle = getIntent().getExtras();
-            }
+            mBundle = getIntent().getExtras();
             mBundleNext = mBundle;
+            setDependentVariables();
 
             //save button
             mButtonSaveName = findViewById(R.id.button_choose_symptom_save);
@@ -105,7 +106,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
             mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
             mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-            mSymptomViewModel.viewModelGetSymptomsToTrack().observe(this,
+            mSymptomViewModel.viewModelGetAllLiveData().observe(this,
                     new Observer<List<Symptom>>() {
                         @Override
                         public void onChanged(List<Symptom> symptoms) {
@@ -115,41 +116,19 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                         }
                     });
+        } // end if they haven't started the activity yet
 
+    } // end onCreate
 
-        }
+    private void setSymptomVariables(){
+
+        // get the objects selected in the UI from the adapter who gets it from view holder
+        mSymptomsSelectedIdsArrayListStrings = new ArrayList<>();
 
     }
 
-    private void checkRecylcerviewForChosenObject(){
-
-        for (int childCount = recyclerViewSymptomNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
-
-            final RecyclerView.ViewHolder holder =
-                    recyclerViewSymptomNameChoices.getChildViewHolder(recyclerViewSymptomNameChoices.getChildAt(i));
-            TextView viewHolderTextView =
-                    holder.itemView.findViewById(R.id.textview_symptom_item);
-            int textViewColorInt =
-                    viewHolderTextView.getTextColors().getDefaultColor();
-
-            selectedColor =
-                    holder.itemView.getResources().getColorStateList(R.color.selected_text_color,
-                            getTheme());
-            int selectInt = selectedColor.getDefaultColor();
-
-            // if the text color of the current item in the list is the color set when
-            // selected by the user
-            if (Objects.equals(selectInt, textViewColorInt) ){
-                // get the ID of the symptom that has the selected color text
-                int position = holder.getBindingAdapterPosition();
-                String currentSymptomSelectedIdString =
-                        mSymptomViewModel.viewModelGetSymptomsToTrack().getValue().get(position)
-                                .getSymptomId().toString();
-                // add that string ID to our array of selected symptoms
-                mSymptomsSelectedIdsArrayListStrings.add(currentSymptomSelectedIdString);
-
-            }
-        }
+    private void setDependentVariables(){
+        setSymptomVariables();
     }
 
     @Override
@@ -172,104 +151,29 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
     @Override
     public void onClick(View view) {
 
-        // basic variables setup
-        // get saving string from resources so everything can translate languages easy
-        mSaveString = getResources().getString(R.string.saving);
-        mEmptyTryAgainString = getResources().getString(R.string.empty_not_saved);
-        mTooManyTryAgainString = getResources().getString(R.string.too_many_selected_not_saved);
-
-
         switch (view.getId()) {
             //do something when edittext is clicked
 //            case R.id.edittext_new_symptom_intensity:
 //
 //                break;
             case R.id.button_choose_symptom_save:
-                // get int
 
-                mSymptomsSelectedArrayList = mSymptomListAdapter.getSelectedSymptomList();
-//
-                //checkRecylcerviewForChosenObject();
+                //TODO debug if below actually saves, if it doesn't then I can use the code in
+                // ChooseIngredientActivity to make it all work again
 
-                // after done with the for loop,
-                // all the symptoms to add have been put into the array
-                // check if we're here to edit a single log and therefore need only one selected
-                Boolean isFromEdit = TextUtils.equals( mBundle.getString(Util.ARGUMENT_ACTION),
-                        Util.ARGUMENT_ACTION_EDIT );
-                Boolean needsOnlyOneLog = isFromEdit;
+                // check what to do based on if it's empty, editing, too many are selected,
+                // or if we need to save
+                // then go to correct place or just toast the error
+                Util.ifInvalidRepeatOrValidAdd(
+                        thisActivity, mSymptomListAdapter, mSymptomLogViewModel, null, null);
 
-                Integer howManySelected = mSymptomsSelectedArrayList.size();
-
-                // so check how many have been selected and put in the array
-                // check if symptoms to add array is empty
-                Boolean isSymptomSelectedEmpty = mSymptomsSelectedArrayList.isEmpty();
-
-                if ( isSymptomSelectedEmpty ) {
-                    // if it's empty and we're from edit, they changed their mind, just go back
-                    if ( isFromEdit ){
-                        Util.goToEditSymptomLogActivity(null, thisActivity,
-                                mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
-                    } else {
-                        // if empty and not from edit, we can't make a new log without them making a
-                        // choice, so alert user none
-                        // were selected and don't
-                        // do anything else
-                        // TODO change this to going back or make a go back button
-                        // TODO also add somewhere to tell them to click the empty circle to select one
-                        Toast.makeText(thisContext, mEmptyTryAgainString,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                } else if (  howManySelected > 1 && needsOnlyOneLog ) {
-                    // the user selected more than one symptom, but is here to only change one log
-                    // tell them to try again and select only one
-                    Toast.makeText(thisContext, mTooManyTryAgainString,
-                            Toast.LENGTH_SHORT).show();
-                } else if (  howManySelected == 1 && needsOnlyOneLog ) {
-                    // the user selected only one symptom, and is here to only change one log
-                    // which means success so we can go back to edit after saving it
-                    Toast.makeText(thisContext, mSaveString,
-                            Toast.LENGTH_SHORT).show();
-
-                    String symptomLogIdString =
-                            mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
-                    UUID symptomLogId = UUID.fromString(symptomLogIdString);
-
-                    // get our symptom log based on its own id we have from edit activity bundle
-                    SymptomLog symptomLog =
-                            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(symptomLogId);
-
-                    // get our UUID directly from the string set in the for loop
-                    UUID symptomId = mSymptomsSelectedArrayList.get(0).getSymptomId();
-                    // save our updated symptom log with the new symptom ID
-                    symptomLog.setSymptomLogSymptomId(symptomId);
-                    //TODO debug this it isn't saving
-                    mSymptomLogViewModel.viewModelUpdateSymptomLog(symptomLog);
-
-                    // done with setting the symptom go back to editing this symptom log
-                    Util.goToEditActivityActionTypeId(null, thisActivity,
-                            Util.ARGUMENT_ACTION_EDIT,
-                            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, symptomLogIdString);
-
-                } else {
-                    // if not empty, put the array into the intent to go add symptoms
-                    for (Symptom symptom: mSymptomsSelectedArrayList
-                         ) {
-                        mSymptomsSelectedIdsArrayListStrings.add(symptom.getSymptomId().toString());
-                    }
-
-                    mBundleNext =
-                            Util.setNewSymptomLogFromSymptomIdBundle(
-                                    mSymptomsSelectedIdsArrayListStrings);
-
-                    // go to set the intensity of the symptom
-                    Util.goToAddSymptomLogActivity(null, thisActivity, mBundleNext);
-                }
 
                 break;
 //
             default:
                 break;
-        }
+        } // end cases switch
     }//end onClick
-}
+
+}// end activity
 

@@ -24,21 +24,21 @@ public class IngredientLogViewModel extends AndroidViewModel {
 
 
   private IngredientLogRepository mIngredientLogRepository;
-  private List<IngredientLog> mViewModelAllIngredientLogsOnDate;
-  private LiveData<List<IngredientLog>> mViewModelAllIngredientLogs;
+  private List<IngredientLog> mViewModelAllOnDate;
+  private LiveData<List<IngredientLog>> mViewModelAll;
 
 
   public IngredientLogViewModel(Application application) {
     super(application);
     mIngredientLogRepository = new IngredientLogRepository(application);
-    mViewModelAllIngredientLogs = mIngredientLogRepository.repositoryGetAllIngredientLogs();
+    mViewModelAll = mIngredientLogRepository.repositoryGetAllIngredientLogs();
 
   }//end LogViewModel method
 
 
   //get all logs to list them
-  public LiveData<List<IngredientLog>> viewModelGetAllIngredientLogs() {
-    return mViewModelAllIngredientLogs;
+  public LiveData<List<IngredientLog>> viewModelGetAllLiveData() {
+    return mViewModelAll;
   }
 
 
@@ -47,35 +47,35 @@ public class IngredientLogViewModel extends AndroidViewModel {
     return mIngredientLogRepository.repositoryGetAllIngredientLogByIngredientId(id);
   }
   // get single log using the uuid
-  public IngredientLog viewModelGetIngredientLogFromLogId(UUID uuid) {
+  public IngredientLog viewModelGetLogFromLogId(UUID uuid) {
     return mIngredientLogRepository.repositoryGetIngredientLogFromLogId(uuid);
   }
   //TODO add other properties of log type here
   //get all logs on date TODO make work
 //  public List<IngredientLog> viewModelGetAllIngredientLogOnDate(Instant instant) {
-//    mViewModelAllIngredientLogsOnDate = mRepository.repositoryGetAllIngredientLogOnDate(instant);
-//    return mViewModelAllIngredientLogsOnDate;
+//    mViewModelAllOnDate = mRepository.repositoryGetAllIngredientLogOnDate(instant);
+//    return mViewModelAllOnDate;
 //  }
 
 
   // cursor for exporting
-  public Cursor viewModelGetCursorAllIngredientLog() {
+  public Cursor viewModelGetCursorAll() {
     return mIngredientLogRepository.repositoryGetCursorAllIngredientLog();
   }
 
 
   // add to database
-  public void viewModelInsertIngredientLog(IngredientLog ingredientLog) {
+  public void viewModelInsert(IngredientLog ingredientLog) {
     mIngredientLogRepository.repositoryInsertIngredientLog(ingredientLog);
   }
 
   // edit log in database
-  public void viewModelUpdateIngredientLog(IngredientLog ingredientLog) {
+  public void viewModelUpdate(IngredientLog ingredientLog) {
     mIngredientLogRepository.repositoryUpdateIngredientLog(ingredientLog);
   }
 
   // delete log in database
-  public void viewModelDeleteIngredientLog(IngredientLog ingredientLog) {
+  public void viewModelDelete(IngredientLog ingredientLog) {
     mIngredientLogRepository.repositoryDeleteIngredientLog(ingredientLog);
   }
 
@@ -91,7 +91,7 @@ public class IngredientLogViewModel extends AndroidViewModel {
   }
 
   // get most recent symptom log of symptom
-  public IngredientLog viewModelGetMostRecentIngredientLogWithIngredient(UUID ingredientId){
+  public IngredientLog viewModelGetMostRecentLogWithIngredient(UUID ingredientId){
     IngredientLog ingredientLogWithSameIngredient =
             mIngredientLogRepository.repositoryGetMostRecentIngredientLogWithIngredient(ingredientId);
     return ingredientLogWithSameIngredient;

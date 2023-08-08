@@ -72,7 +72,7 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
 
 
       mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
-      mIngredients = mIngredientViewModel.viewModelGetAllIngredientArrayList();
+      mIngredients = mIngredientViewModel.viewModelGetAllArrayList();
       mIngredientLogListAdapter =
               new IngredientLogListAdapter(new IngredientLogListAdapter.LogDiff()
                       //, mIngredientViewModel
@@ -81,7 +81,7 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
       recyclerViewIngredient.setLayoutManager(new LinearLayoutManager(this));
       mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
 
-      mIngredientLogViewModel.viewModelGetAllIngredientLogs().observe(this,
+      mIngredientLogViewModel.viewModelGetAllLiveData().observe(this,
               new Observer<List<IngredientLog>>() {
                 @Override
                 public void onChanged(List<IngredientLog> logs) {

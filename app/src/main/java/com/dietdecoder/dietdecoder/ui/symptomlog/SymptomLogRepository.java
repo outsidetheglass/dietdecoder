@@ -72,7 +72,7 @@ class SymptomLogRepository {
 
   // duplicate log that from a log and return our new log
   public SymptomLog repositoryDuplicateSymptomLog(SymptomLog oldSymptomLog) {
-    SymptomLog newSymptomLog = new SymptomLog(oldSymptomLog.getSymptomLogSymptomId());
+    SymptomLog newSymptomLog = new SymptomLog(oldSymptomLog.getLogSymptomId());
     repositoryInsertSymptomLog(newSymptomLog);
     return newSymptomLog;
   }

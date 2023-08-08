@@ -34,10 +34,15 @@ import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.AddSymptomLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.SymptomIntensityFragment;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.database.recipe.Recipe;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.ingredient.IngredientListAdapter;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
@@ -209,8 +214,6 @@ public class Util {
     public static final String ARGUMENT_FROM_EDIT = "from_edit";
 
 
-    public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY = "go_to_ingredient_amount_activity";
-    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY = "go_to_ingredient_brand_activity";
     public static final String ARGUMENT_GO_TO_ADD_INGREDIENT_ACTIVITY =
             "go_to_add_ingredient_activity";
     public static final String ARGUMENT_GO_TO_DELETE_INGREDIENT_ACTIVITY =
@@ -220,6 +223,10 @@ public class Util {
     public static final String ARGUMENT_GO_TO_EDIT_INGREDIENT_ACTIVITY =
             "go_to_edit_ingredient_activity";
     public static final String ARGUMENT_GO_TO_INGREDIENT_ACTIVITY = "go_to_ingredient_activity";
+
+    public static final String ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY = "go_to_ingredient_amount_activity";
+    public static final String ARGUMENT_GO_TO_INGREDIENT_BRAND_ACTIVITY = "go_to_ingredient_brand_activity";
+
 
     public static final String ARGUMENT_GO_TO_ADD_INGREDIENT_LOG_ACTIVITY =
             "go_to_add_ingredient_log_activity";
@@ -239,6 +246,8 @@ public class Util {
             "go_to_detail_symptom_activity";
     public static final String ARGUMENT_GO_TO_SYMPTOM_ACTIVITY =
             "go_to_symptom_activity";
+    public static final String ARGUMENT_GO_TO_ADD_SYMPTOM_ACTIVITY =
+            "go_to_symptom_add_activity";
 
 
     public static final String ARGUMENT_GO_TO_ADD_SYMPTOM_LOG_ACTIVITY =
@@ -346,17 +355,11 @@ public class Util {
 
     // set whether the bundle contains ingredient log id or symptom log id, etc
     public static String[] setLogIdArrayTypeAndStringFromBundle(Bundle paramBundle) {
+        // don't need if null in this function
+
+        // this function checks if null
         String stringTypeFromBundle = setStringTypeBundle(paramBundle);
-        String stringFromBundle = null;
-
-        if (paramBundle.containsKey(stringTypeFromBundle)) {
-            stringFromBundle = paramBundle.getString(stringTypeFromBundle);
-        } else if (stringTypeFromBundle == null) {
-            Log.d(TAG, "Error, failed to have valid type.");
-        } else {
-            Log.d(TAG, "Error, failed to call to get strings from type.");
-        }
-
+        String stringFromBundle = paramBundle.getString(stringTypeFromBundle);
 
         String[] strings = new String[]{stringTypeFromBundle, stringFromBundle};
         return strings;
@@ -1023,7 +1026,8 @@ public class Util {
     public static String setStringByIdArrayFromBundleElseIfStrings(Bundle bundle, String ifSymptomLogString,
                                                                    String ifIngredientLogString, String ifSymptomString,
                                                                    String ifIngredientString, String ifRecipeString) {
-        setLogIdArrayFromBundle(bundle);
+        // TODO remove or figure out why I'd thought I needed this
+        //setLogIdArrayFromBundle(bundle);
 
         String stringTypeFromBundle = null;
 
@@ -1066,7 +1070,176 @@ public class Util {
         return bundle;
     }
 
-    public static Bundle setNewIngredientLogBundle(ArrayList<String> newLogIdStringArray) {
+
+    public static void updateLogObjectFromId(SymptomLogViewModel symptomLogViewModel,
+                                             IngredientLogViewModel ingredientLogViewModel,
+                                             UUID logId, UUID idToSave){
+        if ( !Objects.isNull(symptomLogViewModel) ) {
+            // save our updated symptom log with the new symptom ID
+            SymptomLog symptomLog = symptomLogViewModel.viewModelGetLogFromLogId(logId);
+            symptomLog.setLogSymptomId(idToSave);
+            symptomLogViewModel.viewModelUpdate(symptomLog);
+
+        } else if ( !Objects.isNull(ingredientLogViewModel) ) {
+            IngredientLog ingredientLog = ingredientLogViewModel.viewModelGetLogFromLogId(logId);
+            ingredientLog.setLogIngredientId(idToSave);
+            ingredientLogViewModel.viewModelUpdate(ingredientLog);
+        }
+    }
+
+
+    // to be used to check if the choose activity is saving a valid or invalid object to be log
+    // if empty or there's too many chosen for editing a single log, then invalid and only toast
+    // so user repeats fragment
+    // if not empty and valid choice per whether it's edit or not, then save and
+    // go to add or back to edit
+    public static void ifInvalidRepeatOrValidAdd( Activity activity,
+                                                   SymptomListAdapter symptomListAdapter,
+                                                   SymptomLogViewModel symptomLogViewModel,
+                                                  IngredientListAdapter ingredientListAdapter,
+                                                   IngredientLogViewModel ingredientLogViewModel) {
+
+        ArrayList<String> selectedIdsStringArray = new ArrayList<>();
+        UUID id = null;
+        ArrayList<Symptom> symptomSelectedArrayList = new ArrayList<>();
+        ArrayList<Ingredient> ingredientSelectedArrayList = new ArrayList<>();
+
+        if ( !Objects.isNull(symptomListAdapter) ) {
+            // get the selected symptoms
+            symptomSelectedArrayList = symptomListAdapter.getSelectedSymptomList();
+            // get our UUID directly from the string
+            // we only need the first one if we even use it
+            id = symptomSelectedArrayList.get(0).getSymptomId();
+
+        } else if ( !Objects.isNull(ingredientListAdapter) ) {
+            ingredientSelectedArrayList =
+                    ingredientListAdapter.getSelectedList();
+            id = ingredientSelectedArrayList.get(0).getIngredientId();
+
+        }
+        // convert them to id strings and then that to one string
+        selectedIdsStringArray =
+                setIdStringArrayFromObjectArray(symptomSelectedArrayList, null,
+                        ingredientSelectedArrayList, null, null);
+
+        // check what to do based on if it's empty, editing, too many are selected,
+        // or if we need to save
+        // then go to correct place or just toast the error
+        ifEmptyTooManySaveThenGoTo(
+                activity, selectedIdsStringArray,
+                symptomLogViewModel, ingredientLogViewModel,
+                id);
+    }
+
+    // check what to do based on if it's empty, editing, too many are selected,
+    // or if we need to save
+    // then go to correct place or just toast the error
+    public static void ifEmptyTooManySaveThenGoTo( Activity activity,
+                                                  ArrayList<String> selectedArrayList,
+                                                  SymptomLogViewModel symptomLogViewModel,
+                                                  IngredientLogViewModel ingredientLogViewModel,
+                                                  UUID idToSave ){
+        // if our selected array is invalid then go back to main activity with error out
+        if ( Objects.isNull(selectedArrayList) | selectedArrayList.size() <= 0 ){
+            // so go home and tell user
+            toastInvalidGoToMainActivity(activity);
+        }
+
+        // get bundle from thisActivity
+        Bundle bundle = activity.getIntent().getExtras();
+
+        // get our log based on its own id from bundle
+        // always is index 0 because this is called from choose activity,
+        // so we'll only make multiple logs
+        // if multiple objects are chosen, which happens in the next activity
+        String[] typeAndId = setLogIdArrayTypeAndStringFromBundle(bundle);
+        String typeString = typeAndId[0];
+        String logIdString = typeAndId[1];
+        UUID logId = UUID.fromString(logIdString);
+
+
+        // check if we're here to edit a single log and therefore need only one selected
+        Boolean needsOnlyOneLog = isFromEdit(bundle);
+
+        Integer howManySelected = selectedArrayList.size();
+
+        // so check how many have been selected and put in the array
+        // check if symptoms to add array is empty
+        Boolean isSelectedEmpty = selectedArrayList.isEmpty();
+
+        Context thisContext = activity.getApplicationContext();
+
+        // basic variables setup
+        // get saving string from resources so everything can translate languages easy
+        String saveString = activity.getResources().getString(R.string.saving);
+        String emptyTryAgainString = activity.getResources().getString(R.string.empty_not_saved);
+        String tooManyTryAgainString =
+                activity.getResources().getString(R.string.too_many_selected_not_saved);
+
+        // if we're empty, so we care about what we're doing instead of just telling user 'Nope!'
+        if ( !isSelectedEmpty ) {
+            // only one log means from edit and we care about how many were selected
+            if ( needsOnlyOneLog ) {
+                if (  howManySelected > 1 ) {
+                    // the user selected more than one symptom, but is here to only change one log
+                    // tell them to try again and select only one
+                    Toast.makeText(thisContext, tooManyTryAgainString, Toast.LENGTH_SHORT).show();
+
+                } else if (  howManySelected == 1 | howManySelected == 0  ) {
+                    // if they selected 1 we save first, if 0 they just changed their mind
+                    if (  howManySelected == 1 ) {
+                        // the user selected only one symptom, and is here to only change one log
+                        // which means success so we can go back to edit after saving it
+                        Toast.makeText(thisContext, saveString, Toast.LENGTH_SHORT).show();
+
+                        updateLogObjectFromId(symptomLogViewModel, ingredientLogViewModel,
+                                logId, idToSave);
+                    }
+
+                    // done so go back to editing this symptom log
+                    Util.goToEditActivityActionTypeId(null, activity,
+                            ARGUMENT_ACTION_EDIT, typeString, logIdString);
+                }
+            } else {
+                // not empty
+                // and not from edit/doesn't need only one log, so could be one or more
+                setBundleGoToAddLogActivity(selectedArrayList, activity, typeString);
+            }
+        } else {
+            // empty
+            if ( needsOnlyOneLog ) {
+                // if it's empty and we're from edit that means they changed their mind
+                // just go back
+                    Util.goToEditLogActivity(null, activity, logIdString, typeString);
+            } else {
+                 // if empty and not from edit, we can't make a new log without them making a
+                 // choice, so alert user none were selected and don't do anything else
+                 // TODO change this to going back or make a go back button
+                 // TODO also add somewhere to tell them to click the empty circle to select one
+                 Toast.makeText(thisContext, emptyTryAgainString, Toast.LENGTH_SHORT).show();
+             }
+        }
+
+    }
+
+    public static void setBundleGoToAddLogActivity(ArrayList<String> selectedArrayList,
+                                                   Activity activity, String typeString){
+        Bundle bundleNext = new Bundle();
+
+        // if not empty, put the array into the intent to go add
+        if ( isSymptomLogTypeString(typeString) ) {
+            bundleNext = setNewLogBundleFromSymptomIdStringArray(selectedArrayList);
+
+        } else if ( isIngredientLogTypeString(typeString) ) {
+            bundleNext = Util.setNewLogBundleFromIngredientIdStringArray(selectedArrayList);
+        }
+
+        // go to set the intensity of the symptom
+        Util.goToAddLogActivity(null, activity, bundleNext);
+
+    }
+
+    public static Bundle setNewIngredientLogBundleFromLogIdStringArray(ArrayList<String> newLogIdStringArray) {
 
         // set our new bundle to be an ingredient log
         Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_INGREDIENT_AMOUNT_ACTIVITY,
@@ -1075,20 +1248,41 @@ public class Util {
         return bundle;
     }
 
+    public static Bundle setNewLogBundleFromIngredientIdStringArray(ArrayList<String> newLogIdStringArray) {
+
+        // set our new bundle to be an ingredient log
+        Bundle bundle = setNewBundle(newLogIdStringArray,
+                ARGUMENT_GO_TO_ADD_INGREDIENT_LOG_ACTIVITY,
+                ARGUMENT_INGREDIENT_ID_ARRAY);
+
+        return bundle;
+    }
 
     // bundle the relevant information between fragments for adding new symptom log
-    public static Bundle setNewSymptomLogFromSymptomIdBundle(
-            ArrayList<String> newLogIdStringArray) {
+    public static Bundle setNewSymptomFromIdBundle(
+            ArrayList<String> newArray) {
 
         // set our new bundle to be a symptom log
-        Bundle bundle = setNewBundle(newLogIdStringArray, ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT,
+        Bundle bundle = setNewBundle(newArray,
+                ARGUMENT_GO_TO_ADD_SYMPTOM_ACTIVITY,
                 ARGUMENT_SYMPTOM_ID_ARRAY);
 
         return bundle;
     }
 
     // bundle the relevant information between fragments for adding new symptom log
-    public static Bundle setNewSymptomLogFromSymptomLogIdBundle(
+    public static Bundle setNewLogBundleFromSymptomIdStringArray(
+            ArrayList<String> newStringArray) {
+
+        // set our new bundle to be a symptom log
+        Bundle bundle = setNewBundle(newStringArray, ARGUMENT_GO_TO_ADD_SYMPTOM_LOG_ACTIVITY,
+                ARGUMENT_SYMPTOM_ID_ARRAY);
+
+        return bundle;
+    }
+
+    // bundle the relevant information between fragments for adding new symptom log
+    public static Bundle setNewSymptomLogBundleFromLogIdStringArray(
             ArrayList<String> newLogIdStringArray) {
 
         // set our new bundle to be a symptom log
@@ -1113,7 +1307,6 @@ public class Util {
         // set that we still have things to set
         bundle.putString(ARGUMENT_DONE_OR_UNFINISHED, ARGUMENT_UNFINISHED);
         bundle.putString(ARGUMENT_ACTION, ARGUMENT_ACTION_ADD);
-        // where we want to go next
         bundle.putString(Util.ARGUMENT_GO_TO, whereToGo);
 
 
@@ -1909,12 +2102,19 @@ or at least achieves the same effect.
     public static Boolean isFromEdit(Bundle bundle){
         Boolean isTrueOrFalse = Boolean.FALSE;
 
+        // if either it's from the edit activity or the action to take is to edit
         if ( bundle.containsKey(ARGUMENT_FROM) )  {
                 String whatToChange = bundle.getString(ARGUMENT_FROM);
             if (TextUtils.equals(
                     whatToChange,
                     ARGUMENT_FROM_EDIT
             )) {
+                // then send back that it is from edit
+                isTrueOrFalse = Boolean.TRUE;
+            }
+        } else if ( bundle.containsKey(ARGUMENT_ACTION) ){
+            String actionToTake = bundle.getString(ARGUMENT_ACTION);
+            if ( TextUtils.equals(actionToTake, ARGUMENT_ACTION_EDIT) ){
                 isTrueOrFalse = Boolean.TRUE;
             }
         }
@@ -2205,20 +2405,25 @@ or at least achieves the same effect.
         paramThisActivity.startActivity(intent);
     }
 
+    // tell the user that they got here by mistake, it's a bug
+    public static void toastInvalidGoToMainActivity(Activity activity){
+        String mWrongPlaceLetsGoHome =
+                activity.getResources().getString(R.string.wrong_place_lets_go_home);
+        Toast.makeText(activity.getApplicationContext(), mWrongPlaceLetsGoHome,
+                Toast.LENGTH_SHORT).show();
+        // go back to home screen
+        Util.goToMainActivity(null, activity);
+    }
+
     // check the arguments for if we have a bundle and if we do, check it for valid values
     // go back to list or edit if anything required is invalid
     public static Bundle checkValidFragment(Bundle bundle, Activity activity){
 
         // if we have no bundle at all
         if ( bundle == null ){
-            // there's no information about which symptom to add, so
-            // tell the user that they got here by mistake, it's a bug
-//            String mWrongPlaceLetsGoHome =
-//                    getResources().getString(R.string.wrong_place_lets_go_home);
-//            Toast.makeText(activity.getApplicationContext(), mWrongPlaceLetsGoHome,
-//                    Toast.LENGTH_SHORT).show();
-            // go back to home screen
-            Util.goToMainActivity(null, activity);
+            // there's no information about which object to work with,
+            // so go home and tell user
+            toastInvalidGoToMainActivity(activity);
         } else {
             // check the bundle has required values
             if ( !hasValidWhatToChange(bundle) && !hasValidId(bundle) ){
@@ -2461,6 +2666,8 @@ or at least achieves the same effect.
 
     }
     public static void goToMainActivity(Context context, Activity activity){
+        //TODO check all uses of this to see if they need the
+        // toastInvalidGoToMainActivity(activity);
         goToActivityTypeIdClass(context, activity, null, null, MainActivity.class, null, null, null);
     }
 
@@ -2532,6 +2739,155 @@ or at least achieves the same effect.
         return setToThis;
     }
 
+    // given objects in an array
+    // return a string arraylist of the UUIDs
+    // TODO make more efficient somehow,
+    //  this bothers me but makes making activities simpler so I can't resist.
+    //  Remove the more straightforward functions, like setIdStringArrayFromSymptomArray,
+    //  if I decide I like this
+    public static ArrayList<String> setIdStringArrayFromObjectArray(
+            ArrayList<Symptom> symptomArrayList, ArrayList<SymptomLog> symptomLogArrayList,
+            ArrayList<Ingredient> ingredientArrayList,
+            ArrayList<IngredientLog> ingredientLogArrayList,
+            ArrayList<Recipe> recipeArrayList ){
+
+        Integer arrayListSize;
+        ArrayList<String> stringArrayList = new ArrayList<>();
+
+        // for the arraylist that isn't null,
+        // set our string array to those object's Ids
+        if ( !Objects.isNull(symptomArrayList) ) {
+
+            // for each string in array update that log's instant began
+            arrayListSize = symptomArrayList.size();
+            for (int i=0; i < arrayListSize; i++) {
+                // now get the log associated with each UUID
+                UUID id = symptomArrayList.get(i)
+                        .getSymptomId();
+                // and add that id as a string into the array
+                stringArrayList.add( String.valueOf(id) );
+            }
+
+        } else if (!Objects.isNull(ingredientArrayList)) {
+            arrayListSize = ingredientArrayList.size();
+            for (int i=0; i < arrayListSize; i++) {
+                UUID id = ingredientArrayList.get(i)
+                        .getIngredientId();
+                stringArrayList.add( String.valueOf(id) );
+            }
+
+        } else if (!Objects.isNull(symptomLogArrayList)) {
+            arrayListSize = symptomLogArrayList.size();
+            for (int i=0; i < arrayListSize; i++) {
+                UUID id = symptomLogArrayList.get(i)
+                        .getLogId();
+                stringArrayList.add( String.valueOf(id) );
+            }
+
+
+        } else if (!Objects.isNull(ingredientLogArrayList)) {
+            arrayListSize = ingredientLogArrayList.size();
+            for (int i=0; i < arrayListSize; i++) {
+                UUID id = ingredientLogArrayList.get(i)
+                        .getLogId();
+                stringArrayList.add( String.valueOf(id) );
+            }
+
+
+        } else if (!Objects.isNull(recipeArrayList)) {
+            arrayListSize = recipeArrayList.size();
+            for (int i=0; i < arrayListSize; i++) {
+                UUID id = recipeArrayList.get(i)
+                        .getRecipeId();
+                stringArrayList.add( String.valueOf(id) );
+            }
+
+        }
+
+
+        return stringArrayList;
+    }
+
+    // given objects in an array
+    // return a string arraylist of the UUIDs
+    // TODO remove these if I decide to leave setIdStringArrayFromObjectArray as is
+    public static ArrayList<String> setIdStringArrayFromSymptomArray(
+            ArrayList<Symptom> objectArrayList ){
+
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        Integer arrayListSize = objectArrayList.size();
+
+        // for each string in array update that log's instant began
+        for (int i=0; i < arrayListSize; i++) {
+
+            // now get the log associated with each UUID
+            UUID id = objectArrayList.get(i)
+                    .getSymptomId();
+            // and add that id as a string into the array
+            stringArrayList.add( String.valueOf(id) );
+        }
+
+        return stringArrayList;
+    }
+    // given objects in an array
+    // return a string arraylist of the UUIDs
+    public static ArrayList<String> setIdStringArrayFromSymptomLogArray(
+            ArrayList<SymptomLog> objectArrayList ){
+
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        Integer arrayListSize = objectArrayList.size();
+
+        // for each string in array update that log's instant began
+        for (int i=0; i < arrayListSize; i++) {
+
+            // now get the log associated with each UUID
+            UUID id = objectArrayList.get(i)
+                    .getLogId();
+            // and add that id as a string into the array
+            stringArrayList.add( String.valueOf(id) );
+        }
+
+        return stringArrayList;
+    }
+    // given objects in an array
+    // return a string arraylist of the UUIDs
+    public static ArrayList<String> setIdStringArrayFromIngredientArray(
+            ArrayList<Ingredient> objectArrayList ){
+
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        Integer arrayListSize = objectArrayList.size();
+
+        // for each string in array update that log's instant began
+        for (int i=0; i < arrayListSize; i++) {
+
+            // now get the log associated with each UUID
+            UUID id = objectArrayList.get(i)
+                    .getIngredientId();
+            // and add that id as a string into the array
+            stringArrayList.add( String.valueOf(id) );
+        }
+
+        return stringArrayList;
+    }
+    // return a string arraylist of the UUIDs
+    public static ArrayList<String> setIdStringArrayFromIngredientLogArray(
+            ArrayList<IngredientLog> objectArrayList ){
+
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        Integer arrayListSize = objectArrayList.size();
+
+        // for each string in array update that log's instant began
+        for (int i=0; i < arrayListSize; i++) {
+
+            // now get the log associated with each UUID
+            UUID id = objectArrayList.get(i)
+                    .getLogId();
+            // and add that id as a string into the array
+            stringArrayList.add( String.valueOf(id) );
+        }
+
+        return stringArrayList;
+    }
 
 
     // given a string arraylist of the UUID of ingredient logs,
@@ -2544,7 +2900,7 @@ or at least achieves the same effect.
         for (String logIdString: logIdStringArray) {
             // now get the log associated with each UUID
             symptomLogArray.add(
-                    symptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(logIdString))
+                    symptomLogViewModel.viewModelGetLogFromLogId(UUID.fromString(logIdString))
                 );
         }
         return symptomLogArray;
@@ -2587,6 +2943,8 @@ or at least achieves the same effect.
 
         } else if ( isSymptomBundle(bundle) ){
             stringTypeFromBundle = Util.ARGUMENT_SYMPTOM_ID_ARRAY;
+        } else {
+            Log.d(TAG, "Error, failed to have valid type.");
         }
 
         return stringTypeFromBundle;
@@ -2601,7 +2959,7 @@ or at least achieves the same effect.
         for (String ingredientLogIdString: logIdStringArray) {
             // now get the food log associated with each UUID
             ingredientLogArray.add(
-                    ingredientLogViewModel.viewModelGetIngredientLogFromLogId(
+                    ingredientLogViewModel.viewModelGetLogFromLogId(
                             UUID.fromString(ingredientLogIdString)
                     ));
         }
@@ -2747,6 +3105,16 @@ or at least achieves the same effect.
         context.startActivity(intent);
     }
 
+    public static void goToEditLogActivity(Context context, Activity activity,
+                                                  String idString, String typeString){
+
+        if ( isSymptomLogTypeString(typeString) ) {
+            Util.goToEditSymptomLogActivity(null, activity, idString);
+
+        } else if ( isIngredientLogTypeString(typeString) ) {
+            Util.goToEditIngredientLogActivity(null, activity, idString);
+        }
+    }
     public static void goToEditIngredientLogActivity(Context context, Activity activity,
                                                      String idString){
 
@@ -2796,6 +3164,16 @@ or at least achieves the same effect.
     }
 
 
+    // make going to each of the activities easier
+    public static void goToAddLogActivity(Context context, Activity activity,
+                                                 Bundle bundle){
+        // TODO fix this I'm probably doing this multiple times and being inefficient
+        String typeString = setStringTypeBundle(bundle);
+
+        goToActivityTypeIdClass(context, activity, typeString, null,
+                activity.getClass(), null, null, bundle);
+
+    }
     // make going to each of the activities easier
     public static void goToAddSymptomLogActivity(Context context, Activity activity,
                                                   Bundle bundle){
@@ -2920,7 +3298,7 @@ or at least achieves the same effect.
                     cleanArrayString(bundle.getString(
                             Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY));
             UUID uuid = UUID.fromString(ingredientLogIdString);
-            IngredientLog ingredientLog = ingredientLogViewModel.viewModelGetIngredientLogFromLogId(uuid);
+            IngredientLog ingredientLog = ingredientLogViewModel.viewModelGetLogFromLogId(uuid);
 
             // get the instant that comes before the one we're setting
             // if it's consumed, then it had to have been acquired and cooked before that
@@ -2957,7 +3335,7 @@ or at least achieves the same effect.
             String symptomLogIdString =
                     cleanArrayString(bundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
             UUID uuid = UUID.fromString(symptomLogIdString);
-            SymptomLog symptomLog = SymptomLogViewModel.viewModelGetSymptomLogFromLogId(uuid);
+            SymptomLog symptomLog = SymptomLogViewModel.viewModelGetLogFromLogId(uuid);
             // if it's begin we want to use the default time set
             // if it's changed we want to use begin to set what times are valid, after that instant
             mostRecentInstant = symptomLog.getInstantChanged();
@@ -3227,7 +3605,7 @@ or at least achieves the same effect.
             symptomLog = Util.setSymptomLogBeganChanged(whatToChange, symptomLog,
                     integerBundleToSetDateTime);
             // put our updated log into the database
-            symptomLogViewModel.viewModelUpdateSymptomLog(symptomLog);
+            symptomLogViewModel.viewModelUpdate(symptomLog);
         }
 
         // only if we were told to move to next change should we reset what to change
@@ -3291,7 +3669,7 @@ or at least achieves the same effect.
             //then set the values from the food log
             ingredientLog = setIngredientLogInstants(whatToChange, ingredientLog,
                     integerBundleToSetDateTime);
-            ingredientLogViewModel.viewModelUpdateIngredientLog(ingredientLog);
+            ingredientLogViewModel.viewModelUpdate(ingredientLog);
         }
         //done with for loop, set that we've changed what we needed to
 

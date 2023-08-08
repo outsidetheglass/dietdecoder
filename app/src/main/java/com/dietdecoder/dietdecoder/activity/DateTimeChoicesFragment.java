@@ -154,7 +154,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
         mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
         // now get the info associated with that UUID
         mIngredientLog =
-                mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mCurrentLogId);
+                mIngredientLogViewModel.viewModelGetLogFromLogId(mCurrentLogId);
 
         // set our array of ID's, even if it's just one
         mIngredientLogArray = Util.setIngredientLogArrayFromStringArray(mLogIdStringArray,
@@ -171,7 +171,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
 
         // now get the info associated with that UUID
         mSymptomLog =
-                mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(UUID.fromString(mCurrentLogIdString));
+                mSymptomLogViewModel.viewModelGetLogFromLogId(UUID.fromString(mCurrentLogIdString));
 
         // for each string in array update that log's instant began
         // get the log associated with each UUID

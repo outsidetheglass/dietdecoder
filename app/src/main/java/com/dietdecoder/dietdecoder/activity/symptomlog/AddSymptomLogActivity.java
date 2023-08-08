@@ -3,7 +3,6 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -57,7 +56,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
         toolbar.setOnMenuItemClickListener(this);
 
 
-        // if we had no view made, go straight to asking user for intensity
+        // if we had no view made, set the variables
         if (savedInstanceState == null) {
 
             // declare and set variables
@@ -69,63 +68,50 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
                     new ViewModelProvider(this).get(SymptomViewModel.class);
             mSymptomsToAddArrayListIdStrings = new ArrayList<>();
             mSymptomLogsArrayListIdStrings = new ArrayList<>();
-
-
-            // give the intensity fragment which symptom we're setting
-
-            // get the info about which symptom we're logging
-            // check if info passed in exists, if not then go home
-            if ( getIntent().getExtras() != null ) {
-                // get the info
-                mBundle = getIntent().getExtras();
-                mBundleNext = mBundle;
-
-                // get the array of Id's of symptoms to add
-                String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
-                // clean the array string
-                mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
-
-                // go through the string and at the comma's add that ID to the array
-                for (String mSymptomIdString : mSymptomIdsToAddString.split(",")) {
-                    //Log.d(TAG, mSymptomIdString);
-                    mSymptomsToAddArrayListIdStrings.add(mSymptomIdString);
-
-                    //get info on the symptom to make the log based on defaults
-                    SymptomLog symptomLog = new SymptomLog(UUID.fromString(mSymptomIdString));
-                    // make the symptom log
-                    mSymptomLogViewModel.viewModelInsertSymptomLog(symptomLog);
-                    // put its ID in array to send to fragment
-                    mSymptomLogsArrayListIdStrings.add(symptomLog.getSymptomLogId().toString());
-                }
-                // putting set bundle in Util so it's easier for me to see what exactly is in
-                // each bundle
-                mBundleNext = Util.setNewSymptomLogFromSymptomLogIdBundle(
-                        mSymptomLogsArrayListIdStrings);
-
-                int howManyInArray = 0;
-                for ( String hasComma:
-                        mBundleNext.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY).split(",") ){
-                    howManyInArray++;
-                }
-                Log.d(TAG, "howManyInArray " + howManyInArray);
-                // then go to the specific fragments to change away from the defaults
-                Util.startNextFragmentBundle(thisActivity,
-                        getSupportFragmentManager().beginTransaction(),
-                        mFragmentContainerView,
-                        mNextFragment, mBundleNext);
-
-            } else {
-                // there's no information about which symptom to add, so
-                // tell the user that they got here by mistake, it's a bug
-                // must choose which symptom before this activity
-                String mWrongPlaceLetsGoHome =
-                        getResources().getString(R.string.wrong_place_lets_go_home);
-                Toast.makeText(getApplicationContext(), mWrongPlaceLetsGoHome,
-                        Toast.LENGTH_SHORT).show();
-                Util.goToMainActivity(null, thisActivity);
-            }
-
         }
+        // if we had a savedinstancestate, like user turned the phone to horizontal or vice versa
+        // or if we've made the variables just like normal
+        // both ways, next thing is to check the bundle has the info we need
+
+        // get the info about which symptom we're logging
+        // check if info passed in exists, if not then go home
+        Util.checkValidFragment(getIntent().getExtras(), thisActivity);
+
+        // get the info now we know it's valid
+        mBundle = getIntent().getExtras();
+        mBundleNext = mBundle;
+
+        // get the array of Id's of symptoms to add
+        String mSymptomIdsToAddString = mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY);
+        // clean the array string
+        mSymptomIdsToAddString = Util.cleanArrayString(mSymptomIdsToAddString);
+
+        // go through the string and at the comma's add that ID to the array
+        for (String mSymptomIdString : mSymptomIdsToAddString.split(",")) {
+            //Log.d(TAG, mSymptomIdString);
+            mSymptomsToAddArrayListIdStrings.add(mSymptomIdString);
+
+            //get info on the symptom to make the log based on defaults
+            SymptomLog symptomLog = new SymptomLog(UUID.fromString(mSymptomIdString));
+            // make the symptom log
+            mSymptomLogViewModel.viewModelInsert(symptomLog);
+            // put its ID in array to send to fragment
+            mSymptomLogsArrayListIdStrings.add(symptomLog.getLogId().toString());
+        }
+        // putting set bundle in Util so it's easier for me to see what exactly is in
+        // each bundle
+        mBundleNext = Util.setNewSymptomLogBundleFromLogIdStringArray(
+                mSymptomLogsArrayListIdStrings);
+
+        // then go to the specific fragments to change away from the defaults
+        Util.startNextFragmentBundle(thisActivity,
+                getSupportFragmentManager().beginTransaction(),
+                mFragmentContainerView,
+                mNextFragment, mBundleNext);
+
+
+
+
 
         // leaving this here in case I want this activity to do more than just intensity
         //TODO ask when it started and ended

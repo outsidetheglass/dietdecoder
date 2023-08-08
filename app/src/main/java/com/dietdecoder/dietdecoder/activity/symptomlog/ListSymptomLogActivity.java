@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.EditActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -30,7 +28,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ListSymptomLogActivity extends AppCompatActivity implements View.OnClickListener,
         Toolbar.OnMenuItemClickListener {
@@ -93,7 +90,7 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
       mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-      mSymptomLogViewModel.viewModelGetAllSymptomLogs().observe(this,
+      mSymptomLogViewModel.viewModelGetAllLiveData().observe(this,
               new Observer<List<SymptomLog>>() {
                 @Override
                 public void onChanged(List<SymptomLog> logs) {

@@ -6,14 +6,12 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ChooseIngredientActivity extends AppCompatActivity implements
@@ -60,7 +57,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
     SearchView searchView;
     ImageButton mButtonSubmitSearch;
 
-    ArrayList<String> mIngredientsSelectedIdsArrayListStrings = null;
+    ArrayList<String> mSelectedArrayList = null;
 
     private Fragment nextFragment = null;
 
@@ -90,7 +87,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
 
             // basic variable setup
-            mIngredientsSelectedIdsArrayListStrings = new ArrayList<>();
+            mSelectedArrayList = new ArrayList<>();
             if ( getIntent().getExtras() == null ) {
                 mBundle = new Bundle();
             } else {
@@ -144,7 +141,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
 
             // if we have no filter show normal database
 //            if ( mGivenFilterString == null ){
-            mIngredientViewModel.viewModelGetAllIngredients(mGivenFilterString).observe(this,
+            mIngredientViewModel.viewModelGetAllLiveData(mGivenFilterString).observe(this,
                     new Observer<List<Ingredient>>() {
                         @Override
                         public void onChanged(List<Ingredient> ingredients) {
@@ -196,96 +193,75 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
             case R.id.button_choose_ingredient_save:
                 // get int
                 Log.d(TAG, "in save bundle: " + mBundle.toString());
-//
-                mIngredientsSelectedIdsArrayListStrings = new ArrayList<>();
-                for (int childCount = recyclerViewIngredientNameChoices.getChildCount(), i = 0; i < childCount; ++i) {
 
-                    final RecyclerView.ViewHolder holder =
-                            recyclerViewIngredientNameChoices.getChildViewHolder(recyclerViewIngredientNameChoices.getChildAt(i));
-                    TextView viewHolderTextView =
-                            holder.itemView.findViewById(R.id.textview_ingredient_item);
-                    int textViewColorInt =
-                            viewHolderTextView.getTextColors().getDefaultColor();
 
-                    selectedColor =
-                            holder.itemView.getResources().getColorStateList(R.color.selected_text_color,
-                            getTheme());
-                    int selectInt = selectedColor.getDefaultColor();
+                // check what to do based on if it's empty, editing, too many are selected,
+                // or if we need to save
+                // then go to correct place or just toast the error
+                Util.ifInvalidRepeatOrValidAdd(
+                        thisActivity, null, null, mIngredientListAdapter, mIngredientLogViewModel);
 
-                    // if the text color of the current item in the list is the color set when
-                    // selected by the user
-                    if (Objects.equals(selectInt, textViewColorInt) ){
-                        // get the ID of the ingredient that has the selected color text
-                        int position = holder.getBindingAdapterPosition();
-                        String currentIngredientSelectedIdString =
-                                mIngredientViewModel.viewModelGetAllIngredients(mGivenFilterString).getValue().get(position)
-                                        .getIngredientId().toString();
-                        // add that string ID to our array of selected ingredients
-                        mIngredientsSelectedIdsArrayListStrings.add(currentIngredientSelectedIdString);
 
-                    }
-                }
-
-                // after done with the for loop,
+                // TODO uncomment all this below here if the above saves correctly
                 // all the ingredients to add have been put into the array
                 // check if we're here to edit a single log and therefore need only one selected
-                Boolean needsOnlyOneLog = Boolean.FALSE;
-                if ( mBundle.containsKey(Util.ARGUMENT_ACTION) ){
-                    // if the action to be taken is edit,
-                    // then we need to ensure we're only changing one
-                    if (TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION),
-                            Util.ARGUMENT_ACTION_EDIT )){
-                        needsOnlyOneLog = Boolean.TRUE;
-                    }
-                }
-                Integer howManySelected = mIngredientsSelectedIdsArrayListStrings.size();
-
-                // so check how many have been selected and put in the array
-                // check if ingredients to add array is empty
-                if ( mIngredientsSelectedIdsArrayListStrings.isEmpty() ) {
-                    // if empty, alert user none were selected and don't do anything else
-                    Toast.makeText(thisContext, mEmptyTryAgainString,
-                            Toast.LENGTH_SHORT).show();
-                } else if (  howManySelected > 1 && needsOnlyOneLog ) {
-                    // the user selected more than one ingredient, but is here to only change one
-                    // log
-                    // tell them to try again and select only one
-                    Toast.makeText(thisContext, mTooManyTryAgainString,
-                            Toast.LENGTH_SHORT).show();
-                } else if (  howManySelected == 1 && needsOnlyOneLog ) {
-                    // the user selected only one ingredient, and is here to only change one log
-                    Toast.makeText(thisContext, mSaveString,
-                            Toast.LENGTH_SHORT).show();
-                    // which means success so we can go back to edit after saving it
-                    String ingredientLogIdString =
-                            mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
-                    String ingredientIdString = mIngredientsSelectedIdsArrayListStrings.get(0);
-                    IngredientLog ingredientLog =
-                            mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(UUID.fromString(ingredientLogIdString));
-                    // get the ingredient matching the ingredient ID we got from the UI choice
-                    Ingredient ingredient =
-                            mIngredientViewModel.viewModelGetIngredientFromId(UUID.fromString(ingredientIdString));
-                    // save our updated ingredient log with the new ingredient ID and name
-                    //TODO debug this it isn't saving
-                    ingredientLog.setIngredientLogIngredientId(ingredient.getIngredientId());
-                    mIngredientLogViewModel.viewModelUpdateIngredientLog(ingredientLog);
-
-                    Log.d(TAG, "in howManySelected edit bundle: " + mBundleNext.toString());
-                    // done with setting the ingredient go back to editing this ingredient log
-                    Util.goToEditActivityActionTypeId(null, thisActivity,
-                            Util.ARGUMENT_ACTION_EDIT,
-                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, ingredientLogIdString);
-
-                } else {
-                    // if not empty, put the array into the intent to go add ingredients
-                    mBundleNext =
-                            Util.setNewIngredientLogBundle(mIngredientsSelectedIdsArrayListStrings);
-                    // go to set the intensity of the ingredient
-                    Log.d(TAG, "in howManySelected bundle: " + mBundleNext.toString());
-                    Util.goToAddIngredientLogActivity(thisActivity,
-                            String.valueOf(mIngredientsSelectedIdsArrayListStrings), mBundleNext);
-
-                }
+//                Boolean needsOnlyOneLog = Boolean.FALSE;
+//                if ( mBundle.containsKey(Util.ARGUMENT_ACTION) ){
+//                    // if the action to be taken is edit,
+//                    // then we need to ensure we're only changing one
+//                    if (TextUtils.equals(mBundle.getString(Util.ARGUMENT_ACTION),
+//                            Util.ARGUMENT_ACTION_EDIT )){
+//                        needsOnlyOneLog = Boolean.TRUE;
+//                    }
+//                }
+//                Integer howManySelected = mSelectedArrayList.size();
+//
+//                // so check how many have been selected and put in the array
+//                // check if ingredients to add array is empty
+//                if ( mSelectedArrayList.isEmpty() ) {
+//                    // if empty, alert user none were selected and don't do anything else
+//                    Toast.makeText(thisContext, mEmptyTryAgainString,
+//                            Toast.LENGTH_SHORT).show();
+//                } else if (  howManySelected > 1 && needsOnlyOneLog ) {
+//                    // the user selected more than one ingredient, but is here to only change one
+//                    // log
+//                    // tell them to try again and select only one
+//                    Toast.makeText(thisContext, mTooManyTryAgainString,
+//                            Toast.LENGTH_SHORT).show();
+//                } else if (  howManySelected == 1 && needsOnlyOneLog ) {
+//                    // the user selected only one ingredient, and is here to only change one log
+//                    Toast.makeText(thisContext, mSaveString,
+//                            Toast.LENGTH_SHORT).show();
+//                    // which means success so we can go back to edit after saving it
+//                    String ingredientLogIdString =
+//                            mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
+//                    String ingredientIdString = mSelectedArrayList.get(0);
+//                    IngredientLog ingredientLog =
+//                            mIngredientLogViewModel.viewModelGetLogFromLogId(UUID.fromString(ingredientLogIdString));
+//                    // get the ingredient matching the ingredient ID we got from the UI choice
+//                    Ingredient ingredient =
+//                            mIngredientViewModel.viewModelGetFromId(UUID.fromString(ingredientIdString));
+//                    // save our updated ingredient log with the new ingredient ID and name
+//                    //TODO debug this it isn't saving
+//                    ingredientLog.setLogIngredientId(ingredient.getIngredientId());
+//                    mIngredientLogViewModel.viewModelUpdate(ingredientLog);
+//
+//                    Log.d(TAG, "in howManySelected edit bundle: " + mBundleNext.toString());
+//                    // done with setting the ingredient go back to editing this ingredient log
+//                    Util.goToEditActivityActionTypeId(null, thisActivity,
+//                            Util.ARGUMENT_ACTION_EDIT,
+//                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, ingredientLogIdString);
+//
+//                } else {
+//                    // if not empty, put the array into the intent to go add ingredients
+//                    mBundleNext =
+//                            Util.setNewIngredientLogBundleFromLogIdStringArray(mSelectedArrayList);
+//                    // go to set the intensity of the ingredient
+//                    Log.d(TAG, "in howManySelected bundle: " + mBundleNext.toString());
+//                    Util.goToAddIngredientLogActivity(thisActivity,
+//                            String.valueOf(mSelectedArrayList), mBundleNext);
+//
+//                }
 
                 break;
             case R.id.button_choose_ingredient_add:

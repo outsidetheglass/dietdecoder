@@ -96,9 +96,9 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
                     UUID ingredientId = UUID.fromString(mIngredientIdString);
                     // make the ingredient log
                     IngredientLog ingredientLog = new IngredientLog(ingredientId);
-                    mIngredientLogViewModel.viewModelInsertIngredientLog(ingredientLog);
+                    mIngredientLogViewModel.viewModelInsert(ingredientLog);
                     // put its ID in array to send to fragment
-                    mIngredientLogsToAddArrayListIdStrings.add(ingredientLog.getIngredientLogId().toString());
+                    mIngredientLogsToAddArrayListIdStrings.add(ingredientLog.getLogId().toString());
                 }
                 // putting set bundle in Util so it's easier for me to see what exactly is in
                 // each bundle

@@ -134,10 +134,10 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         // get our current log's id
         mCurrentLogId = UUID.fromString(mLogIdsStringArray.get(mCurrentIndex));
         // use the index of which one we're currently working with on the given array
-        mCurrentSymptomLog = mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(
+        mCurrentSymptomLog = mSymptomLogViewModel.viewModelGetLogFromLogId(
                 mCurrentLogId);
 
-        mCurrentSymptomId = mCurrentSymptomLog.getSymptomLogSymptomId();
+        mCurrentSymptomId = mCurrentSymptomLog.getLogSymptomId();
         mCurrentSymptom =
                 mSymptomViewModel.viewModelGetSymptomFromId(mCurrentSymptomId);
         mCurrentSymptomName = mCurrentSymptom.getSymptomName();
@@ -234,9 +234,9 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 Toast.makeText(getContext(), mSaveString, Toast.LENGTH_SHORT).show();
 
                 // then set the intensity
-                mCurrentSymptomLog.setSymptomLogSymptomIntensity(mIntensitySelected);
+                mCurrentSymptomLog.setLogSymptomIntensity(mIntensitySelected);
                 // update the log
-                mSymptomLogViewModel.viewModelUpdateSymptomLog(mCurrentSymptomLog);
+                mSymptomLogViewModel.viewModelUpdate(mCurrentSymptomLog);
 
             // will set done or unfinished if action means we're from edit
                 mBundleNext = Util.setDoneIfFromEdit(mBundle);
@@ -308,7 +308,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         //TODO fix intensity color gradient, it breaks with default is 10 I think
 
         // if there is no symptom log with same symptom
-        if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
+        if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
                 symptomId ) )) {
             // set our integer to first in the list
             mIntensitySelected = 1;
@@ -316,9 +316,9 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         } else {
             // get the most recent intensity from most recent log
             // and set our default choice to to be that most recent value
-            mIntensitySelected = mSymptomLogViewModel.viewModelGetMostRecentSymptomLogWithSymptom(
+            mIntensitySelected = mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
                             symptomId )
-                    .getSymptomLogSymptomIntensity();
+                    .getLogSymptomIntensity();
             Log.d(TAG, String.valueOf(mIntensitySelected));
         }
         return mIntensitySelected;

@@ -40,7 +40,7 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
   }//end onBindViewHolder
 
   public ArrayList<Symptom> getSelectedSymptomList(){
-    return SymptomViewHolder.viewHolderGetSelectedSymptomList();
+    return SymptomViewHolder.viewHolderGetSelectedArrayList();
   }
 
   public static class SymptomDiff extends DiffUtil.ItemCallback<Symptom> {

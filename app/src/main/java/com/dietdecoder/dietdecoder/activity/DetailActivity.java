@@ -167,9 +167,9 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
     // get the detailed string if the bundle contains that object type id
     String[] detailTypeString = Util.setStringAndTypeByIdArrayFromBundleElseIfStrings(
             mBundle,
-            mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mId).toString(),
-            mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mId).toString(),
-            mIngredientViewModel.viewModelGetIngredientFromId(mId).toString(),
+            mSymptomLogViewModel.viewModelGetLogFromLogId(mId).toString(),
+            mIngredientLogViewModel.viewModelGetLogFromLogId(mId).toString(),
+            mIngredientViewModel.viewModelGetFromId(mId).toString(),
             mSymptomViewModel.viewModelGetSymptomFromId(mId).toString(),
             mRecipeViewModel.viewModelGetRecipeFromId(mId).toString()
     );
@@ -184,16 +184,16 @@ public class DetailActivity extends AppCompatActivity implements Toolbar.OnMenuI
   private void deleteThis() {
 
     if ( Util.isSymptomLogBundle(mBundle) ) {
-      mSymptomLogViewModel.viewModelDeleteSymptomLog(
-              mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mId));
+      mSymptomLogViewModel.viewModelDelete(
+              mSymptomLogViewModel.viewModelGetLogFromLogId(mId));
 
     } else if (Util.isIngredientLogBundle(mBundle)){
-      mIngredientLogViewModel.viewModelDeleteIngredientLog(
-              mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(mId));
+      mIngredientLogViewModel.viewModelDelete(
+              mIngredientLogViewModel.viewModelGetLogFromLogId(mId));
 
     } else if (Util.isIngredientBundle(mBundle)){
       //TODO fix these
-      mIngredientViewModel.viewModelDelete(mIngredientViewModel.viewModelGetIngredientFromId(mId));
+      mIngredientViewModel.viewModelDelete(mIngredientViewModel.viewModelGetFromId(mId));
 
     }
     else if (Util.isSymptomBundle(mBundle)){

@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
-import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
-import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewHolder;
-import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +47,7 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
   public void onBindViewHolder(IngredientLogViewHolder holder, int position) {
     IngredientLog currentIngredientLog = getItem(position);
     Ingredient currentIngredientLogIngredient = null;
-    UUID currentIngredientLogIngredientId = currentIngredientLog.getIngredientLogIngredientId();
+    UUID currentIngredientLogIngredientId = currentIngredientLog.getLogIngredientId();
 
     // TODO fix, this will break if the ingredient is one that isn't in the ingredient database yet
     // find the ingredient matching the id of the log we were given

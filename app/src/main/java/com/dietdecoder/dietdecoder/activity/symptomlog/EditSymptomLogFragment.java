@@ -104,9 +104,9 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             // turn it into its UUID
             mSymptomLogId = UUID.fromString(mSymptomLogIdString);
             // use that to get the log itself
-            mSymptomLog = mSymptomLogViewModel.viewModelGetSymptomLogFromLogId(mSymptomLogId);
+            mSymptomLog = mSymptomLogViewModel.viewModelGetLogFromLogId(mSymptomLogId);
             mSymptom =
-                    mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getSymptomLogSymptomId());
+                    mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getLogSymptomId());
 
             // then the name value
             mSymptomLogSymptomName = mSymptom.getSymptomName();
@@ -116,7 +116,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             mNameValueTextView.setText(mSymptomLogSymptomName);
             mBeganValueTextView.setText(Util.stringFromInstant(mSymptomLog.getInstantBegan()));
             mChangedValueTextView.setText(Util.stringFromInstant(mSymptomLog.getInstantChanged()));
-            mIntensityValueTextView.setText(String.valueOf(mSymptomLog.getSymptomLogSymptomIntensity()));
+            mIntensityValueTextView.setText(String.valueOf(mSymptomLog.getLogSymptomIntensity()));
 
             // also throw listeners on them
             mNameValueOptionButton.setOnClickListener(this);

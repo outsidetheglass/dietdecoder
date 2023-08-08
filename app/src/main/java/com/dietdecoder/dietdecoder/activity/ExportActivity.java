@@ -111,7 +111,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
 
     private void exportDatabaseToSdCard(View view, String fileType) {
         String mFileName = Util.setFileName(fileType);
-        Cursor cursor = mIngredientLogViewModel.viewModelGetCursorAllIngredientLog();
+        Cursor cursor = mIngredientLogViewModel.viewModelGetCursorAll();
         File file = null;
 
         // if the cursor found a database
@@ -139,7 +139,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
                         do {
                             // get the food log
                             IngredientLog mIngredientLog =
-                                    mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
+                                    mIngredientLogViewModel.viewModelGetLogFromLogId(
                                     UUID.fromString(cursor.getString(0))
                             );
                             // get the info to put into the file
@@ -194,7 +194,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
         do {
             // get the food log
             IngredientLog mIngredientLog = ingredientLogViewModel
-                    .viewModelGetIngredientLogFromLogId(
+                    .viewModelGetLogFromLogId(
                     UUID.fromString( cursor.getString(0) )
             );
             // get the info to put into the file
@@ -270,7 +270,7 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
     }
 
     private String processedLine(IngredientLog ingredientLog){
-        StringBuilder info = new StringBuilder(ingredientLog.getIngredientLogId().toString());
+        StringBuilder info = new StringBuilder(ingredientLog.getLogId().toString());
         info.append("\n");
 
         return info.toString();

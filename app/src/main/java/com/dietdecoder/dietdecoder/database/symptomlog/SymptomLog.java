@@ -22,23 +22,23 @@ public class SymptomLog {
 
   @PrimaryKey
   @NonNull
-  @ColumnInfo(name = "symptomLogId")
-  private UUID symptomLogId;
+  @ColumnInfo(name = "logId")
+  private UUID logId;
 
   // when the log was made
   @ColumnInfo(name = "instantLogged")
   private Instant instantLogged;
 
   @NonNull
-  @ColumnInfo(name = "symptomLogSymptomId")
-  private UUID symptomLogSymptomId;
+  @ColumnInfo(name = "logSymptomId")
+  private UUID logSymptomId;
 
-  @ColumnInfo(name = "symptomLogSymptomDescription")
-  private String symptomLogSymptomDescription;
+  @ColumnInfo(name = "logSymptomDescription")
+  private String logSymptomDescription;
 
   // how bad it was out of 10
-  @ColumnInfo(name = "symptomLogSymptomIntensity")
-  private Integer symptomLogSymptomIntensity;
+  @ColumnInfo(name = "logSymptomIntensity")
+  private Integer logSymptomIntensity;
 
   // when it began
   @ColumnInfo(name = "instantBegan")
@@ -51,12 +51,12 @@ public class SymptomLog {
 
 // use Ignore for which parameters are optional
   @Ignore
-  public SymptomLog(UUID symptomLogSymptomId) {
+  public SymptomLog(UUID logSymptomId) {
     // if only symptom was given
     // empty for description
     // changed default is an hour from now
     // default concern and intensity is lowest
-    this(symptomLogSymptomId,
+    this(logSymptomId,
             Instant.now(),
             Instant.now().plus(1, ChronoUnit.HOURS),
             " ",
@@ -65,36 +65,36 @@ public class SymptomLog {
     //  setting that symptom
   }
 
-  public SymptomLog(@NonNull UUID symptomLogSymptomId,
+  public SymptomLog(@NonNull UUID logSymptomId,
                     Instant instantBegan,
                     Instant instantChanged,
-                    String symptomLogSymptomDescription,
-                    Integer symptomLogSymptomIntensity) {
-    this.symptomLogId = UUID.randomUUID();
+                    String logSymptomDescription,
+                    Integer logSymptomIntensity) {
+    this.logId = UUID.randomUUID();
     this.instantLogged = Instant.now();
     this.instantBegan = instantBegan;
     this.instantChanged = instantChanged;
-    this.symptomLogSymptomId = symptomLogSymptomId;
-    this.symptomLogSymptomDescription = symptomLogSymptomDescription;
-    this.symptomLogSymptomIntensity = symptomLogSymptomIntensity;
+    this.logSymptomId = logSymptomId;
+    this.logSymptomDescription = logSymptomDescription;
+    this.logSymptomIntensity = logSymptomIntensity;
   }
 
   // basic getters for the parameters
   // setters
   // and toString
-  public UUID getSymptomLogId() {
-    return(this.symptomLogId);
+  public UUID getLogId() {
+    return(this.logId);
   }
 
-  public UUID getSymptomLogSymptomId() {
-    return(this.symptomLogSymptomId);
+  public UUID getLogSymptomId() {
+    return(this.logSymptomId);
   }
-  public String getSymptomLogSymptomDescription() {
-    return(this.symptomLogSymptomDescription);
+  public String getLogSymptomDescription() {
+    return(this.logSymptomDescription);
   }
 
-  public Integer getSymptomLogSymptomIntensity() {
-    return(this.symptomLogSymptomIntensity);
+  public Integer getLogSymptomIntensity() {
+    return(this.logSymptomIntensity);
   }
 
   public Instant getInstantLogged() {
@@ -109,20 +109,20 @@ public class SymptomLog {
 
   public String toString() {
     String intensityString = "\n Intensity: ";
-    if (this.symptomLogSymptomIntensity != null){
-      intensityString = intensityString.concat(this.symptomLogSymptomIntensity.toString() + "\n");
+    if (this.logSymptomIntensity != null){
+      intensityString = intensityString.concat(this.logSymptomIntensity.toString() + "\n");
     }
-      return ("ID:" + this.symptomLogId.toString() + "\n"+
+      return ("ID:" + this.logId.toString() + "\n"+
               "Logged at: " + this.instantLogged.toString() + "\n"
-              + "\nSymptom ID: " + this.symptomLogSymptomId + "\n"
+              + "\nSymptom ID: " + this.logSymptomId + "\n"
               + "\nWhen Began: " + this.instantBegan.toString() + "\n"
         + "\nWhen Changed/Ended: " + this.instantChanged.toString() + "\n"
-        + "\nSymptom Description: " + this.symptomLogSymptomDescription + "\n" + intensityString);
+        + "\nSymptom Description: " + this.logSymptomDescription + "\n" + intensityString);
   }//end toString
 
 
-  public void setSymptomLogId(UUID symptomLogId) {
-    this.symptomLogId = symptomLogId;
+  public void setLogId(UUID logId) {
+    this.logId = logId;
   }
 
 
@@ -136,15 +136,15 @@ public class SymptomLog {
     this.instantChanged = instant;
   }
 
-  public void setSymptomLogSymptomId(UUID symptomLogSymptomId) {
-    this.symptomLogSymptomId = symptomLogSymptomId;
+  public void setLogSymptomId(UUID logSymptomId) {
+    this.logSymptomId = logSymptomId;
   }
-  public void setSymptomLogSymptomDescription(String symptomLogSymptomDescription) {
-    this.symptomLogSymptomDescription = symptomLogSymptomDescription;
+  public void setLogSymptomDescription(String logSymptomDescription) {
+    this.logSymptomDescription = logSymptomDescription;
   }
 
-  public void setSymptomLogSymptomIntensity(Integer symptomLogSymptomIntensity) {
-    this.symptomLogSymptomIntensity = symptomLogSymptomIntensity;
+  public void setLogSymptomIntensity(Integer logSymptomIntensity) {
+    this.logSymptomIntensity = logSymptomIntensity;
   }
 
 

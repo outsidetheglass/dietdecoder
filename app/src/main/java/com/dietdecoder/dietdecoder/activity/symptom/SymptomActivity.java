@@ -20,7 +20,6 @@ import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -72,10 +71,11 @@ public class SymptomActivity extends AppCompatActivity implements Toolbar.OnMenu
     recyclerView.setAdapter(mSymptomListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    //TODO check this if it works, if not, change it to how symptom log
     // Setup access to database
     mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
     // if not null, then set list of symptoms
-    mActivityAllSymptoms = mSymptomViewModel.viewModelGetAllSymptoms();
+    mActivityAllSymptoms = mSymptomViewModel.viewModelGetAllLiveData();
     // turn LiveData into list and set that in Adapter so we can get positions
     mSymptomListAdapter.setSymptomList(mActivityAllSymptoms.getValue());
 

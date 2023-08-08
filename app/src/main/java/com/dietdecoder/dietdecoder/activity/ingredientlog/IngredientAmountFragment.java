@@ -168,11 +168,11 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
             mCurrentIngredientLogIdString = mIngredientLogIdsStringArray.get(mCurrentIdIndex);
             setCurrentIngredientTextViewNumberPicker(mCurrentIngredientLogIdString);
 
-            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
+            mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetLogFromLogId(
                     UUID.fromString(mCurrentIngredientLogIdString) );
-            mCurrentIngredientId = mCurrentIngredientLog.getIngredientLogIngredientId();
+            mCurrentIngredientId = mCurrentIngredientLog.getLogIngredientId();
             mIngredient =
-                    mIngredientViewModel.viewModelGetIngredientFromId(mCurrentIngredientId);
+                    mIngredientViewModel.viewModelGetFromId(mCurrentIngredientId);
 
             // then the name value
             mCurrentIngredientName = mIngredient.getIngredientName();
@@ -221,13 +221,13 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
     private void setCurrentIngredientTextViewNumberPicker(String paramIngredientLogIdToAddString){
 
         // get first log in the list array
-        mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetIngredientLogFromLogId(
+        mCurrentIngredientLog = mIngredientLogViewModel.viewModelGetLogFromLogId(
                 UUID.fromString(paramIngredientLogIdToAddString) );
 
         // get the name and Id of the ingredient in this ingredient log
-        mCurrentIngredientId = mCurrentIngredientLog.getIngredientLogIngredientId();
+        mCurrentIngredientId = mCurrentIngredientLog.getLogIngredientId();
         Ingredient mCurrentIngredient =
-                mIngredientViewModel.viewModelGetIngredientFromId(mCurrentIngredientId);
+                mIngredientViewModel.viewModelGetFromId(mCurrentIngredientId);
         mCurrentIngredientName = mCurrentIngredient.getIngredientName();
 
         // put in the UI what ingredient we're changing now
@@ -262,9 +262,9 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 
                 // then set the amount
 //                mAmountSelected = mDisplayedStringList[mAmountSelectedIndex+1];
-                mCurrentIngredientLog.setIngredientLogIngredientSubjectiveAmount(mAmountSelected);
+                mCurrentIngredientLog.setLogIngredientSubjectiveAmount(mAmountSelected);
                 // update the log
-                mIngredientLogViewModel.viewModelUpdateIngredientLog(mCurrentIngredientLog);
+                mIngredientLogViewModel.viewModelUpdate(mCurrentIngredientLog);
 
                 // will set done or unfinished if action means we're from edit
                 mBundleNext = Util.setDoneIfFromEdit(mBundle);
@@ -345,7 +345,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
 
         mAmountSelectedIndex = 0;
         // if there is no ingredient log with same ingredient name
-        if ( Objects.isNull(mIngredientLogViewModel.viewModelGetMostRecentIngredientLogWithIngredient(
+        if ( Objects.isNull(mIngredientLogViewModel.viewModelGetMostRecentLogWithIngredient(
                 ingredientId ) )) {
             // set our integer to first in the list
 //            mAmountSelected = mDisplayedStringList[0];

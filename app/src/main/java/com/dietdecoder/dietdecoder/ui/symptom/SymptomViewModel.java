@@ -34,12 +34,12 @@ public class SymptomViewModel extends AndroidViewModel {
   }//end SymptomViewModel method
 
 
-  //get all symptoms to list them
-  public LiveData<List<Symptom>> viewModelGetSymptomsToTrack() {
-    return mViewModelAllSymptomsToTrack;
-  }
+  /////////////
+  // Basics //
+  /////////////
 
-  public LiveData<List<Symptom>> viewModelGetAllSymptoms() {
+  //get all symptoms to list them
+  public LiveData<List<Symptom>> viewModelGetAllLiveData() {
     return mRepository.repositoryGetAllSymptoms();
   }
 

@@ -70,7 +70,7 @@ public class IngredientActivity extends AppCompatActivity implements Toolbar.OnM
     mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
 
     // if not null, then set list of ingredients
-    mActivityAllIngredients = mIngredientViewModel.viewModelGetAllIngredients(null);
+    mActivityAllIngredients = mIngredientViewModel.viewModelGetAllLiveData(null);
 
     // turn LiveData into list and set that in Adapter so we can get positions
     mIngredientListAdapter.setIngredientList(mActivityAllIngredients.getValue());

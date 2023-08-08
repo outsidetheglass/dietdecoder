@@ -40,14 +40,8 @@ public class SymptomLogViewModel extends AndroidViewModel {
 //    Log.d(TAG, mSymptomLogRepository.repositoryGetSomeSymptomLog(1).toString());
   }//end LogViewModel method
 
-
-  //get all logs to list them
-  public LiveData<List<SymptomLog>> viewModelGetAllSymptomLogs() {
-    return mViewModelAllSymptomLogs;
-  }
-
   // give null number to get all
-  public List<SymptomLog> viewModelGetSomeSymptomLog(Integer numberOfSymptomLogsToGet){
+  public List<SymptomLog> viewModelGetSomeLog(Integer numberOfSymptomLogsToGet){
 
     return mSymptomLogRepository.repositoryGetSomeSymptomLog(numberOfSymptomLogsToGet);
   }
@@ -63,21 +57,18 @@ public class SymptomLogViewModel extends AndroidViewModel {
 //  }
 
 
-  public SymptomLog viewModelDuplicateSymptomLog(SymptomLog symptomLog) {
-    return mSymptomLogRepository.repositoryDuplicateSymptomLog(symptomLog);
-  }
 
   // get single log using the instant
-  public List<SymptomLog> viewModelGetSymptomLogFromSymptomId(UUID id) {
+  public List<SymptomLog> viewModelGetLogFromSymptomId(UUID id) {
     return mSymptomLogRepository.repositoryGetAllSymptomLogFromSymptomId(id);
   }
   // get single log using the uuid
-  public SymptomLog viewModelGetSymptomLogFromLogId(UUID uuid) {
+  public SymptomLog viewModelGetLogFromLogId(UUID uuid) {
     return mSymptomLogRepository.repositoryGetSymptomLogFromLogId(uuid);
   }
 
   // cursor for exporting
-  public Cursor viewModelGetCursorAllSymptomLog() {
+  public Cursor viewModelGetCursorAllLog() {
     return mSymptomLogRepository.repositoryGetCursorAllSymptomLog();
   }
 
@@ -86,22 +77,6 @@ public class SymptomLogViewModel extends AndroidViewModel {
 //  public SymptomLog viewModelGetSymptomLogFromNameConcern(String logName, String logConcern){
 //    return mRepository.repositoryGetSymptomLogFromNameConcern(logName, logConcern);
 //  }
-
-
-  // add to database
-  public void viewModelInsertSymptomLog(SymptomLog symptomLog) {
-    mSymptomLogRepository.repositoryInsertSymptomLog(symptomLog);
-  }
-
-  // edit log in database
-  public void viewModelUpdateSymptomLog(SymptomLog symptomLog) {
-    mSymptomLogRepository.repositoryUpdateSymptomLog(symptomLog);
-  }
-
-  // delete log in database
-  public void viewModelDeleteSymptomLog(SymptomLog symptomLog) {
-    mSymptomLogRepository.repositoryDeleteSymptomLog(symptomLog);
-  }
 
   // get average duration of symptom from most recent symptoms of same type
   public Duration viewModelGetAverageSymptomDuration(UUID symptomId){
@@ -115,10 +90,37 @@ public class SymptomLogViewModel extends AndroidViewModel {
   }
 
   // get most recent symptom log of symptom
-  public SymptomLog viewModelGetMostRecentSymptomLogWithSymptom(UUID symptomId){
+  public SymptomLog viewModelGetMostRecentLogWithSymptom(UUID symptomId){
     SymptomLog symptomLogWithSameSymptom =
             mSymptomLogRepository.repositoryGetMostRecentSymptomLogWithSymptom(symptomId);
     return symptomLogWithSameSymptom;
+  }
+
+  /////////////
+  // Basics //
+  /////////////
+  //get all logs to list them
+  public LiveData<List<SymptomLog>> viewModelGetAllLiveData() {
+    return mViewModelAllSymptomLogs;
+  }
+
+  // add to database
+  public void viewModelInsert(SymptomLog symptomLog) {
+    mSymptomLogRepository.repositoryInsertSymptomLog(symptomLog);
+  }
+
+  // edit log in database
+  public void viewModelUpdate(SymptomLog symptomLog) {
+    mSymptomLogRepository.repositoryUpdateSymptomLog(symptomLog);
+  }
+
+  // delete log in database
+  public void viewModelDelete(SymptomLog symptomLog) {
+    mSymptomLogRepository.repositoryDeleteSymptomLog(symptomLog);
+  }
+
+  public SymptomLog viewModelDuplicate(SymptomLog symptomLog) {
+    return mSymptomLogRepository.repositoryDuplicateSymptomLog(symptomLog);
   }
 
 

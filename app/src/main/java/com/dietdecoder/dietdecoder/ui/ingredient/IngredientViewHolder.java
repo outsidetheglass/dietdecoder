@@ -25,7 +25,9 @@ import com.dietdecoder.dietdecoder.activity.ingredient.DeleteIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.DetailIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.EditIngredientActivity;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class IngredientViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -44,6 +46,18 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
   ColorStateList mSelectedColor;
   int mUnSelectedColor;
   Drawable mEmptyCircleDrawable, mGreenRoundcornersDrawable, mFoodBeverageDrawable;
+
+  String mIngredientName, mIngredientIdString, mIngredientChemicalName,
+  mIngredientChemicalAmountUnit, mIngredientBrand, mIngredientChemicalAmountNumberString;
+  Double mIngredientChemicalAmountNumber;
+  Ingredient mIngredient;
+  // allow activities to access existing arraylist in the view holder
+  private static ArrayList<Ingredient> mSelectedArrayList;
+
+  // allow activities to access existing arraylist in the view holder
+  public static ArrayList<Ingredient> viewHolderGetSelectedArrayList(){
+    return mSelectedArrayList;
+  }
 
 
   private IngredientViewHolder(View itemView) {
@@ -82,16 +96,12 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 
   public void bind(Ingredient ingredient) {
 
-    // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
-    //  its name doesn't match what's typed in the search bar
-    String ingredientName = ingredient.getIngredientName();
-    String ingredientIdString = ingredient.getIngredientId().toString();
-    // if the other values exist, list them
-    if (!Objects.isNull(ingredient.getIngredientChemicalName())) {
+    this.mIngredient = ingredient;
 
-    }
+    // set all the parts of ingredient log to variables
+    setVariables();
 
-    mIngredientItemView.setText(ingredientName);
+    mIngredientItemView.setText(mIngredientName);
 
     //TODO make this an if statement, if we're here to edit individual ingredients from a list of
     // them then it should show the options three dots and set on click listener to make a menu
@@ -122,6 +132,31 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 //    });
   }
 
+  private void setVariables() {
+    // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
+    //  its name doesn't match what's typed in the search bar
+    mIngredientName = mIngredient.getIngredientName();
+    mIngredientIdString = mIngredient.getIngredientId().toString();
+    // if the other values exist, list them
+    if ( !Objects.isNull(mIngredient.getIngredientChemicalName()) ) {
+      mIngredientChemicalName = mIngredient.getIngredientChemicalName().toString();
+
+
+      if ( !Objects.isNull(mIngredient.getIngredientChemicalAmountNumber()) ) {
+        mIngredientChemicalAmountNumber = mIngredient.getIngredientChemicalAmountNumber();
+        mIngredientChemicalAmountNumberString = mIngredientChemicalAmountNumber.toString();
+
+      }
+      if ( !Objects.isNull(mIngredient.getIngredientChemicalAmountUnit()) ) {
+        mIngredientChemicalAmountUnit = mIngredient.getIngredientChemicalAmountUnit().toString();
+
+      }
+    }
+    if ( !Objects.isNull(mIngredient.getIngredientBrand()) ) {
+      mIngredientBrand = mIngredient.getIngredientBrand();
+
+    }
+  }
 
   static IngredientViewHolder create(ViewGroup ingredientParent) {
 
@@ -153,6 +188,8 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       mIngredientItemView.setTextColor(mUnSelectedColor);
       mIngredientItemButton.setBackground(mGreenRoundcornersDrawable);
       mIngredientItemButton.setImageDrawable(mEmptyCircleDrawable);
+      // the object was selected before this, so the array list has it and needs it removed
+      mSelectedArrayList.remove(mIngredient);
     } else {
       //change UI to show it was clicked
       // text color change to red
@@ -162,7 +199,14 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       // make the background of the sick face from a green circle to a red circle
       mIngredientItemButton.setBackground(null);
 
+      // allow activities to access existing arraylist in the view holder
+      // on click and the user is selecting it
+      if (mSelectedArrayList == null) {
+        mSelectedArrayList = new ArrayList<>();
+      }
+      mSelectedArrayList.add(mIngredient);
     }
+
 
     //TODO make this work in the individual edit ingredient list
     //TODO this is the else do this if its three dots action list all ingredients

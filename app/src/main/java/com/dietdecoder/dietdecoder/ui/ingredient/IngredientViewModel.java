@@ -38,7 +38,7 @@ public class IngredientViewModel extends AndroidViewModel {
 
 
   //get all ingredients to list them
-  public LiveData<List<Ingredient>> viewModelGetAllIngredients(String filterString) {
+  public LiveData<List<Ingredient>> viewModelGetAllLiveData(String filterString) {
     // if we aren't given a filter, return all ingredients
     LiveData<List<Ingredient>> ingredients = mViewModelAllIngredients;
     // if there is a filter
@@ -65,12 +65,12 @@ public class IngredientViewModel extends AndroidViewModel {
     return mRepository.repositoryGetIngredientFromName(paramIngredientName);
   }
   // get single ingredient using the name
-  public Ingredient viewModelGetIngredientFromId(UUID uuid) {
+  public Ingredient viewModelGetFromId(UUID uuid) {
     return mRepository.repositoryGetIngredientFromId(uuid);
   }
 
 
-  public ArrayList<Ingredient> viewModelGetAllIngredientArrayList(){
+  public ArrayList<Ingredient> viewModelGetAllArrayList(){
     return mRepository.repositoryGetAllIngredientArrayList();
   }
 
@@ -85,9 +85,6 @@ public class IngredientViewModel extends AndroidViewModel {
 //  }
 
 
-  // add to database
-  public void viewModelInsert(Ingredient ingredient) { mRepository.repositoryInsertIngredient(ingredient); }
-
   // edit ingredient in database
   public void viewModelUpdateName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
     mRepository.repositoryUpdateIngredientName(oldIngredientName, oldIngredientConcern, newIngredientName);
@@ -98,6 +95,16 @@ public class IngredientViewModel extends AndroidViewModel {
 //  public void viewModelUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
 //    mRepository.repositoryUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
 //  }
+
+  // add to database
+  public void viewModelInsert(Ingredient ingredient) {
+    mRepository.repositoryInsertIngredient(ingredient);
+  }
+
+  // update in database
+  public void viewModelUpdate(Ingredient ingredient) {
+    mRepository.repositoryUpdateIngredient(ingredient);
+  }
 
   // delete ingredient in database
   public void viewModelDelete(Ingredient ingredient) {

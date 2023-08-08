@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.dietdecoder.dietdecoder.activity.symptomlog.SymptomLogClickListener;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -51,7 +50,7 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
   public void onBindViewHolder(SymptomLogViewHolder holder, int position) {
     SymptomLog currentSymptomLog = getItem(position);
     Symptom currentSymptomLogSymptom = null;
-    UUID currentSymptomLogSymptomId = currentSymptomLog.getSymptomLogSymptomId();
+    UUID currentSymptomLogSymptomId = currentSymptomLog.getLogSymptomId();
 
 //    Log.d(TAG,currentSymptomLog.toString());
     // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
