@@ -33,7 +33,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
   private IngredientLog mIngredientLog;
   ImageButton mIngredientLogOptionButton;
 
-  UUID mIngredientLogIngredientId;
+  UUID mLogIngredientId;
   String mIngredientLogIdString, mIngredientLogIngredientName, mIngredientLogAmount,
           mIngredientLogString,
           mIngredientLogCookedString, unImportantString, mIngredientLogConsumedString,
@@ -48,8 +48,8 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     super(itemView);
     ingredientLogContext = itemView.getContext();
     mActivityClass = itemView.getClass();
-    ingredientLogItemView = itemView.findViewById(R.id.textview_ingredient_log_item);
-    mIngredientLogOptionButton = itemView.findViewById(R.id.imagebutton_ingredient_log_option);
+    ingredientLogItemView = itemView.findViewById(R.id.textview_list_ingredient_log_item);
+    mIngredientLogOptionButton = itemView.findViewById(R.id.imagebutton_list_ingredient_log_option);
 
   }
 
@@ -60,7 +60,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     Context logContext = logParent.getContext();
     LayoutInflater logInflater = LayoutInflater.from(logContext);
     View logView = logInflater.inflate(
-            R.layout.recyclerview_ingredient_log_item,
+            R.layout.recyclerview_list_ingredient_log_item,
             logParent,
             false
     );
@@ -77,6 +77,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     // edit, duplicate, delete, or detail clicked
 
     this.mIngredientLog = ingredientLog;
+    this.mIngredientLogIngredient = ingredient;
     // set all the parts of ingredient log to variables
     setVariables();
 
@@ -101,12 +102,10 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
 
   private void setVariables(){
     mIngredientLogIdString = mIngredientLog.getLogId().toString();
-    mIngredientLogAmount = mIngredientLog.getIngredientLogIngredientSubjectiveAmount();
+    mIngredientLogAmount = mIngredientLog.getLogIngredientSubjectiveAmount();
 
     // get the ingredient in the log
-    mIngredientLogIngredientId = mIngredientLog.getLogIngredientId();
-    mIngredientLogIngredient =
-            mIngredientViewModel.viewModelGetFromId(mIngredientLogIngredientId);
+    mLogIngredientId = mIngredientLog.getLogIngredientId();
     mIngredientLogIngredientName = mIngredientLogIngredient.getIngredientName();
 
     // times between consumed and the others
@@ -128,7 +127,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
 
     switch (view.getId()) {
       // when the options button next to the ingredient log is chosen
-      case R.id.imagebutton_ingredient_log_option:
+      case R.id.imagebutton_list_ingredient_log_option:
         
         // Initializing the popup menu and giving the reference as current logContext
         PopupMenu popupMenu = new PopupMenu(ingredientLogContext, mIngredientLogOptionButton);

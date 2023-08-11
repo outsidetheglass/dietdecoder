@@ -1,8 +1,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="@dimen/width_icon_in_option_button"
-    android:height="@dimen/height_icon_in_option_button"
-    android:viewportWidth="@dimen/viewportWidth_sick_face"
-    android:viewportHeight="@dimen/viewportHeight_sick_face"
+    android:width="@dimen/sick_face_radius"
+    android:height="@dimen/sick_face_radius"
+    android:viewportWidth="@dimen/viewport_sick_face"
+    android:viewportHeight="@dimen/viewport_sick_face"
     android:tint="@color/tint_sick_face"
     >
   <path

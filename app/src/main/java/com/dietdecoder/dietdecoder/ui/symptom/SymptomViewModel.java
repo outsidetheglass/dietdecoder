@@ -43,6 +43,10 @@ public class SymptomViewModel extends AndroidViewModel {
     return mRepository.repositoryGetAllSymptoms();
   }
 
+  public LiveData<List<Symptom>> viewModelGetAllLiveDataToTrack() {
+    return mRepository.repositoryGetSymptomsToTrack();
+  }
+
   //get all symptoms with concern
   //TODO LiveData won't work twice like this I think
 //  public LiveData<List<Symptom>> viewModelGetSymptomsWithConcern(String paramConcern) {

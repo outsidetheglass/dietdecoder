@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -160,8 +162,36 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
         } else if (item.getItemId() == R.id.action_go_home) {
             // do something
             Util.goToMainActivity(null, thisActivity);
-        } else {
-            // do something
+        }   else if (item.getItemId() == R.id.action_more) {
+
+            // Initializing the popup menu and giving the reference as current logContext
+            PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
+            // Inflating popup menu from popup_menu.xml file
+            popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
+            popupMenu.setGravity(Gravity.END);
+            // if an option in the menu is clicked
+            popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
+                // which button was clicked
+                switch (moreMenuItem.getItemId()) {
+
+                    // go to the right activity
+                    case R.id.more_all_symptoms:
+                        Util.goToListSymptomActivity(null, thisActivity, null);
+                        break;
+
+                    case R.id.more_all_ingredients:
+                        Util.goToListIngredientActivity(thisContext, thisActivity, null);
+                        break;
+
+                    default:
+                        break;
+                }//end switch case for which menu item was chosen
+
+                return true;
+            });
+            // Showing the popup menu
+            popupMenu.show();
+
         }
 
         return false;

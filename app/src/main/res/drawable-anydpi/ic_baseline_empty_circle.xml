@@ -1,8 +1,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="@dimen/radius_option_button"
     android:height="@dimen/radius_option_button"
-    android:viewportWidth="@dimen/viewportwidth_icon_in_option_button"
-    android:viewportHeight="@dimen/viewportheight_icon_in_option_button"
+    android:viewportWidth="@dimen/viewport_icon_in_option_button"
+    android:viewportHeight="@dimen/viewport_icon_in_option_button"
     android:tint="@color/tint_empty_circle"
     android:alpha="0.8">
   <path

@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +27,10 @@ import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
@@ -50,6 +50,7 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
     SymptomLog mSymptomLog;
     Button mButtonSaveName;
 
+    public FloatingActionButton addButton;
     ArrayList<String> mSymptomsSelectedIdsArrayListStrings = null;
     ArrayList<Symptom> mSymptomSelectedArrayList = null;
 
@@ -106,18 +107,22 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
             mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
             mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-            mSymptomViewModel.viewModelGetAllLiveData().observe(this,
+            mSymptomViewModel.viewModelGetAllLiveDataToTrack().observe(this,
                     new Observer<List<Symptom>>() {
                         @Override
                         public void onChanged(List<Symptom> symptoms) {
                             // Update the cached copy of the words in the adapter.
-                            mSymptomListAdapter.submitList(symptoms);
+                            // true to only to list symptoms user wants to track are listed
+                            mSymptomListAdapter.submitSymptomList(symptoms);
                             //checkRecylcerviewForChosenObject();
 
                         }
                     });
         } // end if they haven't started the activity yet
 
+        // FAB to add new log
+        addButton = findViewById(R.id.add_button_choose_symptom);
+        addButton.setOnClickListener(this);
     } // end onCreate
 
     private void setSymptomVariables(){
@@ -139,6 +144,36 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
         } else if (item.getItemId() == R.id.action_go_home) {
             Util.goToMainActivity(null, thisActivity);
+        }  else if (item.getItemId() == R.id.action_more) {
+
+            // Initializing the popup menu and giving the reference as current logContext
+            PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
+            // Inflating popup menu from popup_menu.xml file
+            popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
+            popupMenu.setGravity(Gravity.END);
+            // if an option in the menu is clicked
+            popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
+                // which button was clicked
+                switch (moreMenuItem.getItemId()) {
+
+                    // go to the right activity
+                    case R.id.more_all_symptoms:
+                        Util.goToListSymptomActivity(null, thisActivity, null);
+                        break;
+
+                    case R.id.more_all_ingredients:
+                        Util.goToListIngredientActivity(thisContext, thisActivity, null);
+                        break;
+
+                    default:
+                        break;
+                }//end switch case for which menu item was chosen
+
+                return true;
+            });
+            // Showing the popup menu
+            popupMenu.show();
+
         }
         return false;
     }
@@ -170,6 +205,10 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                 break;
 //
+            case R.id.add_button_choose_symptom:
+                // go to the list of symptoms the user experiences to allow user to select which ones
+                // they're having now and then make those symptom logs
+                Util.goToAddEditSymptomActivity(thisContext, thisActivity, null);
             default:
                 break;
         } // end cases switch

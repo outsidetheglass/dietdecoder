@@ -1,4 +1,4 @@
-package com.dietdecoder.dietdecoder.activity.symptomlog;
+package com.dietdecoder.dietdecoder.activity.symptom;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,28 +23,26 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
+import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogListAdapter;
-import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSymptomLogActivity extends AppCompatActivity implements View.OnClickListener,
+public class ListSymptomActivity extends AppCompatActivity implements View.OnClickListener,
         Toolbar.OnMenuItemClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
   // Log.d(TAG, "onActivityResult: made it here");
-  private final Activity thisActivity = ListSymptomLogActivity.this;
+  private final Activity thisActivity = ListSymptomActivity.this;
   private Context thisContext;
 
   Fragment mFragmentGoTo = null;
 
-  private SymptomLogViewModel mSymptomLogViewModel;
   private SymptomViewModel mSymptomViewModel;
-  private SymptomLogListAdapter mSymptomLogListAdapter;
+  private SymptomListAdapter mSymptomListAdapter;
   public ArrayList<Symptom> mSymptoms;
 
   public FloatingActionButton addButton;
@@ -55,57 +53,40 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_list_symptom_log);
+    setContentView(R.layout.activity_list_symptom);
 
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_list_symptom_log);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_list_symptom);
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
     thisContext = getBaseContext();
 
-  //TODO Are you experiencing any symptoms right now?
-    //Any past symptoms to log?
-    //if yes, list symptoms to track from preferences
-
-    //checkbox for each symptom
-    // for each one clicked, open severity scale, autofill medium severity, option to click worse
-    // more than it's ever been before, adds new severity to scale
-    // when click save, for each severity scale save symptom severity
-    //any new types of symptoms or conditions?
-    //if yes, add
-    // list previous symptoms and ask when it stopped/changed, if they did
-
     // if we had no view made, go straight to asking user for intensity
     if (savedInstanceState == null) {
       // make the view for listing the items in the log
-      RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom_log);
+      RecyclerView recyclerViewSymptom = findViewById(R.id.recyclerview_list_symptom);
       // add horizontal lines between each recyclerview item
       recyclerViewSymptom.addItemDecoration(new DividerItemDecoration(recyclerViewSymptom.getContext(),
               DividerItemDecoration.VERTICAL));
 
 
       mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-      mSymptoms = mSymptomViewModel.viewModelGetAllSymptomArrayList();
-      mSymptomLogListAdapter = new SymptomLogListAdapter(new SymptomLogListAdapter.LogDiff() );
-      recyclerViewSymptom.setAdapter(mSymptomLogListAdapter);
+      mSymptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff() );
+      recyclerViewSymptom.setAdapter(mSymptomListAdapter);
       recyclerViewSymptom.setLayoutManager(new LinearLayoutManager(this));
-      mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
-      mSymptomLogViewModel.viewModelGetAllLiveData().observe(this,
-              new Observer<List<SymptomLog>>() {
+      mSymptomViewModel.viewModelGetAllLiveData().observe(this,
+              new Observer<List<Symptom>>() {
                 @Override
-                public void onChanged(List<SymptomLog> logs) {
+                public void onChanged(List<Symptom> symptoms) {
                   // Update the cached copy of the words in the adapter.
-                  mSymptomLogListAdapter.setSymptomLogListSubmitList(logs, mSymptoms);
-                  //mSymptomLogs = logs;
-                  //TODO this is where we should be checking ingredient and recipe adapters
-                  // and adding the ingredient or recipe if it doesn't exist
+                  mSymptomListAdapter.submitSymptomList(symptoms);
                 }
               });
 
       // FAB to add new log
-      addButton = findViewById(R.id.add_button_list_symptom_log);
+      addButton = findViewById(R.id.add_button_list_symptom);
       addButton.setOnClickListener(this);
     }
 
@@ -115,10 +96,10 @@ public class ListSymptomLogActivity extends AppCompatActivity implements View.On
   public void onClick(View view) {
     switch (view.getId()) {
       // which button was clicked
-      case R.id.add_button_list_symptom_log:
+      case R.id.add_button_list_symptom:
         // go to the list of symptoms the user experiences to allow user to select which ones
         // they're having now and then make those symptom logs
-        Util.goToChooseSymptomActivity(thisContext, thisActivity);
+        Util.goToAddEditSymptomActivity(thisContext, thisActivity, null);
         break;
         // TODO add edit and delete buttons in here
       default:

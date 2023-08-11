@@ -72,6 +72,24 @@
   <string name="tons">tons</string>
 
 
+  <string name="title_textview_ingredient">Ingredients</string>
+  <string name="title_textview_symptom">Symptoms</string>
+  <string name="title_textview_edit_symptom">Edit Symptom</string>
+  <string name="title_textview_add_symptom">Add Symptom</string>
+  <string name="title_textview_addedit_symptom">Symptom</string>
+  <string name="symptom_category">Symptom Category:</string>
+  <string name="symptom_description">Symptom Description:</string>
+  <string name="enter_symptom_edittext_name">Enter name here</string>
+  <string name="enter_symptom_edittext_description">Enter description here</string>
+  <string name="enter_symptom_edittext_category">Enter category here</string>
+  <string name="symptom_trackornot">Ask about this symptom</string>
+  <string name="title_symptom_trackornot">Track Symptom</string>
+
+  <string name="all_symptoms">All Symptoms</string>
+  <string name="all_ingredients">All Ingredients</string>
+
+
+
   <string name="question_textview_new_log">What general time range are we concerned with?</string>
   <string name="button_just_now">Just Now</string>
   <string name="button_earlier_today">Earlier Today</string>

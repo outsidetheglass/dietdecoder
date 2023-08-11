@@ -14,14 +14,14 @@
       android:layout_height="wrap_content"
       android:padding="@dimen/activity_horizontal_margin">
   <TextView
-    android:id="@+id/textview_ingredient_log_item"
+    android:id="@+id/textview_list_ingredient_log_item"
     style="@style/textview_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
       android:gravity="start" />
 
   <ImageButton
-      android:id="@+id/imagebutton_ingredient_log_option"
+      android:id="@+id/imagebutton_list_ingredient_log_option"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       style="@style/textview_item_option"

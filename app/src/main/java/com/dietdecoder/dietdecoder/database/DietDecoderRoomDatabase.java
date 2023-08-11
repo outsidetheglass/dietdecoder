@@ -165,7 +165,7 @@ static final Symptom symptomDaoWriteExecute(){
                   "aphasia",
                   "Difficulty focusing, feeling like you aren't in your body, difficulty finding words, general brain fog.",
                   "neurological",
-                  "disassociation", Boolean.FALSE, 0, 3600)
+                  "disassociation", Boolean.TRUE, 0, 3600)
   );
   symptomDao.symptomDaoInsert(
           new Symptom(

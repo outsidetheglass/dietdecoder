@@ -26,10 +26,13 @@ import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
 import com.dietdecoder.dietdecoder.activity.EditActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.AddIngredientActivity;
+import com.dietdecoder.dietdecoder.activity.ingredient.ListIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ChooseIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.IngredientAmountFragment;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ListIngredientLogActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.AddIngredientLogActivity;
+import com.dietdecoder.dietdecoder.activity.symptom.AddEditSymptomActivity;
+import com.dietdecoder.dietdecoder.activity.symptom.ListSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ListSymptomLogActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.AddSymptomLogActivity;
@@ -2406,6 +2409,14 @@ or at least achieves the same effect.
     }
 
     // tell the user that they got here by mistake, it's a bug
+    public static void toastInvalidEmpty(Activity activity){
+        String mWrong =
+                activity.getResources().getString(R.string.empty_not_saved);
+        Toast.makeText(activity.getApplicationContext(), mWrong,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    // tell the user that they got here by mistake, it's a bug
     public static void toastInvalidGoToMainActivity(Activity activity){
         String mWrongPlaceLetsGoHome =
                 activity.getResources().getString(R.string.wrong_place_lets_go_home);
@@ -2415,15 +2426,31 @@ or at least achieves the same effect.
         Util.goToMainActivity(null, activity);
     }
 
+    // tell the user that they got here by mistake, it's a bug
+    public static Boolean isFirstActivity(Activity activity){
+        Boolean isFirst = Boolean.FALSE;
+
+        Class activityClass = activity.getClass();
+        if ( activityClass == ChooseSymptomActivity.class ||
+                activityClass == ChooseIngredientActivity.class ){
+            isFirst = Boolean.TRUE;
+        }
+        return isFirst;
+    }
+
+
     // check the arguments for if we have a bundle and if we do, check it for valid values
     // go back to list or edit if anything required is invalid
     public static Bundle checkValidFragment(Bundle bundle, Activity activity){
 
         // if we have no bundle at all
         if ( bundle == null ){
-            // there's no information about which object to work with,
-            // so go home and tell user
-            toastInvalidGoToMainActivity(activity);
+            // and it's not one of the first activities where the bundle is about to be made
+            if ( !isFirstActivity(activity) ) {
+                // there's no information about which object to work with,
+                // so go home and tell user
+                toastInvalidGoToMainActivity(activity);
+            }
         } else {
             // check the bundle has required values
             if ( !hasValidWhatToChange(bundle) && !hasValidId(bundle) ){
@@ -2431,8 +2458,6 @@ or at least achieves the same effect.
                 Util.goToListOrEditActivity(null, activity, bundle);
             }
         }
-        // got here because valid bundle
-        Log.d(TAG, "Valid bundle here: " + bundle.toString());
         return bundle;
     }
 
@@ -2661,8 +2686,22 @@ or at least achieves the same effect.
     // make going to each of the activities easier
     public static void goToListSymptomLogActivity(Context context, Activity activity,
                                                   String stringId){
-            goToActivityTypeIdClass(context, activity, ARGUMENT_SYMPTOM_LOG_ID_ARRAY, stringId,
-                    ListSymptomLogActivity.class, null, null, null);
+        goToActivityTypeIdClass(context, activity, ARGUMENT_SYMPTOM_LOG_ID_ARRAY, stringId,
+                ListSymptomLogActivity.class, null, null, null);
+
+    }
+    // make going to each of the activities easier
+    public static void goToListSymptomActivity(Context context, Activity activity,
+                                                  String stringId){
+        goToActivityTypeIdClass(context, activity, ARGUMENT_SYMPTOM_ID_ARRAY, stringId,
+                ListSymptomActivity.class, null, null, null);
+
+    }
+    // make going to each of the activities easier
+    public static void goToListIngredientActivity(Context context, Activity activity,
+                                                  String stringId){
+        goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, stringId,
+                ListIngredientActivity.class, null, null, null);
 
     }
     public static void goToMainActivity(Context context, Activity activity){
@@ -3175,10 +3214,24 @@ or at least achieves the same effect.
 
     }
     // make going to each of the activities easier
+    public static void goToAddEditSymptomActivity(Context context, Activity activity,
+                                                  String idStringArray){
+        goToActivityTypeIdClass(context, activity, ARGUMENT_SYMPTOM_ID_ARRAY, idStringArray,
+                AddEditSymptomActivity.class, null, null, null);
+
+    }
+    // make going to each of the activities easier
     public static void goToAddSymptomLogActivity(Context context, Activity activity,
-                                                  Bundle bundle){
+                                                 Bundle bundle){
         goToActivityTypeIdClass(context, activity, ARGUMENT_SYMPTOM_ID_ARRAY, null,
                 AddSymptomLogActivity.class, null, null, bundle);
+
+    }
+    // make going to each of the activities easier
+    public static void goToAddEditIngredientActivity(Context context, Activity activity,
+                                                  String idStringArray){
+//        goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, idStringArray,
+//                AddEditIngredientActivity.class, null, null, null);
 
     }
     public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){

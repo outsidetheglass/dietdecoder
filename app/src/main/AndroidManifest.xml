@@ -54,6 +54,8 @@
           android:exported="false" />
 
 
+      <activity        android:name=".activity.ingredient.ListIngredientActivity"
+          android:exported="false" />
         <activity android:name=".activity.ingredient.IngredientActivity"
         android:exported="false"/>
       <activity        android:name=".activity.ingredient.DeleteIngredientActivity"
@@ -74,10 +76,15 @@
         android:exported="false" />
 
 
+      <activity android:name=".activity.symptom.ListSymptomActivity"
+          android:exported="false" />
       <activity android:name=".activity.symptom.SymptomActivity"
         android:exported="false" />
       <activity        android:name=".activity.symptom.DetailSymptomActivity"
         android:exported="false" />
+      <activity android:name=".activity.symptom.AddEditSymptomActivity"
+          android:exported="false" />
+
 
 
       <activity android:name=".activity.symptomlog.ListSymptomLogActivity"

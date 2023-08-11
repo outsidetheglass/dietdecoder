@@ -1,10 +1,13 @@
 package com.dietdecoder.dietdecoder.activity.symptom;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomListAdapter;
@@ -31,6 +35,7 @@ public class SymptomActivity extends AppCompatActivity implements Toolbar.OnMenu
   private final String TAG = "TAG: " + getClass().getSimpleName();
   private final Activity thisActivity = SymptomActivity.this;
 
+  private Context thisContext;
 
   private SymptomViewModel mSymptomViewModel;
   private SymptomListAdapter mSymptomListAdapter;
@@ -46,8 +51,36 @@ public class SymptomActivity extends AppCompatActivity implements Toolbar.OnMenu
     } else if (item.getItemId() == R.id.action_go_home) {
       // do something
       startActivity(new Intent(thisActivity, MainActivity.class));
-    } else {
-      // do something
+    }   else if (item.getItemId() == R.id.action_more) {
+
+      // Initializing the popup menu and giving the reference as current logContext
+      PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
+      // Inflating popup menu from popup_menu.xml file
+      popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
+      popupMenu.setGravity(Gravity.END);
+      // if an option in the menu is clicked
+      popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
+        // which button was clicked
+        switch (moreMenuItem.getItemId()) {
+
+          // go to the right activity
+          case R.id.more_all_symptoms:
+            Util.goToListSymptomActivity(null, thisActivity, null);
+            break;
+
+          case R.id.more_all_ingredients:
+            Util.goToListIngredientActivity(thisContext, thisActivity, null);
+            break;
+
+          default:
+            break;
+        }//end switch case for which menu item was chosen
+
+        return true;
+      });
+      // Showing the popup menu
+      popupMenu.show();
+
     }
 
     return false;
@@ -62,6 +95,7 @@ public class SymptomActivity extends AppCompatActivity implements Toolbar.OnMenu
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
     RecyclerView recyclerView = findViewById(R.id.recyclerview_symptom);
+    thisContext = this.getApplicationContext();
 
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
             DividerItemDecoration.VERTICAL));
@@ -83,7 +117,7 @@ public class SymptomActivity extends AppCompatActivity implements Toolbar.OnMenu
     if ( mActivityAllSymptoms != null ) {
       mActivityAllSymptoms.observe(this, symptoms -> {
         // Update the cached copy of the words in the adapter.
-        mSymptomListAdapter.submitList(symptoms);
+        mSymptomListAdapter.submitSymptomList(symptoms);
       });
 
     }

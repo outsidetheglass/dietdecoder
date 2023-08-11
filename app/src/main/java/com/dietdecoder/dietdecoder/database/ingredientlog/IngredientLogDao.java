@@ -36,16 +36,16 @@ public interface IngredientLogDao {
   LiveData<List<IngredientLog>> daoGetAllIngredientLog();
 
   // get ingredientlog from ID
-  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = ingredientLogId")
+  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = logId")
   IngredientLog daoGetIngredientLogFromLogId(UUID matchThisUuid);
 
   // get all ingredient logs with a given ingredient
-  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = ingredientLogIngredientId ORDER BY " +
+  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = logIngredientId ORDER BY " +
           "instantConsumed DESC")
   List<IngredientLog> daoGetAllIngredientLogFromIngredientId(UUID matchThisUuid);
 
   // get a specified number of the last ingredients by ingredient id
-  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = ingredientLogIngredientId ORDER BY " +
+  @Query("SELECT * FROM ingredient_log_table WHERE :matchThisUuid = logIngredientId ORDER BY " +
           "instantConsumed DESC " +
           "LIMIT :numberToGet")
   List<IngredientLog> daoGetSomeIngredientLogByIngredientId(UUID matchThisUuid, Integer numberToGet);

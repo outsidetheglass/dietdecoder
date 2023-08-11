@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <item
+    android:title="@string/all_symptoms"
+    android:id="@+id/more_all_symptoms"
+    android:text="@string/all_symptoms"
+    />
+
+  <item
+    android:title="@string/all_ingredients"
+    android:id="@+id/more_all_ingredients"
+    android:text="@string/all_ingredients"
+    />
+
+</menu>

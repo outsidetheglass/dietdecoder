@@ -1,31 +1,21 @@
 package com.dietdecoder.dietdecoder.ui.ingredient;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
-import com.dietdecoder.dietdecoder.Util;
-import com.dietdecoder.dietdecoder.activity.DetailActivity;
-import com.dietdecoder.dietdecoder.activity.EditActivity;
-import com.dietdecoder.dietdecoder.activity.ingredient.DeleteIngredientActivity;
-import com.dietdecoder.dietdecoder.activity.ingredient.DetailIngredientActivity;
-import com.dietdecoder.dietdecoder.activity.ingredient.EditIngredientActivity;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
-import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -163,7 +153,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     Context mIngredientContext = ingredientParent.getContext();
     LayoutInflater ingredientInflater = LayoutInflater.from(mIngredientContext);
     View ingredientView = ingredientInflater.inflate(
-      R.layout.recyclerview_ingredient_item,
+      R.layout.recyclerview_choose_ingredient_item,
       ingredientParent,
       false
     );
@@ -206,54 +196,6 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       }
       mSelectedArrayList.add(mIngredient);
     }
-
-
-    //TODO make this work in the individual edit ingredient list
-    //TODO this is the else do this if its three dots action list all ingredients
-//    ingredientItemOptionButton.setOnClickListener(v -> {
-//
-//      // Initializing the popup menu and giving the reference as current mIngredientContext
-//      PopupMenu popupMenu = new PopupMenu(mIngredientContext, ingredientItemOptionButton);
-//
-//      // Inflating popup menu from popup_menu.xml file
-//      popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-//      popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//        @Override
-//        public boolean onMenuItemClick(MenuItem ingredientMenuItem) {
-//
-//          // if edit clicked
-//          if ( ingredientMenuItem.getTitle().toString() == mIngredientContext.getString(R.string
-//          .edit))
-//          {
-//            //TODO turn this into a fragment, or just a popup
-//            Intent editIngredientIntent = new Intent(mIngredientContext, EditActivity.class);
-//            editIngredientIntent.putExtra(Util.ARGUMENT_INGREDIENT_ID, ingredientIdString);
-//            //TODO add other properties of ingredient type here
-//            //editIngredientIntent.putExtra("ingredient_concern", ingredientConcern);
-//            mIngredientContext.startActivity( editIngredientIntent );
-//          }
-//          // if delete clicked
-//          else if ( ingredientMenuItem.getTitle().toString()  == mIngredientContext.getString(R
-//          .string.delete ))
-//          {
-//            mIngredientContext.startActivity(
-//                    new Intent(mIngredientContext, DetailActivity.class)
-//            );
-//          }
-//          // if more details clicked
-//          else if ( ingredientMenuItem.getTitle().toString() == mIngredientContext.getString(R
-//          .string.detail) )
-//          {
-//            mIngredientContext.startActivity(new Intent(mIngredientContext, DetailActivity
-//            .class));
-//          }
-//
-//          return true;
-//        }
-//      });
-//      // Showing the popup menu
-//      popupMenu.show();
-//    });
 
   }
 }//end ingredient view holder class

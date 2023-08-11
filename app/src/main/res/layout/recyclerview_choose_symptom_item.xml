@@ -17,13 +17,13 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin">
       <TextView
-          android:id="@+id/textview_symptom_item"
+          android:id="@+id/textview_choose_symptom_item"
           style="@style/textview_item"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:gravity="start" />
       <ImageButton
-          android:id="@+id/imagebutton_symptom_option_circle"
+          android:id="@+id/imagebutton_choose_symptom_option"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           style="@style/textview_item_option"

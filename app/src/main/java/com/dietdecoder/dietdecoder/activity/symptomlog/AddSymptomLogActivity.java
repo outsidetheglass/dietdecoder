@@ -3,7 +3,9 @@ package com.dietdecoder.dietdecoder.activity.symptomlog;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +70,6 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
                     new ViewModelProvider(this).get(SymptomViewModel.class);
             mSymptomsToAddArrayListIdStrings = new ArrayList<>();
             mSymptomLogsArrayListIdStrings = new ArrayList<>();
-        }
         // if we had a savedinstancestate, like user turned the phone to horizontal or vice versa
         // or if we've made the variables just like normal
         // both ways, next thing is to check the bundle has the info we need
@@ -103,6 +104,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
         mBundleNext = Util.setNewSymptomLogBundleFromLogIdStringArray(
                 mSymptomLogsArrayListIdStrings);
 
+    }
         // then go to the specific fragments to change away from the defaults
         Util.startNextFragmentBundle(thisActivity,
                 getSupportFragmentManager().beginTransaction(),
@@ -157,8 +159,36 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
         } else if (item.getItemId() == R.id.action_go_home) {
             // do something
             Util.goToMainActivity(null, thisActivity);
-        } else {
-            // do something
+        }   else if (item.getItemId() == R.id.action_more) {
+
+            // Initializing the popup menu and giving the reference as current logContext
+            PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
+            // Inflating popup menu from popup_menu.xml file
+            popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
+            popupMenu.setGravity(Gravity.END);
+            // if an option in the menu is clicked
+            popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
+                // which button was clicked
+                switch (moreMenuItem.getItemId()) {
+
+                    // go to the right activity
+                    case R.id.more_all_symptoms:
+                        Util.goToListSymptomActivity(null, thisActivity, null);
+                        break;
+
+                    case R.id.more_all_ingredients:
+                        Util.goToListIngredientActivity(thisContext, thisActivity, null);
+                        break;
+
+                    default:
+                        break;
+                }//end switch case for which menu item was chosen
+
+                return true;
+            });
+            // Showing the popup menu
+            popupMenu.show();
+
         }
 
         return false;

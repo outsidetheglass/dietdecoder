@@ -99,7 +99,7 @@ public class IngredientLog {
 //  public Double getIngredientLogIngredientAmountNumber() {
 //    return(this.ingredientLogIngredientAmountNumber);
  // }
-  public String getIngredientLogIngredientSubjectiveAmount() {
+  public String getLogIngredientSubjectiveAmount() {
     return(this.logIngredientSubjectiveAmount);
   }
 
@@ -127,7 +127,7 @@ public class IngredientLog {
   }//end toString
 
 
-  public void setIngredientLogId(UUID logId) {
+  public void setLogId(UUID logId) {
     this.logId = logId;
   }
 

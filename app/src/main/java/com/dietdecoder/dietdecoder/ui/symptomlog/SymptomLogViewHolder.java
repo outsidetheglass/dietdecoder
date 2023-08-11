@@ -56,7 +56,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
     Context logContext = logParent.getContext();
     LayoutInflater logInflater = LayoutInflater.from(logContext);
     View logView = logInflater.inflate(
-            R.layout.recyclerview_symptom_log_item,
+            R.layout.recyclerview_list_symptom_log_item,
             logParent,
             false
     );

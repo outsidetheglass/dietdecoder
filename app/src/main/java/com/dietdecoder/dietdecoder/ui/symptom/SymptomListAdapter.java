@@ -19,6 +19,7 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
 
   public SymptomViewModel symptomViewModel;
   public List<Symptom> mSymptomList;
+  public Boolean mListOnlyTracked = Boolean.FALSE;
 
 
   public SymptomListAdapter(@NonNull DiffUtil.ItemCallback<Symptom> diffCallback) {
@@ -36,7 +37,16 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
   @Override
   public void onBindViewHolder(SymptomViewHolder holder, int symptomPosition) {
     Symptom currentSymptom = getItem(symptomPosition);
-    holder.bind(currentSymptom);
+    // only show the symptom if it's one of the ones to track
+    if ( this.mListOnlyTracked ){
+      // if true and in here, then it's a symptom we need to list only if user said to track it
+      if (currentSymptom.getSymptomToTrack()) {
+        holder.bind(currentSymptom);
+      }
+    } else{
+      // list all because this isn't about whether it's tracked or not
+      holder.bind(currentSymptom);
+    }
   }//end onBindViewHolder
 
   public ArrayList<Symptom> getSelectedSymptomList(){
@@ -75,6 +85,18 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
       this.mSymptomList = symptomList;
       notifyDataSetChanged();
     }
+  }
+
+  public void submitSymptomList(List symptoms){
+
+    // TODO remove this if I end up only using the one in the activity
+    // if list only tracked, we're here from making a symptom log,
+    // so list only the symptoms that have set to track to be true
+//    if ( listOnlyTracked ){
+//      this.mListOnlyTracked = Boolean.TRUE;
+//    }
+
+    this.submitList(symptoms);
   }
 
 } //end class SymptomListAdapter

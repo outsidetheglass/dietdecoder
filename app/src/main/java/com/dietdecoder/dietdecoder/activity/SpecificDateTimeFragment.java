@@ -410,7 +410,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
                                 Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ),
                         mBundleNext, moveToNextWhatToChange);
 
-                // this does check if from edit and done, then will go to list or e
+                // this does check if from edit and done, then will go to list or edit
                 Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
                         mFragmentContainer,
                         mDefaultNextFragment, mBundleNext);
