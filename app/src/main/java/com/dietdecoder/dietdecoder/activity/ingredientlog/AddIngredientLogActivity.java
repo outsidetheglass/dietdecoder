@@ -183,6 +183,10 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
                         Util.goToListIngredientActivity(thisContext, thisActivity, null);
                         break;
 
+                    case R.id.more_export_activity:
+                        Util.goToExportActivity(thisContext, thisActivity);
+                        break;
+
                     default:
                         break;
                 }//end switch case for which menu item was chosen

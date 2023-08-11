@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.ingredientlog.EditIngredientLogFragment;
 import com.dietdecoder.dietdecoder.activity.symptom.AddEditSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.EditSymptomLogFragment;
 
@@ -63,6 +64,7 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
             // if it's a food log and we want to duplicate it
             if ( mBundle.containsKey(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY) ) {
+                mNextFragment = new EditIngredientLogFragment();
                 // if coming from duplicate, copy it and put the new ID in the bundle
                 if ( isActionDuplicate ) {
                     // we want to duplicate so do that given our existing ID
@@ -112,15 +114,13 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                         mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY));
                 // TODO add a duplicate in here
 
-            } //TODO make this for the rest of the  recipe edits
+            }
 
             // check which fragment we should start next based on
             // which button was pressed in the fragment we just came from
 //            Fragment mNextFragment = whichFragmentNext(mWhichFragmentGoTo);
 
             if ( mNextFragment != null ) {
-
-                Log.d(TAG, mBundle.toString());
                 // start the next fragment
                 Util.startNextFragmentBundle(thisActivity,
                         getSupportFragmentManager().beginTransaction(),
@@ -162,6 +162,10 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
                     case R.id.more_all_ingredients:
                         Util.goToListIngredientActivity(thisContext, thisActivity, null);
+                        break;
+
+                    case R.id.more_export_activity:
+                        Util.goToExportActivity(thisContext, thisActivity);
                         break;
 
                     default:

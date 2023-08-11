@@ -122,6 +122,10 @@ public class RecipeActivity extends AppCompatActivity implements Toolbar.OnMenuI
             Util.goToListIngredientActivity(this.getApplicationContext(), thisActivity, null);
             break;
 
+          case R.id.more_export_activity:
+            Util.goToExportActivity(null, thisActivity);
+            break;
+
           default:
             break;
         }//end switch case for which menu item was chosen

@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dietdecoder.dietdecoder.activity.DetailActivity;
 import com.dietdecoder.dietdecoder.activity.DateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.ExportActivity;
 import com.dietdecoder.dietdecoder.activity.PartOfDayFragment;
 import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
@@ -2702,6 +2703,12 @@ or at least achieves the same effect.
                                                   String stringId){
         goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, stringId,
                 ListIngredientActivity.class, null, null, null);
+
+    }
+    // make going to each of the activities easier
+    public static void goToExportActivity(Context context, Activity activity){
+        goToActivityTypeIdClass(context, activity, null, null,
+                ExportActivity.class, null, null, null);
 
     }
     public static void goToMainActivity(Context context, Activity activity){

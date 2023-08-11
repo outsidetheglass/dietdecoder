@@ -40,7 +40,8 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
   private Resources.Theme mSymptomViewHolderTheme;
   ColorStateList mSelectedColor;
   int mUnSelectedColor, mLayoutItem, mTextViewItem, mButtonItem;
-  Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable, mGreenRoundcornersDrawable, mEmptyCircleDrawable;
+  Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable,
+          mGreenRoundcornersDrawable, mEmptyCircleDrawable;
 
   String mSymptomIdString;
   public Symptom mSymptom;

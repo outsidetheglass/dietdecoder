@@ -97,7 +97,8 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
             recyclerViewSymptomNameChoices =
                     findViewById(R.id.recyclerview_symptom_name_choices);
             // add horizontal lines between each recyclerview item
-            recyclerViewSymptomNameChoices.addItemDecoration(new DividerItemDecoration(recyclerViewSymptomNameChoices.getContext(),
+            recyclerViewSymptomNameChoices.addItemDecoration(
+                    new DividerItemDecoration(recyclerViewSymptomNameChoices.getContext(),
                     DividerItemDecoration.VERTICAL));
 
 
@@ -163,6 +164,10 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                     case R.id.more_all_ingredients:
                         Util.goToListIngredientActivity(thisContext, thisActivity, null);
+                        break;
+
+                    case R.id.more_export_activity:
+                        Util.goToExportActivity(thisContext, thisActivity);
                         break;
 
                     default:

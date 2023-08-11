@@ -25,7 +25,8 @@ import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
 import com.dietdecoder.dietdecoder.ui.symptomlog.SymptomLogViewModel;
 
 
-public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener,
+        View.OnClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -73,78 +74,58 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
     //TODO put question by question way of adding symptoms here
     // Button to go to ingredient's list and edit and delete and add
-//    saveButton = findViewById(R.id.button_main_save);
-//    saveButton.setOnClickListener( view -> {
-//      startActivity(new Intent(thisActivity, ListSymptomLogActivity.class));
-//    });
-    // make the view for listing the items in the log
-//    RecyclerView recyclerViewLogASymptom = findViewById(R.id.recyclerview_log_a_symptom);
-//    // add horizontal lines between each recyclerview item
-//    recyclerViewLogASymptom.addItemDecoration(new DividerItemDecoration(recyclerViewLogASymptom.getContext(),
-//            DividerItemDecoration.VERTICAL));
-//    symptomListAdapter = new SymptomListAdapter(new SymptomListAdapter.SymptomDiff());
-//    recyclerViewLogASymptom.setAdapter(symptomListAdapter);
-//    recyclerViewLogASymptom.setLayoutManager(new LinearLayoutManager(this));
-//    symptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
-//    symptomViewModel.viewModelGetSymptomsToTrack().observe(this,
-//            new Observer<List<Symptom>>() {
-//              @Override
-//              public void onChanged(List<Symptom> logs) {
-//                // Update the cached copy of the words in the adapter.
-//                symptomListAdapter.submitList(logs);
-//              }
-//            });
 
 
   } //end onCreate
 
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-      if (item.getItemId() == R.id.action_settings) {
-                Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
-                //TODO go to settings/preferences
-        }
-      else if (item.getItemId() == R.id.action_go_home) {
-        Util.goToMainActivity(null, thisActivity);
-      }
-      else if (item.getItemId() == R.id.action_more) {
-        //TODO make this have a menu to select from instead of the other activity
-        Util.goToOtherActivity(null, thisActivity);
-      }  else if (item.getItemId() == R.id.action_more) {
+  @Override
+  public boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_settings) {
+      Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
+      // TODO go to preferences when those have been made
 
-        // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
-        // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
-        popupMenu.setGravity(Gravity.END);
-        // if an option in the menu is clicked
-        popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
-          // which button was clicked
-          switch (moreMenuItem.getItemId()) {
+    } else if (item.getItemId() == R.id.action_go_home) {
+      Util.goToMainActivity(null, thisActivity);
+    }  else if (item.getItemId() == R.id.action_more) {
 
-            // go to the right activity
-            case R.id.more_all_symptoms:
-              Util.goToListSymptomActivity(null, thisActivity, null);
-              break;
+      // Initializing the popup menu and giving the reference as current logContext
+      PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
+      // Inflating popup menu from popup_menu.xml file
+      popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
+      popupMenu.setGravity(Gravity.END);
+      // if an option in the menu is clicked
+      popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
+        // which button was clicked
+        switch (moreMenuItem.getItemId()) {
 
-            case R.id.more_all_ingredients:
-              Util.goToListIngredientActivity(thisContext, thisActivity, null);
-              break;
+          // go to the right activity
+          case R.id.more_all_symptoms:
+            Util.goToListSymptomActivity(null, thisActivity, null);
+            break;
 
-            default:
-              break;
-          }//end switch case for which menu item was chosen
+          case R.id.more_all_ingredients:
+            Util.goToListIngredientActivity(thisContext, thisActivity, null);
+            break;
 
-          return true;
-        });
-        // Showing the popup menu
-        popupMenu.show();
+          case R.id.more_export_activity:
+            Util.goToExportActivity(thisContext, thisActivity);
+            break;
 
-      }
+          default:
+            break;
+        }//end switch case for which menu item was chosen
 
-      return false;
+        return true;
+      });
+      // Showing the popup menu
+      popupMenu.show();
+
     }
+
+    return false;
+  }
+
 //
 //        @Override
 //        public boolean onCreateOptionsMenu(Menu menu){

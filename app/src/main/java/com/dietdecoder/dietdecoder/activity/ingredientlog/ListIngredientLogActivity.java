@@ -69,16 +69,13 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
       // make the view for listing the items in the log
       RecyclerView recyclerViewIngredient = findViewById(R.id.recyclerview_list_ingredient_log);
       // add horizontal lines between each recyclerview item
-      recyclerViewIngredient.addItemDecoration(new DividerItemDecoration(recyclerViewIngredient.getContext(),
-              DividerItemDecoration.VERTICAL));
-
+      recyclerViewIngredient.addItemDecoration(new DividerItemDecoration(
+              recyclerViewIngredient.getContext(), DividerItemDecoration.VERTICAL));
 
       mIngredientViewModel = new ViewModelProvider(this).get(IngredientViewModel.class);
       mIngredients = mIngredientViewModel.viewModelGetAllArrayList();
       mIngredientLogListAdapter =
-              new IngredientLogListAdapter(new IngredientLogListAdapter.LogDiff()
-                      //, mIngredientViewModel
-              );
+              new IngredientLogListAdapter( new IngredientLogListAdapter.LogDiff() );
       recyclerViewIngredient.setAdapter(mIngredientLogListAdapter);
       recyclerViewIngredient.setLayoutManager(new LinearLayoutManager(this));
       mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
@@ -146,6 +143,10 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
 
           case R.id.more_all_ingredients:
             Util.goToListIngredientActivity(thisContext, thisActivity, null);
+            break;
+
+          case R.id.more_export_activity:
+            Util.goToExportActivity(thisContext, thisActivity);
             break;
 
           default:

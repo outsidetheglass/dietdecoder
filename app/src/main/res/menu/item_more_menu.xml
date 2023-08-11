@@ -13,4 +13,9 @@
     android:text="@string/all_ingredients"
     />
 
+  <item
+      android:title="@string/button_export_activity"
+      android:id="@+id/more_export_activity"
+      android:text="@string/button_export_activity"
+      />
 </menu>
