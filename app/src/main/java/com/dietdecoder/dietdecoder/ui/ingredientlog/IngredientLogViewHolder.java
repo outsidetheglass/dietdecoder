@@ -146,7 +146,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
 
     // get the ingredient in the log
     mLogIngredientId = mLog.getLogIngredientId();
-    mLogIngredientName = mLogIngredient.getIngredientName();
+    mLogIngredientName = mLogIngredient.getName();
 
     // times between consumed and the others
     mLogConsumedInstant = mLog.getInstantConsumed();

@@ -116,9 +116,9 @@ public class AddEditSymptomActivity extends AppCompatActivity implements Toolbar
                         mSymptomViewModel.viewModelGetSymptomFromId( UUID.fromString(
                                 Util.cleanArrayString(mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY))
                                 ) );
-                mName = mSymptom.getSymptomName();
-                mDescription = mSymptom.getSymptomDescription();
-                mCategory = mSymptom.getSymptomCategory();
+                mName = mSymptom.getName();
+                mDescription = mSymptom.getDescription();
+                mCategory = mSymptom.getCategory();
                 mEditNameView.setText(mName);
                 mEditDescriptionView.setText(mDescription);
                 mEditCategoryView.setText(mCategory);
@@ -161,16 +161,16 @@ public class AddEditSymptomActivity extends AppCompatActivity implements Toolbar
                     if ( isNameNew || isDescriptionNew || isCategoryNew ) {
                         // first set whichever ones are new
                         if (isNameNew) {
-                            mSymptom.setSymptomName(mEditNameView.getText().toString());
+                            mSymptom.setName(mEditNameView.getText().toString());
                         }
                         if (isDescriptionNew) {
-                            mSymptom.setSymptomDescription(mEditDescriptionView.getText().toString());
+                            mSymptom.setDescription(mEditDescriptionView.getText().toString());
                         }
                         if (isCategoryNew) {
-                            mSymptom.setSymptomCategory(mEditCategoryView.getText().toString());
+                            mSymptom.setCategory(mEditCategoryView.getText().toString());
                         }
 
-                        mSymptom.setSymptomToTrack(mSetSymptomToCheck);
+                        mSymptom.setTrackOrNot(mSetSymptomToCheck);
                         // then update the symptom
                         mSymptomViewModel.viewModelUpdate(mSymptom);
                         Util.goToChooseSymptomActivity(null, thisActivity);
@@ -190,17 +190,17 @@ public class AddEditSymptomActivity extends AppCompatActivity implements Toolbar
                         if ( !Objects.isNull(mEditDescriptionView) ) {
                             Log.d(TAG,
                                     " mEditDescriptionView.getText().toString() " + mEditDescriptionView.getText().toString());
-                            mSymptom.setSymptomDescription(mEditDescriptionView.getText().toString());
+                            mSymptom.setDescription(mEditDescriptionView.getText().toString());
                         }
                         if ( !Objects.isNull(mEditCategoryView) ){
                             Log.d(TAG,
                                     " mEditCategoryView.getText().toString() " + mEditCategoryView.getText().toString());
-                            mSymptom.setSymptomCategory(mEditCategoryView.getText().toString());
+                            mSymptom.setCategory(mEditCategoryView.getText().toString());
                         }
 
                         Log.d(TAG,
                                 " mEditNameView.getText().toString() " + mEditNameView.getText().toString());
-                        mSymptom.setSymptomToTrack(mSetSymptomToCheck);
+                        mSymptom.setTrackOrNot(mSetSymptomToCheck);
                         // add our new symptom to the database
                         mSymptomViewModel.viewModelInsert(mSymptom);
                         Util.goToChooseSymptomActivity(null, thisActivity);

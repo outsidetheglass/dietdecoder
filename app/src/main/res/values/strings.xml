@@ -4,12 +4,18 @@
   <string name="action_go_home">Go Home</string>
   <string name="action_more">More</string>
 
+
   <string name="button_save">Save</string>
   <string name="button_cancel">Cancel</string>
+
   <string name="nothing_changed_not_saved">Nothing changed, returning without saving...</string>
   <string name="change_date_time">Let\'s go change the date/time...</string>
+
   <string name="change_symptom">Let\'s go change the symptom...</string>
   <string name="change_intensity">Let\'s go change the intensity of the symptom...</string>
+
+  <string name="change_ingredient">Off to change the ingredient!</string>
+  <string name="change_amount">Off to set amount of ingredient consumed!</string>
 
 
 
@@ -211,10 +217,14 @@
   <string name="title_log_detail_textview">Detail Log</string>
 
   <string name="button_save_and_add_another">Save and Add Another Ingredient</string>
-  <string name="name_consumed">Ingredient Name:</string>
-  <string name="when_consumed">Consumed/Drank/Ate at:</string>
-  <string name="when_cooked">Cooked/Prepared at:</string>
-  <string name="when_acquired">Acquired/Bought/Harvested at:</string>
+  <string name="ingredient_name">Ingredient Name:</string>
+  <string name="what_brand">Ingredient Brand:</string>
+  <string name="how_much_amount">Subjective Amount:</string>
+  <string name="when_consumed">When Consumed/Drank/Ate:</string>
+  <string name="when_cooked">When Cooked/Prepared:</string>
+  <string name="when_acquired">When Acquired/Bought/Harvested:</string>
+
+
   <string name="symptom_name">Symptom Name:</string>
   <string name="when_began">Began at:</string>
   <string name="when_changed">Changed/Ended at:</string>

@@ -1,211 +1,290 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/constraintLayout_edit_ingredient_log"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout_edit_ingredient_log"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
   <TextView
       android:id="@+id/textview_title_edit_ingredient_log_fragment"
-      android:text="@string/title_textview_edit_log"
       android:layout_width="match_parent"
-      android:layout_height="100dp"
-      android:layout_marginTop="10dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/medium_padding"
+      android:text="@string/title_textview_edit_log"
       android:textAlignment="center"
       android:textAppearance="@style/textview_title"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent" />
+
 
   <TextView
-      android:id="@+id/title_textview_edit_ingredient_log_ingredient_name"
-      android:text="@string/ingredient_name"
+      android:id="@+id/title_textview_edit_ingredient_log_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAlignment="center"
+      android:text="@string/ingredient_name"
       android:textAppearance="@style/textview_main_content"
       android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_title_edit_ingredient_log_fragment"/>
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_brand"
+      app:layout_constraintEnd_toStartOf="@+id/value_textview_edit_ingredient_log_name"
+      app:layout_constraintRight_toLeftOf="@+id/value_textview_edit_ingredient_log_name"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_edit_ingredient_log_fragment" />
 
   <TextView
-      android:id="@+id/value_textview_edit_ingredient_log_ingredient_name"
+      android:id="@+id/value_textview_edit_ingredient_log_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/textview"
       android:layout_margin="@dimen/tiny_padding"
-      android:textAlignment="center"
       android:layout_marginRight="@dimen/tiny_padding"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_consumed"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_ingredient_name"
-      app:layout_constraintRight_toLeftOf="@+id/imagebutton_ingredient_log_name_option"
-      />
+      android:layout_marginLeft="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_brand"
+      app:layout_constraintEnd_toStartOf="@+id/imagebutton_edit_ingredient_log_name"
+      app:layout_constraintLeft_toRightOf="@+id/title_textview_edit_ingredient_log_name"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_name"
+      app:layout_constraintStart_toEndOf="@+id/title_textview_edit_ingredient_log_name"
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_edit_ingredient_log_fragment" />
 
   <ImageButton
-      android:id="@+id/imagebutton_ingredient_log_name_option"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:id="@+id/imagebutton_edit_ingredient_log_name"
       style="@style/textview_item_option"
-      android:layout_alignParentEnd="true"
+      android:layout_width="@dimen/width_height_roundcorners"
+      android:layout_height="@dimen/width_height_roundcorners"
       android:layout_alignParentTop="true"
-      android:layout_marginBottom="@dimen/big_padding"
+      android:layout_alignParentEnd="true"
+      android:layout_marginBottom="@dimen/small_padding"
       android:background="@drawable/roundcorners"
       android:src="@drawable/ic_baseline_option"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_brand"
+      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_name"
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_edit_ingredient_log_fragment" />
+
+  <TextView
+      android:id="@+id/title_textview_edit_ingredient_log_brand"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/what_brand"
+      android:textAppearance="@style/textview_main_content"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_amount"
+      app:layout_constraintEnd_toStartOf="@+id/value_textview_edit_ingredient_log_brand"
+      app:layout_constraintRight_toLeftOf="@+id/value_textview_edit_ingredient_log_brand"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_name" />
+
+  <TextView
+      android:id="@+id/value_textview_edit_ingredient_log_brand"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/tiny_padding"
+      android:layout_marginRight="@dimen/tiny_padding"
+      android:layout_marginLeft="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_amount"
+      app:layout_constraintEnd_toStartOf="@+id/imagebutton_edit_ingredient_log_brand"
+      app:layout_constraintLeft_toRightOf="@+id/title_textview_edit_ingredient_log_brand"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_brand"
+      app:layout_constraintStart_toEndOf="@+id/title_textview_edit_ingredient_log_brand"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_name" />
+
+  <ImageButton
+      android:id="@+id/imagebutton_edit_ingredient_log_brand"
+      style="@style/textview_item_option"
+      android:layout_width="@dimen/width_height_roundcorners"
+      android:layout_height="@dimen/width_height_roundcorners"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_marginBottom="@dimen/small_padding"
+      android:background="@drawable/roundcorners"
+      android:src="@drawable/ic_baseline_option"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_amount"
+      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_brand"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_name" />
+
+  <TextView
+      android:id="@+id/title_textview_edit_ingredient_log_amount"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/how_much_amount"
+      android:textAppearance="@style/textview_main_content"
+      android:textStyle="bold"
       app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_consumed"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_ingredient_name"
-      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_ingredient_name"
-      />
+      app:layout_constraintEnd_toStartOf="@+id/value_textview_edit_ingredient_log_amount"
+      app:layout_constraintRight_toLeftOf="@+id/value_textview_edit_ingredient_log_amount"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_cooked"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_brand" />
+
+  <TextView
+      android:id="@+id/value_textview_edit_ingredient_log_amount"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/tiny_padding"
+      android:layout_marginRight="@dimen/tiny_padding"
+      android:layout_marginLeft="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintEnd_toStartOf="@+id/imagebutton_edit_ingredient_log_amount"
+      app:layout_constraintLeft_toRightOf="@+id/title_textview_edit_ingredient_log_amount"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_amount"
+      app:layout_constraintStart_toEndOf="@+id/title_textview_edit_ingredient_log_amount"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_brand" />
+
+  <ImageButton
+      android:id="@+id/imagebutton_edit_ingredient_log_amount"
+      style="@style/textview_item_option"
+      android:layout_width="@dimen/width_height_roundcorners"
+      android:layout_height="@dimen/width_height_roundcorners"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_marginBottom="@dimen/small_padding"
+      android:background="@drawable/roundcorners"
+      android:src="@drawable/ic_baseline_option"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_amount"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_brand" />
 
   <TextView
       android:id="@+id/title_textview_edit_ingredient_log_consumed"
-      android:text="@string/when_began"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:text="@string/when_consumed"
       android:textAlignment="center"
-      android:layout_marginTop="@dimen/big_padding"
       android:textAppearance="@style/textview_main_content"
       android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_consumed"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/imagebutton_ingredient_log_name_option"/>
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_amount" />
 
   <TextView
       android:id="@+id/value_textview_edit_ingredient_log_consumed"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/textview"
-      android:layout_margin="@dimen/tiny_padding"
-      android:textAlignment="center"
       android:layout_marginRight="@dimen/tiny_padding"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_acquired"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_consumed"
-      />
+      android:layout_marginLeft="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_cooked"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_consumed"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_consumed" />
+
 
   <ImageButton
-      android:id="@+id/imagebutton_ingredient_log_consumed_option"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:id="@+id/imagebutton_edit_ingredient_log_consumed"
       style="@style/textview_item_option"
-      android:layout_alignParentEnd="true"
+      android:layout_width="@dimen/width_height_roundcorners"
+      android:layout_height="@dimen/width_height_roundcorners"
       android:layout_alignParentTop="true"
-      android:layout_marginBottom="@dimen/big_padding"
+      android:layout_alignParentEnd="true"
       android:background="@drawable/roundcorners"
       android:src="@drawable/ic_baseline_option"
-      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_acquired"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_cooked"
+      app:layout_constraintStart_toEndOf="@+id/value_textview_edit_ingredient_log_consumed"
       app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_consumed"
-      />
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_consumed" />
+
 
   <TextView
-      android:id="@+id/title_textview_edit_ingredient_log_acquired"
-      android:text="@string/when_changed"
+      android:id="@+id/title_textview_edit_ingredient_log_cooked"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:text="@string/when_cooked"
       android:textAlignment="center"
       android:textAppearance="@style/textview_main_content"
       android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_cooked"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/value_textview_edit_ingredient_log_consumed"
-      app:layout_constraintTop_toBottomOf="@+id/imagebutton_ingredient_log_consumed_option"/>
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_consumed" />
+
+  <TextView
+      android:id="@+id/value_textview_edit_ingredient_log_cooked"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/tiny_padding"
+      android:layout_marginRight="@dimen/tiny_padding"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_acquired"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_cooked"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_cooked" />
+
+  <ImageButton
+      android:id="@+id/imagebutton_edit_ingredient_log_cooked"
+      style="@style/textview_item_option"
+      android:layout_width="32dp"
+      android:layout_height="33dp"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:background="@drawable/roundcorners"
+      android:src="@drawable/ic_baseline_option"
+      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_acquired"
+      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_cooked"
+      app:layout_constraintStart_toEndOf="@+id/value_textview_edit_ingredient_log_cooked"
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_cooked" />
+
+
+  <TextView
+      android:id="@+id/title_textview_edit_ingredient_log_acquired"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/when_acquired"
+      android:textAlignment="center"
+      android:textAppearance="@style/textview_main_content"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/imagebutton_edit_ingredient_log_acquired"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imagebutton_edit_ingredient_log_cooked" />
 
   <TextView
       android:id="@+id/value_textview_edit_ingredient_log_acquired"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/textview"
-      android:layout_margin="@dimen/tiny_padding"
-      android:textAlignment="center"
+      android:layout_marginLeft="@dimen/tiny_padding"
       android:layout_marginRight="@dimen/tiny_padding"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_ingredient_amount"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_acquired"
-      />
-
+      android:textAlignment="center"
+      android:textAppearance="@style/textview"
+      app:layout_constraintBottom_toTopOf="@+id/button_edit_ingredient_log_done"
+      app:layout_constraintRight_toLeftOf="@+id/imagebutton_edit_ingredient_log_acquired"
+      app:layout_constraintStart_toStartOf="@+id/title_textview_edit_ingredient_log_consumed"
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_acquired" />
 
   <ImageButton
-      android:id="@+id/imagebutton_ingredient_log_acquired_option"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:id="@+id/imagebutton_edit_ingredient_log_acquired"
       style="@style/textview_item_option"
-      android:layout_alignParentEnd="true"
+      android:layout_width="@dimen/width_height_roundcorners"
+      android:layout_height="@dimen/width_height_roundcorners"
       android:layout_alignParentTop="true"
-      android:layout_marginBottom="@dimen/big_padding"
+      android:layout_alignParentEnd="true"
       android:background="@drawable/roundcorners"
       android:src="@drawable/ic_baseline_option"
-      app:layout_constraintBottom_toTopOf="@+id/title_textview_edit_ingredient_log_ingredient_amount"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_acquired"
+      app:layout_constraintBottom_toTopOf="@+id/button_edit_ingredient_log_done"
+      app:layout_constraintStart_toEndOf="@+id/value_textview_edit_ingredient_log_acquired"
       app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_acquired"
-      />
-  <TextView
-      android:id="@+id/title_textview_edit_ingredient_log_ingredient_amount"
-      android:text="@string/how_much_intensity"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textAlignment="center"
-      android:textAppearance="@style/textview_main_content"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/value_textview_edit_ingredient_log_ingredient_amount"
-      app:layout_constraintTop_toBottomOf="@+id/imagebutton_ingredient_log_acquired_option"/>
-  <TextView
-      android:id="@+id/value_textview_edit_ingredient_log_ingredient_amount"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textAppearance="@style/textview"
-      android:layout_margin="@dimen/tiny_padding"
-      android:textAlignment="center"
-      android:layout_marginRight="@dimen/tiny_padding"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@+id/button_edit_ingredient_log_done"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_ingredient_amount"
-      />
+      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_acquired" />
 
-
-  <ImageButton
-      android:id="@+id/imagebutton_ingredient_log_amount_option"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      style="@style/textview_item_option"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentTop="true"
-      android:layout_marginBottom="@dimen/big_padding"
-      android:background="@drawable/roundcorners"
-      android:src="@drawable/ic_baseline_option"
-      app:layout_constraintBottom_toTopOf="@+id/button_edit_ingredient_log_done"
-      app:layout_constraintTop_toBottomOf="@+id/title_textview_edit_ingredient_log_ingredient_amount"
-      app:layout_constraintLeft_toRightOf="@+id/value_textview_edit_ingredient_log_ingredient_amount"
-      />
 
   <Button
       android:id="@+id/button_edit_ingredient_log_done"
-      android:text="@string/button_done"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="@style/button_save"
       android:layout_margin="@dimen/small_padding"
-      app:layout_constraintTop_toBottomOf="@+id/imagebutton_ingredient_log_amount_option"
+      android:text="@string/button_done"
+      android:textAppearance="@style/button_save"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      />
+      app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

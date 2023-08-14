@@ -20,6 +20,8 @@ import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.symptomlog.ChooseSymptomActivity;
 import com.dietdecoder.dietdecoder.activity.symptomlog.SymptomIntensityFragment;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
@@ -36,9 +38,9 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
     Class mNextActivityClass = new ChooseIngredientActivity().getClass();
 
     Button mButtonDone;
-    ImageButton mConsumedValueOptionButton, mCookedValueOptionButton, mAcquiredValueOptionButton,
-            mNameValueOptionButton, mBrandValueOptionButton,
-            mAmountValueOptionButton;
+    ImageButton mConsumedValueButton, mCookedValueButton, mAcquiredValueButton,
+            mNameValueButton, mBrandValueButton,
+            mAmountValueButton;
 
     TextView mNameValueTextView, mConsumedValueTextView, mCookedValueTextView,
             mAcquiredValueTextView, mBrandValueTextView,
@@ -46,7 +48,8 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
 
     String mSaveString, mNothingChangedString, mLogIdString,
-            mLogIngredientName, mDateTime, mChangeIngredient, mChangeIntensityToastString;
+            mLogIngredientName, mDateTime, mChangeIngredient, mChangeAmountToastString,
+            mIngredientBrand, mIngredientSubjectiveAmount;
     Boolean isNameEdited;
 
     Bundle mBundle, mBundleNext;
@@ -55,8 +58,8 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
     IngredientLogViewModel mIngredientLogViewModel;
     IngredientViewModel mIngredientViewModel;
     UUID mLogId;
-    SymptomLog mLog;
-    Symptom mSymptom;
+    IngredientLog mLog;
+    Ingredient mIngredient;
 
     Fragment mNextFragment = null;
 
@@ -74,29 +77,29 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
         // set our UI views
         mNameValueTextView =
-                view.findViewById(R.id.value_textview_edit_ingredient_log_ingredient_name);
+                view.findViewById(R.id.value_textview_edit_ingredient_log_name);
+        mBrandValueTextView =
+                view.findViewById(R.id.value_textview_edit_ingredient_log_brand);
+        mAmountValueTextView =
+                view.findViewById(R.id.value_textview_edit_ingredient_log_amount);
         mConsumedValueTextView =
                 view.findViewById(R.id.value_textview_edit_ingredient_log_consumed);
         mCookedValueTextView =
                 view.findViewById(R.id.value_textview_edit_ingredient_log_cooked);
         mAcquiredValueTextView =
                 view.findViewById(R.id.value_textview_edit_ingredient_log_acquired);
-        mBrandValueTextView =
-                view.findViewById(R.id.value_textview_edit_ingredient_log_ingredient_brand);
-        mAmountValueTextView =
-                view.findViewById(R.id.value_textview_edit_ingredient_log_ingredient_amount);
 
-        mNameValueOptionButton = view.findViewById(R.id.imagebutton_ingredient_log_name_option);
-        mConsumedValueOptionButton =
-                view.findViewById(R.id.imagebutton_ingredient_log_consumed_option);
-        mCookedValueOptionButton =
-                view.findViewById(R.id.imagebutton_ingredient_log_cooked_option);
-        mAcquiredValueOptionButton =
-                view.findViewById(R.id.imagebutton_ingredient_log_acquired_option);
-        mAmountValueOptionButton =
-                view.findViewById(R.id.imagebutton_ingredient_log_amount_option);
-        mBrandValueOptionButton =
-                view.findViewById(R.id.imagebutton_ingredient_log_brand_option);
+        mNameValueButton = view.findViewById(R.id.imagebutton_edit_ingredient_log_name);
+        mBrandValueButton =
+                view.findViewById(R.id.imagebutton_edit_ingredient_log_brand);
+        mAmountValueButton =
+                view.findViewById(R.id.imagebutton_edit_ingredient_log_amount);
+        mConsumedValueButton =
+                view.findViewById(R.id.imagebutton_edit_ingredient_log_consumed);
+        mCookedValueButton =
+                view.findViewById(R.id.imagebutton_edit_ingredient_log_cooked);
+        mAcquiredValueButton =
+                view.findViewById(R.id.imagebutton_edit_ingredient_log_acquired);
 
         mButtonDone = view.findViewById(R.id.button_edit_ingredient_log_done);
 
@@ -115,32 +118,40 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
             if ( mLogIdString.contains(",") ) {
                 Toast.makeText(thisActivity, "An array of log ID's were passed in, try again with only one to edit.", Toast.LENGTH_SHORT).show();
             }
+
             // turn it into its UUID
             mLogId = UUID.fromString(mLogIdString);
             // use that to get the log itself
             mLog = mIngredientLogViewModel.viewModelGetLogFromLogId(mLogId);
-            mSymptom =
-                    mIngredientViewModel.viewModelGetFromId(mLog.getId());
+            mIngredient =
+                    mIngredientViewModel.viewModelGetFromId(mLog.getLogIngredientId());
 
             // then the name value
-            mLogIngredientName = mSymptom.getSymptomName();
+            mLogIngredientName = mIngredient.getName();
+            mIngredientBrand = mIngredient.getBrand();
+
+            mIngredientSubjectiveAmount = mLog.getLogIngredientSubjectiveAmount();
 
             // then use the log to set the text views
             // set the default text to the data
             mNameValueTextView.setText(mLogIngredientName);
+            mAmountValueTextView.setText(mIngredientSubjectiveAmount);
+            mBrandValueTextView.setText(mIngredientBrand);
+
             mConsumedValueTextView.setText(Util.stringFromInstant(mLog.getInstantConsumed()));
             mCookedValueTextView.setText(Util.stringFromInstant(mLog.getInstantCooked()));
             mAcquiredValueTextView.setText(Util.stringFromInstant(mLog.getInstantAcquired()));
-            mAmountValueTextView.setText(String.valueOf(mLog.getLogIngredientAmount()));
-            mBrandValueTextView.setText(String.valueOf(mLog.getLogIngredientBrand()));
+
 
             // also throw listeners on them
-            mNameValueOptionButton.setOnClickListener(this);
-            mConsumedValueOptionButton.setOnClickListener(this);
-            mCookedValueOptionButton.setOnClickListener(this);
-            mAcquiredValueOptionButton.setOnClickListener(this);
-            mAmountValueOptionButton.setOnClickListener(this);
-            mBrandValueOptionButton.setOnClickListener(this);
+            mNameValueButton.setOnClickListener(this);
+            mAmountValueButton.setOnClickListener(this);
+            mBrandValueButton.setOnClickListener(this);
+
+            mConsumedValueButton.setOnClickListener(this);
+            mCookedValueButton.setOnClickListener(this);
+            mAcquiredValueButton.setOnClickListener(this);
+
             mButtonDone.setOnClickListener(this);
         }
     // Inflate the layout for this fragment
@@ -155,8 +166,8 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
         mSaveString = getResources().getString(R.string.saving);
         mNothingChangedString = getResources().getString(R.string.nothing_changed_not_saved);
         mDateTime = getResources().getString(R.string.change_date_time);
-        mChangeIngredient = getResources().getString(R.string.change_symptom);
-        mChangeIntensityToastString = getResources().getString(R.string.change_intensity);
+        mChangeIngredient = getResources().getString(R.string.change_ingredient);
+        mChangeAmountToastString = getResources().getString(R.string.change_amount);
 
         switch (view.getId()) {
             // save button was pressed
@@ -164,7 +175,48 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
                 // done with editing
                 Util.goToListSymptomLogActivity(null, thisActivity, mLogIdString);
                 break;
-            case R.id.imagebutton_ingredient_log_consumed_option:
+            case R.id.imagebutton_edit_ingredient_log_name:
+
+                Toast.makeText(getContext(), mChangeIngredient, Toast.LENGTH_SHORT).show();
+                try {
+
+                    Util.startNextActivityActionChangeIdArray(thisActivity,
+                            mNextActivityClass,
+                            Util.ARGUMENT_ACTION_EDIT,
+                            Util.ARGUMENT_CHANGE_INGREDIENT_LOG_NAME,
+                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, mLogIdString);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            case R.id.imagebutton_edit_ingredient_log_brand:
+
+                Toast.makeText(getContext(), mChangeIngredient, Toast.LENGTH_SHORT).show();
+                try {
+
+                    Util.startNextActivityActionChangeIdArray(thisActivity,
+                            mNextActivityClass,
+                            Util.ARGUMENT_ACTION_EDIT,
+                            Util.ARGUMENT_CHANGE_INGREDIENT_LOG_BRAND,
+                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, mLogIdString);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            case R.id.imagebutton_edit_ingredient_log_amount:
+
+                Toast.makeText(getContext(), mChangeAmountToastString, Toast.LENGTH_SHORT).show();
+                mBundleNext =
+                        Util.setEditSymptomLogBundle(mLogIdString,
+                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new SymptomIntensityFragment(), mBundleNext);
+
+                break;
+            case R.id.imagebutton_edit_ingredient_log_consumed:
                 // when symptom began option was clicked, so tell the user we'll go change that
                 // date time
                 Toast.makeText(getContext(), mDateTime, Toast.LENGTH_SHORT).show();
@@ -180,7 +232,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
                         Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
 
                 break;
-            case R.id.imagebutton_ingredient_log_cooked_option:
+            case R.id.imagebutton_edit_ingredient_log_cooked:
                 // when symptom began option was clicked, so tell the user we'll go change that
                 // date time
                 Toast.makeText(getContext(), mDateTime, Toast.LENGTH_SHORT).show();
@@ -196,7 +248,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
                         Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
 
                 break;
-            case R.id.imagebutton_ingredient_log_acquired_option:
+            case R.id.imagebutton_edit_ingredient_log_acquired:
                 // changed date time was clicked, so tell the user we'll go change that date time
                 Toast.makeText(getContext(), mDateTime, Toast.LENGTH_SHORT).show();
 
@@ -206,32 +258,6 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
-
-                break;
-            case R.id.imagebutton_ingredient_log_name_option:
-
-                Toast.makeText(getContext(), mChangeIngredient, Toast.LENGTH_SHORT).show();
-                try {
-
-                    Util.startNextActivityActionChangeIdArray(thisActivity,
-                            mNextActivityClass,
-                            Util.ARGUMENT_ACTION_EDIT,
-                            Util.ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT,
-                            Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY, mLogIdString);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            case R.id.imagebutton_ingredient_log_amount_option:
-
-                Toast.makeText(getContext(), mChangeIntensityToastString, Toast.LENGTH_SHORT).show();
-                mBundleNext =
-                        Util.setEditSymptomLogBundle(mLogIdString,
-                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
-                Util.startNextFragmentBundle(thisActivity,
-                        getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit, new SymptomIntensityFragment(), mBundleNext);
 
                 break;
             default:

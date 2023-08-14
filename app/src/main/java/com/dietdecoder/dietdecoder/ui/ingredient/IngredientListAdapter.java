@@ -97,7 +97,7 @@ public class IngredientListAdapter extends ListAdapter<Ingredient, IngredientVie
     @Override
     public boolean areContentsTheSame(@NonNull Ingredient oldItem, @NonNull Ingredient newItem) {
       // check all parts of Ingredient to see if they're the same
-      isEqualName = oldItem.getIngredientName().equals(newItem.getIngredientName());
+      isEqualName = oldItem.getName().equals(newItem.getName());
       //TODO add other properties of ingredient type here
       //isEqualConcern = oldItem.getIngredientConcern().equals(newItem.getIngredientConcern());
       return isEqualName && isEqualConcern;

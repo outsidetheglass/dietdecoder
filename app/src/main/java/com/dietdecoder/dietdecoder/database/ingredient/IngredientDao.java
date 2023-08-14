@@ -32,47 +32,36 @@ public interface IngredientDao {
   @Update
   void daoUpdateIngredient(Ingredient ingredient);
 
-  @Query("UPDATE ingredient_table SET ingredientChemicalName = :newIngredientChemicalName WHERE ingredientChemicalName = :oldIngredientChemicalName AND ingredientName = :oldIngredientName")
-  void daoUpdateIngredientChemicalName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientChemicalName);
-
-  @Query("UPDATE ingredient_table SET ingredientName = :newIngredientName WHERE ingredientName = :oldIngredientName AND ingredientChemicalName = :oldIngredientChemicalName")
-  void daoUpdateIngredientName(String oldIngredientName, String oldIngredientChemicalName, String newIngredientName);
-
 
   // Sort by specific chemical and alphabetize them by symptom name
-  @Query("SELECT * FROM ingredient_table ORDER BY ingredientName ASC")
+  @Query("SELECT * FROM ingredient_table ORDER BY name ASC")
   List<Ingredient> daoGetAllIngredientArrayList();
 
 
   // LiveData is a lifecycle library class for live database access
   // Select all ingredients from table and alphabetize them by name
-  @Query("SELECT * FROM ingredient_table ORDER BY ingredientName ASC")
+  @Query("SELECT * FROM ingredient_table ORDER BY name ASC")
   LiveData<List<Ingredient>> daoGetAlphabetizedIngredients();
 
-  // Sort by specific chemical and alphabetize them by ingredient name
-  @Query("SELECT * FROM ingredient_table WHERE ingredientChemicalName LIKE :daoChemicalName ORDER BY ingredientName ASC")
-  LiveData<List<Ingredient>> daoGetIngredientsWithChemicalName(String daoChemicalName);
-
-  @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName")
+  @Query("SELECT * FROM ingredient_table WHERE name = :daoIngredientName")
   Ingredient daoGetIngredientFromName(String daoIngredientName);
 
-
-  @Query("SELECT * FROM ingredient_table WHERE ingredientName = :daoIngredientName AND ingredientChemicalName = :daoIngredientChemicalName")
-  Ingredient daoGetIngredientFromNameChemicalName(String daoIngredientName, String daoIngredientChemicalName);
-
-
-  @Query("SELECT * FROM ingredient_table WHERE ingredientName LIKE :searchIngredientName ORDER BY" +
-          " ingredientName ASC LIMIT 1")
+  @Query("SELECT * FROM ingredient_table WHERE name LIKE :searchIngredientName ORDER BY" +
+          " name ASC LIMIT 1")
   Ingredient daoGetIngredientFromSearchName(String searchIngredientName);
 
   @Query("SELECT * FROM ingredient_table " +
-          "WHERE ingredientName " +
+          "WHERE name " +
           "LIKE :searchIngredientName " +
-          "ORDER BY ingredientName ASC")
+          "ORDER BY name ASC")
   LiveData<List<Ingredient>> daoGetAllIngredientsMatchingSearchName(String searchIngredientName);
 
-  @Query("SELECT * FROM ingredient_table WHERE ingredientId LIKE :searchIngredientId")
+  @Query("SELECT * FROM ingredient_table WHERE id LIKE :searchIngredientId")
   Ingredient daoGetIngredientFromId(UUID searchIngredientId);
+
+  @Query("SELECT * FROM ingredient_table LIMIT 1")
+  Ingredient daoGetAnyIngredient();
+
 
 
   /*

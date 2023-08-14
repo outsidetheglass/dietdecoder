@@ -40,7 +40,7 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
     // only show the symptom if it's one of the ones to track
     if ( this.mListOnlyTracked ){
       // if true and in here, then it's a symptom we need to list only if user said to track it
-      if (currentSymptom.getSymptomToTrack()) {
+      if (currentSymptom.getTrackOrNot()) {
         holder.bind(currentSymptom);
       }
     } else{
@@ -68,10 +68,10 @@ public class SymptomListAdapter extends ListAdapter<Symptom, SymptomViewHolder> 
     @Override
     public boolean areContentsTheSame(@NonNull Symptom oldItem, @NonNull Symptom newItem) {
       // check all parts of Symptom to see if they're the same
-      isEqualName = oldItem.getSymptomName().equals(newItem.getSymptomName());
-      isEqualSymptomDescription = oldItem.getSymptomDescription().equals(newItem.getSymptomDescription());
-      isEqualSymptomCategory = oldItem.getSymptomCategory().equals(newItem.getSymptomCategory());
-      isEqualSymptomSufferType = oldItem.getSymptomSufferType().equals(newItem.getSymptomSufferType());
+      isEqualName = oldItem.getName().equals(newItem.getName());
+      isEqualSymptomDescription = oldItem.getDescription().equals(newItem.getDescription());
+      isEqualSymptomCategory = oldItem.getCategory().equals(newItem.getCategory());
+      isEqualSymptomSufferType = oldItem.getSufferType().equals(newItem.getSufferType());
       return isEqualName && isEqualSymptomDescription && isEqualSymptomCategory && isEqualSymptomSufferType;
     } //end areContentsTheSame
 

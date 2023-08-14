@@ -125,27 +125,13 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
   private void setVariables() {
     // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
     //  its name doesn't match what's typed in the search bar
-    mIngredientName = mIngredient.getIngredientName();
-    mIngredientIdString = mIngredient.getIngredientId().toString();
-    // if the other values exist, list them
-    if ( !Objects.isNull(mIngredient.getIngredientChemicalName()) ) {
-      mIngredientChemicalName = mIngredient.getIngredientChemicalName().toString();
+    mIngredientName = mIngredient.getName();
+    mIngredientIdString = mIngredient.getId().toString();
 
-
-      if ( !Objects.isNull(mIngredient.getIngredientChemicalAmountNumber()) ) {
-        mIngredientChemicalAmountNumber = mIngredient.getIngredientChemicalAmountNumber();
-        mIngredientChemicalAmountNumberString = mIngredientChemicalAmountNumber.toString();
+    if ( !Objects.isNull(mIngredient.getBrand()) ) {
+      mIngredientBrand = mIngredient.getBrand();
 
       }
-      if ( !Objects.isNull(mIngredient.getIngredientChemicalAmountUnit()) ) {
-        mIngredientChemicalAmountUnit = mIngredient.getIngredientChemicalAmountUnit().toString();
-
-      }
-    }
-    if ( !Objects.isNull(mIngredient.getIngredientBrand()) ) {
-      mIngredientBrand = mIngredient.getIngredientBrand();
-
-    }
   }
 
   static IngredientViewHolder create(ViewGroup ingredientParent) {

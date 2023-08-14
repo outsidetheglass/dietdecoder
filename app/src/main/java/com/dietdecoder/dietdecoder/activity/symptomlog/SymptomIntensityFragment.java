@@ -140,7 +140,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         mCurrentSymptomId = mCurrentSymptomLog.getLogSymptomId();
         mCurrentSymptom =
                 mSymptomViewModel.viewModelGetSymptomFromId(mCurrentSymptomId);
-        mCurrentSymptomName = mCurrentSymptom.getSymptomName();
+        mCurrentSymptomName = mCurrentSymptom.getName();
 
 
         setCurrentSymptomTextViewNumberPicker(mCurrentLogIdString);

@@ -52,7 +52,7 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
     // TODO fix, this will break if the ingredient is one that isn't in the ingredient database yet
     // find the ingredient matching the id of the log we were given
     int i = 0;
-    UUID idToCheck = mIngredientArrayList.get(i).getIngredientId();
+    UUID idToCheck = mIngredientArrayList.get(i).getId();
     // while this ingredient in the array's id does not match the current ingredient log's
     // ingredient id
     // and don't go out of bounds by checking for an index of the array bigger than the array size
@@ -60,7 +60,7 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
             currentIngredientLogIngredientId ) && i < mIngredientArrayList.size()) {
       // check the next ingredient id in the array
       i++;
-      idToCheck = mIngredientArrayList.get(i).getIngredientId();
+      idToCheck = mIngredientArrayList.get(i).getId();
     }
     // when we break, check it's the correct ingredient, if it's not that means it was the last in
     // the list and is invalid

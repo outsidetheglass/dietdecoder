@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
+import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptom.SymptomDao;
 
@@ -35,6 +36,12 @@ class SymptomRepository {
     //use the dao instantiated in the SymptomRepository method
     // to get all symptoms, alphabetized
     return mSymptomDao.daoGetSymptomsToTrack();
+  }
+
+  public LiveData<List<Symptom>> repositoryGetAllSymptomsMatchingSearchName(String searchSymptomName) {
+    // percent sign is the SQL wildcard
+    String searchableSqlString = "%" + searchSymptomName + "%";
+    return mSymptomDao.daoGetAllSymptomsMatchingSearchName(searchableSqlString);
   }
 
   // get only symptoms matching category from database

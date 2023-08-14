@@ -175,7 +175,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
                     mIngredientViewModel.viewModelGetFromId(mCurrentIngredientId);
 
             // then the name value
-            mCurrentIngredientName = mIngredient.getIngredientName();
+            mCurrentIngredientName = mIngredient.getName();
 
             // numbers to put in the number picker for how intense the ingredient is
             // colors for the backgrounds to differentiate the numbers easily
@@ -228,7 +228,7 @@ public class IngredientAmountFragment extends Fragment implements View.OnClickLi
         mCurrentIngredientId = mCurrentIngredientLog.getLogIngredientId();
         Ingredient mCurrentIngredient =
                 mIngredientViewModel.viewModelGetFromId(mCurrentIngredientId);
-        mCurrentIngredientName = mCurrentIngredient.getIngredientName();
+        mCurrentIngredientName = mCurrentIngredient.getName();
 
         // put in the UI what ingredient we're changing now
         mTextViewIngredientName.setText(mCurrentIngredientName);

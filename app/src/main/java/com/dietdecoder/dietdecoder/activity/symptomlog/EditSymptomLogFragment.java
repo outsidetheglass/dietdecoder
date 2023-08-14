@@ -109,7 +109,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                     mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getLogSymptomId());
 
             // then the name value
-            mSymptomLogSymptomName = mSymptom.getSymptomName();
+            mSymptomLogSymptomName = mSymptom.getName();
 
             // then use the log to set the text views
             // set the default text to the data

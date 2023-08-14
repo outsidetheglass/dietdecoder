@@ -97,11 +97,11 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
     // listOnlyTracked is to list only the symptoms that have to track set to true
 
     mSymptom = symptom;
-    String symptomName = symptom.getSymptomName();
-    mSymptomIdString = symptom.getSymptomId().toString();
-    String symptomCategory = symptom.getSymptomCategory();
-    String symptomDescription = symptom.getSymptomDescription();
-    String symptomSufferType = symptom.getSymptomSufferType();
+    String symptomName = symptom.getName();
+    mSymptomIdString = symptom.getId().toString();
+    String symptomCategory = symptom.getCategory();
+    String symptomDescription = symptom.getDescription();
+    String symptomSufferType = symptom.getSufferType();
 
     String unImportantString =
             Util.setPlainDescriptionString(symptomDescription);

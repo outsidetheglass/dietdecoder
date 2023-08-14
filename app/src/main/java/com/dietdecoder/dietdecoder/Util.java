@@ -292,6 +292,7 @@ public class Util {
             "change_ingredient_all_instants";
     public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_BRAND = "change_ingredient_log_brand";
     public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT = "change_ingredient_log_amount";
+    public static final String ARGUMENT_CHANGE_INGREDIENT_LOG_NAME = "change_ingredient_log_name";
 
 
     public static final String ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS =
@@ -1113,12 +1114,12 @@ public class Util {
             symptomSelectedArrayList = symptomListAdapter.getSelectedSymptomList();
             // get our UUID directly from the string
             // we only need the first one if we even use it
-            id = symptomSelectedArrayList.get(0).getSymptomId();
+            id = symptomSelectedArrayList.get(0).getId();
 
         } else if ( !Objects.isNull(ingredientListAdapter) ) {
             ingredientSelectedArrayList =
                     ingredientListAdapter.getSelectedList();
-            id = ingredientSelectedArrayList.get(0).getIngredientId();
+            id = ingredientSelectedArrayList.get(0).getId();
 
         }
         // convert them to id strings and then that to one string
@@ -2809,7 +2810,7 @@ or at least achieves the same effect.
             for (int i=0; i < arrayListSize; i++) {
                 // now get the log associated with each UUID
                 UUID id = symptomArrayList.get(i)
-                        .getSymptomId();
+                        .getId();
                 // and add that id as a string into the array
                 stringArrayList.add( String.valueOf(id) );
             }
@@ -2818,7 +2819,7 @@ or at least achieves the same effect.
             arrayListSize = ingredientArrayList.size();
             for (int i=0; i < arrayListSize; i++) {
                 UUID id = ingredientArrayList.get(i)
-                        .getIngredientId();
+                        .getId();
                 stringArrayList.add( String.valueOf(id) );
             }
 
@@ -2868,7 +2869,7 @@ or at least achieves the same effect.
 
             // now get the log associated with each UUID
             UUID id = objectArrayList.get(i)
-                    .getSymptomId();
+                    .getId();
             // and add that id as a string into the array
             stringArrayList.add( String.valueOf(id) );
         }
@@ -2908,7 +2909,7 @@ or at least achieves the same effect.
 
             // now get the log associated with each UUID
             UUID id = objectArrayList.get(i)
-                    .getIngredientId();
+                    .getId();
             // and add that id as a string into the array
             stringArrayList.add( String.valueOf(id) );
         }

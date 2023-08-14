@@ -76,7 +76,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
 
     // info on the symptomlog
     // in order to bind it to the recyclerview
-    String mSymptomLogName = symptom.getSymptomName();
+    String mSymptomLogName = symptom.getName();
 //    String mSymptomLogName = symptomLog.getSymptomLogSymptomName();
      mSymptomLogIdString = symptomLog.getLogId().toString();
     String mSymptomLogDescription = symptomLog.getLogSymptomDescription();

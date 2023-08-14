@@ -12,6 +12,7 @@ import com.dietdecoder.dietdecoder.database.Converters;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -21,23 +22,19 @@ public class Symptom {
 
   @PrimaryKey
   @NonNull
-  @ColumnInfo(name = "symptomId")
-  private UUID mSymptomId;
+  @ColumnInfo(name = "id")
+  private UUID mId;
 
   @NonNull
-  @ColumnInfo(name = "symptomName")
-  private String mSymptomName;
+  @ColumnInfo(name = "name")
+  private String mName;
 
-  @ColumnInfo(name = "symptomDescription")
-  private String mSymptomDescription;
+  @ColumnInfo(name = "description")
+  private String mDescription;
 
   //how much of a concern is this symptom for the user
-  @ColumnInfo(name = "symptomConcernScale")
-  private Integer mSymptomConcernScale;
-
-  // how long this symptom usually lasts
-  @ColumnInfo(name = "symptomDurationSeconds")
-  private Integer mSymptomDurationSeconds;
+  @ColumnInfo(name = "concernScale")
+  private Integer mConcernScale;
 
   // like 1 for 1/10
   // This will just go in Log
@@ -49,92 +46,103 @@ public class Symptom {
 //  private Integer mSymptomIntensity;
 
   // this is for cardio, respiratory, skin, etc
-  @ColumnInfo(name = "symptomCategory")
-  private String mSymptomCategory;
+  @ColumnInfo(name = "category")
+  private String mCategory;
 
   // this is burning pain, body disassociation, stabbing pain, depression, etc
-  @ColumnInfo(name = "symptomSufferType")
-  private String mSymptomSufferType;
+  @ColumnInfo(name = "sufferType")
+  private String mSufferType;
 
   // track this symptom or not
-  @ColumnInfo(name = "symptomToTrack")
-  private Boolean mSymptomToTrack;
+  @ColumnInfo(name = "trackOrNot")
+  private Boolean mTrackOrNot;
 
 
   //TODO add conditions linked with this symptom
 
   // use Ignore for which parameters are optional
   @Ignore
-  public Symptom(String symptomName) {
+  public Symptom(String name) {
     // if only symptom name was given
     // empty for description and type of suffering
     // default category is other
-    this(symptomName, "", "Other", "", Boolean.FALSE, 1, 3600);
+    this(name, "", "Other", "", Boolean.FALSE, 1);
   }
-  public Symptom(@NonNull String symptomName,
-                 String symptomDescription,
-                 String symptomCategory, String symptomSufferType, Boolean symptomToTrack,
-                 Integer symptomConcernScale, Integer symptomDurationSeconds) {
-    this.mSymptomId = UUID.randomUUID();
-    this.mSymptomName = symptomName;
-    this.mSymptomDescription = symptomDescription;
-    this.mSymptomCategory = symptomCategory;
-    //this.mSymptomIntensity = symptomIntensity;
-    this.mSymptomSufferType = symptomSufferType;
-    this.mSymptomToTrack = symptomToTrack;
-    this.mSymptomConcernScale = symptomConcernScale;
-    this.mSymptomDurationSeconds = symptomDurationSeconds;
+  public Symptom(@NonNull String name,
+                 String description,
+                 String category, String sufferType, Boolean trackOrNot,
+                 Integer concernScale) {
+    this.mId = UUID.randomUUID();
+    this.mName = name;
+    this.mDescription = description;
+    this.mCategory = category;
+    this.mSufferType = sufferType;
+    this.mTrackOrNot = trackOrNot;
+    this.mConcernScale = concernScale;
 
   }
 
-  public UUID getSymptomId(){return this.mSymptomId;}
-  public void setSymptomId(UUID id) {
-    this.mSymptomId = id;
+  public UUID getId(){return this.mId;}
+  public void setId(UUID id) {
+    this.mId = id;
   }
 
-  public String getSymptomName(){return this.mSymptomName;}
-  public void setSymptomName(String name) {
-    this.mSymptomName = name;
+  public String getName(){return this.mName;}
+  public void setName(String name) {
+    this.mName = name;
   }
 
-  public String getSymptomDescription(){return this.mSymptomDescription;}
-  public void setSymptomDescription(String description) {
-    this.mSymptomDescription = description;
+  public String getDescription(){return this.mDescription;}
+  public void setDescription(String description) {
+    this.mDescription = description;
   }
 
-  public String getSymptomCategory(){return this.mSymptomCategory;}
-  public void setSymptomCategory(String category) {
-    this.mSymptomCategory = category;
+  public String getCategory(){return this.mCategory;}
+  public void setCategory(String category) {
+    this.mCategory = category;
   }
 
-//  public Integer getSymptomIntensity(){return this.mSymptomIntensity;}
-public String getSymptomSufferType(){return this.mSymptomSufferType;}
-  public void setSymptomSufferType(String sufferType) {
-    this.mSymptomSufferType = sufferType;
+public String getSufferType(){return this.mSufferType;}
+  public void setSufferType(String sufferType) {
+    this.mSufferType = sufferType;
   }
 
-  public Boolean getSymptomToTrack(){return this.mSymptomToTrack;}
-  public void setSymptomToTrack(Boolean track) {
-    this.mSymptomToTrack = track;
+  public Boolean getTrackOrNot(){return this.mTrackOrNot;}
+  public void setTrackOrNot(Boolean track) {
+    this.mTrackOrNot = track;
   }
 
+  public Integer getConcernScale() {
+    return(this.mConcernScale);
+  }
+  public void setConcernScale(Integer integer) {
+    this.mConcernScale = integer;
+  }
 
-  public Integer getSymptomConcernScale() {
-    return(this.mSymptomConcernScale);
-  }
-  public void setSymptomConcernScale(Integer integer) {
-    this.mSymptomConcernScale = integer;
-  }
-
-  public Integer getSymptomDurationSeconds() {
-    return(this.mSymptomDurationSeconds);
-  }
-  public void setSymptomDurationSeconds(Integer integer) {
-    this.mSymptomDurationSeconds = integer;
-  }
 
   public String toString(){
-
-    return "\nName: " + this.mSymptomName + "\nId: " + this.mSymptomId.toString();
+    String description = "";
+    if ( !Objects.isNull(this.mDescription) ) {
+      description = "\nDescription: " + this.mDescription.toString();
+    }
+    String category = "";
+    if ( !Objects.isNull(this.mCategory) ) {
+      category = "\nCategory: " + this.mCategory.toString();
+    }
+    String sufferType = "";
+    if ( !Objects.isNull(this.mSufferType) ) {
+      sufferType = "\nSufferType: " + this.mSufferType.toString();
+    }
+    String trackOrNot = "";
+    if ( !Objects.isNull(this.mTrackOrNot) ) {
+      trackOrNot = "\nTrackOrNot: " + this.mTrackOrNot.toString();
+    }
+    String concernScale = "";
+    if ( !Objects.isNull(this.mConcernScale) ) {
+      concernScale = "\nConcernScale: " + this.mConcernScale.toString();
+    }
+    return "\nId: " + this.mId.toString() +
+            "\nName: " + this.mName +
+            description + category + sufferType + trackOrNot + concernScale;
   }
 } //end Symptom Entity

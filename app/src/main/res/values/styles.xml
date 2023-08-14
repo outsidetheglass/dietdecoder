@@ -5,6 +5,7 @@
     <item name="android:textColor">@color/color_title</item>
     <item name="android:textSize">@dimen/title</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:layout_height">@dimen/layout_height_title</item>
   </style>
 
   <style name="textview_subtitle">

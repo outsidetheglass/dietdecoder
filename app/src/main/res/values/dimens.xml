@@ -20,6 +20,8 @@
   <dimen name="main_content_layout_height">380dp</dimen>
   <dimen name="main_content_layout_width">280dp</dimen>
   <dimen name="half_main_content_layout_width">120dp</dimen>
+  <dimen name="layout_height_title">90dp</dimen>
+
 
   <dimen name="sick_face_radius">24dp</dimen>
   <dimen name="viewport_sick_face">24</dimen>
@@ -28,5 +30,6 @@
   <dimen name="viewport_icon_in_option_button">24</dimen>
 
 
+  <dimen name="width_height_roundcorners">40dp</dimen>
 
 </resources>

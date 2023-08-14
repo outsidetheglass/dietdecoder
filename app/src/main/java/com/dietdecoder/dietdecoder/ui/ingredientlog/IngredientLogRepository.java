@@ -135,6 +135,6 @@ class IngredientLogRepository {
 
   String repositoryGetIngredientNameFromIngredientId(UUID ingredientId){
 
-    return mIngredientDao.daoGetIngredientFromId(ingredientId).getIngredientName();
+    return mIngredientDao.daoGetIngredientFromId(ingredientId).getName();
   }
 } //end IngredientLogRepository class

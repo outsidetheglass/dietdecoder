@@ -28,21 +28,6 @@ class IngredientRepository {
   }
 
 
-  // queries on a separate thread
-  // Observed LiveData will notify the observer when the data has changed.
-  // TODO I deleted the private declaration before, but it might need it
-  LiveData<List<Ingredient>> repositoryGetAllIngredients() {
-    //use the dao instantiated in the IngredientRepository method
-    // to get all ingredients, alphabetized
-    return mIngredientDao.daoGetAlphabetizedIngredients();
-  }
-
-  // get only concern from database for ingredients
-  //TODO add other properties of ingredient type here
-//  LiveData<List<Ingredient>> repositoryGetIngredientsWithConcern(String concern) {
-//    return mIngredientDao.daoGetIngredientsWithConcern(concern);
-//  }
-
   // get only given ingredient using name
   public Ingredient repositoryGetIngredientFromName(String ingredientName) {
     return mIngredientDao.daoGetIngredientFromName(ingredientName);
@@ -53,12 +38,10 @@ class IngredientRepository {
   }
 
 
-
   // get only symptoms matching category from database
   ArrayList<Ingredient> repositoryGetAllIngredientArrayList() {
     return new ArrayList<Ingredient>(mIngredientDao.daoGetAllIngredientArrayList());
   }
-
 
 
   public LiveData<List<Ingredient>> repositoryGetAllIngredientsMatchingSearchName(String searchIngredientName) {
@@ -66,55 +49,41 @@ class IngredientRepository {
     String searchableSqlString = "%" + searchIngredientName + "%";
     return mIngredientDao.daoGetAllIngredientsMatchingSearchName(searchableSqlString);
   }
+
   public Ingredient repositoryGetIngredientFromSearchName(String searchIngredientName) {
     return mIngredientDao.daoGetIngredientFromSearchName(searchIngredientName);
   }
 
-  //TODO add other properties of ingredient type here
-//  public Ingredient repositoryGetIngredientFromNameConcern(String ingredientName, String ingredientConcern) {
-//    return mIngredientDao.daoGetIngredientFromNameConcern(ingredientName, ingredientConcern);
-//  }
 
   // You must call this on a non-UI thread or your app will throw an exception. Room ensures
   // that you're not doing any long running operations on the main thread, blocking the UI.
-  void repositoryInsertIngredient(Ingredient ingredient) {
+  void repositoryInsert(Ingredient ingredient) {
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoInsertIngredient(ingredient);
     });
-
   } // end insert
 
-  void repositoryUpdateIngredient(Ingredient ingredient) {
+  void repositoryUpdate(Ingredient ingredient) {
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoUpdateIngredient(ingredient);
     });
   }
 
   // You must call this on a non-UI thread
-  void repositoryDeleteIngredient(Ingredient ingredient) {
+  void repositoryDelete(Ingredient ingredient) {
     DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
       mIngredientDao.daoDeleteIngredient(ingredient);
     });
-
   } // end delete
 
-//TODO add other properties of ingredient type here
-//  void repositoryUpdateConcern(String oldIngredientName, String oldIngredientConcern, String newIngredientConcern) {
-//
-//    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
-//      mIngredientDao.daoUpdateConcern(oldIngredientName, oldIngredientConcern, newIngredientConcern);
-//    });
-//
-//  } // end update concern
-
-  void repositoryUpdateIngredientName(String oldIngredientName, String oldIngredientConcern, String newIngredientName) {
-
-    DietDecoderRoomDatabase.databaseWriteExecutor.execute(() -> {
-      mIngredientDao.daoUpdateIngredientName(oldIngredientName, oldIngredientConcern, newIngredientName);
-    });
-
-  } // end update concern
-
+  // queries on a separate thread
+  // Observed LiveData will notify the observer when the data has changed.
+  // TODO I deleted the private declaration before, but it might need it
+  LiveData<List<Ingredient>> repositoryGetAllIngredients() {
+    //use the dao instantiated in the IngredientRepository method
+    // to get all ingredients, alphabetized
+    return mIngredientDao.daoGetAlphabetizedIngredients();
+  }
 
 
 } //end IngredientRepository class

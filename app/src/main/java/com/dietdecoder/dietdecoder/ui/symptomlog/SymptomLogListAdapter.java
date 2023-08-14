@@ -56,14 +56,14 @@ public class SymptomLogListAdapter extends ListAdapter<SymptomLog, SymptomLogVie
     // TODO fix, this will break if the symptom is one that isn't in the symptom database yet
     // find the symptom matching the id of the log we were given
     int i = 0;
-    UUID symptomIdToCheck = mSymptomArrayList.get(i).getSymptomId();
+    UUID symptomIdToCheck = mSymptomArrayList.get(i).getId();
     // while this symptom in the array's id does not match the current symptom log's symptom id
     // and don't go out of bounds by checking for an index of the array bigger than the array size
     while ( !Objects.equals(symptomIdToCheck,
             currentSymptomLogSymptomId ) && i < mSymptomArrayList.size()) {
       // check the next symptom id in the array
       i++;
-      symptomIdToCheck = mSymptomArrayList.get(i).getSymptomId();
+      symptomIdToCheck = mSymptomArrayList.get(i).getId();
     }
     // when we break, check it's the correct symptom, if it's not that means it was the last in
     // the list and is invalid
