@@ -112,9 +112,9 @@ public class ListIngredientActivity extends AppCompatActivity implements View.On
               });
 
       // FAB to add new log
-      addButton = findViewById(R.id.add_button_list_ingredient_log);
+      addButton = findViewById(R.id.add_button_list_ingredient);
       addButton.setOnClickListener(this);
-      mEditTextSearch = findViewById(R.id.edittext_choose_ingredient_search);
+      mEditTextSearch = findViewById(R.id.edittext_list_ingredient_search);
       mEditTextSearch.setOnClickListener(this::onClick);
     }
 

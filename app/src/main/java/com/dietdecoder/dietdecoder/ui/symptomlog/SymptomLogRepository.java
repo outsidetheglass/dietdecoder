@@ -155,9 +155,24 @@ class SymptomLogRepository {
 
   // get most recent symptom log with symptom
   SymptomLog repositoryGetMostRecentSymptomLogWithSymptom(UUID symptomId){
+    //TODO fix this, this might get used badly if called from not adding a symptom log
+    SymptomLog symptomLogWithSameSymptom = null;
 
-    SymptomLog symptomLogWithSameSymptom =
-          mSymptomLogDao.daoGetSomeSymptomLogFromSymptomId(symptomId, 1).get(0);
+    if ( !Objects.isNull(mSymptomLogDao.daoGetAllSymptomLogFromSymptomId(symptomId)) ) {
+      // defaults for getting most recent, what to do when there's only one
+      Integer howManyToGet = 1;
+      Integer whichToGet = 0;
+      Integer symptomLogSize = mSymptomLogDao.daoGetAllSymptomLogFromSymptomId(symptomId).size();
+
+      if (symptomLogSize > 1) {
+        // get two and return the one before last, because this gets called in add log
+        howManyToGet = 2;
+        whichToGet = 1;
+      }
+      symptomLogWithSameSymptom =
+              mSymptomLogDao.daoGetSomeSymptomLogFromSymptomId(symptomId, howManyToGet)
+                      .get(whichToGet);
+    }
     return symptomLogWithSameSymptom;
   }
 

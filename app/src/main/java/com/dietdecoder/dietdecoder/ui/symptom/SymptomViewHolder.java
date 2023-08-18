@@ -54,6 +54,7 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
   private SymptomViewHolder(View itemView) {
     super(itemView);
     mSymptomViewHolderContext = itemView.getContext();
+    mSelectedArrayList = new ArrayList<>();
 
     if (mSymptomViewHolderContext.getClass() == ChooseSymptomActivity.class) {
       mTextViewItem = id.textview_choose_symptom_item;

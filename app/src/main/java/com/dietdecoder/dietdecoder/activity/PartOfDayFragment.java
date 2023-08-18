@@ -94,7 +94,7 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Log.d(TAG, " \nmBundle in log part of day: \n" + getArguments().toString());
+        Log.d(TAG, "PartOfDayFragment onViewCreated : \n" + getArguments().toString());
         thisActivity = getActivity();
 
         // check the bundle exists and has what to change and an id array string

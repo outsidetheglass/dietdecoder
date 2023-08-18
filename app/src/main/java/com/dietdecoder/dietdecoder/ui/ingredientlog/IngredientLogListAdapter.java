@@ -49,35 +49,39 @@ public class IngredientLogListAdapter extends ListAdapter<IngredientLog, Ingredi
     Ingredient currentIngredientLogIngredient = null;
     UUID currentIngredientLogIngredientId = currentIngredientLog.getLogIngredientId();
 
-    // TODO fix, this will break if the ingredient is one that isn't in the ingredient database yet
-    // find the ingredient matching the id of the log we were given
-    int i = 0;
-    UUID idToCheck = mIngredientArrayList.get(i).getId();
-    // while this ingredient in the array's id does not match the current ingredient log's
-    // ingredient id
-    // and don't go out of bounds by checking for an index of the array bigger than the array size
-    while ( !Objects.equals(idToCheck,
-            currentIngredientLogIngredientId ) && i < mIngredientArrayList.size()) {
-      // check the next ingredient id in the array
-      i++;
-      idToCheck = mIngredientArrayList.get(i).getId();
-    }
-    // when we break, check it's the correct ingredient, if it's not that means it was the last in
-    // the list and is invalid
-    if ( Objects.equals(idToCheck,
-            currentIngredientLogIngredientId )) {
-      currentIngredientLogIngredient = mIngredientArrayList.get(i);
+    if (!Objects.isNull(mIngredientArrayList)) {
+      // find the ingredient matching the id of the log we were given
+      int i = 0;
+      UUID idToCheck = mIngredientArrayList.get(i).getId();
+      // while this ingredient in the array's id does not match the current ingredient log's
+      // ingredient id
+      // and don't go out of bounds by checking for an index of the array bigger than the array size
+      while (!Objects.equals(idToCheck,
+              currentIngredientLogIngredientId) && i < mIngredientArrayList.size()) {
+        // check the next ingredient id in the array
+        i++;
+        idToCheck = mIngredientArrayList.get(i).getId();
+      }
+      // when we break, check it's the correct ingredient, if it's not that means it was the last in
+      // the list and is invalid
+      if (Objects.equals(idToCheck,
+              currentIngredientLogIngredientId)) {
+        currentIngredientLogIngredient = mIngredientArrayList.get(i);
+      } else {
+        //TODO add logic here for alerting user for broken ingredient
+        Log.d(TAG,
+                "ingredient in this ingredient log, this log id: " +
+                        currentIngredientLogIngredientId.toString() +
+                        " was not found in list of ingredients, need to add ingredient" +
+                        " and find out how this ingredient log got added without a valid ingredient" +
+                        ".");
+      }
+      holder.bind(currentIngredientLog, currentIngredientLogIngredient);
     } else {
-      //TODO add logic here for alerting user for broken ingredient
-      Log.d(TAG,
-              "ingredient in this ingredient log, this log id: " +
-                      currentIngredientLogIngredientId.toString() +
-                      " was not found in list of ingredients, need to add ingredient" +
-                      " and find out how this ingredient log got added without a valid ingredient" +
-                      ".");
+      // TODO what to do here if it's null, probably just nothing is fine. Log it maybe.
+      Log.d(TAG, "Ingredient array list does not exist.");
     }
 
-    holder.bind(currentIngredientLog, currentIngredientLogIngredient);
   }//end onBindViewHolder
 
   public static class LogDiff extends DiffUtil.ItemCallback<IngredientLog> {

@@ -159,7 +159,6 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         // set our default intensity to first in list if no symptom has been logged yet, and
         // set to most recent log with same symptom name if it exists
         mIntensitySelected = setIntensityDefault(mCurrentSymptomId);
-        mIntensitySelectedIndex = mIntensitySelected - 1;
 
 
         // set our numberpicker with our string of 1 to 10 and with default value of the same
@@ -297,7 +296,9 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         mIntensitySelected =  valuePicker+1;
 
         // set background color to change with new value
-        GradientDrawable gradient = (GradientDrawable) getResources().getDrawable(R.drawable.gradient);
+        GradientDrawable gradient = (GradientDrawable) getResources()
+                .getDrawable(R.drawable.gradient, thisContext.getTheme());
+        Log.d(TAG, String.valueOf(mIntensitySelected));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             gradient = setGradient(gradient, mIntensitySelected, mIntensityColorList);
         }
@@ -312,7 +313,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 symptomId ) )) {
             // set our integer to first in the list
             mIntensitySelected = 1;
-            Log.d(TAG,mSymptomLogViewModel.toString());
+            Log.d(TAG, mSymptomLogViewModel.toString());
         } else {
             // get the most recent intensity from most recent log
             // and set our default choice to to be that most recent value
@@ -321,6 +322,8 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                     .getLogSymptomIntensity();
             Log.d(TAG, String.valueOf(mIntensitySelected));
         }
+
+        mIntensitySelected = mIntensitySelected - 1;
         return mIntensitySelected;
     }
 
@@ -329,28 +332,37 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                                          int[] colorList){
         //TODO make this the default background color, white for now is fine
         int white = getResources().getColor(R.color.white, thisActivity.getTheme());
-        int maxIndex = colorList.length-1;
-        int selectedIndex = selectedInteger-1;
-        int previousIntensityColorInt = white, nextIntensityColorInt = white,
-                currentIntensityColorInt = colorList[selectedIndex];
+        int maxIndex = colorList.length -1;
+        int selectedIndex = selectedInteger;
+        //int selectedIndex = selectedInteger-1;
+        int previousIntensityColorInt = white;
+        int nextIntensityColorInt = white;
+        int currentIntensityColorInt = 0;
+        Log.d(TAG, "setGradient: " + String.valueOf(selectedIndex));
 //        Log.d(TAG, "maxIndex should be 9: " + maxIndex);
 //        Log.d(TAG, "selectedInteger should start at 1: " + selectedInteger);
-
 //        for (int str : colorList){
 //            Log.d(TAG, "colorList " + str);
 //        }
 
         // set which color we're using
-        if ( selectedIndex == 0 ) {
+        if ( selectedIndex <= 1 ) {
             // we're zero so let's leave it white to show top of numberpicker
             nextIntensityColorInt = colorList[selectedIndex + 1];
-        } else if ( selectedIndex == maxIndex ) {
+            currentIntensityColorInt = colorList[selectedIndex];
+        } else if ( selectedIndex >= maxIndex ) {
             // at bottom of picker so leave the next one white
             previousIntensityColorInt = colorList[selectedIndex - 1];
+            currentIntensityColorInt = colorList[selectedIndex-1];
         } else {
             // somewhere in the middle so set both
-            previousIntensityColorInt = colorList[selectedIndex - 1];
-            nextIntensityColorInt = colorList[selectedIndex + 1];
+//            previousIntensityColorInt = colorList[selectedIndex - 1];
+//            nextIntensityColorInt = colorList[selectedIndex + 1];
+//            currentIntensityColorInt = colorList[selectedIndex];
+
+            previousIntensityColorInt = colorList[selectedIndex - 2];
+            nextIntensityColorInt = colorList[selectedIndex];
+            currentIntensityColorInt = colorList[selectedIndex-1];
         }
 //        Log.d(TAG, "previousIntensityColorInt " + previousIntensityColorInt);
 //        Log.d(TAG, "currentIntensityColorInt " + currentIntensityColorInt);

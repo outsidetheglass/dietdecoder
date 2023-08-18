@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
+import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 import com.dietdecoder.dietdecoder.ui.ingredientlog.IngredientLogViewModel;
@@ -48,6 +49,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
     SymptomViewModel mSymptomViewModel = null;
     IngredientLog mIngredientLog = null;
     SymptomLog mSymptomLog = null;
+    Symptom mSymptom = null;
 
     String mQuestionTextViewString = null;
     String mCurrentLogIdString, mWhatToChange, mWhatToChangeJustNow, mWhatToChangeEarlierToday;
@@ -173,6 +175,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
         mSymptomLog =
                 mSymptomLogViewModel.viewModelGetLogFromLogId(UUID.fromString(mCurrentLogIdString));
 
+        mSymptom = mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getLogSymptomId());
         // for each string in array update that log's instant began
         // get the log associated with each UUID
         mSymptomLogArray = Util.setSymptomLogArrayFromStringArray(mLogIdStringArray,
@@ -248,7 +251,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
                 Util.setQuestionStringWhatToChangeJustNow( mWhatToChange,
                         questionStringIfBegin, questionStringIfChanged,
                         Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS,
-                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED );
+                        Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED, mSymptom.getName() );
         // set the question and what to change based on which of the instant options
         mQuestionTextViewString = questionJustNowBundle.getString(Util.ARGUMENT_QUESTION);
 

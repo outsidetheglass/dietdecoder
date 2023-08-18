@@ -228,7 +228,7 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
 //                break;
             case R.id.button_choose_ingredient_save:
                 // get int
-                Log.d(TAG, "in save bundle: " + mBundle.toString());
+                //Log.d(TAG, "in save bundle: " + mBundle.toString());
 
 
                 // check what to do based on if it's empty, editing, too many are selected,

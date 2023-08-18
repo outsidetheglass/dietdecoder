@@ -66,9 +66,13 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
           Ingredient ingredient = ingredientDaoWriteExecute();
           recipeDaoWriteExecute(ingredient.getId());
           ingredientLogDaoWriteExecute(ingredient.getId());
+          Log.d(TAG, ingredient.toString());
+          Log.d(TAG, "ingredientLogDaoWriteExecute");
 
           Symptom symptom = symptomDaoWriteExecute();
           symptomLogDaoWriteExecute(symptom.getId());
+          Log.d(TAG, symptom.toString());
+          Log.d(TAG, "symptomLogDaoWriteExecute");
         });
 
       }
@@ -139,6 +143,7 @@ public abstract class DietDecoderRoomDatabase extends RoomDatabase {
 
     IngredientLog ingredientLog  = new IngredientLog(ingredientId);
     ingredientLogDao.daoIngredientLogInsert(ingredientLog);
+    Log.d(TAG, ingredientLog.toString());
   }
 
   static final void recipeDaoWriteExecute(UUID ingredientId){
