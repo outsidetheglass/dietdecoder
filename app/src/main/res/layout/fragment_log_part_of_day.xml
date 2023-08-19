@@ -2,12 +2,12 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/constraintLayout_log_date_time_choices"
+  android:id="@+id/constraintLayout_log_part_of_day"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <TextView
-      android:id="@+id/textview_title_log_date_time_choices_time_fragment"
+      android:id="@+id/textview_title_log_part_of_day_time_fragment"
       android:text="@string/title_textview_new_log"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textview_title_log_date_time_choices_time_fragment"/>
+      app:layout_constraintTop_toBottomOf="@+id/textview_title_log_part_of_day_time_fragment"/>
 
   <Button
       android:id="@+id/button_log_part_of_day_early"

@@ -113,8 +113,8 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
 
 
         // get info about what date time we're starting from
-        mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
-        mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+//        mIngredientLogViewModel = new ViewModelProvider(this).get(IngredientLogViewModel.class);
+//        mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
 
         mWhatToChange = mBundle.getString(Util.ARGUMENT_CHANGE);
         // if we came from edit this will tell us

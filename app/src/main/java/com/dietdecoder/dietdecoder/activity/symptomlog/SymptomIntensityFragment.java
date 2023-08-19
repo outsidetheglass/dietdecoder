@@ -173,7 +173,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             gradient = setGradient(gradient, mIntensitySelected, mIntensityColorList);
         }
-        Log.d(TAG, " gradient " + gradient.toString());
+        //Log.d(TAG, " gradient " + gradient.toString());
         mNumberPicker.setBackground(gradient);
 
     }
@@ -298,7 +298,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         // set background color to change with new value
         GradientDrawable gradient = (GradientDrawable) getResources()
                 .getDrawable(R.drawable.gradient, thisContext.getTheme());
-        Log.d(TAG, String.valueOf(mIntensitySelected));
+        //Log.d(TAG, String.valueOf(mIntensitySelected));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             gradient = setGradient(gradient, mIntensitySelected, mIntensityColorList);
         }
@@ -313,14 +313,14 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 symptomId ) )) {
             // set our integer to first in the list
             mIntensitySelected = 1;
-            Log.d(TAG, mSymptomLogViewModel.toString());
+           // Log.d(TAG, mSymptomLogViewModel.toString());
         } else {
             // get the most recent intensity from most recent log
             // and set our default choice to to be that most recent value
             mIntensitySelected = mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
                             symptomId )
                     .getLogSymptomIntensity();
-            Log.d(TAG, String.valueOf(mIntensitySelected));
+           // Log.d(TAG, String.valueOf(mIntensitySelected));
         }
 
         mIntensitySelected = mIntensitySelected - 1;
@@ -338,7 +338,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         int previousIntensityColorInt = white;
         int nextIntensityColorInt = white;
         int currentIntensityColorInt = 0;
-        Log.d(TAG, "setGradient: " + String.valueOf(selectedIndex));
+       // Log.d(TAG, "setGradient: " + String.valueOf(selectedIndex));
 //        Log.d(TAG, "maxIndex should be 9: " + maxIndex);
 //        Log.d(TAG, "selectedInteger should start at 1: " + selectedInteger);
 //        for (int str : colorList){

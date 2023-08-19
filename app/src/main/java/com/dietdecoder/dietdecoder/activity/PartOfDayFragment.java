@@ -108,6 +108,7 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
         mAction = mBundle.getString(Util.ARGUMENT_ACTION);
         mIsEdit = Util.isActionEditBundle(mBundle);
 
+        Log.d(TAG, "PartOfDayFragment mBundleNext : \n" + mBundleNext.toString());
 
         questionTextView = view.findViewById(R.id.textview_question_log_part_of_day_specific_time_range);
 
@@ -242,9 +243,11 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
     // set which fragment container we're using and the question and visibility of optional button
     private void setDependentUI(int fragmentContainer, int questionStringInt, int
             allDayButtonVisibleOrNot){
+
         // when we have to replace the fragment container, replace the right one
         mFragmentContainer = fragmentContainer;
 
+        Log.d(TAG, "setDependentUI mFragmentContainer " + String.valueOf(mFragmentContainer));
         //remove the all day button if it's a ingredient log,
         // since how long it took to eat something isn't something particularly helpful to record
         // or start the listener for the all day symptom log button
@@ -310,8 +313,15 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
         setValidVisibilityInstants(mSymptomLog.getInstantBegan(), null,
                 mSymptomLog.getInstantChanged());
 
-        // if consumed hasn't been set yet, then that's what we're changing
-        if ( Util.isSymptomLogWhatToChangeSetToBegin(mWhatToChange) ){
+        if ( Util.isSymptomLogWhatToChangeSetToChanged(mWhatToChange) ) {
+            // fragmentContainer, questionStringInt, allDayButtonVisibleOrNot
+            setDependentUI(Util.fragmentContainerViewAddSymptomLog,
+                    R.string.question_textview_new_symptom_log_changed_time,
+                    View.VISIBLE);
+            //nextFragment, instantToCheck
+            setWhatToChangeValues(null, mSymptomLog.getInstantChanged());
+        } else  {
+            // if consumed hasn't been set yet, then that's what we're changing
             // fragmentContainer, questionStringInt, allDayButtonVisibleOrNot
             setDependentUI(Util.fragmentContainerViewAddSymptomLog,
                     R.string.question_textview_new_symptom_log_begin_time,
@@ -327,14 +337,6 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
 //                // if it's today and we're setting begin, earliest is midnight of today
 //                mLongestAgoIsMidnight = Boolean.TRUE;
 //            }
-        }
-        else if ( Util.isSymptomLogWhatToChangeSetToChanged(mWhatToChange) ) {
-            // fragmentContainer, questionStringInt, allDayButtonVisibleOrNot
-            setDependentUI(Util.fragmentContainerViewAddSymptomLog,
-                    R.string.question_textview_new_symptom_log_changed_time,
-                    View.VISIBLE);
-            //nextFragment, instantToCheck
-            setWhatToChangeValues(null, mSymptomLog.getInstantChanged());
         }
 
         // set a listener on our symptom log only button, saying the symptom lasted all day
@@ -358,22 +360,26 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
 
         if ( mSettingIngredientLog ){
             setIngredientLogDependentValues();
+            // get the date time of current log so we can set the default view with it
+            mDateTime = Util.getDateTimeFromChange(mWhatToChange, mIngredientLog, null);
+
+            // set buttons invisible based on logic for
+            // which one had to happen before or after another
+            setButtonVisibilityByInstantAlreadySet(mMostRecentInstant, mMiddleInstant,
+                    mLongestAgoInstant);
         }
         else if ( mSettingSymptomLog ){
             setSymptomLogDependentValues();
+            //set times viewable
+            mDateTime = Util.getDateTimeFromChange(mWhatToChange, null, mSymptomLog);
+            setButtonVisibilityByInstantAlreadySet(mMostRecentInstant, null,
+                    mLongestAgoInstant);
         }
         else {
             Log.d(TAG, "Neither symptom log nor ingredient log were given for the object to set a" +
                     " date time to.");
         }
 
-        // get the date time of current log so we can set the default view with it
-        mDateTime = Util.getDateTimeFromChange(mWhatToChange, mIngredientLog, mSymptomLog);
-
-        // set buttons invisible based on logic for
-        // which one had to happen before or after another
-        setButtonVisibilityByInstantAlreadySet(mMostRecentInstant, mMiddleInstant,
-                mLongestAgoInstant);
 
     }
 
@@ -411,12 +417,18 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
 
 
     // check if the times of each instant set in the log are valid and go back to list if so
-    private void checkIfInvalid(Instant mLongestAgoInstant, Instant mMiddleInstant
-            , Instant mMostRecentInstant){
+    private void checkIfInvalid(Instant mLongestAgoInstant,
+                                Instant mMiddleInstant, Instant mMostRecentInstant){
 
         //TODO if edit, ask user if they want to also edit the invalid times or cancel request
 
         // we want these to be false, true on these mean something's invalid
+
+        if ( mMiddleInstant == null ){
+            Log.d(TAG, " check if invalid middle instant is null");
+        } else {
+            Log.d(TAG, "not null, weird");
+        }
         Boolean cookedDayHappenedAfterConsumedDay = Util.isEarlierDayYear(mMiddleInstant,
                 mMostRecentInstant);
         Boolean acquiredHappenedAfterConsumed = Util.isEarlierDayYear(mLongestAgoInstant,
@@ -470,8 +482,9 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
             Util.toastInvalidBeforeAfter(firstTypeString, secondTypeString, beforeOrAfterString,
                     thisActivity);
 
+            Log.d(TAG, "checkIfInvalid mFragmentContainer " + String.valueOf(mFragmentContainer));
             Util.goToLogSpecificDateTimeFragment(thisActivity,
-                    getParentFragmentManager().beginTransaction(),mFragmentContainer,
+                    getParentFragmentManager().beginTransaction(), mFragmentContainer,
                     mBundleNext);
         }
         // if cooked day happened before consumed day and after acquired AKA it's valid
@@ -781,7 +794,10 @@ public class PartOfDayFragment extends Fragment implements View.OnClickListener 
         checkIfInvalid(mLongestAgoInstant, mMiddleInstant, mMostRecentInstant);
 
         Integer longestAgoHour = Util.hourFromInstant(mLongestAgoInstant);
-        Integer middleHour = Util.hourFromInstant(mMiddleInstant);
+        Integer middleHour = null;
+        if ( mMiddleInstant != null ) {
+            middleHour = Util.hourFromInstant(mMiddleInstant);
+        }
         Integer mostRecentHour = Util.hourFromInstant(mMostRecentInstant);
 
         //TODO change the logic to work off of booleans for what to set,

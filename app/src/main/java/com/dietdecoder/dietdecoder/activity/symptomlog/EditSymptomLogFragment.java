@@ -97,7 +97,8 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             mBundle = getArguments();
 
             // get id as a string
-            mSymptomLogIdString = mBundle.getString(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY);
+            mSymptomLogIdString = Util.cleanArrayString(mBundle.getString(
+                    Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
             if ( mSymptomLogIdString.contains(",") ) {
                 Toast.makeText(thisActivity, "An array of log ID's were passed in, try again with only one to edit.", Toast.LENGTH_SHORT).show();
             }

@@ -82,7 +82,7 @@ public class Util {
             R.id.fragment_container_view_new_ingredient_log;
 
     public static final int fragmentContainerViewAddSymptomLog =
-            R.id.fragment_container_view_new_symptom_log;
+            R.id.fragment_container_view_add_symptom_log;
 
 
     //public static final int fragmentContainerViewEditSymptomLog = R.id
@@ -1814,7 +1814,7 @@ or at least achieves the same effect.
         Boolean happenedBeforeItShouldHave = Boolean.FALSE;
 
         // only compute day year calculation if neither is null
-        if ( shouldBeEarlierInstant != null || shouldHappenLaterInstant != null){
+        if ( shouldBeEarlierInstant != null && shouldHappenLaterInstant != null){
             Integer shouldBeEarlierDay = Util.dayOfYearFromInstant(shouldBeEarlierInstant);
             Integer shouldBeEarlierYear = Util.yearFromInstant(shouldBeEarlierInstant);
 
@@ -2172,9 +2172,9 @@ or at least achieves the same effect.
         LocalDateTime nowLocalDateTime = localDateTimeFromInstant(Instant.now());
         Integer thisDay = nowLocalDateTime.getDayOfYear();
         Integer thisYear = nowLocalDateTime.getYear();
-        Log.d(TAG, " \n\ninstant: \n" + instantToCheck.toString());
-        Log.d(TAG, " \n\nyearToCheck: \n" + yearToCheck.toString());
-        Log.d(TAG, " \n\ndayToCheck: \n" + dayToCheck.toString());
+       // Log.d(TAG, " \n\ninstant: \n" + instantToCheck.toString());
+       // Log.d(TAG, " \n\nyearToCheck: \n" + yearToCheck.toString());
+       // Log.d(TAG, " \n\ndayToCheck: \n" + dayToCheck.toString());
 //        Integer yearToCheck = instantToCheck.get(ChronoField.YEAR);
 //        Log.d(TAG,  " \n\nyear: \n" +yearToCheck.toString());
 //        Integer yearToCheck = instantToCheck.get(ChronoField.YEAR);
@@ -2309,8 +2309,8 @@ or at least achieves the same effect.
         paramBundle.putString(Util.ARGUMENT_CHANGE, whatToChange);
         int howManyInArray = 0;
         String idArrayString = setStringTypeBundle(paramBundle);
-        Log.d(TAG, paramBundle.toString());
-        Log.d(TAG, idArrayString);
+       //// Log.d(TAG, paramBundle.toString());
+       // Log.d(TAG, idArrayString);
         for ( String hasComma:
                 paramBundle.getString(idArrayString).split(",") ){
             howManyInArray++;
@@ -2318,7 +2318,7 @@ or at least achieves the same effect.
         paramBundle.putString(ARGUMENT_HOW_MANY_ID_IN_ARRAY, String.valueOf(howManyInArray));
         paramBundle.putString(Util.ARGUMENT_CURRENT_INDEX_IN_ARRAY,
                 String.valueOf(howManyInArray-1));
-        Log.d(TAG, paramBundle.toString());
+      //  Log.d(TAG, paramBundle.toString());
 
         startNextFragmentBundle(paramThisActivity, paramFragmentTransaction,
                 paramFragmentContainerView,
@@ -2388,7 +2388,7 @@ or at least achieves the same effect.
                                          int paramFragmentContainerView,
                                          Fragment paramNextFragment ) {
 
-        Log.d(TAG, "\n\n in starting fragment next fragment \n" + paramNextFragment.toString());
+        //Log.d(TAG, "\n\n in starting fragment next fragment \n" + paramNextFragment.toString());
         paramFragmentTransaction
                 .replace(paramFragmentContainerView,
                         paramNextFragment)
@@ -3309,7 +3309,7 @@ or at least achieves the same effect.
     public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){
         Bundle bundle = setNewBundle(null, ARGUMENT_GO_TO_ADD_INGREDIENT_ACTIVITY,
                 ARGUMENT_INGREDIENT_ID_ARRAY);
-        Log.d(TAG, bundle.toString());
+        //Log.d(TAG, bundle.toString());
         goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, null,
                 AddIngredientActivity.class, null, null, bundle);
 

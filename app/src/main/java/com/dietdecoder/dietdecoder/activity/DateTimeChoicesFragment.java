@@ -235,7 +235,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
         setSymptomLogViewModel();
 
         // fragmentContainer, questionStringInt, allDayButtonVisibleOrNot
-        setDependentUI(Util.fragmentContainerViewAddIngredientLog,
+        setDependentUI(Util.fragmentContainerViewAddSymptomLog,
                 mQuestionTextViewString);
 
         // if just now is picked then symptom begin and changed/ended can all be set to now

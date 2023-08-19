@@ -45,7 +45,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
 
     public AddSymptomLogActivity() {
-        super(R.layout.activity_new_symptom_log);
+        super(R.layout.activity_add_symptom_log);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
         super.onCreate(savedInstanceState);
 
         // make toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_new_symptom_log);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_add_symptom_log);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
 
