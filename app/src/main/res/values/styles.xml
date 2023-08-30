@@ -75,6 +75,11 @@
     <item name="android:textSize">@dimen/normal_textsize</item>
   </style>
 
+  <style name="button_choose">
+    <item name="android:textColor">@color/button_label</item>
+    <item name="android:textSize">@dimen/normal_textsize</item>
+  </style>
+
   <style name="button_cancel">
     <item name="android:background">@color/green_200</item>
     <item name="android:textColor">@color/gray</item>

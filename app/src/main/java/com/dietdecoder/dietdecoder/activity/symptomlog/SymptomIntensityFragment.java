@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.activity.DateTimeChoicesFragment;
+import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.ui.symptom.SymptomViewModel;
@@ -183,7 +184,9 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
 
         // initialize variables
         // after intensity is done being set the next default place is date times
-        mDefaultNextFragment = new DateTimeChoicesFragment();
+        // TODO change back to date time choices and debug why earlier today isn't working
+        //mDefaultNextFragment = new DateTimeChoicesFragment();
+        mDefaultNextFragment = new SpecificDateTimeFragment();
         // default next place to go should be the next fragment
         mNextFragment = mDefaultNextFragment;
         // repeating this fragment

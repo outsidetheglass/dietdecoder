@@ -63,6 +63,11 @@ public class ListIngredientLogActivity extends AppCompatActivity implements View
 
     thisContext = getBaseContext();
 
+    // TODO, somewhere in ingredient log or add ingredient, if the user says alcohol and they're
+    //  tracking liver damage, shoot up a warning (first ask if user wants warnings) for how
+    //  dangerous this number of drinks is, with specifics for user's sex, age, past drinking
+    //  history, etc. So they know what they're getting into. Same for drinking soda/eating carbs
+    //  after a heart surgery, etc.
 
     // if we have no view made
     if (savedInstanceState == null) {

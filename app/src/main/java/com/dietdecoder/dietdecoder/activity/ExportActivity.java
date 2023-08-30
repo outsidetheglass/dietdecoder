@@ -83,6 +83,12 @@ public class ExportActivity extends AppCompatActivity implements Toolbar.OnMenuI
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_export);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setOnMenuItemClickListener(this);
+
+        //TODO make export without the thing I'm guilty about button - so it can be exported
+        // without saying the addict drank alcohol, or coke after a heart surgery, so the user
+        // still will record things even if they aren't up for sharing all of it yet, they can
+        // decide to later.
+
         // set the paths for internal memory and external SD card
         Context context = getBaseContext();
         internalPath = context.getFilesDir();

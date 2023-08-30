@@ -173,7 +173,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
             // save button was pressed
             case R.id.button_edit_ingredient_log_done:
                 // done with editing
-                Util.goToListSymptomLogActivity(null, thisActivity, mLogIdString);
+                Util.goToListIngredientLogActivity(null, thisActivity, mLogIdString);
                 break;
             case R.id.imagebutton_edit_ingredient_log_name:
 

@@ -300,9 +300,11 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
 //                }
 
                 break;
+                //TODO remove
             case R.id.button_choose_ingredient_add:
-                // add new ingredient button
-                Util.goToAddIngredientActivityMakeAddBundle(null, thisActivity);
+                // add new ingredient button, go to list of ingredients
+                // TODO fix this
+                Util.goToListIngredientActivity(thisContext, thisActivity, null);
                 break;
             case R.id.imagebutton_ingredient_search:
                 if ( TextUtils.isEmpty(mEditTextSearch.getText()) ){

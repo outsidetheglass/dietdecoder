@@ -122,6 +122,8 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
         } // end if they haven't started the activity yet
 
         // FAB to add new log
+        // TODO remove this entirely if all symptoms add button is enough, this button here
+        //  looked too much like add log button, was confusing
         addButton = findViewById(R.id.add_button_choose_symptom);
         addButton.setOnClickListener(this);
     } // end onCreate
@@ -210,10 +212,11 @@ public class ChooseSymptomActivity extends AppCompatActivity implements Toolbar.
 
                 break;
 //
+            //TODO remove if unneeded
             case R.id.add_button_choose_symptom:
                 // go to the list of symptoms the user experiences to allow user to select which ones
                 // they're having now and then make those symptom logs
-                Util.goToAddEditSymptomActivity(thisContext, thisActivity, null);
+                Util.goToListSymptomActivity(thisContext, thisActivity, null);
             default:
                 break;
         } // end cases switch

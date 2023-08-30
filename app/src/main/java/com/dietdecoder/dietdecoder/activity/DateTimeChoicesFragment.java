@@ -315,12 +315,11 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
                 // just now means now date and time and the what to change that varies for which
                 // object
                 mDateTime = LocalDateTime.now();
-//                mBundleNext = mBundleNextJustNow;
-//                mBundleNext.putString(Util.ARGUMENT_DONE_OR_UNFINISHED, Util.ARGUMENT_DONE);
+
                 mBundleNext = Util.setDone(mBundleNext);
                 mNextFragment = null;
                 mWhatToChange = mWhatToChangeJustNow;
-                mMoveToNextWhatToChange =  Boolean.TRUE;
+                mMoveToNextWhatToChange =  Boolean.FALSE;
                 break;
 
             case R.id.button_log_date_time_choices_earlier_today:
@@ -329,7 +328,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
                 // set times to be earlier today, time set automatically
                 mDateTime = LocalDateTime.now().minusHours(hoursEarlierInt);
                 mNextFragment = new PartOfDayFragment();
-                mMoveToNextWhatToChange = Boolean.FALSE;
+                mMoveToNextWhatToChange = Boolean.TRUE;
                 break;
 
             case R.id.button_log_date_time_choices_yesterday:
@@ -339,7 +338,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
                 mDateTime = LocalDateTime.now().minusDays(1);
                 // part of day yesterday
                 mNextFragment = new PartOfDayFragment();
-                mMoveToNextWhatToChange = Boolean.FALSE;
+                mMoveToNextWhatToChange = Boolean.TRUE;
 
                 break;
 
@@ -348,7 +347,7 @@ public class DateTimeChoicesFragment extends Fragment implements View.OnClickLis
                         Toast.LENGTH_SHORT).show();
                 // given no specific info yet we can't set anything, so just go there
                 mNextFragment = new SpecificDateTimeFragment();
-                mMoveToNextWhatToChange = Boolean.FALSE;
+                mMoveToNextWhatToChange = Boolean.TRUE;
                 break;
 
             default:

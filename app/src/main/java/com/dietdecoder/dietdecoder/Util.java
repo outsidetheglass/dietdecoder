@@ -2364,8 +2364,9 @@ or at least achieves the same effect.
         }
     }
     public static Bundle setGoToFromNextFragment(Bundle bundle, Fragment nextFragment){
+        Log.d(TAG, " nextFragment " +nextFragment.toString());
         //TODO make this also set where from
-        Class nextFragmentClass = nextFragment.getClass();
+         Class nextFragmentClass = nextFragment.getClass();
         String goToString = null;
         if (DateTimeChoicesFragment.class == nextFragmentClass){
             goToString = ARGUMENT_GO_TO_DATE_TIME_CHOICES_FRAGMENT;
@@ -3628,22 +3629,29 @@ or at least achieves the same effect.
                                                        SymptomLog symptomLog,
                                                        Bundle integerBundleToSetDateTime){
 
+        // TODO when I care again, fix these, specific date time fragment isn't setting what to
+        //  change, it's coming back null
         if (isSymptomLogAllInstants(whatToChange)) {
+            Log.d(TAG, "isSymptomLogAllInstants. what to change: " +whatToChange);
             // get the instant we have already so we have correct date
             // change began at time
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
                     integerBundleToSetDateTime);
             symptomLog.setInstantBegan(instantToSet);
             // then change when the symptom changed/ended instant
-            instantToSet = Util.setInstantFromBundle(symptomLog.getInstantChanged(),
-                    integerBundleToSetDateTime);
+            //instantToSet = Util.setInstantFromBundle(symptomLog.getInstantChanged(),
+            // integerBundleToSetDateTime);
+            // TODO change this to a default amount of time based on average duration of that
+            //  symptom
             symptomLog.setInstantChanged(instantToSet);
         } else if (isSymptomLogWhatToChangeSetToBegin(whatToChange)) {
+            Log.d(TAG, "isSymptomLogWhatToChangeSetToBegin. what to change: " +whatToChange);
             // get the instant we have already so we have correct date
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
                     integerBundleToSetDateTime);
             symptomLog.setInstantBegan(instantToSet);
         } else if (isSymptomLogAllInstantsAllDay(whatToChange)) {
+            Log.d(TAG, "isSymptomLogAllInstantsAllDay. what to change: " +whatToChange);
             // get the instant we have already so we have correct date
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantBegan(),
                     integerBundleToSetDateTime);
@@ -3654,6 +3662,7 @@ or at least achieves the same effect.
             symptomLog.setInstantChanged(latestInstantInDay);
         }
         else {
+            Log.d(TAG, "else. what to change: " +whatToChange);
             Instant instantToSet = Util.setInstantFromBundle(symptomLog.getInstantChanged(),
                     integerBundleToSetDateTime);
             symptomLog.setInstantChanged(instantToSet);
@@ -3733,13 +3742,13 @@ or at least achieves the same effect.
             symptomLogViewModel.viewModelUpdate(symptomLog);
         }
 
-        // only if we were told to move to next change should we reset what to change
+        // TODO change this to check bundle and only if we're not done
         if ( moveToNextWhatToChange ){
             // return the bundle that now has been reset to get the next instant
             bundle = Util.setBundleLogToNextInstant(bundleNext);
         } else {
-            // leave the bundle the way we got it
-            bundle = bundleNext;
+            // set to done
+            bundle = setDone(bundleNext);
         }
 
         return bundle;
