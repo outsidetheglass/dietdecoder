@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class IngredientActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class IngredientActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
   // make a TAG to use to log errors
   private final String TAG = "TAG: " + getClass().getSimpleName();
@@ -86,10 +87,7 @@ public class IngredientActivity extends AppCompatActivity implements Toolbar.OnM
 
     // FAB to add new ingredient
     addIngredientButton = findViewById(R.id.add_button_ingredient);
-    addIngredientButton.setOnClickListener( view -> {
-      addIngredientIntent = new Intent(thisActivity, AddIngredientActivity.class);
-      startActivity(addIngredientIntent);
-    });
+    addIngredientButton.setOnClickListener(this::onClick);
 
   }
 
@@ -142,6 +140,21 @@ public class IngredientActivity extends AppCompatActivity implements Toolbar.OnM
   }
 
 
+  @Override
+  public void onClick(View view) {
+
+    switch (view.getId()) {
+      // save button was pressed
+      case R.id.add_button_ingredient:
+        // done with editing
+
+        Util.goToAddEditIngredientActivity(null, thisActivity, null);
+        break;
+      default:
+        break;
+    }
+
+  }// end onClick
 
 
 }//end IngredientActivity

@@ -91,6 +91,9 @@
   <string name="symptom_trackornot">Ask about this symptom</string>
   <string name="title_symptom_trackornot">Track Symptom</string>
 
+  <string name="enter_ingredient_edittext_brand">Enter brand here</string>
+
+
   <string name="all_symptoms">All Symptoms</string>
   <string name="all_ingredients">All Ingredients</string>
 
@@ -149,9 +152,10 @@
   <string name="button_log_activity">Logs</string>
 
 
-  <string name="title_textview_new_ingredient">New Ingredient</string>
+  <string name="title_textview_addedit_ingredient">Ingredient</string>
+  <string name="title_textview_edit_ingredient">Edit Ingredient</string>
+  <string name="title_textview_add_ingredient">Add Ingredient</string>
   <string name="enter_ingredient_edittext_name">Type Ingredient Name Here</string>
-  <string name="enter_ingredient_edittext_concern">Concern about Ingredient Here</string>
 
   <string name="empty_not_saved">Not saved because it is empty.</string>
   <string name="too_many_selected_not_saved">Not saved because too many were selected.</string>

@@ -31,7 +31,7 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
     private final Activity thisActivity = AddIngredientLogActivity.this;
     private Context thisContext;
 
-//    int mFragmentContainerView = ;
+    int mFragmentContainerView = Util.fragmentContainerViewAddIngredientLog;
     Bundle mBundle, mBundleNext;
 
     String mWhichFragmentGoTo;
@@ -76,55 +76,51 @@ public class AddIngredientLogActivity extends AppCompatActivity implements Toolb
 
             // give the intensity fragment which ingredient we're setting
 
-            // get the info about which ingredient we're logging
+            // get the info about which symptom we're logging
             // check if info passed in exists, if not then go home
-            if ( getIntent().getExtras() != null ) {
-                // get the info
-                mBundle = getIntent().getExtras();
-                mBundleNext = mBundle;
+            Util.checkValidFragment(getIntent().getExtras(), thisActivity);
 
-                // get the array of Id's of ingredients to add
-                String mIngredientIdsToAddString =
-                        mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY);
-                // clean the array string
-                mIngredientIdsToAddString = Util.cleanArrayString(mIngredientIdsToAddString);
-                //Log.d(TAG, mIngredientIdsToAddString);
-                // go through the string and at the comma's add that ID to the array
-                for (String mIngredientIdString : mIngredientIdsToAddString.split(",")) {
-                    //Log.d(TAG, mIngredientIdString);
-                    mIngredientsToAddArrayListIdStrings.add(mIngredientIdString);
+            // get the info
+            mBundle = getIntent().getExtras();
+            mBundleNext = mBundle;
 
-                    //get info on the ingredient to make the log based on defaults
-                    UUID ingredientId = UUID.fromString(mIngredientIdString);
-                    // make the ingredient log
-                    IngredientLog ingredientLog = new IngredientLog(ingredientId);
-                    mIngredientLogViewModel.viewModelInsert(ingredientLog);
-                    // put its ID in array to send to fragment
-                    mIngredientLogsToAddArrayListIdStrings.add(ingredientLog.getLogId().toString());
-                }
-                // putting set bundle in Util so it's easier for me to see what exactly is in
-                // each bundle
-                mBundleNext =
-                        Util.setNewIngredientLogBundleFromArray(mIngredientLogsToAddArrayListIdStrings);
 
-                Log.d(TAG, mBundleNext.toString());
-                // then go to the specific fragments to change away from the defaults
-                Util.startNextFragmentBundle(thisActivity, getSupportFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewAddIngredientLog,
-                        mNextFragment, mBundleNext);
+            //TODO make this more efficient, it's running the for loop twice, once in Util clean
+            // and again here to add them all
 
-            } else {
-                // there's no information about which ingredient to add, so
-                // tell the user that they got here by mistake, it's a bug
-                // must choose which ingredient before this activity
-                String mWrongPlaceLetsGoHome =
-                        getResources().getString(R.string.wrong_place_lets_go_home);
-                Toast.makeText(getApplicationContext(), mWrongPlaceLetsGoHome,
-                        Toast.LENGTH_SHORT).show();
-                Util.goToMainActivity( null, thisActivity);
+            // get the array of Id's of ingredients to add
+            mIngredientsToAddArrayListIdStrings =
+                    Util.cleanBundledStringIntoArrayList(
+                            mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY) );
+
+            //Log.d(TAG, mIngredientIdsToAddString);
+            // go through the string and add that ID to the array
+            for (String ingredientIdString : mIngredientsToAddArrayListIdStrings) {
+                //Log.d(TAG, mIngredientIdString);
+
+                //get info on the ingredient to make the log based on defaults
+                IngredientLog ingredientLog =
+                        new IngredientLog( UUID.fromString(
+                                Util.cleanArrayString(ingredientIdString) ) );
+                // make the ingredient log
+                mIngredientLogViewModel.viewModelInsert(ingredientLog);
+
+                // put its ID in array to send to fragment
+                mIngredientLogsToAddArrayListIdStrings.add(ingredientLog.getLogId().toString());
             }
+            // putting set bundle in Util so it's easier for me to see what exactly is in
+            // each bundle
+            mBundleNext =
+                    Util.setNewIngredientLogBundleFromArray(mIngredientLogsToAddArrayListIdStrings);
 
+            Log.d(TAG, mBundleNext.toString());
         }
+        // then go to the specific fragments to change away from the defaults
+        Util.startNextFragmentBundle(thisActivity, getSupportFragmentManager().beginTransaction(),
+                mFragmentContainerView,
+                mNextFragment, mBundleNext);
+
+
 
         // leaving this here in case I want this activity to do more than just intensity
         //TODO ask when it started and ended

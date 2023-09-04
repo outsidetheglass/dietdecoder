@@ -62,13 +62,11 @@
         android:exported="false" />
       <activity        android:name=".activity.ingredient.DetailIngredientActivity"
         android:exported="false" />
-      <activity        android:name=".activity.ingredient.AddIngredientActivity"
-        android:exported="false" />
-      <activity        android:name=".activity.ingredient.EditIngredientActivity"
+      <activity        android:name=".activity.ingredient.AddEditIngredientActivity"
         android:exported="false" />
 
 
-      <activity android:name=".activity.recipe.RecipeActivity"
+        <activity android:name=".activity.recipe.RecipeActivity"
         android:exported="false"/>
       <activity        android:name=".activity.recipe.AddRecipeActivity"
         android:exported="false" />

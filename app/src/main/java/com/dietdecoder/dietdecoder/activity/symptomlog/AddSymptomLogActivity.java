@@ -117,10 +117,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
 
         // leaving this here in case I want this activity to do more than just intensity
         //TODO ask when it started and ended
-//        // if there's an intent, it's the fragment passing info along
-//        if ( getIntent().getExtras() != null ) {
-//            mBundle = getIntent().getExtras();
-//
+
 //            // get the string that tells us which button was pressed
 //            // so we know which fragment is next to start
 //            mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_FRAGMENT_GO_TO);
@@ -147,7 +144,7 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
 //                // it was null so go back to the logs list
 //                startActivity(new Intent(thisActivity, ListSymptomLogActivity.class));
 //            }
-//        }
+//
     }
 
     @Override
@@ -198,22 +195,6 @@ public class AddSymptomLogActivity extends AppCompatActivity implements Toolbar.
         return false;
     }
 
-    private Fragment whichFragmentNext(String whichFragmentGoTo) {
-
-        // TODO add symptom log for all symptom IDs chosen
-        // TODO fix, right now it only will work for first symptom and maybe not even that
-        // TODO make it work for intensity for all symptoms
-
-        // change which fragment starts based on which button was pressed
-        if (Objects.equals(whichFragmentGoTo,
-                Util.ARGUMENT_GO_TO_SYMPTOM_INTENSITY_FRAGMENT)) {
-            // we know the day but not the time
-            // ask that before we can move on
-            mNextFragment = new SymptomIntensityFragment();
-
-        }
-        return mNextFragment;
-    }
 
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);

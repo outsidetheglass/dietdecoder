@@ -131,6 +131,8 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
             Util.setDescriptionString(
                     mLogAmount + ", " + mLogAcquiredString);
 
+//    Log.d(TAG, "printString: " + printString);
+//    Log.d(TAG, "unImportantString: " + unImportantString);
     // set part of it bold and part of it not bold
     mItemView.setText(printString);
 
@@ -151,6 +153,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     // times between consumed and the others
     mLogConsumedInstant = mLog.getInstantConsumed();
     mLogConsumedString = Util.stringFromInstant(mLogConsumedInstant);
+
     // how many days ago, if any, between when it was cooked and consumed
     mLogCookedInstant = mLog.getInstantCooked();
     mLogCookedString =

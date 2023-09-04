@@ -26,7 +26,7 @@ import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.activity.MainActivity;
 import com.dietdecoder.dietdecoder.activity.OtherActivity;
 import com.dietdecoder.dietdecoder.activity.EditActivity;
-import com.dietdecoder.dietdecoder.activity.ingredient.AddIngredientActivity;
+import com.dietdecoder.dietdecoder.activity.ingredient.AddEditIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredient.ListIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.ChooseIngredientActivity;
 import com.dietdecoder.dietdecoder.activity.ingredientlog.IngredientAmountFragment;
@@ -328,11 +328,17 @@ public class Util {
     // for bundling between activities
     public static String cleanArrayString(String paramString) {
         String mString = paramString;
-        // remove first and last brackets if it has them
-        mString = mString.replaceAll("\\[", "");
-        mString = mString.replaceAll("\\]", "");
-        // and remove any whitespace
-        mString = mString.replaceAll("\\s", "");
+
+        // double check it's only one and not an array of multiple
+        if ( paramString.contains(",") ) {
+            Log.d(TAG, "An array of log ID's were passed in, try again with only one to edit.");
+        } else {
+            // remove first and last brackets if it has them
+            mString = mString.replaceAll("\\[", "");
+            mString = mString.replaceAll("\\]", "");
+            // and remove any whitespace
+            mString = mString.replaceAll("\\s", "");
+        }
         return mString;
     }
 
@@ -3067,7 +3073,7 @@ or at least achieves the same effect.
             // now get the food log associated with each UUID
             ingredientLogArray.add(
                     ingredientLogViewModel.viewModelGetLogFromLogId(
-                            UUID.fromString(ingredientLogIdString)
+                            UUID.fromString(cleanArrayString(ingredientLogIdString))
                     ));
         }
         return ingredientLogArray;
@@ -3303,8 +3309,8 @@ or at least achieves the same effect.
     // make going to each of the activities easier
     public static void goToAddEditIngredientActivity(Context context, Activity activity,
                                                   String idStringArray){
-//        goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, idStringArray,
-//                AddEditIngredientActivity.class, null, null, null);
+        goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, idStringArray,
+                AddEditIngredientActivity.class, null, null, null);
 
     }
     public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){
@@ -3312,7 +3318,7 @@ or at least achieves the same effect.
                 ARGUMENT_INGREDIENT_ID_ARRAY);
         //Log.d(TAG, bundle.toString());
         goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, null,
-                AddIngredientActivity.class, null, null, bundle);
+                AddEditIngredientActivity.class, null, null, bundle);
 
     }
 
@@ -3682,6 +3688,7 @@ or at least achieves the same effect.
 
         if (isIngredientLogAllInstants(whatToChange)) {
 
+            Log.d(TAG, "in all instants setting");
             // using the bundle and instant we want to change, set the localdatetime to that
             instant = Util.setInstantFromBundle(ingredientLog.getInstantConsumed(),
                     integerBundleToSetDateTime);
@@ -3768,6 +3775,7 @@ or at least achieves the same effect.
 
         // only one will be given in to set its instants
         if ( ingredientLogViewModel != null ){
+            Log.d(TAG, "in setLogInstants , whatToChange is: " + whatToChange);
             // if we're setting ingredient logs
             bundleNext = Util.setIngredientLogInstants(whatToChange, ingredientLogArray,
                     ingredientLogViewModel, Util.setBundleFromLocalDateTime(dateTime),
@@ -3854,7 +3862,7 @@ or at least achieves the same effect.
     }
 
     public static SpannableStringBuilder setViewHolderRecyclerViewString(String title, String subtitle,
-                                                                         String severity,
+                                                                         String severityAmount,
                                                                          String unImportantString) {
 
         String boldString = "";
@@ -3864,16 +3872,17 @@ or at least achieves the same effect.
         // leave out brand if it isn't named
         if ( TextUtils.isEmpty(subtitle)) {
             boldString = title;
-            if (!TextUtils.isEmpty(severity)) {
+            if (!TextUtils.isEmpty(severityAmount)) {
                 notBoldString = notBoldString
-                        .concat("\n").concat(severity).concat("/10");
+                        .concat("\n").concat(severityAmount);
             }
         }
         else {
             boldString = title;
             notBoldString = notBoldString.concat("\n").concat(subtitle);
-            if (!TextUtils.isEmpty(severity)) {
-                            notBoldString = notBoldString.concat("\n").concat(severity).concat(
+            if (!TextUtils.isEmpty(severityAmount)) {
+                            notBoldString =
+                                    notBoldString.concat("\n").concat(severityAmount).concat(
                                     "/10");
             }
         }

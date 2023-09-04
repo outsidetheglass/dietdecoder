@@ -95,6 +95,8 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         mBundle = Util.checkValidFragment(getArguments(), thisActivity);
         mBundleNextSave = Util.updateBundleGoToNext(mBundle);
 
+        Log.d(TAG, "in specific fragment, mBundle: " + mBundle.toString());
+        Log.d(TAG, "in specific fragment, mBundleNextSave: " + mBundleNextSave.toString());
         //TODO finish setting this up for food vs symptom
         titleTextView = view.findViewById(R.id.textview_title_log_specific_date);
 
@@ -145,7 +147,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         // set our array of ID's, even if it's just one
         mLogIdStringArray = Util.cleanBundledStringIntoArrayList(logIdsString);
         // get our current log's id
-        mCurrentLogIdString = mLogIdStringArray.get(mCurrentLogIdIndex);
+        mCurrentLogIdString = Util.cleanArrayString(mLogIdStringArray.get(mCurrentLogIdIndex));
         mCurrentLogId = UUID.fromString(mCurrentLogIdString);
     }
 
@@ -203,6 +205,8 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         // it uses a value set in there, mCurrentLogId
         setIngredientLogViewModel();
 
+
+        // TODO fix, this is probably what's breaking from edit
 
         // if consumed hasn't been set yet, then that's what we're changing
         if ( Util.isIngredientLogConsumed(mWhatToChange) ){
@@ -397,6 +401,9 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
                 Toast.makeText(getContext(), getResources().getString(R.string.saving),
                         Toast.LENGTH_SHORT).show();
 
+                // TODO debug this, it's currently only setting the correct datetime on second
+                //  attempt to edit the value
+
                 // set our bundle to what should happen when it's saved
                 mBundleNext = mBundleNextSave;
                 // if we're saving and it's a valid value, we're done so lets set to move to next
@@ -410,6 +417,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
                                 Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ),
                         mBundleNext, moveToNextWhatToChange);
 
+                mBundleNext = Util.setDone(mBundleNext);
                 // this does check if from edit and done, then will go to list or edit
                 Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
                         mFragmentContainer,

@@ -52,10 +52,11 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 
   private IngredientViewHolder(View itemView) {
     super(itemView);
+    mIngredientViewHolderContext = itemView.getContext();
+    mSelectedArrayList = new ArrayList<>();
 
     // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
     //  its name doesn't match what's typed in the search bar
-    mIngredientViewHolderContext = itemView.getContext();
     mIngredientItemView = itemView.findViewById(R.id.textview_ingredient_item);
     mIngredientItemButton = itemView.findViewById(R.id.imagebutton_ingredient_option_circle);
 
@@ -155,7 +156,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     // unselect
     //switch (case)
 
-    // if the user wants to unselect the symptom, the color will be red
+    // if the user wants to unselect, the color will be red
     // selected color is red
     boolean userWantsToUnSelect = mIngredientItemView.getTextColors() == mSelectedColor;
 

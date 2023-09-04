@@ -51,8 +51,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
             mAllTimesAreSame, mWhatToChangeNext;
     String[] mDisplayedStringList;
     int[] mIntensityColorList;
-    int mIntensitySelectedIndex, mHowManyIds, mIntensitySelected,
-    mIntensityOfMostRecentSymptomLogWithSameSymptomName, mCurrentIndex;
+    int mIntensitySelectedIndex, mHowManyIds, mIntensitySelected, mCurrentIndex;
     UUID mCurrentLogId, mCurrentSymptomId;
     Color mCurrentIntensityColor;
 
@@ -144,8 +143,44 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         mCurrentSymptomName = mCurrentSymptom.getName();
 
 
-        setCurrentSymptomTextViewNumberPicker(mCurrentLogIdString);
+        setCurrentSymptomTextViewNumberPicker();
     }
+
+    // set the values that differ depending on what to change for symptom log
+    private void setDependentValues(){
+
+        // initialize variables
+        // after intensity is done being set the next default place is date times
+        // TODO change back to date time choices and debug why earlier today isn't working
+        //mDefaultNextFragment = new DateTimeChoicesFragment();
+        mDefaultNextFragment = new SpecificDateTimeFragment();
+        // default next place to go should be the next fragment
+        mNextFragment = mDefaultNextFragment;
+        // repeating this fragment
+        mRepeatThisFragment = new SymptomIntensityFragment();
+
+
+        // this has to come after setObjectArrayValues,
+        // it uses a value set in there, mCurrentLogId
+        setSymptomLogViewModel();
+
+        setNumberPickerUI();
+        setCurrentSymptomTextViewNumberPicker();
+
+    }
+
+    // change the name on the text view to new current symptom and the new default intensity value
+    private void setCurrentSymptomTextViewNumberPicker(){
+
+
+        // put in the UI what symptom we're changing now
+        mTextViewSymptomName.setText(mCurrentSymptomName);
+
+        // also reset the default value on the number picker
+        mIntensitySelected = setIntensityDefault(mCurrentSymptomId);
+        mNumberPicker.setValue(mIntensitySelected);
+    }
+
 
     private void setNumberPickerUI(){
 
@@ -177,42 +212,6 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         //Log.d(TAG, " gradient " + gradient.toString());
         mNumberPicker.setBackground(gradient);
 
-    }
-
-    // set the values that differ depending on what to change for symptom log
-    private void setDependentValues(){
-
-        // initialize variables
-        // after intensity is done being set the next default place is date times
-        // TODO change back to date time choices and debug why earlier today isn't working
-        //mDefaultNextFragment = new DateTimeChoicesFragment();
-        mDefaultNextFragment = new SpecificDateTimeFragment();
-        // default next place to go should be the next fragment
-        mNextFragment = mDefaultNextFragment;
-        // repeating this fragment
-        mRepeatThisFragment = new SymptomIntensityFragment();
-
-
-        // this has to come after setObjectArrayValues,
-        // it uses a value set in there, mCurrentLogId
-        setSymptomLogViewModel();
-
-        setNumberPickerUI();
-        setCurrentSymptomTextViewNumberPicker(mCurrentLogIdString);
-
-    }
-
-
-    // change the name on the text view to new current symptom and the new default intensity value
-    private void setCurrentSymptomTextViewNumberPicker(String paramSymptomLogIdString){
-
-
-        // put in the UI what symptom we're changing now
-        mTextViewSymptomName.setText(mCurrentSymptomName);
-
-        // also reset the default value on the number picker
-        mIntensitySelected = setIntensityDefault(mCurrentSymptomId);
-        mNumberPicker.setValue(mIntensitySelected);
     }
 
     @Override

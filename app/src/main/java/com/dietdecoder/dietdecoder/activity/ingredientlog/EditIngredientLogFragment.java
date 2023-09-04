@@ -114,10 +114,9 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
             mBundle = getArguments();
 
             // get id as a string
-            mLogIdString = mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY);
-            if ( mLogIdString.contains(",") ) {
-                Toast.makeText(thisActivity, "An array of log ID's were passed in, try again with only one to edit.", Toast.LENGTH_SHORT).show();
-            }
+            // this is edit so it's only one id for sure
+            mLogIdString = Util.cleanArrayString(
+                    mBundle.getString(Util.ARGUMENT_INGREDIENT_LOG_ID_ARRAY) );
 
             // turn it into its UUID
             mLogId = UUID.fromString(mLogIdString);
@@ -209,11 +208,11 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
                 Toast.makeText(getContext(), mChangeAmountToastString, Toast.LENGTH_SHORT).show();
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mLogIdString,
-                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
+                        Util.setEditIngredientLogBundle(mLogIdString,
+                                Util.ARGUMENT_CHANGE_INGREDIENT_LOG_AMOUNT);
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
-                        Util.fragmentContainerViewEdit, new SymptomIntensityFragment(), mBundleNext);
+                        Util.fragmentContainerViewEdit, new IngredientAmountFragment(), mBundleNext);
 
                 break;
             case R.id.imagebutton_edit_ingredient_log_consumed:
@@ -223,7 +222,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
                 // set our relevant data to use in new location
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mLogIdString,
+                        Util.setEditIngredientLogBundle(mLogIdString,
                         Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED);
 
                 // begin is a time, so go to the date time fragment to set it
@@ -239,7 +238,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
                 // set our relevant data to use in new location
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mLogIdString,
+                        Util.setEditIngredientLogBundle(mLogIdString,
                                 Util.ARGUMENT_CHANGE_INGREDIENT_LOG_COOKED);
 
                 // begin is a time, so go to the date time fragment to set it
@@ -253,7 +252,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
                 Toast.makeText(getContext(), mDateTime, Toast.LENGTH_SHORT).show();
 
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mLogIdString,
+                        Util.setEditIngredientLogBundle(mLogIdString,
                                 Util.ARGUMENT_CHANGE_INGREDIENT_LOG_ACQUIRED);
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
