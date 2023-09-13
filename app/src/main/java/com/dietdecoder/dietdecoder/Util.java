@@ -3638,7 +3638,7 @@ or at least achieves the same effect.
 
         // TODO when I care again, fix these, specific date time fragment isn't setting what to
         //  change, it's coming back null
-        if (isSymptomLogAllInstants(whatToChange)) {
+        if (isSymptomLogAllInstants(whatToChange) || Objects.isNull(whatToChange)) {
             Log.d(TAG, "isSymptomLogAllInstants. what to change: " +whatToChange);
             // get the instant we have already so we have correct date
             // change began at time
@@ -3748,7 +3748,7 @@ or at least achieves the same effect.
             //  instantaneous, like a migraine, or must be instantaneous, like vomiting
 
             // set that date and time to either began or changed (determined by whatToChange)
-            symptomLog = Util.setSymptomLogBeganChanged(whatToChange, symptomLog,
+            symptomLog = setSymptomLogBeganChanged(whatToChange, symptomLog,
                     integerBundleToSetDateTime);
             // put our updated log into the database
             symptomLogViewModel.viewModelUpdate(symptomLog);
@@ -3782,15 +3782,15 @@ or at least achieves the same effect.
         if ( ingredientLogViewModel != null ){
             Log.d(TAG, "in setLogInstants , whatToChange is: " + whatToChange);
             // if we're setting ingredient logs
-            bundleNext = Util.setIngredientLogInstants(whatToChange, ingredientLogArray,
-                    ingredientLogViewModel, Util.setBundleFromLocalDateTime(dateTime),
+            bundleNext = setIngredientLogInstants(whatToChange, ingredientLogArray,
+                    ingredientLogViewModel, setBundleFromLocalDateTime(dateTime),
                     bundleNext, moveToNextWhatToChange);
 
         } else if ( symptomLogViewModel != null ) {
             // if setting symptom logs
-            bundleNext = Util.setSymptomLogInstants(whatToChange, symptomLogArray,
+            bundleNext = setSymptomLogInstants(whatToChange, symptomLogArray,
                     symptomViewModel, symptomLogViewModel,
-                    Util.setBundleFromLocalDateTime(dateTime),
+                    setBundleFromLocalDateTime(dateTime),
                     bundleNext, moveToNextWhatToChange);
         }
 
