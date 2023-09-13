@@ -766,7 +766,8 @@ public class Util {
     ////////////////////////////////////////////////////////
     // conversions between data types///////////////////////
     ////////////////////////////////////////////////////////
-    public static Instant instantFromValues(Integer mHour, Integer mMinute, Integer mDay, Integer mMonth, Integer mYear) {
+    public static Instant instantFromValues(Integer mMinute, Integer mHour, Integer mDay,
+                                            Integer mMonth, Integer mYear) {
 
         // save it directly from here
         Instant logInstant;
@@ -2370,7 +2371,7 @@ or at least achieves the same effect.
         }
     }
     public static Bundle setGoToFromNextFragment(Bundle bundle, Fragment nextFragment){
-        Log.d(TAG, " nextFragment " +nextFragment.toString());
+        //Log.d(TAG, " nextFragment " +nextFragment.toString());
         //TODO make this also set where from
          Class nextFragmentClass = nextFragment.getClass();
         String goToString = null;
@@ -3686,7 +3687,11 @@ or at least achieves the same effect.
 
         Instant instant;
 
-        if (isIngredientLogAllInstants(whatToChange)) {
+        // if set all instants or if we weren't given a specific what to change, set them all
+        //TODO fix why it's null instead of this, used badly it could reset good dates (like if
+        // we think we're editing consumed but it's null and the time meant to be just consumed
+        // is also set on acquired and cooked. It's probably in edit
+        if (isIngredientLogAllInstants(whatToChange) || Objects.isNull(whatToChange) ) {
 
             Log.d(TAG, "in all instants setting");
             // using the bundle and instant we want to change, set the localdatetime to that

@@ -161,6 +161,12 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View view) {
 
+
+        //TODO fix why whatToChange is null in Util set log instants, used badly it
+        // could reset good dates (like if
+        // we think we're editing consumed but it's null and the time meant to be just consumed
+        // is also set on acquired and cooked. It's probably in edit here somewhere
+
         // get saving string from resources so everything can translate languages easy
         mSaveString = getResources().getString(R.string.saving);
         mNothingChangedString = getResources().getString(R.string.nothing_changed_not_saved);

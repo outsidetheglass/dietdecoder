@@ -205,6 +205,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         // it uses a value set in there, mCurrentLogId
         setIngredientLogViewModel();
 
+        Log.d(TAG, "time: " + mDateTime);
 
         // TODO fix, this is probably what's breaking from edit
 
@@ -400,6 +401,12 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
             case R.id.button_log_specific_date_save:
                 Toast.makeText(getContext(), getResources().getString(R.string.saving),
                         Toast.LENGTH_SHORT).show();
+
+
+                Log.d(TAG, "time save: " + mDateTime);
+                Log.d(TAG, "min save: " + mMinute + " HH: " + mHour + " DD: " + mDay);
+                Log.d(TAG, "funs: " +Util.localDateTimeFromInstant(
+                        Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ));
 
                 // TODO debug this, it's currently only setting the correct datetime on second
                 //  attempt to edit the value
