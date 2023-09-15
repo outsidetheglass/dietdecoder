@@ -4,17 +4,22 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dietdecoder.dietdecoder.R;
+import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.ingredientlog.ChooseIngredientActivity;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 
 import java.util.ArrayList;
@@ -25,16 +30,24 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 
 
   // make a TAG to use to log errors
-  private final String TAG = getClass().getSimpleName();
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
   // to set the text for what shows up in the UI
   public TextView mIngredientItemView;
-  public ImageButton mIngredientItemButton;
+  private static final int mTextViewChooseInt = R.id.textview_choose_ingredient_item;
+  private static final int mTextViewListInt = R.id.textview_list_ingredient_item;
+
+  public ImageButton mButtonCircle, mButtonMore;
   public ListView listView;
   private Context mIngredientViewHolderContext;
   private Resources.Theme mIngredientViewHolderTheme;
   ColorStateList mSelectedColor;
-  int mUnSelectedColor;
+
+  int mUnSelectedColor, mTextViewItemInt, mButtonMoreInt, mButtonCircleInt;
+  private static final int mButtonMoreListInt = R.id.imagebutton_list_ingredient_more;
+  private static final int mButtonCircleListInt = R.id.imagebutton_list_ingredient_circle;
+  private static final int mButtonCircleChooseInt = R.id.imagebutton_choose_ingredient_option_circle;
+
   Drawable mEmptyCircleDrawable, mGreenRoundcornersDrawable, mFoodBeverageDrawable;
 
   String mIngredientName, mIngredientIdString, mIngredientChemicalName,
@@ -55,10 +68,22 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     mIngredientViewHolderContext = itemView.getContext();
     mSelectedArrayList = new ArrayList<>();
 
+    if (mIngredientViewHolderContext.getClass() == ChooseIngredientActivity.class) {
+      Log.d(TAG, "choose ingredient");
+      mTextViewItemInt = mTextViewChooseInt;
+      mButtonCircleInt = mButtonCircleChooseInt;
+    } else {
+      Log.d(TAG, "list ingredient");
+      Log.d(TAG, "mTextViewListInt: " + mTextViewListInt);
+      mTextViewItemInt = mTextViewListInt;
+      mButtonMoreInt = mButtonMoreListInt;
+      mButtonCircleInt = mButtonCircleListInt;
+    }
     // TODO bind the search bar to the view holder, then make the ingredient in bind invisible if
     //  its name doesn't match what's typed in the search bar
-    mIngredientItemView = itemView.findViewById(R.id.textview_ingredient_item);
-    mIngredientItemButton = itemView.findViewById(R.id.imagebutton_ingredient_option_circle);
+    mIngredientItemView = itemView.findViewById(mTextViewItemInt);
+    mButtonMore = itemView.findViewById(mButtonMoreInt);
+    mButtonCircle = itemView.findViewById(mButtonCircleInt);
 
     mIngredientViewHolderTheme = mIngredientViewHolderContext.getTheme();
     mSelectedColor = itemView.getResources().getColorStateList(R.color.selected_text_color,
@@ -92,6 +117,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     // set all the parts of ingredient log to variables
     setVariables();
 
+    Log.d(TAG, "mIngredientName: " + mIngredientName);
     mIngredientItemView.setText(mIngredientName);
 
     //TODO make this an if statement, if we're here to edit individual ingredients from a list of
@@ -100,7 +126,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     // ingredient log
     //if (ACTION == ACTION_NEW) then show empty circle and select unselect with text
     // else show three dot options
-    mIngredientItemButton.setOnClickListener(this::onClick);
+    mButtonCircle.setOnClickListener(this::onClick);
 
 
 //
@@ -148,13 +174,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     return new IngredientViewHolder(ingredientView);
   }
 
-
-  @Override
-  public void onClick(View v) {
-
-    //TODO make a if else or a switch case for if action is new, then empty circle and select
-    // unselect
-    //switch (case)
+  private void chooseItemButton (){
 
     // if the user wants to unselect, the color will be red
     // selected color is red
@@ -163,8 +183,8 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     //change text color to show it was unclicked, change back to unselected color
     if (userWantsToUnSelect) {
       mIngredientItemView.setTextColor(mUnSelectedColor);
-      mIngredientItemButton.setBackground(mGreenRoundcornersDrawable);
-      mIngredientItemButton.setImageDrawable(mEmptyCircleDrawable);
+      mButtonCircle.setBackground(mGreenRoundcornersDrawable);
+      mButtonCircle.setImageDrawable(mEmptyCircleDrawable);
       // the object was selected before this, so the array list has it and needs it removed
       mSelectedArrayList.remove(mIngredient);
     } else {
@@ -172,9 +192,9 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       // text color change to red
       mIngredientItemView.setTextColor(mSelectedColor);
       // change the empty circle to the sick face
-      mIngredientItemButton.setImageDrawable(mFoodBeverageDrawable);
+      mButtonCircle.setImageDrawable(mFoodBeverageDrawable);
       // make the background of the sick face from a green circle to a red circle
-      mIngredientItemButton.setBackground(null);
+      mButtonCircle.setBackground(null);
 
       // allow activities to access existing arraylist in the view holder
       // on click and the user is selecting it
@@ -183,6 +203,81 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       }
       mSelectedArrayList.add(mIngredient);
     }
+  }
 
+  private void moreItemButton(){
+
+    // Initializing the popup menu and giving the reference as current logContext
+    PopupMenu popupMenu = new PopupMenu(mIngredientViewHolderContext, mIngredientItemView);
+    // Inflating popup menu from popup_menu.xml file
+    popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
+    popupMenu.setGravity(Gravity.END);
+    // if an option in the menu is clicked
+    popupMenu.setOnMenuItemClickListener(menuItem -> {
+      // which button was clicked
+      switch (menuItem.getItemId()) {
+
+        // go to the right activity, edit or delete or details,
+        // and then the action to take is either duplicate, edit, or delete
+        // and go with the ID array string of the object
+        case R.id.duplicate_option:
+          // edit fragment checks for if we're a duplicate or not for what to set
+          Util.goToEditActivityActionTypeId(mIngredientViewHolderContext, null,
+                  Util.ARGUMENT_ACTION_DUPLICATE,
+                  Util.ARGUMENT_INGREDIENT_ID_ARRAY,  mIngredientIdString);
+          break;
+
+        case R.id.edit_option:
+          // tell the edit activity we want the full edit fragment
+
+          //Log.d(TAG, " edit imagebutton_list_ingredient_option: " + mIngredientIdString);
+          Util.goToAddEditIngredientActivity(mIngredientViewHolderContext, null,
+                  mIngredientIdString);
+          break;
+
+        case R.id.delete_option:
+          // delete this log, go activity double checking if they want to
+          Util.goToDetailActivity(mIngredientViewHolderContext, Util.ARGUMENT_ACTION_DELETE,
+                  Util.ARGUMENT_INGREDIENT_ID_ARRAY, mIngredientIdString);
+          break;
+
+        case R.id.detail_option:
+          Util.goToDetailActivity(mIngredientViewHolderContext, Util.ARGUMENT_ACTION_DETAIL,
+                  Util.ARGUMENT_INGREDIENT_ID_ARRAY, mIngredientIdString);
+          break;
+
+        default:
+          break;
+      }//end switch case for which menu item was chosen
+
+//      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, ingredientLogIdString);
+//      ingredientLogContext.startActivity(mIntent);
+
+      return true;
+    });
+    // Showing the popup menu
+    popupMenu.show();
+
+  }
+
+  @Override
+  public void onClick(View view) {
+
+    // which button was clicked
+    switch (view.getId()) {
+
+      case mButtonCircleListInt:
+
+      case mButtonCircleChooseInt:
+        chooseItemButton();
+        break;
+
+      case mButtonMoreListInt:
+        moreItemButton();
+        break;
+
+      default:
+        break;
+    }//end switch case
   }
 }//end ingredient view holder class

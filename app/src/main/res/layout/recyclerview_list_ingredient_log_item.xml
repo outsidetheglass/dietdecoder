@@ -29,8 +29,10 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/roundcorners"
         android:layout_toStartOf="@+id/imagebutton_list_ingredient_log_more_option"
-        android:src="@drawable/ic_baseline_empty_circle" />
-  <ImageButton
+        android:src="@drawable/ic_baseline_empty_circle"
+        />
+
+    <ImageButton
       android:id="@+id/imagebutton_list_ingredient_log_more_option"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -40,6 +42,8 @@
       android:background="@drawable/roundcorners"
       android:src="@drawable/ic_baseline_option"
       />
+
+
   </RelativeLayout>
 
   </androidx.cardview.widget.CardView>

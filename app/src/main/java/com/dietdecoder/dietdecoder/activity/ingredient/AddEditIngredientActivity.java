@@ -73,6 +73,7 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
     toolbar.setTitle(getResources().getString(R.string.app_name));
     toolbar.setOnMenuItemClickListener(this);
 
+    //TODO make edit work in here, no icon even, and get add working
 
     // if we didn't have a savedinstancestate, like user turned the phone to horizontal
     if (savedInstanceState == null) {

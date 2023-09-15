@@ -75,6 +75,8 @@ public class AddEditSymptomActivity extends AppCompatActivity implements Toolbar
         toolbar.setOnMenuItemClickListener(this);
 
 
+        //TODO make edit work in here, no icon even, and get add working
+
         // if we didn't have a savedinstancestate, like user turned the phone to horizontal
         if (savedInstanceState == null) {
 

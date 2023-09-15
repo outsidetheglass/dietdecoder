@@ -87,7 +87,7 @@ public class ListIngredientActivity extends AppCompatActivity implements View.On
       }
 
       // make the view for listing the items in the log
-      RecyclerView recyclerViewIngredient = findViewById(R.id.recyclerview_list_ingredient);
+      RecyclerView recyclerViewIngredient = findViewById(R.id.recyclerview_list_ingredient_item);
       // add horizontal lines between each recyclerview item
       recyclerViewIngredient.addItemDecoration(new DividerItemDecoration(recyclerViewIngredient.getContext(),
               DividerItemDecoration.VERTICAL));

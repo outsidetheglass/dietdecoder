@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -214,8 +215,8 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
             case R.id.edit_option:
               // tell the edit activity we want the full edit fragment
 
-              Util.goToEditActivityActionTypeId(mSymptomViewHolderContext, null,
-                      Util.ARGUMENT_ACTION_EDIT, Util.ARGUMENT_SYMPTOM_ID_ARRAY,
+              //Log.d(TAG, " edit imagebutton_list_symptom_option: " + mSymptomIdString);
+              Util.goToAddEditSymptomActivity(mSymptomViewHolderContext, null,
                       mSymptomIdString);
               break;
 

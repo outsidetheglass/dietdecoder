@@ -20,16 +20,29 @@
     android:layout_height="wrap_content"
       android:gravity="start" />
 
-  <ImageButton
-      android:id="@+id/imagebutton_list_ingredient_option"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      style="@style/textview_item_option"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentTop="true"
-      android:background="@drawable/roundcorners"
-      android:src="@drawable/ic_baseline_option"
-      />
+    <ImageButton
+        android:id="@+id/imagebutton_list_ingredient_circle"
+        style="@style/textview_item_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/roundcorners"
+        android:layout_toStartOf="@+id/imagebutton_list_ingredient_more"
+        android:src="@drawable/ic_baseline_empty_circle"
+        />
+
+    <ImageButton
+        android:id="@+id/imagebutton_list_ingredient_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/textview_item_option"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/roundcorners"
+        android:src="@drawable/ic_baseline_option"
+        />
+
+
   </RelativeLayout>
 
   </androidx.cardview.widget.CardView>
