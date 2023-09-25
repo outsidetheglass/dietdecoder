@@ -23,7 +23,7 @@
           android:layout_height="wrap_content"
           android:gravity="start" />
       <ImageButton
-          android:id="@+id/imagebutton_choose_symptom_option"
+          android:id="@+id/imagebutton_choose_symptom_circle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           style="@style/textview_item_option"

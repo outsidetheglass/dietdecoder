@@ -30,7 +30,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
   private static SymptomLogClickListener mListener;
   // to set the text for what shows up in the UI
   public TextView symptomLogItemView;
-  private Context symptomLogContext;
+  private Context mSymptomLogContext;
   private SymptomLog mSymptomLog;
   ImageButton mSymptomLogCheckButton;
   public ArrayList<SymptomLog> mSelectedSymptomLogArrayList;
@@ -41,7 +41,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
                                SymptomLogClickListener listener) {
     super(itemView);
     this.mListener = listener;
-    symptomLogContext = itemView.getContext();
+    mSymptomLogContext = itemView.getContext();
     mActivityClass = itemView.getClass();
     symptomLogItemView = itemView.findViewById(R.id.textview_symptom_log_item);
     mSymptomLogCheckButton = itemView.findViewById(R.id.imagebutton_symptom_log_option);
@@ -124,7 +124,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
       case R.id.imagebutton_symptom_log_option:
         
         // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(symptomLogContext, mSymptomLogCheckButton);
+        PopupMenu popupMenu = new PopupMenu(mSymptomLogContext, mSymptomLogCheckButton);
         // Inflating popup menu from popup_menu.xml file
         popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
         popupMenu.setGravity(Gravity.END);
@@ -138,7 +138,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
             // and go with the ID array string of the object
             case R.id.duplicate_option:
               // edit fragment checks for if we're a duplicate or not for what to set
-              Util.goToEditActivityActionTypeId(symptomLogContext, null,
+              Util.goToEditActivityActionTypeId(mSymptomLogContext, null,
                       Util.ARGUMENT_ACTION_DUPLICATE,
                       Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,  mSymptomLogIdString);
               break;
@@ -146,19 +146,19 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
             case R.id.edit_option:
               // tell the edit activity we want the full edit fragment
 
-              Util.goToEditActivityActionTypeId(symptomLogContext, null,
+              Util.goToEditActivityActionTypeId(mSymptomLogContext, null,
                       Util.ARGUMENT_ACTION_EDIT, Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY,
                       mSymptomLogIdString);
               break;
 
             case R.id.delete_option:
               // delete this log, go activity double checking if they want to
-              Util.goToDetailActivity(symptomLogContext, Util.ARGUMENT_ACTION_DELETE,
+              Util.goToDetailActivity(mSymptomLogContext, Util.ARGUMENT_ACTION_DELETE,
                       Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
               break;
 
             case R.id.detail_option:
-              Util.goToDetailActivity(symptomLogContext, Util.ARGUMENT_ACTION_DETAIL,
+              Util.goToDetailActivity(mSymptomLogContext, Util.ARGUMENT_ACTION_DETAIL,
                       Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
               break;
 
@@ -167,7 +167,7 @@ public class SymptomLogViewHolder extends RecyclerView.ViewHolder implements Vie
           }//end switch case for which menu item was chosen
 
 //      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, symptomLogIdString);
-//      symptomLogContext.startActivity(mIntent);
+//      mSymptomLogContext.startActivity(mIntent);
 
           return true;
         });

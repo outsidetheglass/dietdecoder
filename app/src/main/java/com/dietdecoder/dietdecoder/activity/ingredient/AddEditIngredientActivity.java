@@ -54,8 +54,8 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
   IngredientViewModel mIngredientViewModel;
 
   private EditText mEditNameView;
-  private EditText mEditCategoryView;
   private EditText mEditBrandView;
+  //TODO make it track whether this is a food to try to avoid or not
   ImageButton mTrackOrNotButton;
   Boolean isNameViewEmpty, isCategoryViewEmpty, isBrandViewEmpty, isFromEdit,
           mSetIngredientToCheck;
@@ -89,22 +89,12 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
 
       mSaveButton.setOnClickListener(this::onClick);
 
-      mSickFaceDrawable = getResources().getDrawable(R.drawable.ic_baseline_sick,
-              mTheme);
-      mGreenRoundcornersDrawable =
-              getResources().getDrawable(R.drawable.roundcorners,
-                      mTheme);
-      mRedRoundcornersBackgroundDrawable =
-              getResources().getDrawable(R.drawable.red_roundcorners,
-                      mTheme);
-      mEmptyCircleDrawable =
-              getResources().getDrawable(R.drawable.ic_baseline_empty_circle,
-                      mTheme);
-
       // if here from edit, put that info into the views
       if ( getIntent().getExtras() != null ) {
         mBundle = getIntent().getExtras();
+        Log.d(TAG, "mBundle in addedit ingredient: " + mBundle.toString());
         isFromEdit = Util.isFromEdit(mBundle);
+        Log.d(TAG, "isFromEdit in addedit ingredient: " + isFromEdit.toString());
 
         if (isFromEdit ) {
           // get the array and remove the brackets as a string, since we can
@@ -120,7 +110,6 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
           // put the values into the view
           mEditNameView.setText(mName);
           mEditBrandView.setText(mBrand);
-          mEditCategoryView.setText(mCategory);
         }
 
       } else {
@@ -146,9 +135,9 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
 //                break;
       case R.id.button_addedit_ingredient_save:
 
-        Log.d(TAG, " saving");
+//        Log.d(TAG, " saving");
         if ( isFromEdit ){
-          Log.d(TAG, " edit");
+//          Log.d(TAG, " edit");
           // if the name in edit is different than it was, save it
           Boolean isNameNew = !TextUtils.equals(mEditNameView.getText().toString(),
                   mName);
@@ -165,35 +154,34 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
               mIngredient.setBrand(mEditBrandView.getText().toString());
             }
 
-
             // then update the ingredient
             mIngredientViewModel.viewModelUpdate(mIngredient);
-            Util.goToChooseIngredientActivity(null, thisActivity);
+            Util.goToListIngredientActivity(null, thisActivity, mIngredient.getId().toString());
           }
         } else {
-          Log.d(TAG, " adding");
+          //Log.d(TAG, " adding");
+
           // not from edit, so we're adding
           // first check if name is empty, we can't add one without at least that
           if ( TextUtils.isEmpty(mEditNameView.getText()) ){
-            Log.d(TAG, " empty");
+            //Log.d(TAG, " empty");
             Util.toastInvalidEmpty(thisActivity);
           } else {
-            Log.d(TAG, " name");
+            //Log.d(TAG, " name");
             // there is a name, so make the ingredient
             mIngredient = new Ingredient(mEditNameView.getText().toString());
             // then set values if they were given
             if ( !Objects.isNull(mEditBrandView) ) {
-              Log.d(TAG,
-                      " mEditBrandView.getText().toString() " + mEditBrandView.getText().toString());
+//              Log.d(TAG,
+//                      " mEditBrandView.getText().toString() " + mEditBrandView.getText().toString());
               mIngredient.setBrand(mEditBrandView.getText().toString());
             }
-
-            Log.d(TAG,
-                    " mEditNameView.getText().toString() " + mEditNameView.getText().toString());
+//            Log.d(TAG,
+//                    " mEditNameView.getText().toString() " + mEditNameView.getText().toString());
 
             // add our new ingredient to the database
             mIngredientViewModel.viewModelInsert(mIngredient);
-            Util.goToChooseIngredientActivity(null, thisActivity);
+            Util.goToListIngredientActivity(null, thisActivity, mIngredient.getId().toString());
           }
         }
 

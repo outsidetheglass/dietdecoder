@@ -3311,7 +3311,7 @@ or at least achieves the same effect.
     public static void goToAddEditIngredientActivity(Context context, Activity activity,
                                                   String idStringArray){
         goToActivityTypeIdClass(context, activity, ARGUMENT_INGREDIENT_ID_ARRAY, idStringArray,
-                AddEditIngredientActivity.class, null, null, null);
+                AddEditIngredientActivity.class, null, ARGUMENT_ACTION_EDIT, null);
 
     }
     public static void goToAddIngredientActivityMakeAddBundle(Context context, Activity activity){

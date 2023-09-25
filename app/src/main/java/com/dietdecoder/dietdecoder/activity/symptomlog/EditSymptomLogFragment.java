@@ -196,6 +196,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 mBundleNext =
                         Util.setEditSymptomLogBundle(mSymptomLogIdString,
                                 Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
+
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
                         Util.fragmentContainerViewEdit, new SymptomIntensityFragment(), mBundleNext);

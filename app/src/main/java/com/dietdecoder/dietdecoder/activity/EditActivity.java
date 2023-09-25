@@ -92,23 +92,25 @@ public class EditActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 //                    mWhichFragmentGoTo = mBundle.getString(Util.ARGUMENT_GO_TO);
 //                }
 
-            } else  if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY) ) {
+            } else  if ( Util.isSymptomLogBundle(mBundle) ) {
                 // we're here with symptom log
 
+                //TODO get this working through Util the normal way
+                //Util.goToEditSymptomLogActivity();
                 mNextFragment = new EditSymptomLogFragment();
                 // TODO add a duplicate in here, or figure out how to do it
                 //  with the dao the right way
 
             }
-            else  if ( mBundle.containsKey(Util.ARGUMENT_SYMPTOM_ID_ARRAY) ) {
-                // we're here with symptom log
+            else  if (Util.isSymptomBundle(mBundle) ) {
+                // we're here with symptom
 
                 Util.goToAddEditSymptomActivity(null, thisActivity, mBundle.getString(Util.ARGUMENT_SYMPTOM_ID_ARRAY));
                 // TODO add a duplicate in here
 
             }
-            else  if ( mBundle.containsKey(Util.ARGUMENT_INGREDIENT_ID_ARRAY) ) {
-                // we're here with symptom log
+            else  if ( Util.isIngredientBundle(mBundle) ) {
+                // we're here with ingredient
 
                 Util.goToAddEditIngredientActivity(null, thisActivity,
                         mBundle.getString(Util.ARGUMENT_INGREDIENT_ID_ARRAY));

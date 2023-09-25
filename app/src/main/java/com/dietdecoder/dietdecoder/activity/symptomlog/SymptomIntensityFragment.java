@@ -99,6 +99,9 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         mButtonSaveName.setOnClickListener(this);
         mNumberPicker = view.findViewById(R.id.numberpicker_new_symptom_intensity);
 
+        // default is one before the symptom log logic finds differently
+        mIntensitySelected = 1;
+
         // set the current symptom
         setDependentValues();
 
@@ -239,8 +242,14 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 // update the log
                 mSymptomLogViewModel.viewModelUpdate(mCurrentSymptomLog);
 
-            // will set done or unfinished if action means we're from edit
+                // will set done or unfinished if action means we're from edit
                 mBundleNext = Util.setDoneIfFromEdit(mBundle);
+                //Log.d(TAG, mBundle.toString());
+                if ( Util.isFromEdit(mBundle) ){
+                    Log.d(TAG, mBundle.toString());
+                    Util.goToEditSymptomLogActivity(thisContext, thisActivity, mCurrentLogIdString);
+                }
+
 
                 // if that was the last one to add
                     if ( mCurrentIndex == 0) {
@@ -252,7 +261,10 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                         if ( mHowManyIds > 1) {
                             // alert user that all symptoms will have the same time and date,
                             // they can be individually edited from the symptom log menu
-                            Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT).show();
+
+                            //Toast.makeText(getContext(), mAllTimesAreSame, Toast.LENGTH_SHORT)
+
+                            // .show();
                             //if the current index is zero we've gone through them all
                             // and if the number in array was more than one
                             // then we're done
@@ -295,7 +307,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
         // get the index of the spot in the array chosen
         int valuePicker = picker.getValue();
         // get the string value of the chosen intensity
-        mIntensitySelected =  valuePicker+1;
+        mIntensitySelected = valuePicker+1;
 
         // set background color to change with new value
         GradientDrawable gradient = (GradientDrawable) getResources()
@@ -310,22 +322,23 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
     private Integer setIntensityDefault(UUID symptomId){
         //TODO fix intensity color gradient, it breaks with default is 10 I think
 
+        SymptomLog mostRecentSymptomLogWithSameSymptom =
+                mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
+                symptomId );
+
         // if there is no symptom log with same symptom
-        if ( Objects.isNull(mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
-                symptomId ) )) {
+        if ( Objects.isNull(mostRecentSymptomLogWithSameSymptom) ) {
             // set our integer to first in the list
             mIntensitySelected = 1;
            // Log.d(TAG, mSymptomLogViewModel.toString());
         } else {
             // get the most recent intensity from most recent log
             // and set our default choice to to be that most recent value
-            mIntensitySelected = mSymptomLogViewModel.viewModelGetMostRecentLogWithSymptom(
-                            symptomId )
-                    .getLogSymptomIntensity();
+            mIntensitySelected = mostRecentSymptomLogWithSameSymptom.getLogSymptomIntensity();
            // Log.d(TAG, String.valueOf(mIntensitySelected));
         }
 
-        mIntensitySelected = mIntensitySelected - 1;
+        //mIntensitySelected = mIntensitySelected - 1;
         return mIntensitySelected;
     }
 

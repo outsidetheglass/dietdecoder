@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,10 +58,10 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
 
     if (mSymptomViewHolderContext.getClass() == ChooseSymptomActivity.class) {
       mTextViewItem = id.textview_choose_symptom_item;
-      mButtonItem = id.imagebutton_choose_symptom_option;
+      mButtonItem = id.imagebutton_choose_symptom_circle;
     } else {
       mTextViewItem = id.textview_list_symptom_item;
-      mButtonItem = id.imagebutton_list_symptom_option;
+      mButtonItem = id.imagebutton_list_symptom_more;
     }
 
     mSymptomItemView = itemView.findViewById(mTextViewItem);
@@ -152,97 +151,104 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
     return new SymptomViewHolder(symptomView);
   }
 
+  private void chooseMoreButton(){
+    // if the user wants to unselect the symptom, the color will be red
+    // selected color is red
+    boolean userWantsToUnSelect = mSymptomItemView.getTextColors() == mSelectedColor;
 
-  @Override
-  public void onClick(View view) {
-    switch (view.getId()) {
+    //change text color to show it was unclicked, change back to unselected color
+    if ( userWantsToUnSelect ) {
+      mSymptomItemView.setTextColor(mUnSelectedColor);
+      mSymptomItemButton.setBackground(mGreenRoundcornersDrawable);
+      mSymptomItemButton.setImageDrawable(mEmptyCircleDrawable);
+
+      // the symptom was selected before this, so the array list has it and needs it removed
+      mSelectedArrayList.remove(mSymptom);
+    }
+    else {
+      //change UI to show it was clicked
+      // text color change to red
+      mSymptomItemView.setTextColor(mSelectedColor);
+      // change the empty circle to the sick face
+      mSymptomItemButton.setImageDrawable(mSickFaceDrawable);
+      // make the background of the sick face from a green circle to a red circle
+      mSymptomItemButton.setBackground(null);
+
+      // allow activities to access existing arraylist in the view holder
+      // on click and the user is selecting it
+      if (mSelectedArrayList == null) {
+        mSelectedArrayList = new ArrayList<>();
+      }
+      mSelectedArrayList.add(mSymptom);
+    }
+  }
+
+  private void listMoreButton(){
+
+    // Initializing the popup menu and giving the reference as current logContext
+    PopupMenu popupMenu = new PopupMenu(mSymptomViewHolderContext, mSymptomItemView);
+    // Inflating popup menu from popup_menu.xml file
+    popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
+    popupMenu.setGravity(Gravity.END);
+    // if an option in the menu is clicked
+    popupMenu.setOnMenuItemClickListener(menuItem -> {
       // which button was clicked
-      case R.id.imagebutton_choose_symptom_option:
+      switch (menuItem.getItemId()) {
 
-        // if the user wants to unselect the symptom, the color will be red
-        // selected color is red
-        boolean userWantsToUnSelect = mSymptomItemView.getTextColors() == mSelectedColor;
+        // go to the right activity, edit or delete or details,
+        // and then the action to take is either duplicate, edit, or delete
+        // and go with the ID array string of the object
+        case R.id.duplicate_option:
+          // edit fragment checks for if we're a duplicate or not for what to set
+          Util.goToEditActivityActionTypeId(mSymptomViewHolderContext, null,
+                  Util.ARGUMENT_ACTION_DUPLICATE,
+                  Util.ARGUMENT_SYMPTOM_ID_ARRAY,  mSymptomIdString);
+          break;
 
-        //change text color to show it was unclicked, change back to unselected color
-        if ( userWantsToUnSelect ) {
-          mSymptomItemView.setTextColor(mUnSelectedColor);
-          mSymptomItemButton.setBackground(mGreenRoundcornersDrawable);
-          mSymptomItemButton.setImageDrawable(mEmptyCircleDrawable);
+        case R.id.edit_option:
+          // tell the edit activity we want the full edit fragment
 
-          // the symptom was selected before this, so the array list has it and needs it removed
-          mSelectedArrayList.remove(mSymptom);
-        }
-        else {
-          //change UI to show it was clicked
-          // text color change to red
-          mSymptomItemView.setTextColor(mSelectedColor);
-          // change the empty circle to the sick face
-          mSymptomItemButton.setImageDrawable(mSickFaceDrawable);
-          // make the background of the sick face from a green circle to a red circle
-          mSymptomItemButton.setBackground(null);
+          //Log.d(TAG, " edit imagebutton_list_symptom_option: " + mSymptomIdString);
+          Util.goToAddEditSymptomActivity(mSymptomViewHolderContext, null,
+                  mSymptomIdString);
+          break;
 
-          // allow activities to access existing arraylist in the view holder
-          // on click and the user is selecting it
-          if (mSelectedArrayList == null) {
-            mSelectedArrayList = new ArrayList<>();
-          }
-          mSelectedArrayList.add(mSymptom);
-        }
-        break;
+        case R.id.delete_option:
+          // delete this log, go activity double checking if they want to
+          Util.goToDetailActivity(mSymptomViewHolderContext, Util.ARGUMENT_ACTION_DELETE,
+                  Util.ARGUMENT_SYMPTOM_ID_ARRAY, mSymptomIdString);
+          break;
 
-      case R.id.imagebutton_list_symptom_option:
+        case R.id.detail_option:
+          Util.goToDetailActivity(mSymptomViewHolderContext, Util.ARGUMENT_ACTION_DETAIL,
+                  Util.ARGUMENT_SYMPTOM_ID_ARRAY, mSymptomIdString);
+          break;
 
-        // Initializing the popup menu and giving the reference as current logContext
-        PopupMenu popupMenu = new PopupMenu(mSymptomViewHolderContext, mSymptomItemView);
-        // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-        popupMenu.setGravity(Gravity.END);
-        // if an option in the menu is clicked
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-          // which button was clicked
-          switch (menuItem.getItemId()) {
-
-            // go to the right activity, edit or delete or details,
-            // and then the action to take is either duplicate, edit, or delete
-            // and go with the ID array string of the object
-            case R.id.duplicate_option:
-              // edit fragment checks for if we're a duplicate or not for what to set
-              Util.goToEditActivityActionTypeId(mSymptomViewHolderContext, null,
-                      Util.ARGUMENT_ACTION_DUPLICATE,
-                      Util.ARGUMENT_SYMPTOM_ID_ARRAY,  mSymptomIdString);
-              break;
-
-            case R.id.edit_option:
-              // tell the edit activity we want the full edit fragment
-
-              //Log.d(TAG, " edit imagebutton_list_symptom_option: " + mSymptomIdString);
-              Util.goToAddEditSymptomActivity(mSymptomViewHolderContext, null,
-                      mSymptomIdString);
-              break;
-
-            case R.id.delete_option:
-              // delete this log, go activity double checking if they want to
-              Util.goToDetailActivity(mSymptomViewHolderContext, Util.ARGUMENT_ACTION_DELETE,
-                      Util.ARGUMENT_SYMPTOM_ID_ARRAY, mSymptomIdString);
-              break;
-
-            case R.id.detail_option:
-              Util.goToDetailActivity(mSymptomViewHolderContext, Util.ARGUMENT_ACTION_DETAIL,
-                      Util.ARGUMENT_SYMPTOM_ID_ARRAY, mSymptomIdString);
-              break;
-
-            default:
-              break;
-          }//end switch case for which menu item was chosen
+        default:
+          break;
+      }//end switch case for which menu item was chosen
 
 //      mIntent.putExtra(Util.ARGUMENT_FOOD_LOG_ID, symptomLogIdString);
 //      symptomLogContext.startActivity(mIntent);
 
-          return true;
-        });
-        // Showing the popup menu
-        popupMenu.show();
+      return true;
+    });
+    // Showing the popup menu
+    popupMenu.show();
 
+  }
+
+  @Override
+  public void onClick(View view) {
+    // which button was clicked
+    switch (view.getId()) {
+
+      case R.id.imagebutton_choose_symptom_circle:
+        chooseMoreButton();
+        break;
+
+      case R.id.imagebutton_list_symptom_more:
+        listMoreButton();
         break;
 
       default:
