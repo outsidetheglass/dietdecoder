@@ -2149,7 +2149,8 @@ or at least achieves the same effect.
                     // then send back that it is from edit
                     isTrueOrFalse = Boolean.TRUE;
                 }
-            } else if (bundle.containsKey(ARGUMENT_ACTION)) {
+            }
+            if (bundle.containsKey(ARGUMENT_ACTION)) {
                 String actionToTake = bundle.getString(ARGUMENT_ACTION);
                 if (TextUtils.equals(actionToTake, ARGUMENT_ACTION_EDIT)) {
                     isTrueOrFalse = Boolean.TRUE;

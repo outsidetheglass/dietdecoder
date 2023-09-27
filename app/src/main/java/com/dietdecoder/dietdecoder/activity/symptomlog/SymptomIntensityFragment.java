@@ -246,19 +246,28 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 mBundleNext = Util.setDoneIfFromEdit(mBundle);
                 //Log.d(TAG, mBundle.toString());
                 if ( Util.isFromEdit(mBundle) ){
-                    Log.d(TAG, mBundle.toString());
-                    Util.goToEditSymptomLogActivity(thisContext, thisActivity, mCurrentLogIdString);
+//                    Log.d(TAG, "is from edit," + mBundle.toString());
+                    
+                    Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
+                            Util.fragmentContainerViewEdit,
+                            new EditSymptomLogFragment(), mBundleNext);
                 }
+                else {
+                    // not edit
+                    Log.d(TAG, "not from edit," + mBundle.toString());
 
-
-                // if that was the last one to add
-                    if ( mCurrentIndex == 0) {
+                    // if that was the last one to add
+                    if (mCurrentIndex == 0) {
+                        Log.d(TAG, "not from edit and current index is 0," + mBundle.toString());
                         //TODO make times show up and modifiable back in add new logs if I want,
                         // probably don't need all these fragments, or make it a preference when
                         // they want to be asked when the symptom happened
 
                         // if there was more than one symptom,
-                        if ( mHowManyIds > 1) {
+                        if (mHowManyIds > 1) {
+                            Log.d(TAG,
+                                    "is not from edit, and current index is zero and there were " +
+                                            "more than one total ids" + mBundle.toString());
                             // alert user that all symptoms will have the same time and date,
                             // they can be individually edited from the symptom log menu
 
@@ -274,13 +283,14 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                         }
 
 
-                            // go to date fragment to set when the symptom(s) happened
-                            Util.startNextFragmentBundleChange(thisActivity,
-                                    getParentFragmentManager().beginTransaction(),
-                                    Util.fragmentContainerViewAddSymptomLog,
-                                    mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
+                    // go to date fragment to set when the symptom(s) happened
+                    Util.startNextFragmentBundleChange(thisActivity,
+                            getParentFragmentManager().beginTransaction(),
+                            Util.fragmentContainerViewAddSymptomLog,
+                            mDefaultNextFragment, mBundleNext, mWhatToChangeNext);
 
-                    }  else {
+                    } else {
+                        Log.d(TAG, "not last in array," + mBundle.toString());
                         // not the last in the array, repeat this fragment
 
                         // and lower our count for how many left to add
@@ -293,6 +303,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                                 mRepeatThisFragment, mBundleNext);
                     }
 
+                } // end if edit or not edit
 
                 break;
 //

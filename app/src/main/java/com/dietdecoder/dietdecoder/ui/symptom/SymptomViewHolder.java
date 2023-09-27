@@ -185,11 +185,12 @@ public class SymptomViewHolder extends RecyclerView.ViewHolder implements View.O
 
   private void listMoreButton(){
 
+//    PopupMenu popupMenu = new PopupMenu(getContext(), this, Gravity.NO_GRAVITY, R.attr.actionOverflowMenuStyle, 0);
     // Initializing the popup menu and giving the reference as current logContext
-    PopupMenu popupMenu = new PopupMenu(mSymptomViewHolderContext, mSymptomItemView);
+    PopupMenu popupMenu = new PopupMenu(mSymptomViewHolderContext, mSymptomItemView, Gravity.END);
     // Inflating popup menu from popup_menu.xml file
     popupMenu.getMenuInflater().inflate(R.menu.item_options_menu, popupMenu.getMenu());
-    popupMenu.setGravity(Gravity.END);
+//    popupMenu.setGravity(Gravity.END);
     // if an option in the menu is clicked
     popupMenu.setOnMenuItemClickListener(menuItem -> {
       // which button was clicked
