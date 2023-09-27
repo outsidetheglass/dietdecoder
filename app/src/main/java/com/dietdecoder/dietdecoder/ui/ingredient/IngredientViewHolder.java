@@ -104,13 +104,12 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
     String ingredientName = ingredient.getName();
     mIngredientIdString = ingredient.getId().toString();
     String ingredientBrand = ingredient.getBrand();
-    String ingredientDescription = ingredient.getName();
 
     String unImportantString =
-            Util.setPlainDescriptionString(ingredientDescription);
+            Util.setPlainDescriptionString(ingredientBrand);
 
     // only show useful description, not just the name repeated
-    if ( TextUtils.equals(ingredientName, ingredientDescription) ) {
+    if ( TextUtils.equals(ingredientName, ingredientBrand) ) {
       unImportantString = "";
     }
 

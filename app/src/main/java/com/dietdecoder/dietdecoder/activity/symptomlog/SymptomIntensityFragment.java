@@ -247,7 +247,7 @@ public class SymptomIntensityFragment extends Fragment implements View.OnClickLi
                 //Log.d(TAG, mBundle.toString());
                 if ( Util.isFromEdit(mBundle) ){
 //                    Log.d(TAG, "is from edit," + mBundle.toString());
-                    
+
                     Util.startNextFragmentBundle(thisActivity, getParentFragmentManager().beginTransaction(),
                             Util.fragmentContainerViewEdit,
                             new EditSymptomLogFragment(), mBundleNext);
