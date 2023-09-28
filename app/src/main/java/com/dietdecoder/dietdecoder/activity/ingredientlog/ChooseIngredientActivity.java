@@ -93,12 +93,12 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
             if ( getIntent().getExtras() == null ) {
                 mBundle = new Bundle();
             } else {
-                Log.d(TAG,
-                        "in bundle, getIntent().getExtras(): " + getIntent().getExtras());
+//                Log.d(TAG,
+//                        "in bundle, getIntent().getExtras(): " + getIntent().getExtras());
 
                 if ( getIntent().getExtras().containsKey(Util.ARGUMENT_FILTER) ) {
-                    Log.d(TAG, "in bundle, getIntent().getExtras().getString(Util.ARGUMENT_FILTER): "
-                            + getIntent().getExtras().getString(Util.ARGUMENT_FILTER));
+//                    Log.d(TAG, "in bundle, getIntent().getExtras().getString(Util.ARGUMENT_FILTER): "
+//                            + getIntent().getExtras().getString(Util.ARGUMENT_FILTER));
 
                     // we only want to set the filter string not keep this bundle
                     mGivenFilterString = getIntent().getExtras().getString(Util.ARGUMENT_FILTER);
@@ -131,8 +131,9 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
             recyclerViewIngredientNameChoices =
                     findViewById(R.id.recyclerview_ingredient_name_choices);
             // add horizontal lines between each recyclerview item
-            recyclerViewIngredientNameChoices.addItemDecoration(new DividerItemDecoration(recyclerViewIngredientNameChoices.getContext(),
-                    DividerItemDecoration.VERTICAL));
+            recyclerViewIngredientNameChoices.addItemDecoration(
+                    new DividerItemDecoration(recyclerViewIngredientNameChoices.getContext(),
+                    DividerItemDecoration.VERTICAL) );
 
 
             mIngredientListAdapter = new IngredientListAdapter(new IngredientListAdapter.IngredientDiff());
@@ -323,34 +324,5 @@ public class ChooseIngredientActivity extends AppCompatActivity implements
         }
     }//end onClick
 
-    //TODO get active search working
-//    @Override
-//    public boolean onCreateOptionsMenu( Menu menu) {
-//        getMenuInflater().inflate( R.menu.menu_main, menu);
-//
-//        MenuItem myActionMenuItem = menu.findItem( R.id.search_menu_item);
-//        final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (TextUtils.isEmpty(newText)) {
-////                    mSearchAdapter.filter("");
-////                    listView.clearTextFilter();
-//                } else {
-//                    Toast.makeText(thisActivity, "separate activity worked, newtext: " + newText,
-//                            Toast.LENGTH_SHORT).show();
-////                    mSearchAdapter.filter(newText);
-//                }
-//                return true;
-//            }
-//        });
-//
-//        return true;
-//    }//end options menu
 }
 

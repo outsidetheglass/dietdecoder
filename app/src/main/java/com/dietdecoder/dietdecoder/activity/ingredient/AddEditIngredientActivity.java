@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
+import com.dietdecoder.dietdecoder.activity.SpecificDateTimeFragment;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
@@ -58,7 +59,7 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
   //TODO make it track whether this is a food to try to avoid or not
   ImageButton mTrackOrNotButton;
   Boolean isNameViewEmpty, isCategoryViewEmpty, isBrandViewEmpty, isFromEdit,
-          mSetIngredientToCheck;
+          mSetIngredientToCheck, isDuplicate;
 
   public AddEditIngredientActivity() {
     super(R.layout.activity_addedit_ingredient);
@@ -92,9 +93,9 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
       // if here from edit, put that info into the views
       if ( getIntent().getExtras() != null ) {
         mBundle = getIntent().getExtras();
-        Log.d(TAG, "mBundle in addedit ingredient: " + mBundle.toString());
+//        Log.d(TAG, "mBundle in addedit ingredient: " + mBundle.toString());
         isFromEdit = Util.isFromEdit(mBundle);
-        Log.d(TAG, "isFromEdit in addedit ingredient: " + isFromEdit.toString());
+        isDuplicate = Util.isActionDuplicateBundle(mBundle);
 
         if (isFromEdit ) {
           // get the array and remove the brackets as a string, since we can
@@ -110,6 +111,27 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
           // put the values into the view
           mEditNameView.setText(mName);
           mEditBrandView.setText(mBrand);
+
+        } else if ( isDuplicate ){
+          // TODO make duplicate work, this is copied from ingredient log fragment
+
+//            mDuplicate = mIngredientViewModel.viewModelDuplicate(mIngredient);
+//            mDuplicateIdString = mDuplicate.getId().toString();
+//
+//            // now that the log has been duplicated, go set the time consumed because that's
+//            // the only required difference from the duplicated log (besides UUID and time
+//            // logged, which have been reset to instant now)
+//
+//            // set our relevant data to use in new location
+//            mBundleNext =
+//                    Util.setEditIngredientLogBundle(mDuplicateIdString,
+//                            Util.ARGUMENT_CHANGE_INGREDIENT_BRAND);
+//
+//            // begin is a time, so go to the date time fragment to set it
+//            Util.startNextFragmentBundle(thisActivity,
+//                    getParentFragmentManager().beginTransaction(),
+//                    Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
+//
         }
 
       } else {
@@ -193,23 +215,21 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
 
   @Override
   public boolean onMenuItemClick(MenuItem item) {
+
     if (item.getItemId() == R.id.action_settings) {
+      // go to settings when that's made
       Toast.makeText(thisActivity, "Settings was clicked!", Toast.LENGTH_SHORT).show();
 
-      // do something
     } else if (item.getItemId() == R.id.action_go_home) {
-      // do something
       Util.goToMainActivity(null, thisActivity);
-    }  else if (item.getItemId() == R.id.action_more) {
 
-      // Initializing the popup menu and giving the reference as current logContext
-      PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more));
-      // Inflating popup menu from popup_menu.xml file
+    }  else if (item.getItemId() == R.id.action_more) {
+      // Initializing the popup menu
+      PopupMenu popupMenu = new PopupMenu(thisContext, findViewById(R.id.action_more), Gravity.END);
       popupMenu.getMenuInflater().inflate(R.menu.item_more_menu, popupMenu.getMenu());
-      popupMenu.setGravity(Gravity.END);
+
       // if an option in the menu is clicked
       popupMenu.setOnMenuItemClickListener(moreMenuItem -> {
-        // which button was clicked
         switch (moreMenuItem.getItemId()) {
 
           // go to the right activity
@@ -230,12 +250,10 @@ public class AddEditIngredientActivity extends AppCompatActivity implements Tool
         }//end switch case for which menu item was chosen
 
         return true;
-      });
+      }); // end listener
+
       // Showing the popup menu
       popupMenu.show();
-
-    } else {
-      // do something
     }
 
     return false;

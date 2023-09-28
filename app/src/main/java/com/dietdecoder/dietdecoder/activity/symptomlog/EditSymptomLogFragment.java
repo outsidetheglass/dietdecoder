@@ -40,17 +40,18 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
     TextView mNameValueTextView, mBeganValueTextView, mChangedValueTextView, mIntensityValueTextView;
 
 
-    String mSaveString, mNothingChangedString, mSymptomLogIdString,
-            mSymptomLogSymptomName, mChangeDateTime, mChangeSymptom, mChangeIntensityToastString;
+    String mSaveString, mNothingChangedString, mLogIdString,
+            mLogSymptomName, mChangeDateTime, mChangeSymptom, mChangeIntensityToastString,
+            mDuplicateLogIdString;
     Boolean isNameEdited;
 
     Bundle mBundle, mBundleNext;
     Intent mIntent;
 
-    SymptomLogViewModel mSymptomLogViewModel;
+    SymptomLogViewModel mLogViewModel;
     SymptomViewModel mSymptomViewModel;
-    UUID mSymptomLogId;
-    SymptomLog mSymptomLog;
+    UUID mLogId;
+    SymptomLog mLog, mDuplicateLog;
     Symptom mSymptom;
 
     Fragment mNextFragment = null;
@@ -87,7 +88,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
         mButtonDone = view.findViewById(R.id.button_edit_symptom_log_done);
 
         // out database accesses
-        mSymptomLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
+        mLogViewModel = new ViewModelProvider(this).get(SymptomLogViewModel.class);
         mSymptomViewModel = new ViewModelProvider(this).get(SymptomViewModel.class);
 
 
@@ -97,27 +98,51 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             mBundle = getArguments();
 
             // get id as a string
-            mSymptomLogIdString = Util.cleanArrayString(mBundle.getString(
+            mLogIdString = Util.cleanArrayString(mBundle.getString(
                     Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY));
-            if ( mSymptomLogIdString.contains(",") ) {
-                Toast.makeText(thisActivity, "An array of log ID's were passed in, try again with only one to edit.", Toast.LENGTH_SHORT).show();
-            }
-            // turn it into its UUID
-            mSymptomLogId = UUID.fromString(mSymptomLogIdString);
-            // use that to get the log itself
-            mSymptomLog = mSymptomLogViewModel.viewModelGetLogFromLogId(mSymptomLogId);
-            mSymptom =
-                    mSymptomViewModel.viewModelGetSymptomFromId(mSymptomLog.getLogSymptomId());
 
+            if ( mLogIdString.contains(",") ){
+                Toast.makeText(thisActivity,
+                        "An array of log ID's were passed in, try again with only one to edit.",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            // turn it into its UUID
+            mLogId = UUID.fromString(mLogIdString);
+            // use that to get the log itself
+            mLog = mLogViewModel.viewModelGetLogFromLogId(mLogId);
+            mSymptom =
+                    mSymptomViewModel.viewModelGetSymptomFromId(mLog.getLogSymptomId());
+
+            // if it's duplicate, don't need to set UI, just do it
+            if (Util.isActionDuplicateBundle(mBundle) ) {
+                mDuplicateLog = mLogViewModel.viewModelDuplicate(mLog);
+                mDuplicateLogIdString = mDuplicateLog.getLogId().toString();
+
+                // now that the log has been duplicated, go set the time consumed because that's
+                // the only required difference from the duplicated log (besides UUID and time
+                // logged, which have been reset to instant now)
+
+                // set our relevant data to use in new location
+                mBundleNext =
+                        Util.setEditSymptomLogBundle(mDuplicateLogIdString,
+                                Util.ARGUMENT_CHANGE_SYMPTOM_LOG_ALL_INSTANTS);
+
+                // begin is a time, so go to the date time fragment to set it
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
+
+            }
             // then the name value
-            mSymptomLogSymptomName = mSymptom.getName();
+            mLogSymptomName = mSymptom.getName();
 
             // then use the log to set the text views
             // set the default text to the data
-            mNameValueTextView.setText(mSymptomLogSymptomName);
-            mBeganValueTextView.setText(Util.stringFromInstant(mSymptomLog.getInstantBegan()));
-            mChangedValueTextView.setText(Util.stringFromInstant(mSymptomLog.getInstantChanged()));
-            mIntensityValueTextView.setText(String.valueOf(mSymptomLog.getLogSymptomIntensity()));
+            mNameValueTextView.setText(mLogSymptomName);
+            mBeganValueTextView.setText(Util.stringFromInstant(mLog.getInstantBegan()));
+            mChangedValueTextView.setText(Util.stringFromInstant(mLog.getInstantChanged()));
+            mIntensityValueTextView.setText(String.valueOf(mLog.getLogSymptomIntensity()));
 
             // also throw listeners on them
             mNameValueOptionButton.setOnClickListener(this);
@@ -145,7 +170,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
             // save button was pressed
             case R.id.button_edit_symptom_log_done:
                 // done with editing
-                Util.goToListSymptomLogActivity(null, thisActivity, mSymptomLogIdString);
+                Util.goToListSymptomLogActivity(null, thisActivity, mLogIdString);
                 break;
             case R.id.imagebutton_symptom_log_began_option:
                 // when symptom began option was clicked, so tell the user we'll go change that
@@ -154,7 +179,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
 
                 // set our relevant data to use in new location
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                        Util.setEditSymptomLogBundle(mLogIdString,
                         Util.ARGUMENT_CHANGE_SYMPTOM_LOG_BEGIN);
 
                 // begin is a time, so go to the date time fragment to set it
@@ -168,7 +193,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                 Toast.makeText(getContext(), mChangeDateTime, Toast.LENGTH_SHORT).show();
 
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                        Util.setEditSymptomLogBundle(mLogIdString,
                                 Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED);
                 Util.startNextFragmentBundle(thisActivity,
                         getParentFragmentManager().beginTransaction(),
@@ -184,7 +209,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
                             mNextActivityClass,
                             Util.ARGUMENT_ACTION_EDIT,
                             Util.ARGUMENT_CHANGE_SYMPTOM_LOG_CHANGED,
-                            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mSymptomLogIdString);
+                            Util.ARGUMENT_SYMPTOM_LOG_ID_ARRAY, mLogIdString);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -194,7 +219,7 @@ public class EditSymptomLogFragment extends Fragment implements View.OnClickList
 
                 Toast.makeText(getContext(), mChangeIntensityToastString, Toast.LENGTH_SHORT).show();
                 mBundleNext =
-                        Util.setEditSymptomLogBundle(mSymptomLogIdString,
+                        Util.setEditSymptomLogBundle(mLogIdString,
                                 Util.ARGUMENT_CHANGE_SYMPTOM_LOG_INTENSITY);
 
                 Util.startNextFragmentBundle(thisActivity,

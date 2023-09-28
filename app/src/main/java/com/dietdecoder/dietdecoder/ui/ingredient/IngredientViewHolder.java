@@ -43,7 +43,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
   private Resources.Theme mIngredientViewHolderTheme;
   ColorStateList mSelectedColor;
   int mUnSelectedColor, mLayoutItem, mTextViewItem, mButtonItem;
-  Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable,
+  Drawable mCoffeeDrawable, mRedRoundcornersBackgroundDrawable,
           mGreenRoundcornersDrawable, mEmptyCircleDrawable;
 
   String mIngredientIdString;
@@ -81,7 +81,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
 //            mIngredientViewHolderTheme);
 
     // drawables for the selected and unselected options and their backgrounds
-    mSickFaceDrawable = itemView.getResources().getDrawable(drawable.ic_baseline_sick,
+    mCoffeeDrawable = itemView.getResources().getDrawable(drawable.ic_baseline_coffee,
             mIngredientViewHolderTheme);
     mRedRoundcornersBackgroundDrawable =
             itemView.getResources().getDrawable(drawable.red_roundcorners,
@@ -171,7 +171,7 @@ public class IngredientViewHolder extends RecyclerView.ViewHolder implements Vie
       // text color change to red
       mIngredientItemView.setTextColor(mSelectedColor);
       // change the empty circle to the sick face
-      mIngredientItemButton.setImageDrawable(mSickFaceDrawable);
+      mIngredientItemButton.setImageDrawable(mCoffeeDrawable);
       // make the background of the sick face from a green circle to a red circle
       mIngredientItemButton.setBackground(null);
 

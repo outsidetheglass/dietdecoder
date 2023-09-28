@@ -95,8 +95,8 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         mBundle = Util.checkValidFragment(getArguments(), thisActivity);
         mBundleNextSave = Util.updateBundleGoToNext(mBundle);
 
-        Log.d(TAG, "in specific fragment, mBundle: " + mBundle.toString());
-        Log.d(TAG, "in specific fragment, mBundleNextSave: " + mBundleNextSave.toString());
+//        Log.d(TAG, "in specific fragment, mBundle: " + mBundle.toString());
+//        Log.d(TAG, "in specific fragment, mBundleNextSave: " + mBundleNextSave.toString());
         //TODO finish setting this up for food vs symptom
         titleTextView = view.findViewById(R.id.textview_title_log_specific_date);
 
@@ -205,7 +205,7 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
         // it uses a value set in there, mCurrentLogId
         setIngredientLogViewModel();
 
-        Log.d(TAG, "time: " + mDateTime);
+//        Log.d(TAG, "time: " + mDateTime);
 
         // TODO fix, this is probably what's breaking from edit
 
@@ -403,10 +403,10 @@ public class SpecificDateTimeFragment extends Fragment implements View.OnClickLi
                         Toast.LENGTH_SHORT).show();
 
 
-                Log.d(TAG, "time save: " + mDateTime);
-                Log.d(TAG, "min save: " + mMinute + " HH: " + mHour + " DD: " + mDay);
-                Log.d(TAG, "funs: " +Util.localDateTimeFromInstant(
-                        Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ));
+//                Log.d(TAG, "time save: " + mDateTime);
+//                Log.d(TAG, "min save: " + mMinute + " HH: " + mHour + " DD: " + mDay);
+//                Log.d(TAG, "funs: " +Util.localDateTimeFromInstant(
+//                        Util.instantFromValues(mMinute, mHour, mDay, mMonth, mYear) ));
 
                 // TODO debug this, it's currently only setting the correct datetime on second
                 //  attempt to edit the value

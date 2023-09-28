@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import com.dietdecoder.dietdecoder.R;
 import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
-import com.dietdecoder.dietdecoder.database.symptom.Symptom;
 import com.dietdecoder.dietdecoder.ui.ingredient.IngredientViewModel;
 
 import java.time.Instant;
@@ -43,7 +41,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
   ColorStateList mSelectedColor;
   int mUnSelectedColor, mLayoutItem, mTextViewItem, mButtonItem;
   ImageButton mMoreOptionButton, mChooseOptionButton;
-  Drawable mSickFaceDrawable, mRedRoundcornersBackgroundDrawable,
+  Drawable mCoffeeDrawable, mRedRoundcornersBackgroundDrawable,
           mGreenRoundcornersDrawable, mEmptyCircleDrawable;
 
   UUID mLogIngredientId;
@@ -79,7 +77,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
     mUnSelectedColor = typedValue.data;
 
     // drawables for the selected and unselected options and their backgrounds
-    mSickFaceDrawable = itemView.getResources().getDrawable(R.drawable.ic_baseline_sick,
+    mCoffeeDrawable = itemView.getResources().getDrawable(R.drawable.ic_baseline_coffee,
             mViewHolderTheme);
     mRedRoundcornersBackgroundDrawable =
             itemView.getResources().getDrawable(R.drawable.red_roundcorners,
@@ -188,7 +186,7 @@ public class IngredientLogViewHolder extends RecyclerView.ViewHolder implements 
           // text color change to red
           mItemView.setTextColor(mSelectedColor);
           // change the empty circle to the sick face
-          mChooseOptionButton.setImageDrawable(mSickFaceDrawable);
+          mChooseOptionButton.setImageDrawable(mCoffeeDrawable);
           // make the background of the sick face from a green circle to a red circle
           mChooseOptionButton.setBackground(null);
 

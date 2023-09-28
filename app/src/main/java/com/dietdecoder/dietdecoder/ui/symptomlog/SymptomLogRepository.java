@@ -2,10 +2,12 @@ package com.dietdecoder.dietdecoder.ui.symptomlog;
 
 import android.app.Application;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLogDao;
 
@@ -72,9 +74,26 @@ class SymptomLogRepository {
 
   // duplicate log that from a log and return our new log
   public SymptomLog repositoryDuplicateSymptomLog(SymptomLog oldSymptomLog) {
-    SymptomLog newSymptomLog = new SymptomLog(oldSymptomLog.getLogSymptomId());
-    repositoryInsertSymptomLog(newSymptomLog);
-    return newSymptomLog;
+
+    // so set the ingredient log we were given to its new time consumed, now
+    //get info on the ingredient to make the log based on defaults
+    Instant instantBegan = oldSymptomLog.getInstantBegan();
+    Instant instantChanged = oldSymptomLog.getInstantChanged();
+    Instant instantNow = Instant.now();
+    Integer intensity = oldSymptomLog.getLogSymptomIntensity();
+    UUID symptomId = oldSymptomLog.getLogSymptomId();
+
+    SymptomLog symptomLogToReturn = new SymptomLog(symptomId);
+
+    // set time consumed to now and everything else to be same as given ingredient log
+    symptomLogToReturn.setInstantBegan(instantBegan);
+    symptomLogToReturn.setInstantChanged(instantChanged);
+    symptomLogToReturn.setLogSymptomIntensity(intensity);
+
+    // put our duplicated log into the database
+    mSymptomLogDao.daoSymptomLogInsert(symptomLogToReturn);
+
+    return symptomLogToReturn;
   }
 
 

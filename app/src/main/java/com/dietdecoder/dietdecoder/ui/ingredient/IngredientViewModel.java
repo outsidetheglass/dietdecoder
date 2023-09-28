@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
+import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,11 @@ public class IngredientViewModel extends AndroidViewModel {
   public void viewModelDelete(Ingredient ingredient) {
     mRepository.repositoryDelete(ingredient);
   }
+
+  public Ingredient viewModelDuplicate(Ingredient ingredient) {
+    return mRepository.repositoryDuplicateIngredient(ingredient);
+  }
+
 
   //get all ingredients to list them
   public LiveData<List<Ingredient>> viewModelGetAllLiveData(String filterString) {

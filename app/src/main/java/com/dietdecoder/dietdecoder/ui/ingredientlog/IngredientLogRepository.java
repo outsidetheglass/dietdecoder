@@ -2,14 +2,17 @@ package com.dietdecoder.dietdecoder.ui.ingredientlog;
 
 import android.app.Application;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.dietdecoder.dietdecoder.Util;
 import com.dietdecoder.dietdecoder.database.DietDecoderRoomDatabase;
 import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLogDao;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +20,8 @@ import java.util.UUID;
 
 class IngredientLogRepository {
 
+
+  private final String TAG = "TAG: " + getClass().getSimpleName();
 
 
   private IngredientLogDao mIngredientLogDao;
@@ -88,6 +93,32 @@ class IngredientLogRepository {
       mIngredientLogDao.daoIngredientLogUpdate(ingredientLog);
     });
 
+  } // end update
+
+  // duplicate the given log and update the new log's time consumed to now
+  IngredientLog repositoryDuplicateIngredientLog(IngredientLog ingredientLog) {
+    // we want the same log info as the given log, but with an updated time consumed
+
+    // so set the ingredient log we were given to its new time consumed, now
+    //get info on the ingredient to make the log based on defaults
+    Instant instantAcquired = ingredientLog.getInstantAcquired();
+    Instant instantCooked = ingredientLog.getInstantCooked();
+    Instant instantNow = Instant.now();
+    String subjectiveAmount = ingredientLog.getLogIngredientSubjectiveAmount();
+    UUID ingredientId = ingredientLog.getLogIngredientId();
+
+     IngredientLog ingredientLogToReturn = new IngredientLog(ingredientId);
+
+     // set time consumed to now and everything else to be same as given ingredient log
+     ingredientLogToReturn.setInstantConsumed(instantNow);
+     ingredientLogToReturn.setInstantAcquired(instantAcquired);
+     ingredientLogToReturn.setInstantCooked(instantCooked);
+     ingredientLogToReturn.setLogIngredientSubjectiveAmount(subjectiveAmount);
+
+     // put our duplicated log into the database
+     mIngredientLogDao.daoIngredientLogInsert(ingredientLogToReturn);
+
+     return ingredientLogToReturn;
   } // end update
 
   // get given number of ingredient logs matching the given ingredient's name

@@ -2237,6 +2237,21 @@ or at least achieves the same effect.
         }
         return isTrueOrFalse;
     }
+
+    public static Boolean isActionDuplicateBundle(Bundle bundle){
+        Boolean isTrueOrFalse = Boolean.FALSE;
+
+        if (
+                TextUtils.equals(
+                        bundle.getString(ARGUMENT_ACTION),
+                        ARGUMENT_ACTION_DUPLICATE
+                )
+        ) {
+            isTrueOrFalse = Boolean.TRUE;
+        }
+        return isTrueOrFalse;
+    }
+
     public static Boolean isActionAddBundle(Bundle bundle){
         Boolean isTrueOrFalse = Boolean.FALSE;
 
@@ -3781,7 +3796,7 @@ or at least achieves the same effect.
 
         // only one will be given in to set its instants
         if ( ingredientLogViewModel != null ){
-            Log.d(TAG, "in setLogInstants , whatToChange is: " + whatToChange);
+//            Log.d(TAG, "in setLogInstants , whatToChange is: " + whatToChange);
             // if we're setting ingredient logs
             bundleNext = setIngredientLogInstants(whatToChange, ingredientLogArray,
                     ingredientLogViewModel, setBundleFromLocalDateTime(dateTime),

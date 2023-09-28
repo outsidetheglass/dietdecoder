@@ -49,7 +49,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
 
     String mSaveString, mNothingChangedString, mLogIdString,
             mLogIngredientName, mDateTime, mChangeIngredient, mChangeAmountToastString,
-            mIngredientBrand, mIngredientSubjectiveAmount;
+            mIngredientBrand, mIngredientSubjectiveAmount, mDuplicateLogIdString;
     Boolean isNameEdited;
 
     Bundle mBundle, mBundleNext;
@@ -58,7 +58,7 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
     IngredientLogViewModel mIngredientLogViewModel;
     IngredientViewModel mIngredientViewModel;
     UUID mLogId;
-    IngredientLog mLog;
+    IngredientLog mLog, mDuplicateLog;
     Ingredient mIngredient;
 
     Fragment mNextFragment = null;
@@ -122,36 +122,59 @@ public class EditIngredientLogFragment extends Fragment implements View.OnClickL
             mLogId = UUID.fromString(mLogIdString);
             // use that to get the log itself
             mLog = mIngredientLogViewModel.viewModelGetLogFromLogId(mLogId);
-            mIngredient =
-                    mIngredientViewModel.viewModelGetFromId(mLog.getLogIngredientId());
 
-            // then the name value
-            mLogIngredientName = mIngredient.getName();
-            mIngredientBrand = mIngredient.getBrand();
+            // if it's duplicate, don't need to set UI, just do it
+            if (Util.isActionDuplicateBundle(mBundle) ) {
+                //TODO fix, duplicate breaks when multiple are chosen
+                mDuplicateLog = mIngredientLogViewModel.viewModelDuplicate(mLog);
+                mDuplicateLogIdString = mDuplicateLog.getLogId().toString();
 
-            mIngredientSubjectiveAmount = mLog.getLogIngredientSubjectiveAmount();
+                // now that the log has been duplicated, go set the time consumed because that's
+                // the only required difference from the duplicated log (besides UUID and time
+                // logged, which have been reset to instant now)
 
-            // then use the log to set the text views
-            // set the default text to the data
-            mNameValueTextView.setText(mLogIngredientName);
-            mAmountValueTextView.setText(mIngredientSubjectiveAmount);
-            mBrandValueTextView.setText(mIngredientBrand);
+                // set our relevant data to use in new location
+                mBundleNext =
+                        Util.setEditIngredientLogBundle(mDuplicateLogIdString,
+                                Util.ARGUMENT_CHANGE_INGREDIENT_LOG_CONSUMED);
 
-            mConsumedValueTextView.setText(Util.stringFromInstant(mLog.getInstantConsumed()));
-            mCookedValueTextView.setText(Util.stringFromInstant(mLog.getInstantCooked()));
-            mAcquiredValueTextView.setText(Util.stringFromInstant(mLog.getInstantAcquired()));
+                // begin is a time, so go to the date time fragment to set it
+                Util.startNextFragmentBundle(thisActivity,
+                        getParentFragmentManager().beginTransaction(),
+                        Util.fragmentContainerViewEdit, new SpecificDateTimeFragment(), mBundleNext);
+
+            } else {
+
+                // then the ingredient values
+                mIngredient =
+                        mIngredientViewModel.viewModelGetFromId(mLog.getLogIngredientId());
+                mLogIngredientName = mIngredient.getName();
+                mIngredientBrand = mIngredient.getBrand();
+
+                mIngredientSubjectiveAmount = mLog.getLogIngredientSubjectiveAmount();
+
+                // then use the log to set the text views
+                // set the default text to the data
+                mNameValueTextView.setText(mLogIngredientName);
+                mAmountValueTextView.setText(mIngredientSubjectiveAmount);
+                mBrandValueTextView.setText(mIngredientBrand);
+
+                mConsumedValueTextView.setText(Util.stringFromInstant(mLog.getInstantConsumed()));
+                mCookedValueTextView.setText(Util.stringFromInstant(mLog.getInstantCooked()));
+                mAcquiredValueTextView.setText(Util.stringFromInstant(mLog.getInstantAcquired()));
 
 
-            // also throw listeners on them
-            mNameValueButton.setOnClickListener(this);
-            mAmountValueButton.setOnClickListener(this);
-            mBrandValueButton.setOnClickListener(this);
+                // also throw listeners on them
+                mNameValueButton.setOnClickListener(this);
+                mAmountValueButton.setOnClickListener(this);
+                mBrandValueButton.setOnClickListener(this);
 
-            mConsumedValueButton.setOnClickListener(this);
-            mCookedValueButton.setOnClickListener(this);
-            mAcquiredValueButton.setOnClickListener(this);
+                mConsumedValueButton.setOnClickListener(this);
+                mCookedValueButton.setOnClickListener(this);
+                mAcquiredValueButton.setOnClickListener(this);
 
-            mButtonDone.setOnClickListener(this);
+                mButtonDone.setOnClickListener(this);
+            } // end checking duplicate or edit
         }
     // Inflate the layout for this fragment
     return view;

@@ -73,6 +73,10 @@ public class IngredientLogViewModel extends AndroidViewModel {
   public void viewModelUpdate(IngredientLog ingredientLog) {
     mIngredientLogRepository.repositoryUpdateIngredientLog(ingredientLog);
   }
+  // edit log in database
+  public IngredientLog viewModelDuplicate(IngredientLog ingredientLog) {
+    return mIngredientLogRepository.repositoryDuplicateIngredientLog(ingredientLog);
+  }
 
   // delete log in database
   public void viewModelDelete(IngredientLog ingredientLog) {

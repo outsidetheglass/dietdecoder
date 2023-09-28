@@ -9,7 +9,9 @@ import com.dietdecoder.dietdecoder.database.ingredient.IngredientDao;
 import com.dietdecoder.dietdecoder.database.ingredient.Ingredient;
 import com.dietdecoder.dietdecoder.database.ingredientlog.IngredientLog;
 import com.dietdecoder.dietdecoder.database.symptom.Symptom;
+import com.dietdecoder.dietdecoder.database.symptomlog.SymptomLog;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,6 +86,24 @@ class IngredientRepository {
     // to get all ingredients, alphabetized
     return mIngredientDao.daoGetAlphabetizedIngredients();
   }
+
+
+  public Ingredient repositoryDuplicateIngredient(Ingredient oldIngredient) {
+
+    // get info on the ingredient to make it based on defaults
+    String ingredientName = oldIngredient.getName();
+
+    Ingredient ingredientToReturn = new Ingredient(ingredientName);
+
+    // set time consumed to now and everything else to be same as given ingredient log
+    ingredientToReturn.setName(ingredientName);
+
+    // put our duplicated log into the database
+    mIngredientDao.daoInsertIngredient(ingredientToReturn);
+
+    return ingredientToReturn;
+  }
+
 
 
 } //end IngredientRepository class
